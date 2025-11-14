@@ -1,10 +1,12 @@
-url: "https://beta.digitathya.com/admin/login"
+url: "https://beta.digitathya.com/accessCheck"
+
 browser: "chrome"
+access_code: "2560"
 
 users:
   superadmin:
-    username: "superadmin@test.com"
-    password: "Password123"
+    username: "loadtesting_superadmin@mailinator.com"
+    password: "Newuser@123"
 
   manufacturer:
     username: "manufacturer@test.com"

@@ -26,10 +26,20 @@ def setup(get_config):
 
 @pytest.fixture()
 def login_superadmin(setup, get_config):
+    from pages.common.access_code_page import AccessCodePage
     from pages.superadmin.sa_login_page import SuperAdminLogin
+
     user = get_config["users"]["superadmin"]
+    access_code = get_config["access_code"]
+
+    # Step 1: Enter Access Code
+    AccessCodePage(setup).enter_access_code(access_code)
+
+    # Step 2: Perform Login
     SuperAdminLogin(setup).login(user["username"], user["password"])
+
     return setup
+
 
 @pytest.fixture()
 def login_manufacturer(setup, get_config):
