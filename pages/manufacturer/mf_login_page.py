@@ -1,16 +1,35 @@
+import unittest
+import time
+import datetime
+import openpyxl
+# from HtmlTestRunner import HTMLTestRunner
+from selenium import webdriver
 from selenium.webdriver.common.by import By
-from pages.common.base_page import BasePage
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.firefox.service import Service
+from webdriver_manager.firefox import GeckoDriverManager
 
-class ManufacturerLogin(BasePage):
-    username_input = (By.ID, "email")
-    password_input = (By.ID, "password")
-    login_btn = (By.XPATH, "//button[contains(text(),'Login')]")  # change if different text
+# Set up the WebDriver using webdriver-manager to handle GeckoDriver
+service=Service(GeckoDriverManager().install())
 
-    def login(self, username, password):
-        self.type(self.username_input, username)
-        self.type(self.password_input, password)
-        self.click(self.login_btn)
+class Loginpage:
+    def __init__(self, driver):
+        self.driver=driver
+        self.driver.maximize_window()
+
+    def setUserName(self,username):
+        self.driver.find_element(By.XPATH,"//input[@id='username']").clear()
+        self.driver.find_element(By.XPATH,"//input[@id='username']").send_keys(username)
+
+    def setPassword(self,password):
+        self.driver.find_element(By.XPATH,"//input[@id='password-input']").clear()
+        self.driver.find_element(By.XPATH,"//input[@id='password-input']").send_keys(password)
+
+    def clickLogin(self):
+        self.driver.find_element(By.XPATH,"//button[normalize-space()='Login']").click()
+
+    def clickLogout(self):
+        self.driver.find_element(By.XPATH,"//span[@class='oxd-userdropdown-tab']").click()
+        self.driver.find_element(By.XPATH,"//a[normalize-space()='Logout']").click()
 
 
-
-qwertyuioplkjhgfdfvbnm,mnb
