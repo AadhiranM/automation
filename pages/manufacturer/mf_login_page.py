@@ -12,5 +12,5 @@ class ManufacturerLogin(BasePage):
         self.click(self.login_btn)
 
 
-qwertyuiopasdfghjklzxcvbnm
-qwertyuiop
+
+qwertyuioplkjhgfdfvbnm,mnb
