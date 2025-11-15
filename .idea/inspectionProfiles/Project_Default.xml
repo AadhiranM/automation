@@ -1,0 +1,34 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="LossyEncoding" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="E305" />
+          <option value="E231" />
+          <option value="E225" />
+          <option value="E501" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnreachableCodeInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="list.send_keys" />
+          <option value="str.text" />
+          <option value="list.select_By_visible_text" />
+          <option value="twocaptchaapi.TwoCaptchaApi.solve_image_captcha" />
+          <option value="base64.b64encode" />
+          <option value="str.get" />
+          <option value="xlutils.getRowCount" />
+          <option value="xlutils.readData" />
+          <option value="xlutils.writeData" />
+          <option value="pyttsx3.engine.getProperty" />
+          <option value="testcases.test_login.Test_001_login.driver" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

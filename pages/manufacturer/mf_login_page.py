@@ -10,3 +10,7 @@ class ManufacturerLogin(BasePage):
         self.type(self.username_input, username)
         self.type(self.password_input, password)
         self.click(self.login_btn)
+
+
+qwertyuiopasdfghjklzxcvbnm
+qwertyuiop
