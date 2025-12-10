@@ -29,7 +29,7 @@ class Loginpage:
         self.driver.find_element(By.XPATH,"//button[normalize-space()='Login']").click()
 
     def clickLogout(self):
-        self.driver.find_element(By.XPATH,"//span[@class='oxd-userdropdown-tab']").click()
-        self.driver.find_element(By.XPATH,"//a[normalize-space()='Logout']").click()
+        self.driver.find_element(By.XPATH,"//span[@class='text-start ms-xl-2']").click()
+        self.driver.find_element(By.XPATH,"//span[normalize-space()='Logout']").click()
 
 

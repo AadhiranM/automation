@@ -1,23 +1,21 @@
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
-class BasePage:
-    def __init__(self, driver, timeout=10):
-        self.driver = driver
-        self.timeout = timeout
+from pages.common.AccessCodePage import AccessCodePage
+from pages.QR_Management.login_page import Loginpage
+from utilities.readproperties import Readconfig
 
-    def click(self, locator):
-        WebDriverWait(self.driver, self.timeout).until(EC.element_to_be_clickable(locator)).click()
+class BaseTest:
+    def login_and_access(self):
+        # Step 1: Access Code
+        ac_page = AccessCodePage(self.driver)
+        ac_present = ac_page.enter_access_code(Readconfig.getAccessCode())
+        if ac_present:
+            print("Access code entered successfully")
+        else:
+            print("Access code page not present, continuing")
 
-    def type(self, locator, text):
-        WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located(locator)).clear()
-        WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located(locator)).send_keys(text)
+        # Step 2: Login
+        lp = Loginpage(self.driver)
+        lp.setUserName(Readconfig.getUsername())
+        lp.setPassword(Readconfig.getUserpassword())
+        lp.clickLogin()
 
-    def get_text(self, locator):
-        return WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located(locator)).text
-
-    def is_visible(self, locator):
-        return WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located(locator))
-
-    def open(self, url):
-        self.driver.get(url)
