@@ -1,11 +1,10 @@
-url: "https://beta.digitathya.com/accessCheck"
-
+url: "https://beta.digitathya.com/admin/login"
 browser: "chrome"
-access_code: "2560"
+access_code: "2560"   # replace with your real code
 
 users:
   superadmin:
-    username: "loadtesting_superadmin@mailinator.com"
+    username: "yivake3549@gusronk.com"
     password: "Newuser@123"
 
   manufacturer:
@@ -13,4 +12,8 @@ users:
     password: "Password123"
 
 implicit_wait: 10
-headless: false    # set true in CI if you want headless
+explicit_wait: 10          # <-- NEW (for WebDriverWait)
+headless: false
+
+# Only required for ULAA
+ulaa_path: "C:/Program Files/Zoho/Ulaa/Application/ulaa.exe"

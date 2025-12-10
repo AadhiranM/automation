@@ -6,20 +6,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# try to reuse your utilities.logger if present, otherwise set up a fallback file logger
-try:
-    from utilities.logger import logger
-except Exception:
-    import logging
-    os.makedirs("reports/logs", exist_ok=True)
-    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    logfile = f"reports/logs/test_run_{ts}.log"
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=[logging.FileHandler(logfile), logging.StreamHandler()]
-    )
-    logger = logging.getLogger("automation")
+# -----------------------------------------------------------
+# ALWAYS use the global logger (NO fallback logger here)
+# -----------------------------------------------------------
+from utilities.logger import logger
+
 
 class BasePage:
     def __init__(self, driver, timeout=10):
@@ -41,7 +32,6 @@ class BasePage:
             logger.info(f"📸 Screenshot saved: {file}")
         except Exception as e:
             logger.error(f"Failed saving screenshot: {e}")
-            print(f"📸 Screenshot failed: {e}")
 
     # -------------------------------------------------------------------
     # 🔥 WAIT helper (all waits use this)
@@ -72,19 +62,16 @@ class BasePage:
                     self.driver.execute_script(
                         "arguments[0].scrollIntoView({block: 'center'});", element
                     )
-                except Exception:
+                except:
                     pass
                 time.sleep(0.1)
 
                 # Normal click
                 try:
                     element.click()
-                except Exception:
-                    # JS click fallback
-                    try:
-                        self.driver.execute_script("arguments[0].click();", element)
-                    except Exception as e:
-                        raise
+                except:
+                    # JS fallback
+                    self.driver.execute_script("arguments[0].click();", element)
 
                 time.sleep(0.2)
                 logger.info(f"Clicked successfully: {locator}")
@@ -132,12 +119,11 @@ class BasePage:
             raise
 
     # -------------------------------------------------------------------
-    # 🔥 IS VISIBLE (returns element or False)
+    # 🔥 IS VISIBLE
     # -------------------------------------------------------------------
     def is_visible(self, locator):
         try:
-            el = self.wait(locator)
-            return el
+            return self.wait(locator)
         except:
             return False
 

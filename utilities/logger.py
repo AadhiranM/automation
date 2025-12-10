@@ -1,22 +1,38 @@
 import logging
 import os
-from datetime import datetime
 
-# Create logs folder if not exists
-LOG_DIR = "logs"
+# Log folder
+LOG_DIR = "reports/logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 
-# Log file name (per run)
-LOG_FILE = os.path.join(LOG_DIR, f"test_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")
+# Single reusable log file
+LOG_FILE = f"{LOG_DIR}/automation.log"
 
-# Configure logger
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-    handlers=[
-        logging.FileHandler(LOG_FILE, encoding="utf-8"),
-        logging.StreamHandler()   # also print to console
-    ]
-)
+# Create logger
+logger = logging.getLogger("automation")
+logger.setLevel(logging.INFO)
 
-logger = logging.getLogger("AutomationLogger")
+# Avoid duplicate handlers
+if not logger.handlers:
+
+    # -------------------------
+    # FILE HANDLER (one file only)
+    # -------------------------
+    file_handler = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
+    file_format = logging.Formatter(
+        "%(asctime)s [%(levelname)s] %(message)s"
+    )
+    file_handler.setFormatter(file_format)
+    logger.addHandler(file_handler)
+
+    # -------------------------
+    # CONSOLE HANDLER (terminal)
+    # -------------------------
+    console_handler = logging.StreamHandler()
+    console_format = logging.Formatter(
+        "%(asctime)s [%(levelname)s] %(message)s"
+    )
+    console_handler.setFormatter(console_format)
+    logger.addHandler(console_handler)
+
+logger.info("📘 Logger initialized — writing to automation.log")
