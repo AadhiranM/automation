@@ -17,6 +17,5 @@
   "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_sql_injection_email[admin' --]": true,
   "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_sql_injection_email['; DROP TABLE users; --]": true,
   "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_xss_injection_email[<script>alert('XSS')</script>]": true,
-  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_xss_injection_email[test@<img src=x onerror=alert(1)>.com]": true,
-  "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_search_invalid_special_characters": true
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_xss_injection_email[test@<img src=x onerror=alert(1)>.com]": true
 }

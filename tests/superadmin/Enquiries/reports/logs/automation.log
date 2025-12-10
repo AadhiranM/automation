@@ -195,3 +195,441 @@ Symbols not available. Dumping unresolved backtrace:
 2025-12-10 15:47:53,430 [INFO] Typed successfully in ('name', 'password')
 2025-12-10 15:47:53,431 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
 2025-12-10 15:47:53,433 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:43:30,234 [INFO] 📘 Logger initialized — writing to automation.log
+2025-12-10 17:43:33,271 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 17:43:33,272 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 17:43:33,615 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 17:43:33,615 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:43:33,615 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:43:33,967 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:43:33,972 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 17:43:33,972 [INFO] Waiting for: ('name', 'email')
+2025-12-10 17:43:35,175 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 17:43:35,175 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 17:43:35,176 [INFO] Waiting for: ('name', 'password')
+2025-12-10 17:43:35,466 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 17:43:35,466 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:43:35,467 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:43:38,215 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:43:38,215 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:43:38,216 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:43:40,230 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:43:40,897 [INFO] Typing into ('id', 'search-vale'): '!@#$%^&*'
+2025-12-10 17:43:40,898 [INFO] Waiting for: ('id', 'search-vale')
+2025-12-10 17:43:41,205 [INFO] Typed successfully in ('id', 'search-vale')
+2025-12-10 17:43:45,246 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 17:43:45,248 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 17:43:45,561 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 17:43:45,561 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:43:45,562 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:43:46,754 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:43:46,754 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 17:43:46,755 [INFO] Waiting for: ('name', 'email')
+2025-12-10 17:43:47,110 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 17:43:47,110 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 17:43:47,110 [INFO] Waiting for: ('name', 'password')
+2025-12-10 17:43:47,423 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 17:43:47,423 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:43:47,424 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:43:50,118 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:43:50,119 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:43:50,119 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:43:52,100 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:43:52,755 [INFO] Typing into ('id', 'search-vale'): '   '
+2025-12-10 17:43:52,756 [INFO] Waiting for: ('id', 'search-vale')
+2025-12-10 17:43:53,044 [INFO] Typed successfully in ('id', 'search-vale')
+2025-12-10 17:43:56,906 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 17:43:56,908 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 17:43:57,235 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 17:43:57,235 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:43:57,236 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:43:57,586 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:43:57,586 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 17:43:57,587 [INFO] Waiting for: ('name', 'email')
+2025-12-10 17:43:58,773 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 17:43:58,773 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 17:43:58,773 [INFO] Waiting for: ('name', 'password')
+2025-12-10 17:43:59,088 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 17:43:59,088 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:43:59,089 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:44:01,787 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:44:01,787 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:44:01,788 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:44:03,597 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:44:04,134 [INFO] Clicking: ('xpath', "//input[@placeholder='Filter by : Created At']")
+2025-12-10 17:44:04,134 [INFO] Waiting for: ('xpath', "//input[@placeholder='Filter by : Created At']")
+2025-12-10 17:44:04,533 [INFO] Clicked successfully: ('xpath', "//input[@placeholder='Filter by : Created At']")
+2025-12-10 17:44:08,821 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 17:44:08,822 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 17:44:09,147 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 17:44:09,147 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:44:09,148 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:44:09,685 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:44:09,685 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 17:44:09,685 [INFO] Waiting for: ('name', 'email')
+2025-12-10 17:44:10,562 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 17:44:10,562 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 17:44:10,562 [INFO] Waiting for: ('name', 'password')
+2025-12-10 17:44:10,854 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 17:44:10,854 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:44:10,855 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:44:13,962 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:44:13,963 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:44:13,964 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:44:15,860 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:44:16,507 [INFO] Clicking: ('id', 'filterToggleBtn')
+2025-12-10 17:44:16,508 [INFO] Waiting for: ('id', 'filterToggleBtn')
+2025-12-10 17:44:16,925 [INFO] Clicked successfully: ('id', 'filterToggleBtn')
+2025-12-10 17:44:17,327 [INFO] Clicking: ('id', 'date_range')
+2025-12-10 17:44:17,327 [INFO] Waiting for: ('id', 'date_range')
+2025-12-10 17:44:17,712 [INFO] Clicked successfully: ('id', 'date_range')
+2025-12-10 17:44:36,939 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 17:44:36,940 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 17:44:37,327 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 17:44:37,327 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:44:37,327 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:44:37,895 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:44:37,895 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 17:44:37,895 [INFO] Waiting for: ('name', 'email')
+2025-12-10 17:44:38,894 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 17:44:38,894 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 17:44:38,895 [INFO] Waiting for: ('name', 'password')
+2025-12-10 17:44:39,233 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 17:44:39,233 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:44:39,234 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:44:42,032 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:44:42,032 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:44:42,033 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:44:44,243 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:44:44,878 [INFO] Clicking: ('id', 'filterToggleBtn')
+2025-12-10 17:44:44,878 [INFO] Waiting for: ('id', 'filterToggleBtn')
+2025-12-10 17:44:45,266 [INFO] Clicked successfully: ('id', 'filterToggleBtn')
+2025-12-10 17:44:45,668 [INFO] Clicking: ('xpath', "//button[normalize-space()='Clear Filter']")
+2025-12-10 17:44:45,668 [INFO] Waiting for: ('xpath', "//button[normalize-space()='Clear Filter']")
+2025-12-10 17:44:47,083 [INFO] Clicked successfully: ('xpath', "//button[normalize-space()='Clear Filter']")
+2025-12-10 17:45:01,151 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 17:45:01,151 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 17:45:01,449 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 17:45:01,449 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:45:01,450 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:45:01,998 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:45:01,998 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 17:45:01,998 [INFO] Waiting for: ('name', 'email')
+2025-12-10 17:45:02,923 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 17:45:02,923 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 17:45:02,923 [INFO] Waiting for: ('name', 'password')
+2025-12-10 17:45:03,247 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 17:45:03,247 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:45:03,248 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:45:05,903 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:45:05,904 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:45:05,906 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:45:07,740 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:45:24,014 [INFO] 📘 Logger initialized — writing to automation.log
+2025-12-10 17:45:26,202 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 17:45:26,203 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 17:45:26,523 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 17:45:26,525 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:45:26,526 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:45:27,087 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:45:27,088 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 17:45:27,088 [INFO] Waiting for: ('name', 'email')
+2025-12-10 17:45:27,955 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 17:45:27,955 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 17:45:27,955 [INFO] Waiting for: ('name', 'password')
+2025-12-10 17:45:28,250 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 17:45:28,250 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:45:28,250 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:45:30,895 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:45:30,895 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:45:30,896 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:45:32,857 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:45:33,555 [INFO] Typing into ('id', 'search-vale'): 'test'
+2025-12-10 17:45:33,555 [INFO] Waiting for: ('id', 'search-vale')
+2025-12-10 17:45:33,896 [INFO] Typed successfully in ('id', 'search-vale')
+2025-12-10 17:45:37,781 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 17:45:37,783 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 17:45:38,161 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 17:45:38,161 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:45:38,161 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:45:38,721 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:45:38,721 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 17:45:38,721 [INFO] Waiting for: ('name', 'email')
+2025-12-10 17:45:39,600 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 17:45:39,600 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 17:45:39,602 [INFO] Waiting for: ('name', 'password')
+2025-12-10 17:45:39,901 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 17:45:39,901 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:45:39,902 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:45:53,768 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:45:53,768 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:45:53,769 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:45:56,381 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:45:57,461 [INFO] Typing into ('id', 'search-vale'): 'gmail'
+2025-12-10 17:45:57,461 [INFO] Waiting for: ('id', 'search-vale')
+2025-12-10 17:45:57,778 [INFO] Typed successfully in ('id', 'search-vale')
+2025-12-10 17:46:01,749 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 17:46:01,750 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 17:46:02,116 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 17:46:02,116 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:46:02,117 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:46:02,669 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:46:02,669 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 17:46:02,670 [INFO] Waiting for: ('name', 'email')
+2025-12-10 17:46:03,619 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 17:46:03,619 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 17:46:03,620 [INFO] Waiting for: ('name', 'password')
+2025-12-10 17:46:03,932 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 17:46:03,932 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:46:03,933 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:46:06,584 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:46:06,586 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:46:06,586 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:46:08,448 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:46:09,170 [INFO] Clicking: ('xpath', "//input[@placeholder='Filter by : Created At']")
+2025-12-10 17:46:09,170 [INFO] Waiting for: ('xpath', "//input[@placeholder='Filter by : Created At']")
+2025-12-10 17:46:09,560 [INFO] Clicked successfully: ('xpath', "//input[@placeholder='Filter by : Created At']")
+2025-12-10 17:46:14,703 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 17:46:14,705 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 17:46:15,068 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 17:46:15,068 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:46:15,068 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:46:15,590 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:46:15,590 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 17:46:15,591 [INFO] Waiting for: ('name', 'email')
+2025-12-10 17:46:16,482 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 17:46:16,482 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 17:46:16,483 [INFO] Waiting for: ('name', 'password')
+2025-12-10 17:46:16,783 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 17:46:16,783 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:46:16,783 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:46:19,850 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:46:19,851 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:46:19,851 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:46:21,764 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:46:22,292 [INFO] Clicking: ('id', 'filterToggleBtn')
+2025-12-10 17:46:22,293 [INFO] Waiting for: ('id', 'filterToggleBtn')
+2025-12-10 17:46:22,728 [INFO] Clicked successfully: ('id', 'filterToggleBtn')
+2025-12-10 17:46:23,128 [INFO] Clicking: ('id', 'date_range')
+2025-12-10 17:46:23,128 [INFO] Waiting for: ('id', 'date_range')
+2025-12-10 17:46:23,510 [INFO] Clicked successfully: ('id', 'date_range')
+2025-12-10 17:46:24,299 [INFO] Clicking: ('xpath', "//button[normalize-space()='Apply']")
+2025-12-10 17:46:24,300 [INFO] Waiting for: ('xpath', "//button[normalize-space()='Apply']")
+2025-12-10 17:46:24,702 [INFO] Clicked successfully: ('xpath', "//button[normalize-space()='Apply']")
+2025-12-10 17:46:48,795 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 17:46:48,796 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 17:46:49,147 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 17:46:49,149 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:46:49,150 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:46:49,773 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:46:49,773 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 17:46:49,773 [INFO] Waiting for: ('name', 'email')
+2025-12-10 17:46:51,377 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 17:46:51,377 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 17:46:51,378 [INFO] Waiting for: ('name', 'password')
+2025-12-10 17:46:51,691 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 17:46:51,691 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:46:51,692 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:46:52,061 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:46:52,061 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:46:52,062 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:46:56,366 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:46:56,857 [INFO] Clicking: ('id', 'filterToggleBtn')
+2025-12-10 17:46:56,857 [INFO] Waiting for: ('id', 'filterToggleBtn')
+2025-12-10 17:46:57,241 [INFO] Clicked successfully: ('id', 'filterToggleBtn')
+2025-12-10 17:46:57,641 [INFO] Clicking: ('xpath', "//button[normalize-space()='Clear Filter']")
+2025-12-10 17:46:57,642 [INFO] Waiting for: ('xpath', "//button[normalize-space()='Clear Filter']")
+2025-12-10 17:46:59,074 [INFO] Clicked successfully: ('xpath', "//button[normalize-space()='Clear Filter']")
+2025-12-10 17:47:13,170 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 17:47:13,171 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 17:47:13,483 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 17:47:13,483 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:47:13,484 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:47:13,845 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 17:47:13,846 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 17:47:13,846 [INFO] Waiting for: ('name', 'email')
+2025-12-10 17:47:17,504 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 17:47:17,504 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 17:47:17,505 [INFO] Waiting for: ('name', 'password')
+2025-12-10 17:47:17,818 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 17:47:17,818 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:47:17,818 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:47:18,191 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 17:47:18,210 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:47:18,211 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:47:22,586 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 17:47:23,084 [INFO] Typing into ('id', 'search-vale'): 'test'
+2025-12-10 17:47:23,085 [INFO] Waiting for: ('id', 'search-vale')
+2025-12-10 17:47:23,415 [INFO] Typed successfully in ('id', 'search-vale')
+2025-12-10 18:05:13,725 [INFO] 📘 Logger initialized — writing to automation.log
+2025-12-10 18:05:16,215 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 18:05:16,216 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 18:05:16,536 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 18:05:16,537 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:05:16,539 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:05:17,098 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:05:17,100 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 18:05:17,100 [INFO] Waiting for: ('name', 'email')
+2025-12-10 18:05:17,988 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 18:05:17,988 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 18:05:17,988 [INFO] Waiting for: ('name', 'password')
+2025-12-10 18:05:18,279 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 18:05:18,279 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:05:18,279 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:05:21,070 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:05:21,070 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:05:21,071 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:05:23,075 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:05:23,596 [INFO] Typing into ('id', 'search-vale'): 'test'
+2025-12-10 18:05:23,596 [INFO] Waiting for: ('id', 'search-vale')
+2025-12-10 18:05:23,924 [INFO] Typed successfully in ('id', 'search-vale')
+2025-12-10 18:05:27,799 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 18:05:27,808 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 18:05:28,127 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 18:05:28,128 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:05:28,128 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:05:28,701 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:05:28,701 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 18:05:28,701 [INFO] Waiting for: ('name', 'email')
+2025-12-10 18:05:29,619 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 18:05:29,620 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 18:05:29,620 [INFO] Waiting for: ('name', 'password')
+2025-12-10 18:05:29,910 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 18:05:29,910 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:05:29,911 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:05:32,591 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:05:32,591 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:05:32,592 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:05:34,556 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:05:35,041 [INFO] Typing into ('id', 'search-vale'): 'gmail'
+2025-12-10 18:05:35,042 [INFO] Waiting for: ('id', 'search-vale')
+2025-12-10 18:05:35,456 [INFO] Typed successfully in ('id', 'search-vale')
+2025-12-10 18:05:39,427 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 18:05:39,428 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 18:05:39,790 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 18:05:39,790 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:05:39,790 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:05:40,327 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:05:40,327 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 18:05:40,327 [INFO] Waiting for: ('name', 'email')
+2025-12-10 18:05:41,214 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 18:05:41,215 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 18:05:41,215 [INFO] Waiting for: ('name', 'password')
+2025-12-10 18:05:41,513 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 18:05:41,513 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:05:41,514 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:05:44,234 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:05:44,235 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:05:44,235 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:05:46,138 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:05:46,755 [INFO] Clicking: ('xpath', "//input[@placeholder='Filter by : Created At']")
+2025-12-10 18:05:46,756 [INFO] Waiting for: ('xpath', "//input[@placeholder='Filter by : Created At']")
+2025-12-10 18:05:47,145 [INFO] Clicked successfully: ('xpath', "//input[@placeholder='Filter by : Created At']")
+2025-12-10 18:05:52,106 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 18:05:52,112 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 18:05:52,423 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 18:05:52,423 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:05:52,424 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:05:52,787 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:05:52,787 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 18:05:52,787 [INFO] Waiting for: ('name', 'email')
+2025-12-10 18:05:53,882 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 18:05:53,882 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 18:05:53,882 [INFO] Waiting for: ('name', 'password')
+2025-12-10 18:05:54,173 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 18:05:54,173 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:05:54,173 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:05:54,564 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:05:54,566 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:05:54,568 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:05:58,810 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:05:59,494 [INFO] Clicking: ('id', 'filterToggleBtn')
+2025-12-10 18:05:59,494 [INFO] Waiting for: ('id', 'filterToggleBtn')
+2025-12-10 18:05:59,872 [INFO] Clicked successfully: ('id', 'filterToggleBtn')
+2025-12-10 18:06:00,273 [INFO] Clicking: ('id', 'date_range')
+2025-12-10 18:06:00,274 [INFO] Waiting for: ('id', 'date_range')
+2025-12-10 18:06:00,733 [INFO] Clicked successfully: ('id', 'date_range')
+2025-12-10 18:06:01,537 [INFO] Clicking: ('xpath', "//button[normalize-space()='Apply']")
+2025-12-10 18:06:01,537 [INFO] Waiting for: ('xpath', "//button[normalize-space()='Apply']")
+2025-12-10 18:06:01,949 [INFO] Clicked successfully: ('xpath', "//button[normalize-space()='Apply']")
+2025-12-10 18:06:25,941 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 18:06:25,944 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 18:06:26,284 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 18:06:26,284 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:06:26,286 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:06:26,867 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:06:26,867 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 18:06:26,867 [INFO] Waiting for: ('name', 'email')
+2025-12-10 18:06:27,685 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 18:06:27,685 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 18:06:27,685 [INFO] Waiting for: ('name', 'password')
+2025-12-10 18:06:27,998 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 18:06:27,999 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:06:27,999 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:06:30,740 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:06:30,740 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:06:30,741 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:06:32,553 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:06:33,078 [INFO] Clicking: ('id', 'filterToggleBtn')
+2025-12-10 18:06:33,078 [INFO] Waiting for: ('id', 'filterToggleBtn')
+2025-12-10 18:06:33,457 [INFO] Clicked successfully: ('id', 'filterToggleBtn')
+2025-12-10 18:06:33,858 [INFO] Clicking: ('xpath', "//button[normalize-space()='Clear Filter']")
+2025-12-10 18:06:33,859 [INFO] Waiting for: ('xpath', "//button[normalize-space()='Clear Filter']")
+2025-12-10 18:06:35,277 [INFO] Clicked successfully: ('xpath', "//button[normalize-space()='Clear Filter']")
+2025-12-10 18:06:49,404 [INFO] Typing into ('name', 'access_code'): '2560'
+2025-12-10 18:06:49,405 [INFO] Waiting for: ('name', 'access_code')
+2025-12-10 18:06:49,747 [INFO] Typed successfully in ('name', 'access_code')
+2025-12-10 18:06:49,747 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:06:49,747 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:06:50,294 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2025-12-10 18:06:50,295 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2025-12-10 18:06:50,296 [INFO] Waiting for: ('name', 'email')
+2025-12-10 18:06:51,796 [INFO] Typed successfully in ('name', 'email')
+2025-12-10 18:06:51,796 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2025-12-10 18:06:51,796 [INFO] Waiting for: ('name', 'password')
+2025-12-10 18:06:52,140 [INFO] Typed successfully in ('name', 'password')
+2025-12-10 18:06:52,140 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:06:52,140 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:06:54,831 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2025-12-10 18:06:54,832 [INFO] Clicking: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:06:54,833 [INFO] Waiting for: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:06:56,555 [INFO] Clicked successfully: ('xpath', "//span[normalize-space()='Enquiries']")
+2025-12-10 18:06:57,191 [INFO] Typing into ('id', 'search-vale'): 'test'
+2025-12-10 18:06:57,191 [INFO] Waiting for: ('id', 'search-vale')
+2025-12-10 18:06:57,494 [INFO] Typed successfully in ('id', 'search-vale')
+2025-12-10 18:06:57,533 [INFO] Clicking: ('xpath', "//table[contains(@class,'table')]//tbody/tr[1]//button[contains(@class,'dropdown')]")
+2025-12-10 18:06:57,533 [INFO] Waiting for: ('xpath', "//table[contains(@class,'table')]//tbody/tr[1]//button[contains(@class,'dropdown')]")
+2025-12-10 18:06:57,707 [WARNING] [CLICK FAILED] Attempt 1/3 for ('xpath', "//table[contains(@class,'table')]//tbody/tr[1]//button[contains(@class,'dropdown')]") → Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=142.0.7444.177); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#staleelementreferenceexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff76b36a235
+	0x7ff76b0c2630
+	0x7ff76ae516dd
+	0x7ff76ae594c8
+	0x7ff76ae5c8c2
+	0x7ff76aefce53
+	0x7ff76aed2b0a
+	0x7ff76aefbaba
+	0x7ff76ae9b0ed
+	0x7ff76ae9bf63
+	0x7ff76b395d60
+	0x7ff76b38fe8a
+	0x7ff76b3b1005
+	0x7ff76b0dd71e
+	0x7ff76b0e4e1f
+	0x7ff76b0cb7c4
+	0x7ff76b0cb97f
+	0x7ff76b0b18e8
+	0x7fff6699e8d7
+	0x7fff67d6c53c
+
+2025-12-10 18:06:58,209 [INFO] Clicking: ('xpath', "//table[contains(@class,'table')]//tbody/tr[1]//button[contains(@class,'dropdown')]")
+2025-12-10 18:06:58,209 [INFO] Waiting for: ('xpath', "//table[contains(@class,'table')]//tbody/tr[1]//button[contains(@class,'dropdown')]")
+2025-12-10 18:06:58,586 [INFO] Clicked successfully: ('xpath', "//table[contains(@class,'table')]//tbody/tr[1]//button[contains(@class,'dropdown')]")
+2025-12-10 18:06:58,586 [INFO] Clicking: ('xpath', "//a[normalize-space()='View']")
+2025-12-10 18:06:58,587 [INFO] Waiting for: ('xpath', "//a[normalize-space()='View']")
+2025-12-10 18:07:00,626 [INFO] Clicked successfully: ('xpath', "//a[normalize-space()='View']")
+2025-12-10 18:07:00,626 [INFO] Waiting for: ('xpath', "//strong[text()='Business Email:']/ancestor::tr/td[2]/span")
+2025-12-10 18:07:00,645 [INFO] Waiting for: ('xpath', "//strong[text()='Message:']/ancestor::tr/td[2]/span")
+2025-12-10 18:07:00,658 [INFO] Waiting for: ('xpath', "//strong[text()='Status:']/ancestor::tr/td[2]/span")

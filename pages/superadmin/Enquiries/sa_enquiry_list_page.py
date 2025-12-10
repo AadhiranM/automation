@@ -1,18 +1,42 @@
+# pages/superadmin/Enquiries/sa_enquiry_list_page.py
+
+import time
+from datetime import datetime
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
 from pages.common.base_page import BasePage
 from utilities.flatpickr import FlatpickrRangePicker
-import time
 
 
 class SAEnquiryListPage(BasePage):
 
+    # ----------------- SEARCH -----------------
     SEARCH_BOX = (By.ID, "search-vale")
+
+    # ----------------- MENU -----------------
     ENQUIRIES_MENU = (By.XPATH, "//span[normalize-space()='Enquiries']")
+
+    # ----------------- TABLE -----------------
     FIRST_ROW = (By.XPATH, "(//table[contains(@class,'table')]//tbody/tr)[1]")
     NO_DATA_ROW = (By.XPATH, "//td[contains(@class,'dataTables_empty')]")
+    CREATED_AT_COL = (By.XPATH, "//table[contains(@class,'table')]//tbody/tr/td[8]")
 
+    # ----------------- ACTION MENU LOCATORS -----------------
+    FIRST_ROW_ACTION_BTN = (
+        By.XPATH,
+        "//table[contains(@class,'table')]//tbody/tr[1]//button[contains(@class,'dropdown')]"
+    )
+
+    ACTION_VIEW = (By.XPATH, "//a[normalize-space()='View']")
+    ACTION_EDIT = (By.XPATH, "//a[normalize-space()='Edit']")
+    ACTION_ASSIGN = (By.XPATH, "//button[contains(text(),'Assign Internal User')]")
+    ACTION_UNASSIGN = (By.XPATH, "//a[contains(text(),'Un-assign')]")
+    ACTION_SEND_EMAIL = (By.XPATH, "//a[normalize-space()='Send Email']")
+    ACTION_FOLLOWUP = (By.XPATH, "//a[normalize-space()='Follow Up']")
+
+    # ----------------- DATE FILTERS -----------------
     INLINE_CREATED_AT = (By.XPATH, "//input[@placeholder='Filter by : Created At']")
     FILTER_PANEL_BTN = (By.ID, "filterToggleBtn")
     PANEL_DATE_RANGE = (By.ID, "date_range")
@@ -21,7 +45,9 @@ class SAEnquiryListPage(BasePage):
     CLEAR_BTN = (By.XPATH, "//button[normalize-space()='Clear Filter']")
     FILTER_CLOSE_ICON = (By.CSS_SELECTOR, "div.offcanvas-header button.close")
 
+    # ----------------- NAVIGATION -----------------
     def goto_page(self):
+        """Navigate to enquiry list."""
         try:
             self.click(self.ENQUIRIES_MENU)
         except:
@@ -31,34 +57,36 @@ class SAEnquiryListPage(BasePage):
         self.wait_for_results()
 
     def wait_for_results(self):
+        """Wait until table row OR 'no data' message is visible."""
         WebDriverWait(self.driver, self.timeout).until(
             lambda d: d.find_elements(*self.FIRST_ROW) or d.find_elements(*self.NO_DATA_ROW)
         )
 
+    # ----------------- SEARCH -----------------
     def search(self, text):
         self.type(self.SEARCH_BOX, text)
         try:
-            elem = self.driver.find_element(*self.SEARCH_BOX)
-            elem.send_keys("\n")
+            self.driver.find_element(*self.SEARCH_BOX).send_keys("\n")
         except:
             pass
 
+    # ----------------- INLINE CALENDAR -----------------
     def open_inline_calendar(self):
-        # open inline calendar
         self.click(self.INLINE_CREATED_AT)
         time.sleep(0.25)
 
+    # ----------------- FILTER PANEL -----------------
     def open_filter_panel(self):
         self.click(self.FILTER_PANEL_BTN)
         time.sleep(0.4)
 
     def close_filter_panel(self):
+        """Safely closes the offcanvas panel."""
         try:
-            # If offcanvas not visible -> nothing to do
+            # already closed
             if not self.driver.find_elements(By.CSS_SELECTOR, "div.offcanvas.show"):
                 return True
 
-            # If close icon present, click it
             if self.driver.find_elements(*self.FILTER_CLOSE_ICON):
                 try:
                     self.click(self.FILTER_CLOSE_ICON)
@@ -66,93 +94,84 @@ class SAEnquiryListPage(BasePage):
                 except:
                     pass
 
-            # fallback: send ESC event to close
+            # ESC fallback
             self.driver.execute_script(
                 "document.body.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape'}));"
             )
-            time.sleep(0.12)
+            time.sleep(0.1)
             return True
         except:
             return True
 
-    # ----------------- INLINE FILTER -----------------
+    # ----------------- INLINE DATE FILTER -----------------
     def filter_inline_created_at(self, start, end):
-        """
-        Use FlatpickrRangePicker to select an inline date range.
-        Returns True if the calendar/range is disabled (meaning no results expected).
-        """
         self.open_inline_calendar()
         picker = FlatpickrRangePicker(self.driver)
 
-        # Defensive: attempt selection; select_range returns True on success, False if disabled/click failed
         try:
             ok = picker.select_range(start, end)
         except Exception:
             ok = False
 
-        # If select_range returned False -> assume dates are disabled and no rows should be present
         if not ok:
-            # leave calendar open so tests can assert disabled day nodes OR close explicitly
-            return True
+            return True  # range disabled → no results expected
 
-        # otherwise selection done — small pause for UI to update
         time.sleep(0.25)
         return False
 
-    # ----------------- PANEL FILTER -----------------
+    # ----------------- PANEL DATE FILTER -----------------
     def filter_panel_created_at(self, start, end):
-        """
-        Open the offcanvas panel and set created-at range using FlatpickrRangePicker.
-        Returns True if panel selection was NOT possible (range disabled) and caller should expect no results.
-        """
         self.open_filter_panel()
         picker = FlatpickrRangePicker(self.driver)
 
-        # Open the date control inside panel
         try:
             self.click(self.PANEL_DATE_RANGE)
             time.sleep(0.25)
         except:
-            # if date_range control missing, close panel and treat as failure
-            try:
-                self.close_filter_panel()
-            except:
-                pass
+            self.close_filter_panel()
             return True
 
-        # Try selecting; select_range returns True on success, False if disabled or click failure
         try:
             ok = picker.select_range(start, end)
         except Exception:
             ok = False
 
         if not ok:
-            # selection failed due to disabled days — close panel and return flag
-            try:
-                self.close_filter_panel()
-            except:
-                pass
+            self.close_filter_panel()
             return True
 
-        # Apply if present
         try:
             self.click(self.APPLY_BTN)
         except:
             pass
 
-        # Close panel for clean state
-        try:
-            self.close_filter_panel()
-        except:
-            pass
-
+        self.close_filter_panel()
         return False
+
+    # ----------------- ACTION MENU METHODS -----------------
+    def open_action_menu(self):
+        self.click(self.FIRST_ROW_ACTION_BTN)
+
+    def click_view(self):
+        self.click(self.ACTION_VIEW)
+
+    def click_edit(self):
+        self.click(self.ACTION_EDIT)
+
+    def click_assign(self):
+        self.click(self.ACTION_ASSIGN)
+
+    def click_unassign(self):
+        self.click(self.ACTION_UNASSIGN)
+
+    def click_send_email(self):
+        self.click(self.ACTION_SEND_EMAIL)
+
+    def click_followup(self):
+        self.click(self.ACTION_FOLLOWUP)
 
     # ----------------- TABLE HELPERS -----------------
     def has_no_results(self):
-        """
-        True when 'No matching entries found' row is visible.
-        """
         try:
             WebDriverWait(self.driver, 5).until(
                 lambda d: d.find_elements(*self.NO_DATA_ROW) or d.find_elements(*self.FIRST_ROW)
@@ -164,22 +183,29 @@ class SAEnquiryListPage(BasePage):
     def is_row_present(self):
         return bool(self.driver.find_elements(*self.FIRST_ROW))
 
-    def has_disabled_future_dates(self):
-        """
-        Return True if disabled day elements exist. Open inline calendar briefly if not visible.
-        """
-        try:
-            # Open inline calendar if not present
-            if not self.driver.find_elements(By.CSS_SELECTOR, "div.flatpickr-calendar.open"):
-                try:
-                    self.open_inline_calendar()
-                except:
-                    pass
+    def get_all_created_dates(self):
+        """Returns Created At column values as Python date objects."""
+        rows = self.driver.find_elements(*self.CREATED_AT_COL)
+        result = []
+        for r in rows:
+            try:
+                dt = datetime.strptime(r.text.strip(), "%d %b %Y %I:%M %p").date()
+                result.append(dt)
+            except:
+                pass
+        return result
 
-            # small wait for DOM update
+    def has_disabled_future_dates(self):
+        """Used for negative tests to confirm future days are disabled."""
+        try:
+            # open inline calendar if needed
+            if not self.driver.find_elements(By.CSS_SELECTOR, "div.flatpickr-calendar.open"):
+                self.open_inline_calendar()
+
             time.sleep(0.12)
             disabled = self.driver.find_elements(By.CSS_SELECTOR, "span.flatpickr-day.flatpickr-disabled")
-            # Attempt to close inline calendar (click outside via ESC) to restore state
+
+            # Close calendar
             try:
                 self.driver.execute_script(
                     "document.body.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape'}));"
