@@ -1,23 +1,155 @@
+# pages/common/base_page.py
+import time
+import os
+from datetime import datetime
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+# try to reuse your utilities.logger if present, otherwise set up a fallback file logger
+try:
+    from utilities.logger import logger
+except Exception:
+    import logging
+    os.makedirs("reports/logs", exist_ok=True)
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    logfile = f"reports/logs/test_run_{ts}.log"
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        handlers=[logging.FileHandler(logfile), logging.StreamHandler()]
+    )
+    logger = logging.getLogger("automation")
 
 class BasePage:
     def __init__(self, driver, timeout=10):
         self.driver = driver
         self.timeout = timeout
 
+    # -------------------------------------------------------------------
+    # 📸 Take Screenshot (used internally on failure)
+    # -------------------------------------------------------------------
+    def _screenshot(self, name="failure"):
+        folder = "reports/screenshots"
+        os.makedirs(folder, exist_ok=True)
+
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        file = f"{folder}/{name}_{ts}.png"
+
+        try:
+            self.driver.save_screenshot(file)
+            logger.info(f"📸 Screenshot saved: {file}")
+        except Exception as e:
+            logger.error(f"Failed saving screenshot: {e}")
+            print(f"📸 Screenshot failed: {e}")
+
+    # -------------------------------------------------------------------
+    # 🔥 WAIT helper (all waits use this)
+    # -------------------------------------------------------------------
+    def wait(self, locator, condition=EC.visibility_of_element_located, timeout=None):
+        t = timeout if timeout is not None else self.timeout
+        try:
+            logger.info(f"Waiting for: {locator}")
+            return WebDriverWait(self.driver, t).until(condition(locator))
+        except Exception as e:
+            logger.error(f"[WAIT FAILED] {locator} → {e}")
+            self._screenshot("wait_failed")
+            raise
+
+    # -------------------------------------------------------------------
+    # 🔥 CLICK (scroll → normal click → JS click → retry)
+    # -------------------------------------------------------------------
     def click(self, locator):
-        WebDriverWait(self.driver, self.timeout).until(EC.element_to_be_clickable(locator)).click()
+        attempts = 3
 
+        for attempt in range(attempts):
+            try:
+                logger.info(f"Clicking: {locator}")
+                element = self.wait(locator, EC.presence_of_element_located)
+
+                # Scroll into center
+                try:
+                    self.driver.execute_script(
+                        "arguments[0].scrollIntoView({block: 'center'});", element
+                    )
+                except Exception:
+                    pass
+                time.sleep(0.1)
+
+                # Normal click
+                try:
+                    element.click()
+                except Exception:
+                    # JS click fallback
+                    try:
+                        self.driver.execute_script("arguments[0].click();", element)
+                    except Exception as e:
+                        raise
+
+                time.sleep(0.2)
+                logger.info(f"Clicked successfully: {locator}")
+                return
+
+            except Exception as e:
+                logger.warning(f"[CLICK FAILED] Attempt {attempt+1}/3 for {locator} → {e}")
+
+                if attempt == attempts - 1:
+                    self._screenshot("click_failed")
+                    logger.error(f"Click ultimately failed: {locator}")
+                    raise
+
+                time.sleep(0.5)
+
+    # -------------------------------------------------------------------
+    # 🔥 TYPE (clear + send keys safely)
+    # -------------------------------------------------------------------
     def type(self, locator, text):
-        WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located(locator)).clear()
-        WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located(locator)).send_keys(text)
+        try:
+            logger.info(f"Typing into {locator}: '{text}'")
+            element = self.wait(locator, EC.visibility_of_element_located)
+            element.clear()
+            time.sleep(0.05)
+            element.send_keys(text)
+            time.sleep(0.15)
+            logger.info(f"Typed successfully in {locator}")
+        except Exception as e:
+            logger.error(f"[TYPE FAILED] {locator} text='{text}' → {e}")
+            self._screenshot("type_failed")
+            raise
 
+    # -------------------------------------------------------------------
+    # 🔥 GET TEXT
+    # -------------------------------------------------------------------
     def get_text(self, locator):
-        return WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located(locator)).text
+        try:
+            el = self.wait(locator)
+            text = el.text
+            logger.info(f"Got text from {locator}: {text}")
+            return text
+        except Exception as e:
+            logger.error(f"[GET TEXT FAILED] {locator} → {e}")
+            self._screenshot("gettext_failed")
+            raise
 
+    # -------------------------------------------------------------------
+    # 🔥 IS VISIBLE (returns element or False)
+    # -------------------------------------------------------------------
     def is_visible(self, locator):
-        return WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located(locator))
+        try:
+            el = self.wait(locator)
+            return el
+        except:
+            return False
 
+    # -------------------------------------------------------------------
+    # 🔥 OPEN URL
+    # -------------------------------------------------------------------
     def open(self, url):
-        self.driver.get(url)
+        try:
+            logger.info(f"Opening URL: {url}")
+            self.driver.get(url)
+            time.sleep(1)
+        except Exception as e:
+            logger.error(f"[OPEN FAILED] {url} → {e}")
+            self._screenshot("open_failed")
+            raise

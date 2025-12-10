@@ -1,0 +1,21 @@
+{
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_login_valid": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_empty_email": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_empty_password": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_invalid_email_format[test]": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_invalid_email_format[abc@]": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_invalid_email_format[@mail.com]": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_invalid_email_format[wrong.com]": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_invalid_email_format[abc@gmail]": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_invalid_email_format[test@test]": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_invalid_password[wrongpass]": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_invalid_password[12345678]": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_invalid_password[testing999]": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_invalid_password[!@#abcd]": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_both_wrong": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_sql_injection_email[' OR 1=1; --]": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_sql_injection_email[admin' --]": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_sql_injection_email['; DROP TABLE users; --]": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_xss_injection_email[<script>alert('XSS')</script>]": true,
+  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_xss_injection_email[test@<img src=x onerror=alert(1)>.com]": true
+}
