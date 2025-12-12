@@ -15,7 +15,8 @@ class QR_Management_QR_m_filters:
     filters_mftr_date=(By.XPATH,"//input[@id='manufacturing_date']")
     filters_exp_date=(By.XPATH,"//input[@id='expiry_date']")
     filters_apply_btn=(By.XPATH,"//button[normalize-space()='Apply']")
-
+    clear_filter=(By.XPATH,"//button[@id='clear-filter-btn']")
+    filter_product_name=(By.XPATH,"//input[@id='product_name']")
     search_field=(By.XPATH,"//input[@id='search-vale']")
     search_btn=(By.XPATH,"//button[@id='search-btn']")
     table_rows=(By.XPATH,"//table[@id='crudTable']//tbody//tr")
@@ -67,6 +68,16 @@ class QR_Management_QR_m_filters:
                 flag = True
                 break
         return flag
+
+    def Click_filter_button(self):
+        self.driver.find_element(*self.filters_btn).click()
+
+    def Enter_filter_prd_name(self,product_name):
+        self.driver.find_element(*self.filter_product_name).clear()
+        self.driver.find_element(*self.filter_product_name).send_keys(product_name)
+
+    def Click_filters_apply_btn(self):
+        self.driver.find_element(*self.filters_apply_btn).click()
 
     def Click_manufacturer_date(self):
         self.driver.find_element(*self.filters_mftr_date).click()

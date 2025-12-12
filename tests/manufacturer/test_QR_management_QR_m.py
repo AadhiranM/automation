@@ -26,7 +26,6 @@ class Test_006_QR_management_QR_m_DDT(BaseTest):
     dimension_value="2 cm"
     delivery_field_value="chennai"
 
-
     def test_QR_management_generate(self, driver):
         self.logger.info(f"===== QR Management QR Test Started for QR Generate=====")
         self.driver = driver
@@ -70,8 +69,4 @@ class Test_006_QR_management_QR_m_DDT(BaseTest):
         # Generate QR
         qr_QR_page.click_genarate_QR_button()
         time.sleep(10)
-
-
-
-
 
