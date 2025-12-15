@@ -11,17 +11,18 @@ from utilities.customlogger import LogGen
 from pages.common.base_page import BaseTest
 from utilities.read_excel import get_test_data
 
-@pytest.mark.order(7)
-class Test_007_QR_management_QR_m_filters(BaseTest):
+@pytest.mark.order(8)
+class Test_QRM_filter_option(BaseTest):
     logger = LogGen.loggen()
 
-    search_value="iphone"
-    select_status="Completed"
+    product_name="iphone"
+    manufacturing_date="10-05-2024"
+    expiry_date="10-05-2027"
 
     def test_QR_management_filters(self, driver):
         self.logger.info(f"===== QR Management QR Test Started for QR management filters=====")
-        self.driver = driver
-        self.login_and_access()
+        # self.driver = driver
+        # self.login_and_access()
 
         qr_page = QR_Management_Category_Page(driver)
         qr_page.Click_Dashboard()
@@ -33,16 +34,20 @@ class Test_007_QR_management_QR_m_filters(BaseTest):
 
         # Fill product details
         qr_QRM_filters.Click_reset_btn()
-        qr_QRM_filters.Enter_search_field(self.search_value)
-        qr_QRM_filters.Click_search_btn()
+        qr_QRM_filters.Click_filter_button()
+        qr_QRM_filters.Enter_filter_prd_name(self.product_name)
         time.sleep(2)
-
+        qr_QRM_filters.Click_manufacturer_date()
+        time.sleep(1)
+        qr_QRM_filters.set_manufacturing_date(self.manufacturing_date)
+        qr_QRM_filters.set_expiry_date(self.expiry_date)
+        time.sleep(1)
+        qr_QRM_filters.Click_filters_apply_btn()
         # qr_QRM_filters.select_status_drp(self.select_status)
 
-        status=qr_QRM_filters.search_product(self.search_value)
+        status=qr_QRM_filters.search_product(self.product_name)
         time.sleep(1)
         assert True==status
         time.sleep(1)
-
 
 

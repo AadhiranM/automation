@@ -15,7 +15,7 @@ test_data = get_test_data(excel_path, "category")  # Sheet name: Category
 
 @pytest.mark.order(2)
 @pytest.mark.parametrize("data", test_data)
-class Test_002_QR_management(BaseTest):
+class Test_QRM_category(BaseTest):
     logger = LogGen.loggen()
 
     def test_QR_management_category_flow(self, driver, data):

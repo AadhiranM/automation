@@ -11,14 +11,14 @@ from pages.common.base_page import BaseTest
 from utilities.read_excel import get_test_data
 
 @pytest.mark.order(7)
-class Test_007_QR_management_QR_m_import(BaseTest):
+class Test_QRM_import(BaseTest):
     logger = LogGen.loggen()
     upload_file = r"C:\Users\Suresh V\Downloads\qr-import-sample (1).xlsx"
 
     def test_QR_management_generate_import(self, driver):
         self.logger.info("===== QR Management QR Test Started =====")
-        self.driver = driver
-        self.login_and_access()
+        # self.driver = driver
+        # self.login_and_access()
 
         qr_page = QR_Management_Category_Page(driver)
         qr_page.Click_Dashboard()

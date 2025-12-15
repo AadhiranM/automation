@@ -16,19 +16,19 @@ test_data=get_test_data(excel_path,"products")
 
 @pytest.mark.order(4)
 @pytest.mark.parametrize("data", test_data)
-class Test_004_QR_management_products_DDT(BaseTest):
+class Test_QRM_products(BaseTest):
     logger = LogGen.loggen()
 
-    def test_QR_management_variants_flow(self, driver,data):
+    def test_QR_management_products_flow(self, driver,data):
         self.logger.info(f"===== QR Management products Test Started for {data['product_name']} =====")
 
         # Login only once
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Logged in successfully for first iteration")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Logged in successfully for first iteration")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         qr_page = QR_Management_Category_Page(driver)
         qr_page.Click_Dashboard()
@@ -78,4 +78,5 @@ class Test_004_QR_management_products_DDT(BaseTest):
         except:
             driver.save_screenshot(f".\\Screenshots\\test_create_product_{data['product_name']}.png")
             self.logger.error(f"Create product failed for '{data['product_name']}'")
+            assert False
             return  # skip this product and continue

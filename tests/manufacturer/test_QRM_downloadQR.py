@@ -11,18 +11,14 @@ from utilities.customlogger import LogGen
 from pages.common.base_page import BaseTest
 from utilities.read_excel import get_test_data
 
-@pytest.mark.order(8)
-class Test_008_QR_management_QR_m_filter_option(BaseTest):
+@pytest.mark.order(9)
+class Test_QRM_downloadQR(BaseTest):
     logger = LogGen.loggen()
 
-    product_name="iphone"
-    manufacturing_date="10-05-2024"
+    search_value="samsung"
+    select_status="Completed"
 
-    expiry_date="10-05-2027"
-
-
-
-    def test_QR_management_filters(self, driver):
+    def test_QR_management_download_QR(self, driver):
         self.logger.info(f"===== QR Management QR Test Started for QR management filters=====")
         self.driver = driver
         self.login_and_access()
@@ -37,20 +33,23 @@ class Test_008_QR_management_QR_m_filter_option(BaseTest):
 
         # Fill product details
         qr_QRM_filters.Click_reset_btn()
-        qr_QRM_filters.Click_filter_button()
-        qr_QRM_filters.Enter_filter_prd_name(self.product_name)
+        qr_QRM_filters.Enter_search_field(self.search_value)
+        # qr_QRM_filters.Click_search_btn()
         time.sleep(2)
-        qr_QRM_filters.Click_manufacturer_date()
-        time.sleep(1)
-        qr_QRM_filters.set_manufacturing_date(self.manufacturing_date)
-        qr_QRM_filters.set_expiry_date(self.expiry_date)
-        time.sleep(1)
-        qr_QRM_filters.Click_filters_apply_btn()
-        # qr_QRM_filters.select_status_drp(self.select_status)
 
-        status=qr_QRM_filters.search_product(self.product_name)
+        qr_QRM_filters.select_status_drp(self.select_status)
         time.sleep(1)
-        assert True==status
+        status=qr_QRM_filters.search_product(self.search_value)
         time.sleep(1)
+        if status:
+            qr_QRM_filters.download_batch_QR()
+            time.sleep(1)
+            qr_QRM_filters.download_unit_QR()
+            time.sleep(1)
+        else:
+            print("No matching data")
+            self.logger.error("No matching data found for the search value")
+            pytest.fail("No matching data found for the search value")
+
 
 

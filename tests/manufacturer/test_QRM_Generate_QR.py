@@ -11,15 +11,13 @@ from utilities.customlogger import LogGen
 from pages.common.base_page import BaseTest
 from utilities.read_excel import get_test_data
 
-
 # Load Excel test data
 excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "Generate_QR")  # Sheet name: Generate_QR
 
-
 @pytest.mark.order(5)
 @pytest.mark.parametrize("data", test_data)
-class Test_005_QR_management_QR_m_DDT(BaseTest):
+class Test_QRM_generate_QR(BaseTest):
     logger = LogGen.loggen()
 
     def test_QR_management_generate(self, driver, data):
@@ -36,12 +34,12 @@ class Test_005_QR_management_QR_m_DDT(BaseTest):
         self.logger.info(f"===== Running QR Generation for SKU: {sku_id}, Batch: {batch_no} =====")
 
         # Login only once
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Logged in successfully for first iteration")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Logged in successfully for first iteration")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         # Navigate to QR Management
         qr_page = QR_Management_Category_Page(driver)

@@ -13,20 +13,19 @@ test_data = get_test_data(excel_path,"variants")  # Sheet name: Variants
 
 @pytest.mark.order(3)
 @pytest.mark.parametrize("data", test_data)
-class Test_003_QR_management_variants(BaseTest):
+class Test_QRM_variants(BaseTest):
     logger = LogGen.loggen()
 
     def test_QR_management_variants_flow(self, driver, data):
         self.logger.info("===== QR Management Variants Test Started =====")
 
         # this need to enable if want to run this specific module
-
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Login completed for first iteration")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Login completed for first iteration")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         category_name = data["Category"]        # Match Excel header
         variants_type = data["variants_type"]
@@ -49,6 +48,7 @@ class Test_003_QR_management_variants(BaseTest):
             qr_variants_page.Click_Category_Entered_name()
         except:
             self.logger.warning(f"No category found with name '{category_name}'. Variant '{variants_value}' cannot be created.")
+            assert False
             return
 
         # qr_variants_page.Click_Category_Entered_name()

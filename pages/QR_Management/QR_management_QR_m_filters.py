@@ -23,6 +23,11 @@ class QR_Management_QR_m_filters:
     table_column=(By.XPATH,"//table[@id='crudTable']//tbody//tr//td")
     table_xpath=(By.XPATH,"//table[@id='crudTable']")
     status_drp=(By.XPATH,"//select[@id='idStatus']")
+    batch_QR=(By.XPATH,"//table[@id='crudTable']//tbody//tr//td[13]//a")
+    unit_QR=(By.XPATH,"//table[@id='crudTable']//tbody//tr//td[14]//a")
+    action_btn=(By.XPATH,"//tbody/tr[1]/td[15]/div[1]/button[1]")
+    invalidate_opt=(By.XPATH,"//ul[@class='dropdown-menu dropdown-menu-end show']//a[@class='dropdown-item status-item-btn'][normalize-space()='Invalidate']")
+    yes_btn=(By.XPATH,"//button[@class='btn btn-danger status-record']")
 
     def __init__(self, driver):
         self.driver = driver
@@ -53,20 +58,35 @@ class QR_Management_QR_m_filters:
 
     def search_product(self, search_value):
         flag = False
-        for r in range(1, self.getNoOfRows() + 1):
-            table = self.driver.find_element(*self.table_xpath)
-            time.sleep(2)
+        try:
+            # Check if table has empty message
+            empty_cells = self.driver.find_elements(By.XPATH, "//table[@id='crudTable']//td[@class='dataTables_empty']")
+            if empty_cells:
+                print("Table is empty")
+                return False
 
-            # Read both columns
-            product_name = table.find_element(By.XPATH, f"//table[@id='crudTable']//tbody//tr[{r}]//td[2]").text.strip()
-            batch_no = table.find_element(By.XPATH, f"//table[@id='crudTable']//tbody//tr[{r}]//td[3]").text.strip()
+            # Get all rows in tbody
+            rows = self.driver.find_elements(By.XPATH, "//table[@id='crudTable']//tbody//tr")
 
-            print(product_name)
-            print(batch_no)
-            # Match if search_value equals either product_name or batch_no
-            if search_value == product_name or search_value == batch_no:
-                flag = True
-                break
+            for r in range(1, len(rows) + 1):
+                # Get product_name and batch_no using full XPath
+                product_name = self.driver.find_element(
+                    By.XPATH, f"//table[@id='crudTable']//tbody//tr[{r}]//td[2]"
+                ).text.strip()
+                batch_no = self.driver.find_element(
+                    By.XPATH, f"//table[@id='crudTable']//tbody//tr[{r}]//td[3]"
+                ).text.strip()
+
+                print(product_name, batch_no)
+
+                if search_value == product_name or search_value == batch_no:
+                    flag = True
+                    break
+
+        except Exception as e:
+            print(f"Exception in searching product: {e}")
+            flag = False
+
         return flag
 
     def Click_filter_button(self):
@@ -129,4 +149,19 @@ class QR_Management_QR_m_filters:
         self.wait.until(EC.element_to_be_clickable(self.filters_exp_date)).click()
         self.select_date(date_string)
 
+
+    def download_batch_QR(self):
+        self.driver.find_element(*self.batch_QR).click()
+
+    def download_unit_QR(self):
+        self.driver.find_element(*self.unit_QR).click()
+
+    def click_action_btn(self):
+        self.driver.find_element(*self.action_btn).click()
+
+    def click_invalidate_btn(self):
+        self.driver.find_element(*self.invalidate_opt).click()
+
+    def click_yes_btn(self):
+        self.driver.find_element(*self.yes_btn).click()
 
