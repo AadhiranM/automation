@@ -8,6 +8,9 @@ class TestEnquiryViewPositive:
     def test_view_enquiry_details(self, setup):
         list_page = SAEnquiryListPage(setup)
 
+        # ⭐ NEW — Open Enquiry list directly (no menu click)
+        list_page.goto_page()
+
         list_page.search("test")
         list_page.open_action_menu()
         list_page.click_view()

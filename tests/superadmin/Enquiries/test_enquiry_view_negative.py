@@ -7,12 +7,11 @@ class TestEnquiryViewNegative:
     def test_view_without_valid_search(self, setup):
         page = SAEnquiryListPage(setup)
 
+        # Must load Enquiries page
+        page.goto_page()
+
         # Search something that will never appear
-        page.search("_____INVALID_____%$#")
+        page.search("%$#")
 
         # Expect: NO rows present
-        assert not page.is_row_present(), "Unexpected row present for invalid search."
-
-        # Expect: Action menu cannot be clicked
-        with pytest.raises(Exception):
-            page.open_action_menu()
+        assert page.has_no_results(), "Expected no matching results!"

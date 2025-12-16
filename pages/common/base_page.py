@@ -5,11 +5,14 @@ from datetime import datetime
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
 
 # -----------------------------------------------------------
 # ALWAYS use the global logger (NO fallback logger here)
 # -----------------------------------------------------------
 from utilities.logger import logger
+
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 
 class BasePage:
@@ -32,6 +35,19 @@ class BasePage:
             logger.info(f"📸 Screenshot saved: {file}")
         except Exception as e:
             logger.error(f"Failed saving screenshot: {e}")
+
+    def is_element_visible(self, locator, timeout=5):
+        """
+        Returns True if element becomes visible within timeout.
+        Returns False if not found / not visible.
+        """
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.visibility_of_element_located(locator)
+            )
+            return True
+        except (TimeoutException, StaleElementReferenceException):
+            return False
 
     # -------------------------------------------------------------------
     # 🔥 WAIT helper (all waits use this)
@@ -139,3 +155,15 @@ class BasePage:
             logger.error(f"[OPEN FAILED] {url} → {e}")
             self._screenshot("open_failed")
             raise
+
+    # existing code...
+
+    def is_present(self, locator, timeout=3):
+        """Return True if element is present, False otherwise"""
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.presence_of_element_located(locator)
+            )
+            return True
+        except TimeoutException:
+            return False
