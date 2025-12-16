@@ -6,6 +6,9 @@ from pages.common.base_page import BasePage
 class SAEnquiryFollowUpPage(BasePage):
 
     # ---------------- INPUT FIELD (CKEditor) ----------------
+    # ----------------- ACTION MENU ITEMS -----------------
+
+
     BODY = (
         By.XPATH,
         "//div[contains(@class,'ck-editor__editable') and @contenteditable='true']"
@@ -26,9 +29,7 @@ class SAEnquiryFollowUpPage(BasePage):
     )
 
     FOLLOWUP_SENDER = (
-        By.XPATH,
-        "(//ul[contains(@class,'list-group')]//li)[1]//strong"
-    )
+        By.XPATH, "//strong[normalize-space()='Load testing Superadmin']")
 
     FOLLOWUP_TIME = (
         By.XPATH,
@@ -39,6 +40,9 @@ class SAEnquiryFollowUpPage(BasePage):
         By.XPATH,
         "(//ul[contains(@class,'list-group')]//li)[1]//p"
     )
+
+    # Validation error
+    CONTENT_ERROR = (By.ID, "content_error")
 
     # ---------------- METHODS ----------------
     def type_followup(self, text):
@@ -63,3 +67,10 @@ class SAEnquiryFollowUpPage(BasePage):
             "time": self.get_text(self.FOLLOWUP_TIME).strip(),
             "message": self.get_text(self.FOLLOWUP_TEXT).strip(),
         }
+
+    def get_toast_text(self):
+        toast = self.wait(self.SUCCESS_TOAST)
+        return toast.text.strip()
+
+    def wait_for_content_error(self):
+        return self.is_visible(self.CONTENT_ERROR)

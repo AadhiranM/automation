@@ -52,6 +52,14 @@ class SAEnquiryListPage(BasePage):
         By.XPATH, "//table[contains(@class,'dataTable')]"
     )
 
+    # ----------------- ACTIONS -----------------
+    ACTION_SEND_EMAIL = (By.XPATH, "//a[normalize-space()='Send Email']")
+
+    ACTION_FOLLOW_UP = (
+        By.XPATH,
+        "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//a[normalize-space()='Follow Up']"
+    )
+
     # ----------------- NAVIGATION -----------------
     def goto_page(self):
         self.driver.get("https://beta.digitathya.com/admin/enquires?reset_filters=1")
@@ -175,3 +183,12 @@ class SAEnquiryListPage(BasePage):
         WebDriverWait(self.driver, 15).until(
             EC.presence_of_element_located(self.PAGE_LOADED_MARKER)
         )
+
+
+    def click_send_email(self):
+        self.click(self.ACTION_SEND_EMAIL)
+
+    def click_follow_up(self):
+        """Click Follow Up from action menu"""
+        self.wait(self.ACTION_FOLLOW_UP)
+        self.click(self.ACTION_FOLLOW_UP)

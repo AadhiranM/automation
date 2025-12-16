@@ -2,6 +2,7 @@ import os
 import pytest
 from datetime import datetime
 
+import shutil
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.edge.options import Options as EdgeOptions
@@ -53,6 +54,18 @@ def wait(setup, get_config):
     timeout = get_config.get("explicit_wait", 10)
     return WebDriverWait(setup, timeout)
 
+
+# =========================================================
+# CLEAN OLD ARTIFACTS (Screenshots)
+# =========================================================
+@pytest.fixture(scope="session", autouse=True)
+def clean_old_reports():
+    screenshots_dir = "reports/screenshots"
+
+    if os.path.exists(screenshots_dir):
+        shutil.rmtree(screenshots_dir)
+
+    os.makedirs(screenshots_dir, exist_ok=True)
 
 # =========================================================
 # MAIN DRIVER SETUP (Chrome / Edge / Firefox / Ulaa)
@@ -186,7 +199,9 @@ def pytest_runtest_makereport(item):
         driver = item.funcargs.get("setup")
 
         if driver:
-            folder = "reports/screenshots"
+            # ALWAYS resolve path from project root
+            project_root = os.getcwd()
+            folder = os.path.join(project_root, "reports", "screenshots")
             os.makedirs(folder, exist_ok=True)
 
             file_name = (
@@ -197,9 +212,9 @@ def pytest_runtest_makereport(item):
             filepath = os.path.join(folder, file_name)
             driver.save_screenshot(filepath)
 
-            print(f"\n📸 Screenshot saved: {filepath}")
+            print(f"\n Screenshot saved: {filepath}")
 
-            # Allure reporting compatibility
+            # Optional: Allure
             try:
                 import allure
                 with open(filepath, "rb") as f:

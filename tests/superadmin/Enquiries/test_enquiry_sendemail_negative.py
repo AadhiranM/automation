@@ -4,48 +4,71 @@ from pages.superadmin.Enquiries.sa_enquiry_sendemail_page import SAEnquirySendEm
 
 
 @pytest.mark.superadmin
+@pytest.mark.usefixtures("login_superadmin")  #  login handled
 class TestSendEmailNegative:
 
-    def test_blank_subject(self, setup):
+    def test_send_email_blank_subject(self, setup):
         list_page = SAEnquiryListPage(setup)
+        email_page = SAEnquirySendEmailPage(setup)
+
+        #  Navigate to Enquiries
+        list_page.goto_page()
         list_page.search("test")
         list_page.wait_first_row_loaded()
         list_page.open_action_menu()
         list_page.click_send_email()
 
-        email = SAEnquirySendEmailPage(setup)
+        #  Only body filled
+        email_page.type_body("Testing body only")
+        email_page.click_send()
 
-        email.type_body("Testing body only")
-        email.click_send()
+        # Validate subject error
+        assert email_page.wait_subject_error(), \
+            "Subject validation error not shown"
 
-        assert email.wait_subject_error(), "❌ Subject error message not shown"
-        print("✔ Blank subject validation displayed.")
+        print(" Blank subject validation displayed")
 
 
-    def test_blank_body(self, setup):
+    def test_send_email_blank_body(self, setup):
         list_page = SAEnquiryListPage(setup)
+        email_page = SAEnquirySendEmailPage(setup)
+
+        #  Navigate to Enquiries
+        list_page.goto_page()
         list_page.search("test")
         list_page.wait_first_row_loaded()
         list_page.open_action_menu()
         list_page.click_send_email()
 
-        email = SAEnquirySendEmailPage(setup)
+        #  Only subject filled
+        email_page.type_subject("Subject only")
+        email_page.click_send()
 
-        email.type_subject("Subject only")
-        email.click_send()
+        #  Validate body error
+        assert email_page.wait_body_error(), \
+            "Body validation error not shown"
 
-        assert email.wait_body_error(), "❌ Body error message not shown"
-        print("✔ Blank body validation displayed.")
+        print(" Blank body validation displayed")
 
 
-    def test_close_without_sending(self, setup):
+    def test_send_email_without_subject_and_body(self, setup):
         list_page = SAEnquiryListPage(setup)
+        email_page = SAEnquirySendEmailPage(setup)
+
+        #  Navigate to Enquiries
+        list_page.goto_page()
         list_page.search("test")
+        list_page.wait_first_row_loaded()
         list_page.open_action_menu()
         list_page.click_send_email()
 
-        # Browser back to close modal
-        setup.back()
+        #  Click send without filling anything
+        email_page.click_send()
 
-        assert "enquiries" in setup.current_url.lower(), "❌ Did not return to enquiries page"
-        print("✔ Close without sending returned to list page.")
+        #  Both validations must appear
+        assert email_page.wait_subject_error(), \
+            "Subject validation error not shown"
+        assert email_page.wait_body_error(), \
+            "Body validation error not shown"
+
+        print(" Blank subject & body validation displayed")

@@ -1,12 +1,25 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from pages.common.base_page import BasePage
+from datetime import datetime
 
 
 class SAEnquirySendEmailPage(BasePage):
 
     # ---------------- INPUT LOCATORS ----------------
-    TO_EMAIL = (By.ID, "email-to")
+    TO_EMAIL = (By.CSS_SELECTOR, "input[type='email']")
+    PREVIOUS_EMAIL_SECTION = (By.XPATH, "//h5[normalize-space()='Previous Email']")
+
+    PREV_EMAIL_SENDERS = (
+        By.XPATH,
+        "//ul[@id='followup-comment-list']//strong"
+    )
+
+    PREV_EMAIL_DATES = (
+        By.XPATH,
+        "//ul[@id='followup-comment-list']//span[contains(@class,'comment-meta')]"
+    )
+
     SUBJECT = (By.ID, "subject")
 
     # CKEditor editable DIV
@@ -16,8 +29,7 @@ class SAEnquirySendEmailPage(BasePage):
     )
 
     SEND_BUTTON = (
-        By.XPATH,
-        "//button[contains(text(),'Submit') or contains(text(),'Send')]"
+        By.XPATH, "//button[normalize-space()='Submit']"
     )
 
     # ---------------- VALIDATION ERRORS ----------------
@@ -25,9 +37,12 @@ class SAEnquirySendEmailPage(BasePage):
     BODY_ERROR = (By.ID, "content_error")
 
     # ---------------- TOAST / SUCCESS ----------------
-    SUCCESS_TOAST = (By.XPATH, "//div[contains(@class,'toastify') and contains(text(),'Email')]")
+    SUCCESS_TOAST = (
+        By.XPATH,
+        "//div[contains(@class,'toastify') and contains(text(),'Email')]"
+    )
 
-    # ---------------- PREVIOUS EMAIL SECTION ----------------
+    # ---------------- PREVIOUS EMAIL (LATEST) ----------------
     PREV_EMAIL_SENDER = (
         By.XPATH,
         "//ul[@id='followup-comment-list']/li[1]//strong"
@@ -45,7 +60,7 @@ class SAEnquirySendEmailPage(BasePage):
 
     PREV_EMAIL_BODY = (
         By.XPATH,
-        "//ul[@id='followup-comment-list']/li[1]//div[@class='comment-body']/p"
+        "//ul[@id='followup-comment-list']/li[1]//div[@class='comment-body']"
     )
 
     # ---------------- INPUT METHODS ----------------
@@ -71,8 +86,9 @@ class SAEnquirySendEmailPage(BasePage):
         return self.is_visible(self.BODY_ERROR)
 
     # ---------------- TOAST ----------------
-    def wait_for_toast(self):
-        return self.is_visible(self.SUCCESS_TOAST)
+    def get_toast_text(self):
+        toast = self.wait(self.SUCCESS_TOAST)
+        return toast.text.strip()
 
     # ---------------- PREVIOUS EMAIL EXTRACTION ----------------
     def get_previous_email_details(self):
@@ -82,3 +98,27 @@ class SAEnquirySendEmailPage(BasePage):
             "subject": self.get_text(self.PREV_EMAIL_SUBJECT).strip(),
             "body": self.get_text(self.PREV_EMAIL_BODY).strip(),
         }
+
+    # ---------------- VALIDATIONS ----------------
+    def is_email_disabled(self):
+        el = self.wait(self.TO_EMAIL)
+        return el.get_attribute("readonly") or not el.is_enabled()
+
+    def is_previous_email_section_present(self):
+        return self.is_visible(self.PREVIOUS_EMAIL_SECTION)
+
+    def get_all_previous_senders(self):
+        elements = self.driver.find_elements(*self.PREV_EMAIL_SENDERS)
+        return [e.text.strip() for e in elements]
+
+    def get_all_previous_dates(self):
+        elements = self.driver.find_elements(*self.PREV_EMAIL_DATES)
+        return [e.text.strip() for e in elements]
+
+    def is_valid_date_format(self, date_text):
+        try:
+            datetime.strptime(date_text, "%b %d, %Y at %I:%M %p")
+            return True
+        except ValueError:
+            return False
+

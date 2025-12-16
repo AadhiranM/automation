@@ -1,38 +1,46 @@
 import logging
 import os
 
-# Log folder
+# -------------------------
+# LOG PATH SETUP
+# -------------------------
 LOG_DIR = "reports/logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 
-# Single reusable log file
 LOG_FILE = f"{LOG_DIR}/automation.log"
 
-# Create logger
+# -------------------------
+# CREATE LOGGER
+# -------------------------
 logger = logging.getLogger("automation")
 logger.setLevel(logging.INFO)
 
-# Avoid duplicate handlers
-if not logger.handlers:
+# 🔥 IMPORTANT: Remove existing handlers (pytest reuse issue)
+if logger.hasHandlers():
+    logger.handlers.clear()
 
-    # -------------------------
-    # FILE HANDLER (one file only)
-    # -------------------------
-    file_handler = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
-    file_format = logging.Formatter(
-        "%(asctime)s [%(levelname)s] %(message)s"
-    )
-    file_handler.setFormatter(file_format)
-    logger.addHandler(file_handler)
+# -------------------------
+# FILE HANDLER (OVERWRITE)
+# -------------------------
+file_handler = logging.FileHandler(
+    LOG_FILE,
+    mode="w",              # ✅ overwrite every run
+    encoding="utf-8"
+)
+file_format = logging.Formatter(
+    "%(asctime)s [%(levelname)s] %(message)s"
+)
+file_handler.setFormatter(file_format)
+logger.addHandler(file_handler)
 
-    # -------------------------
-    # CONSOLE HANDLER (terminal)
-    # -------------------------
-    console_handler = logging.StreamHandler()
-    console_format = logging.Formatter(
-        "%(asctime)s [%(levelname)s] %(message)s"
-    )
-    console_handler.setFormatter(console_format)
-    logger.addHandler(console_handler)
+# -------------------------
+# CONSOLE HANDLER
+# -------------------------
+console_handler = logging.StreamHandler()
+console_format = logging.Formatter(
+    "%(asctime)s [%(levelname)s] %(message)s"
+)
+console_handler.setFormatter(console_format)
+logger.addHandler(console_handler)
 
-logger.info("📘 Logger initialized — writing to automation.log")
+logger.info("📘 Logger initialized — fresh run, old logs cleared")

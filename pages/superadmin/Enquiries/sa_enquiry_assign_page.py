@@ -3,15 +3,16 @@ from pages.common.base_page import BasePage
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException
-
+from selenium.webdriver.common.action_chains import ActionChains
+import time
 
 class SAEnquiryAssignPage(BasePage):
 
     # ----------------- ACTION (3 DOTS) -----------------
     ACTION_DOTS = (
-        By.XPATH,
-        "//table[contains(@class,'dataTable')]//tbody/tr[1]//button[@data-bs-toggle='dropdown']"
-    )
+    By.XPATH,
+    "//table[contains(@class,'dataTable')]//tbody/tr[1]//button[@data-bs-toggle='dropdown']"
+)
 
     DROPDOWN_MENU_OPEN = (
         By.XPATH,
@@ -20,9 +21,10 @@ class SAEnquiryAssignPage(BasePage):
 
     # ----------------- ASSIGN INTERNAL USER -----------------
     ASSIGN_BTN = (
-        By.XPATH,
-        "//table/tbody/tr[1]//button[normalize-space()='Assign Internal User']"
-    )
+    By.XPATH,
+    "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]"
+    "//button[normalize-space()='Assign Internal User']"
+)
 
     INTERNAL_USER_DROPDOWN = (By.ID, "assigned_to")
     SUBMIT_ASSIGN = (By.XPATH, "//button[contains(text(),'Submit')]")
@@ -35,9 +37,9 @@ class SAEnquiryAssignPage(BasePage):
 
     # ----------------- UNASSIGN -----------------
     UNASSIGN_BTN = (
-        By.XPATH,
-        "//button[normalize-space()='Un-assign Internal User']"
-    )
+    By.XPATH,
+    "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]"
+    "//button[contains(@class,'unassign-btn')]")
 
     UNASSIGN_CONFIRM_CANCEL = (
         By.XPATH,
@@ -62,31 +64,45 @@ class SAEnquiryAssignPage(BasePage):
 
     # ================= ACTION METHODS =================
 
-    def open_actions(self, retries=3):
-        """
-        Always re-locate the action button to avoid stale element issues.
-        """
-        for attempt in range(retries):
+    def open_actions(self):
+        for attempt in range(3):
             try:
-                WebDriverWait(self.driver, 10).until(
+                # 🔹 Wait for table row to be present
+                WebDriverWait(self.driver, 15).until(
+                    EC.presence_of_element_located(self.ACTION_DOTS)
+                )
+
+                # 🔹 Re-locate element every time (VERY IMPORTANT)
+                action_btn = WebDriverWait(self.driver, 15).until(
                     EC.element_to_be_clickable(self.ACTION_DOTS)
                 )
-                self.click(self.ACTION_DOTS)
 
-                WebDriverWait(self.driver, 10).until(
-                    EC.visibility_of_element_located(self.DROPDOWN_MENU_OPEN)
+                # 🔹 Scroll into view (datatable issue)
+                self.driver.execute_script(
+                    "arguments[0].scrollIntoView({block:'center'});", action_btn
                 )
-                return
+                time.sleep(0.3)
+
+                # 🔹 Click using ActionChains (more reliable than .click())
+                ActionChains(self.driver).move_to_element(action_btn).click().perform()
+
+                # 🔹 Wait for dropdown menu to appear (IMPORTANT FIX)
+                WebDriverWait(self.driver, 10).until(
+                    EC.presence_of_element_located(self.DROPDOWN_MENU_OPEN)
+                )
+
+                return  # ✅ SUCCESS
 
             except StaleElementReferenceException:
-                if attempt == retries - 1:
-                    raise
+                time.sleep(0.5)
+
+        raise AssertionError(" Failed to open action dropdown after retries")
 
     def open_assign_user(self):
-        WebDriverWait(self.driver, 15).until(
-            EC.element_to_be_clickable(self.ASSIGN_BTN)
+        btn = WebDriverWait(self.driver, 15).until(
+            EC.presence_of_element_located(self.ASSIGN_BTN)
         )
-        self.click(self.ASSIGN_BTN)
+        self.driver.execute_script("arguments[0].click();", btn)
 
     def choose_internal_user(self, name):
         """Select internal user from dropdown"""
@@ -127,11 +143,10 @@ class SAEnquiryAssignPage(BasePage):
     # ================= UNASSIGN ACTIONS =================
 
     def click_unassign(self):
-        if not self.is_element_visible(self.UNASSIGN_BTN):
-            return False
-
-        self.click(self.UNASSIGN_BTN)
-        return True
+        btn = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located(self.UNASSIGN_BTN)
+        )
+        self.driver.execute_script("arguments[0].click();", btn)
 
     def confirm_unassign_yes(self):
         self.click(self.UNASSIGN_CONFIRM_YES)
@@ -182,3 +197,11 @@ class SAEnquiryAssignPage(BasePage):
                     (By.XPATH, "//table//tbody/tr[1]/td[6]//span")
                 )
             )
+
+    def wait_until_assigned_user_is(self, expected, timeout=20):
+        from selenium.webdriver.support.ui import WebDriverWait
+
+        def _check(driver):
+            return self.assigned_user_value().strip() == expected
+
+        WebDriverWait(self.driver, timeout).until(_check)
