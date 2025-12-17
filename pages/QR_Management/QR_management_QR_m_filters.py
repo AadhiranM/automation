@@ -28,6 +28,11 @@ class QR_Management_QR_m_filters:
     action_btn=(By.XPATH,"//tbody/tr[1]/td[15]/div[1]/button[1]")
     invalidate_opt=(By.XPATH,"//ul[@class='dropdown-menu dropdown-menu-end show']//a[@class='dropdown-item status-item-btn'][normalize-space()='Invalidate']")
     yes_btn=(By.XPATH,"//button[@class='btn btn-danger status-record']")
+    reasign_batch_opt=(By.XPATH,"//ul[@class='dropdown-menu dropdown-menu-end show']//button[@type='button'][normalize-space()='Re-assign Batch QR']")
+    product_input_field=(By.XPATH,"//input[@aria-label='Search']")
+    product_search_opt=(By.XPATH,"//span[@id='select2-product_ref_id-container']")
+    variant_sku=(By.XPATH,"//select[@id='variant_sku']")
+    reasign_submit_btn=(By.XPATH,"//div[@class='modal-content border-0']//button[@type='submit'][normalize-space()='Submit']")
 
     def __init__(self, driver):
         self.driver = driver
@@ -164,4 +169,22 @@ class QR_Management_QR_m_filters:
 
     def click_yes_btn(self):
         self.driver.find_element(*self.yes_btn).click()
+
+    def click_reasign_batch_QR(self):
+        self.driver.find_element(*self.reasign_batch_opt).click()
+
+    def click_product_search(self):
+        self.driver.find_element(*self.product_search_opt).click()
+
+    def Enter_reasign_product_field(self,product):
+        ele=self.driver.find_element(*self.product_input_field)
+        ele.send_keys(product)
+        ele.send_keys(Keys.ENTER)
+
+    def select_varinat_sku(self,variant_sku):
+        drp_variant_sku=Select(self.driver.find_element(*self.variant_sku))
+        drp_variant_sku.select_by_visible_text(variant_sku)
+
+    def click_reasign_submit_btn(self):
+        self.driver.find_element(*self.reasign_submit_btn).click()
 
