@@ -175,6 +175,3 @@ class QR_Management_QR_m_Page:
     def click_genarate_QR_button(self):
         self.driver.find_element(*self.genarate_QR).click()
 
-
-
-
