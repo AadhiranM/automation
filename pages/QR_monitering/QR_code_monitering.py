@@ -209,7 +209,7 @@ class QR_code_monitering_page:
     # ================= REPORT EXPORT =================
     report_start_id = (By.XPATH, "//input[@id='fromId']")
     report_end_id = (By.XPATH, "//input[@id='toId']")
-    ID_select_user_drpdwn = (By.XPATH, "//select[@id='id-user-select']")
+    ID_select_user_drpdwn = (By.XPATH,"//select[@id='id-user-select']")
     submit_btn = (By.XPATH, "//button[@id='submitBtn']")
 
     # ================= USER EXPORT =================
@@ -225,6 +225,7 @@ class QR_code_monitering_page:
     # ================= DATE BASED EXPORT =================
     date_based_tab = (By.XPATH, "//button[@id='date-tab']")
     date_based_date_range = (By.XPATH, "//input[@id='export_datepicker_range']")
+    table_rows = (By.XPATH, "//table[@id='crudTable']//tbody//tr")
 
     # ================= INIT =================
     def __init__(self, driver):
@@ -272,6 +273,23 @@ class QR_code_monitering_page:
     def Click_filters_apply(self):
         self.driver.find_element(*self.filters_apply).click()
 
+    def click_Export_btn(self):
+        self.driver.find_element(*self.export_btn).click()
+
+    def Enter_report_start_id(self,Report_start_Id):
+        self.driver.find_element(*self.report_start_id).send_keys(Report_start_Id)
+
+    def Enter_report_end_id(self,Report_end_Id):
+        self.driver.find_element(*self.report_end_id).send_keys(Report_end_Id)
+
+    def select_id_select_user_drpdwn(self,select_user):
+        drpdwn= Select(self.driver.find_element(*self.ID_select_user_drpdwn))
+        drpdwn.select_by_visible_text(select_user)
+
+    def click_submit_btn(self):
+        self.driver.find_element(*self.submit_btn).click()
+
+
     # ================= FLATPICKR DATE RANGE =================
     def select_date_range(self, start_date, end_date):
         """
@@ -305,18 +323,30 @@ class QR_code_monitering_page:
         time.sleep(0.5)
 
         for d in self.driver.find_elements(By.XPATH, calendar_popup + "//span[contains(@class,'flatpickr-day')]"):
-            if d.text == str(int(start_day)) and "disabled" not in d.get_attribute("class"):
+            classes = d.get_attribute("class")
+            if (
+                    d.text == str(int(start_day))
+                    and "flatpickr-disabled" not in classes
+                    and "notAllowed" not in classes
+                    and "prevMonthDay" not in classes
+                    and "nextMonthDay" not in classes
+            ):
                 d.click()
                 break
 
-        time.sleep(0.5)
+        # for d in self.driver.find_elements(By.XPATH, calendar_popup + "//span[contains(@class,'flatpickr-day')]"):
+        #     if d.text == str(int(start_day)) and "disabled" not in d.get_attribute("class"):
+        #         d.click()
+        #         break
+
+        time.sleep(2)
 
         # END DATE
         if start_year != end_year or start_month_name != end_month_name:
             year_input.clear()
             year_input.send_keys(end_year)
             month_dropdown.select_by_visible_text(end_month_name)
-            time.sleep(0.5)
+            time.sleep(2)
 
         for d in self.driver.find_elements(By.XPATH, calendar_popup + "//span[contains(@class,'flatpickr-day')]"):
             if d.text == str(int(end_day)) and "disabled" not in d.get_attribute("class"):
@@ -324,3 +354,55 @@ class QR_code_monitering_page:
                 break
 
         time.sleep(1)
+
+    def search_product(self, timeout=10):
+        """
+        Check if the QR Monitoring table has any rows after applying filter.
+        Returns True if table has rows, False if empty.
+        """
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
+
+        try:
+            wait = WebDriverWait(self.driver, timeout)
+            # Wait until table is present
+            wait.until(EC.presence_of_element_located((By.ID, "crudTable")))
+
+            # Check if table shows "No data"
+            empty_cells = self.driver.find_elements(
+                By.XPATH, "//table[@id='crudTable']//td[@class='dataTables_empty']"
+            )
+            if empty_cells:
+                print("Table is empty")
+                return False
+
+            # Check for rows
+            rows = self.driver.find_elements(By.XPATH, "//table[@id='crudTable']//tbody//tr")
+            if not rows:
+                print("No rows found")
+                return False
+
+            print(f"Table has {len(rows)} row(s)")
+            for r, row in enumerate(rows, start=1):
+                tds = row.find_elements(By.TAG_NAME, "td")
+                row_data = [td.text.strip() for td in tds]
+                print(f"Row {r}: {row_data}")
+
+            return True
+
+        except Exception as e:
+            print(f"Exception in checking table rows: {e}")
+            return False
+
+    def get_table_row_count(self):
+        """
+        Returns the number of rows in the table after filter is applied.
+        Correctly handles 'No data available' row.
+        """
+        rows = self.driver.find_elements(*self.table_rows)
+        if not rows:
+            return 0
+        # Check if first row shows "No data"
+        if "dataTables_empty" in rows[0].get_attribute("class"):
+            return 0
+        return len(rows)

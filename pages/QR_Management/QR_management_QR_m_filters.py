@@ -81,6 +81,7 @@ class QR_Management_QR_m_filters:
                 batch_no = self.driver.find_element(
                     By.XPATH, f"//table[@id='crudTable']//tbody//tr[{r}]//td[3]"
                 ).text.strip()
+                time.sleep(1)
 
                 print(product_name, batch_no)
 
@@ -181,7 +182,7 @@ class QR_Management_QR_m_filters:
         ele.send_keys(product)
         ele.send_keys(Keys.ENTER)
 
-    def select_varinat_sku(self,variant_sku):
+    def select_variant_sku(self,variant_sku):
         drp_variant_sku=Select(self.driver.find_element(*self.variant_sku))
         drp_variant_sku.select_by_visible_text(variant_sku)
 

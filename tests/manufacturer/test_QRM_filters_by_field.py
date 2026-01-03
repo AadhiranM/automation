@@ -20,8 +20,9 @@ class Test_QRM_filters(BaseTest):
 
     def test_QR_management_filters(self, driver):
         self.logger.info(f"===== QR Management QR Test Started for QR management filters=====")
-        # self.driver = driver
-        # self.login_and_access()
+
+        self.driver = driver
+        self.login_and_access()
 
         qr_page = QR_Management_Category_Page(driver)
         qr_page.Click_Dashboard()

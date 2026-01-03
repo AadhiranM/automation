@@ -136,7 +136,7 @@ class Test_QRM_reassign_batch_QR_DDT(BaseTest):
                 time.sleep(2)
 
                 # Select variant SKU
-                qr_filters.select_varinat_sku(variant_sku)
+                qr_filters.select_variant_sku(variant_sku)
                 time.sleep(2)
 
                 qr_filters.click_reasign_submit_btn()
@@ -156,5 +156,6 @@ class Test_QRM_reassign_batch_QR_DDT(BaseTest):
                     f"Reassign failed: Product or Variant SKU not found "
                     f"(Product={product}, Variant={variant_sku})"
                 )
+
 
 
