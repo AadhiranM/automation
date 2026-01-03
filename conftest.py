@@ -143,7 +143,7 @@ def setup(request, get_browser, get_config, base_url):
     driver.get(base_url)
 
     # ---------------------------------------------------------
-    # 🔥 ACCESS CODE AUTO-HANDLER (Correct position)
+    # ACCESS CODE AUTO-HANDLER (Correct position)
     # ---------------------------------------------------------
     if "accessCheck" in driver.current_url:
         from pages.common.access_code_page import AccessCodePage

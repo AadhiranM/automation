@@ -167,3 +167,11 @@ class BasePage:
             return True
         except TimeoutException:
             return False
+
+    def get_value(self, locator):
+        element = self.wait(locator)
+        return element.get_attribute("value")
+
+    def clear(self, locator):
+        element = self.wait(locator)
+        element.clear()

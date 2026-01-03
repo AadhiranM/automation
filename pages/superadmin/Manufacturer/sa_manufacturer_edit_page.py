@@ -6,36 +6,79 @@ from pages.common.base_page import BasePage
 
 class SAManufacturerEditPage(BasePage):
 
-    # --------- INPUT FIELDS ----------
-    EMAIL = (By.NAME, "email")
-    COMPANY_NAME = (By.NAME, "company_name")
+    # ---------------- MODAL ----------------
+    EDIT_MODAL = (By.ID, "showModal")
 
-    # --------- BUTTON ----------
-    UPDATE_BTN = (By.XPATH, "//button[normalize-space()='Update']")
+    # ---------------- INPUT FIELDS (MODAL SCOPED) ----------------
+    EMAIL = (
+        By.XPATH,
+        "//div[@id='showModal' and contains(@class,'show')]//input[@name='email']"
+    )
 
-    # --------- PAGE LOAD ----------
-    PAGE_MARKER = (By.XPATH, "//h5[normalize-space()='Edit Manufacturer']")
+    COMPANY_NAME = (
+        By.XPATH,
+        "//div[@id='showModal' and contains(@class,'show')]//input[@name='company_name']"
+    )
 
+    # ---------------- BUTTON ----------------
+    UPDATE_BTN = (
+        By.XPATH,
+        "//div[@id='showModal']//button[normalize-space()='Update']"
+    )
+
+    # ---------------- SUCCESS TOAST ----------------
+    SUCCESS_TOAST = (
+        By.XPATH,
+        "//div[contains(text(),'updated successfully')]"
+    )
+
+    # ---------------- PAGE LOAD ----------------
     def wait_for_page(self):
-        WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located(self.PAGE_MARKER)
+        """Wait until Edit modal is visible"""
+        WebDriverWait(self.driver, 15).until(
+            EC.visibility_of_element_located(self.EDIT_MODAL)
         )
 
-    # --------- ACTIONS ----------
+    # ---------------- ACTIONS ----------------
     def update_email(self, email):
+        self.wait(self.EMAIL)
         self.clear(self.EMAIL)
         self.type(self.EMAIL, email)
 
     def update_company_name(self, name):
+        self.wait(self.COMPANY_NAME)
         self.clear(self.COMPANY_NAME)
         self.type(self.COMPANY_NAME, name)
 
     def click_update(self):
         self.click(self.UPDATE_BTN)
 
-    # --------- GETTERS ----------
+    # ---------------- WAIT AFTER UPDATE ----------------
+    def wait_for_update_success(self):
+        """
+        Some environments show toast,
+        some directly close modal.
+        Handle both safely.
+        """
+        WebDriverWait(self.driver, 15).until(
+            lambda d:
+            d.find_elements(*self.SUCCESS_TOAST) or
+            not d.find_elements(*self.EDIT_MODAL)
+        )
+
+    def wait_for_modal_close(self):
+        """Explicit wait if needed"""
+        WebDriverWait(self.driver, 15).until(
+            EC.invisibility_of_element_located(self.EDIT_MODAL)
+        )
+
+    # ---------------- GETTERS ----------------
     def get_email_value(self):
-        return self.wait(self.EMAIL).get_attribute("value")
+        return WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(self.EMAIL)
+        ).get_attribute("value")
 
     def get_company_name_value(self):
-        return self.wait(self.COMPANY_NAME).get_attribute("value")
+        return WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(self.COMPANY_NAME)
+        ).get_attribute("value")

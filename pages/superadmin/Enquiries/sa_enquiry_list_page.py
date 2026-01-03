@@ -12,6 +12,7 @@ class SAEnquiryListPage(BasePage):
 
     # ----------------- SEARCH -----------------
     SEARCH_BOX = (By.ID, "search-vale")
+    SEARCH_BTN = (By.ID, "search-btn")
 
     # ----------------- STATUS FILTER -----------------
     STATUS_SELECT = (By.ID, "idStatus")   # Native <select>
@@ -79,16 +80,16 @@ class SAEnquiryListPage(BasePage):
 
     # ----------------- SEARCH -----------------
     def search(self, text):
-        self.wait_for_page_loaded()  # 👈 critical
-        self.wait(self.SEARCH_BOX)
+        self.wait_for_page_loaded()
         self.type(self.SEARCH_BOX, text)
-        self.driver.find_element(*self.SEARCH_BOX).send_keys("\n")
+        self.click(self.SEARCH_BTN)  # 🔑 important
+        self.wait_for_results()
 
     # ----------------- STATUS FILTER -----------------
-    def filter_by_status(self, status_text):
+    def filter_by_status(self, status):
         dropdown = self.wait(self.STATUS_SELECT)
-        Select(dropdown).select_by_visible_text(status_text)
-        time.sleep(0.4)
+        Select(dropdown).select_by_visible_text(status)
+        self.click(self.SEARCH_BTN)  # 🔑 required
         self.wait_for_results()
 
     # ----------------- ENTRIES PER PAGE -----------------
@@ -140,11 +141,16 @@ class SAEnquiryListPage(BasePage):
     # ----------------- INLINE DATE FILTER -----------------
     def filter_inline_created_at(self, start, end):
         self.click(self.INLINE_CREATED_AT)
+
+        WebDriverWait(self.driver, 5).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "flatpickr-calendar"))
+        )
+
         picker = FlatpickrRangePicker(self.driver)
-        ok = picker.select_range(start, end)
-        time.sleep(0.4)
+        picker.select_range(start, end)
+
+        self.click(self.SEARCH_BTN)  # 🔑 mandatory
         self.wait_for_results()
-        return ok
 
     # ----------------- PANEL DATE FILTER -----------------
     def filter_panel_created_at(self, start, end):
