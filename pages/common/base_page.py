@@ -3,6 +3,7 @@ import time
 import os
 from datetime import datetime
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
@@ -175,3 +176,12 @@ class BasePage:
     def clear(self, locator):
         element = self.wait(locator)
         element.clear()
+
+    def select_by_visible_text(self, locator, text):
+        """
+        Select dropdown option by visible text
+        Used for normal <select> dropdowns
+        """
+        element = self.driver.find_element(*locator)
+        select = Select(element)
+        select.select_by_visible_text(text)

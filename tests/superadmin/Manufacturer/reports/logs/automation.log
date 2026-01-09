@@ -1,72 +1,58 @@
-2026-01-03 17:19:54,698 [INFO] 📘 Logger initialized — fresh run, old logs cleared
-2026-01-03 17:19:56,156 [INFO] Typing into ('name', 'access_code'): '2560'
-2026-01-03 17:19:56,156 [INFO] Waiting for: ('name', 'access_code')
-2026-01-03 17:19:56,461 [INFO] Typed successfully in ('name', 'access_code')
-2026-01-03 17:19:56,461 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-01-03 17:19:56,462 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-01-03 17:19:57,067 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-01-03 17:19:57,069 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
-2026-01-03 17:19:57,069 [INFO] Waiting for: ('name', 'email')
-2026-01-03 17:19:58,251 [INFO] Typed successfully in ('name', 'email')
-2026-01-03 17:19:58,251 [INFO] Typing into ('name', 'password'): 'Newuser@123'
-2026-01-03 17:19:58,252 [INFO] Waiting for: ('name', 'password')
-2026-01-03 17:19:58,550 [INFO] Typed successfully in ('name', 'password')
-2026-01-03 17:19:58,552 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
-2026-01-03 17:19:58,553 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
-2026-01-03 17:19:58,941 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
-2026-01-03 17:20:09,069 [INFO] Clicking: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2026-01-03 17:20:09,070 [INFO] Waiting for: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2026-01-03 17:20:09,488 [INFO] Clicked successfully: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2026-01-03 17:20:09,489 [INFO] Clicking: ('xpath', "//a[normalize-space()='Edit']")
-2026-01-03 17:20:09,489 [INFO] Waiting for: ('xpath', "//a[normalize-space()='Edit']")
-2026-01-03 17:20:19,840 [INFO] Clicked successfully: ('xpath', "//a[normalize-space()='Edit']")
-2026-01-03 17:20:20,368 [INFO] Waiting for: ('xpath', "//div[@id='showModal' and contains(@class,'show')]//input[@name='email']")
-2026-01-03 17:20:20,393 [INFO] Waiting for: ('xpath', "//div[@id='showModal' and contains(@class,'show')]//input[@name='email']")
-2026-01-03 17:20:20,430 [INFO] Typing into ('xpath', "//div[@id='showModal' and contains(@class,'show')]//input[@name='email']"): 'pea_updated@mailinator.com'
-2026-01-03 17:20:20,430 [INFO] Waiting for: ('xpath', "//div[@id='showModal' and contains(@class,'show')]//input[@name='email']")
-2026-01-03 17:20:20,746 [INFO] Typed successfully in ('xpath', "//div[@id='showModal' and contains(@class,'show')]//input[@name='email']")
-2026-01-03 17:20:20,746 [INFO] Waiting for: ('xpath', "//div[@id='showModal' and contains(@class,'show')]//input[@name='company_name']")
-2026-01-03 17:20:20,759 [INFO] Waiting for: ('xpath', "//div[@id='showModal' and contains(@class,'show')]//input[@name='company_name']")
-2026-01-03 17:20:20,789 [INFO] Typing into ('xpath', "//div[@id='showModal' and contains(@class,'show')]//input[@name='company_name']"): 'Pea Updated'
-2026-01-03 17:20:20,790 [INFO] Waiting for: ('xpath', "//div[@id='showModal' and contains(@class,'show')]//input[@name='company_name']")
-2026-01-03 17:20:21,090 [INFO] Typed successfully in ('xpath', "//div[@id='showModal' and contains(@class,'show')]//input[@name='company_name']")
-2026-01-03 17:20:21,090 [INFO] Clicking: ('xpath', "//div[@id='showModal']//button[normalize-space()='Update']")
-2026-01-03 17:20:21,090 [INFO] Waiting for: ('xpath', "//div[@id='showModal']//button[normalize-space()='Update']")
-2026-01-03 17:20:21,465 [INFO] Clicked successfully: ('xpath', "//div[@id='showModal']//button[normalize-space()='Update']")
-2026-01-03 17:20:21,512 [INFO] Clicking: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2026-01-03 17:20:21,512 [INFO] Waiting for: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2026-01-03 17:20:21,889 [INFO] Clicked successfully: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2026-01-03 17:20:21,889 [INFO] Clicking: ('xpath', "//a[normalize-space()='Edit']")
-2026-01-03 17:20:21,890 [INFO] Waiting for: ('xpath', "//a[normalize-space()='Edit']")
-2026-01-03 17:20:22,958 [WARNING] [CLICK FAILED] Attempt 1/3 for ('xpath', "//a[normalize-space()='Edit']") → Message: stale element reference: stale element not found
+2026-01-06 15:38:19,913 [INFO] 📘 Logger initialized — fresh run, old logs cleared
+2026-01-06 15:38:21,536 [INFO] Typing into ('name', 'access_code'): '2560'
+2026-01-06 15:38:21,537 [INFO] Waiting for: ('name', 'access_code')
+2026-01-06 15:38:21,887 [INFO] Typed successfully in ('name', 'access_code')
+2026-01-06 15:38:21,888 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-01-06 15:38:21,889 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-01-06 15:38:22,477 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-01-06 15:38:22,479 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2026-01-06 15:38:22,479 [INFO] Waiting for: ('name', 'email')
+2026-01-06 15:38:23,376 [INFO] Typed successfully in ('name', 'email')
+2026-01-06 15:38:23,376 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2026-01-06 15:38:23,376 [INFO] Waiting for: ('name', 'password')
+2026-01-06 15:38:23,660 [INFO] Typed successfully in ('name', 'password')
+2026-01-06 15:38:23,660 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2026-01-06 15:38:23,661 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2026-01-06 15:38:24,022 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2026-01-06 15:38:42,989 [INFO] Typing into ('id', 'search-vale'): 'Sydney'
+2026-01-06 15:38:42,990 [INFO] Waiting for: ('id', 'search-vale')
+2026-01-06 15:38:43,311 [INFO] Typed successfully in ('id', 'search-vale')
+2026-01-06 15:38:43,311 [INFO] Clicking: ('id', 'search-btn')
+2026-01-06 15:38:43,311 [INFO] Waiting for: ('id', 'search-btn')
+2026-01-06 15:38:43,685 [INFO] Clicked successfully: ('id', 'search-btn')
+2026-01-06 15:38:43,708 [INFO] Clicking: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
+2026-01-06 15:38:43,709 [INFO] Waiting for: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
+2026-01-06 15:38:43,978 [WARNING] [CLICK FAILED] Attempt 1/3 for ('css selector', 'div.dropdown > button.btn > i.ri-more-fill') → Message: stale element reference: stale element not found in the current frame
   (Session info: chrome=143.0.7499.170); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#staleelementreferenceexception
 Stacktrace:
 Symbols not available. Dumping unresolved backtrace:
-	0x7ff6e96288e5
-	0x7ff6e9628940
-	0x7ff6e940165d
-	0x7ff6e9417ed3
-	0x7ff6e94169d3
-	0x7ff6e940a006
-	0x7ff6e940a166
-	0x7ff6e9407f4c
-	0x7ff6e940c74e
-	0x7ff6e94ac05f
-	0x7ff6e9481fda
-	0x7ff6e94aac97
-	0x7ff6e944ac29
-	0x7ff6e944ba93
-	0x7ff6e9940640
-	0x7ff6e993af80
-	0x7ff6e99596e6
-	0x7ff6e9645de4
-	0x7ff6e964ed8c
-	0x7ff6e9632004
-	0x7ff6e96321b5
-	0x7ff6e9617ee2
+	0x7ff6665f88e5
+	0x7ff6665f8940
+	0x7ff6663d165d
+	0x7ff6663d92cc
+	0x7ff6663dc74e
+	0x7ff66647c05f
+	0x7ff666451fda
+	0x7ff66647ac97
+	0x7ff66641ac29
+	0x7ff66641ba93
+	0x7ff666910640
+	0x7ff66690af80
+	0x7ff6669296e6
+	0x7ff666615de4
+	0x7ff66661ed8c
+	0x7ff666602004
+	0x7ff6666021b5
+	0x7ff6665e7ee2
 	0x7ff8c312e8d7
 	0x7ff8c3e8c53c
 
-2026-01-03 17:20:23,460 [INFO] Clicking: ('xpath', "//a[normalize-space()='Edit']")
-2026-01-03 17:20:23,460 [INFO] Waiting for: ('xpath', "//a[normalize-space()='Edit']")
-2026-01-03 17:20:33,876 [INFO] Clicked successfully: ('xpath', "//a[normalize-space()='Edit']")
+2026-01-06 15:38:44,479 [INFO] Clicking: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
+2026-01-06 15:38:44,479 [INFO] Waiting for: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
+2026-01-06 15:38:44,839 [INFO] Clicked successfully: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
+2026-01-06 15:38:44,839 [INFO] Clicking: ('xpath', "//a[contains(@class,'send-invite-btn')]")
+2026-01-06 15:38:44,839 [INFO] Waiting for: ('xpath', "//a[contains(@class,'send-invite-btn')]")
+2026-01-06 15:38:45,272 [INFO] Clicked successfully: ('xpath', "//a[contains(@class,'send-invite-btn')]")
+2026-01-06 15:38:45,272 [INFO] Clicking: ('css selector', 'button.swal2-cancel')
+2026-01-06 15:38:45,272 [INFO] Waiting for: ('css selector', 'button.swal2-cancel')
+2026-01-06 15:38:45,631 [INFO] Clicked successfully: ('css selector', 'button.swal2-cancel')

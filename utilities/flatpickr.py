@@ -282,3 +282,23 @@ class FlatpickrRangePicker:
             return False
 
         return True
+
+    def select_single_date_static(self, target_date):
+        """
+        For static inline flatpickr (Business Info)
+        """
+        # Ensure calendar is visible
+        self.wait.until(
+            EC.presence_of_element_located((By.CLASS_NAME, "flatpickr-calendar"))
+        )
+
+        day_xpath = (
+            f"//span[contains(@class,'flatpickr-day') "
+            f"and not(contains(@class,'disabled')) "
+            f"and text()='{target_date.day}']"
+        )
+
+        day_el = self.wait.until(
+            EC.element_to_be_clickable((By.XPATH, day_xpath))
+        )
+        day_el.click()

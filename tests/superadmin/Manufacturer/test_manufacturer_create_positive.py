@@ -11,11 +11,20 @@ class TestManufacturerCreatePositive:
         list_page = SAManufacturerListPage(setup)
         list_page.goto_page()
 
-        list_page.click_add_manufacturer()  # you already have similar buttons
-        create = SAManufacturerCreatePage(setup)
+        # Open Create modal
+        list_page.click_create()
 
-        create.fill_email("munich@mailinator.com")
-        create.fill_company_name("Munich")
-        create.submit()
+        create_page = SAManufacturerCreatePage(setup)
+        create_page.wait_for_page()
 
-        create.wait_for_success()
+        # Enter details
+        create_page.fill_email("Sydneyy@mailinator.com")
+        create_page.fill_company_name("Sydneyy Tea Shop")
+
+        # Save
+        create_page.click_save()
+        msg = create_page.wait_for_success()
+        assert "Created Successfully" in msg
+
+        # secondary validation
+        assert list_page.is_company_present("Sydney Tea Shop")

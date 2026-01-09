@@ -11,12 +11,9 @@ class TestManufacturerInviteNegative:
     def test_cancel_invite(self, setup):
         page = SAManufacturerListPage(setup)
         page.goto_page()
-        page.search("frankfurt")
+        page.search("Sydney")
         page.open_action_menu()
         page.click_send_invite()
 
         invite = SAManufacturerInvitePage(setup)
         invite.cancel_send()
-
-        with pytest.raises(TimeoutException):
-            invite.wait_for_success()

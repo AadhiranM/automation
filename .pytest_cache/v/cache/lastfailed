@@ -21,5 +21,9 @@
   "tests/superadmin/Enquiries/test_enquiry_assign_negative.py::TestEnquiryAssignNegative::test_assign_without_selecting_user": true,
   "tests/superadmin/Enquiries/test_enquiry_assign_negative.py::TestEnquiryAssignUnassignPositive::test_unassign_cancel_should_not_change_user": true,
   "tests/superadmin/Enquiries/test_enquiry_sendemail_positive.py::TestSendEmailPositive::TestSendEmailPositive::test_send_email_and_verify_history": true,
-  "tests/superadmin/Enquiries/test_enquiry_followup_negative.py::TestFollowUpNegative::test_followup_empty_message": true
+  "tests/superadmin/Enquiries/test_enquiry_followup_negative.py::TestFollowUpNegative::test_followup_empty_message": true,
+  "tests/superadmin/Manufacturer/test_manufacturer_create_negative.py::TestManufacturerCreateNegative::test_create_manufacturer_with_short_company_name": true,
+  "tests/superadmin/Manufacturer/test_manufacturer_create_negative.py::TestManufacturerCreateNegative::test_create_manufacturer_with_existing_email_and_company_name": true,
+  "tests/manufacturer_onboarding/test_manufacturer_onboard_positive.py::TestManufacturerOnboardPositive::test_positive_kyc": true,
+  "tests/manufacturer_onboarding/test_manufacturer_onboard_positive.py::TestManufacturerOnboardPositive::test_full_onboarding_positive_flow": true
 }

@@ -1,0 +1,40 @@
+2026-01-09 16:55:47,974 [INFO] 📘 Logger initialized — fresh run, old logs cleared
+2026-01-09 16:55:50,641 [INFO] Typing into ('name', 'access_code'): '2560'
+2026-01-09 16:55:50,643 [INFO] Waiting for: ('name', 'access_code')
+2026-01-09 16:55:51,008 [INFO] Typed successfully in ('name', 'access_code')
+2026-01-09 16:55:51,009 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-01-09 16:55:51,009 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-01-09 16:55:51,592 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-01-09 16:55:51,594 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
+2026-01-09 16:55:51,595 [INFO] Waiting for: ('name', 'email')
+2026-01-09 16:55:52,603 [INFO] Typed successfully in ('name', 'email')
+2026-01-09 16:55:52,603 [INFO] Typing into ('name', 'password'): 'Newuser@123'
+2026-01-09 16:55:52,604 [INFO] Waiting for: ('name', 'password')
+2026-01-09 16:55:52,925 [INFO] Typed successfully in ('name', 'password')
+2026-01-09 16:55:52,925 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2026-01-09 16:55:52,926 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2026-01-09 16:55:56,063 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2026-01-09 16:55:57,954 [INFO] Typing into ('id', 'companyNameInput'): 'Sydney Tea Shop Pvt Ltd'
+2026-01-09 16:55:57,954 [INFO] Waiting for: ('id', 'companyNameInput')
+2026-01-09 16:55:58,271 [INFO] Typed successfully in ('id', 'companyNameInput')
+2026-01-09 16:55:58,271 [INFO] Typing into ('name', 'business_email'): 'sydney@mailinator.com'
+2026-01-09 16:55:58,272 [INFO] Waiting for: ('name', 'business_email')
+2026-01-09 16:55:58,618 [INFO] Typed successfully in ('name', 'business_email')
+2026-01-09 16:55:58,644 [INFO] Clicking: ('xpath', "//span[contains(@id,'select2-business_type_id-container')]")
+2026-01-09 16:55:58,644 [INFO] Waiting for: ('xpath', "//span[contains(@id,'select2-business_type_id-container')]")
+2026-01-09 16:55:59,014 [INFO] Clicked successfully: ('xpath', "//span[contains(@id,'select2-business_type_id-container')]")
+2026-01-09 16:55:59,709 [INFO] Clicking: ('xpath', "//span[contains(@id,'select2-industry_type_id-container')]")
+2026-01-09 16:55:59,709 [INFO] Waiting for: ('xpath', "//span[contains(@id,'select2-industry_type_id-container')]")
+2026-01-09 16:56:00,112 [INFO] Clicked successfully: ('xpath', "//span[contains(@id,'select2-industry_type_id-container')]")
+2026-01-09 16:56:00,752 [INFO] Typing into ('name', 'gst_no'): '22AAAAA0000A1Z5'
+2026-01-09 16:56:00,752 [INFO] Waiting for: ('name', 'gst_no')
+2026-01-09 16:56:01,082 [INFO] Typed successfully in ('name', 'gst_no')
+2026-01-09 16:56:01,082 [INFO] Typing into ('name', 'pan_no'): 'PQRST6789K'
+2026-01-09 16:56:01,083 [INFO] Waiting for: ('name', 'pan_no')
+2026-01-09 16:56:01,408 [INFO] Typed successfully in ('name', 'pan_no')
+2026-01-09 16:56:01,408 [INFO] Typing into ('name', 'website_url'): 'https://sydneytea.com'
+2026-01-09 16:56:01,408 [INFO] Waiting for: ('name', 'website_url')
+2026-01-09 16:56:01,724 [INFO] Typed successfully in ('name', 'website_url')
+2026-01-09 16:56:01,796 [INFO] Clicking: ('xpath', "//button[normalize-space()='Next']")
+2026-01-09 16:56:01,797 [INFO] Waiting for: ('xpath', "//button[normalize-space()='Next']")
+2026-01-09 16:56:02,159 [INFO] Clicked successfully: ('xpath', "//button[normalize-space()='Next']")

@@ -1,34 +1,104 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from pages.common.base_page import BasePage
 
 
 class SAManufacturerCreatePage(BasePage):
 
-    EMAIL = (By.NAME, "email")
-    TEMP_PASSWORD = (By.NAME, "temp_password_masked")  # readonly
-    COMPANY_NAME = (By.NAME, "company_name")
+    # ---------------- MODAL ----------------
+    CREATE_MODAL = (By.ID, "showModal")
 
-    SAVE_BTN = (By.XPATH, "//button[normalize-space()='Save']")
-    CLOSE_BTN = (By.CSS_SELECTOR, "button.btn-close")
+    # ---------------- INPUT FIELDS ----------------
+    EMAIL = (
+        By.XPATH,
+        "//div[@id='showModal' and contains(@class,'show')]//input[@name='email']"
+    )
 
-    SUCCESS_TOAST = (By.XPATH, "//div[contains(text(),'successfully')]")
-    ERROR_EMAIL = (By.ID, "error-email")
-    ERROR_COMPANY = (By.ID, "error-company_name")
+    COMPANY_NAME = (
+        By.XPATH,
+        "//div[@id='showModal' and contains(@class,'show')]//input[@name='company_name']"
+    )
 
+    # ---------------- BUTTON ----------------
+    SAVE_BTN = (
+        By.XPATH,
+        "//div[@id='showModal']//button[normalize-space()='Save']"
+    )
+
+    # ---------------- BACKEND VALIDATION ERRORS (CORRECT) ----------------
+    ERROR_EMAIL = (
+        By.XPATH,
+        "//input[@name='email' and contains(@class,'is-invalid')]"
+        "/following-sibling::div[contains(@class,'invalid-feedback')]"
+    )
+
+    ERROR_COMPANY = (
+        By.XPATH,
+        "//input[@name='company_name' and contains(@class,'is-invalid')]"
+        "/following-sibling::div[contains(@class,'invalid-feedback')]"
+    )
+
+    # ---------------- SUCCESS TOAST ----------------
+    SUCCESS_TOAST = (
+        By.XPATH,
+        "//div[contains(@class,'toastify') and contains(@class,'bg-success')]"
+    )
+
+    # ---------------- PAGE LOAD ----------------
+    def wait_for_page(self):
+        WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(self.CREATE_MODAL)
+        )
+
+    # ---------------- ACTIONS ----------------
     def fill_email(self, email):
+        self.clear(self.EMAIL)
         self.type(self.EMAIL, email)
 
     def fill_company_name(self, name):
+        self.clear(self.COMPANY_NAME)
         self.type(self.COMPANY_NAME, name)
 
-    def submit(self):
+    def click_save(self):
         self.click(self.SAVE_BTN)
 
-    def wait_for_success(self):
-        self.wait(self.SUCCESS_TOAST)
-
+    # ---------------- VALIDATION CHECKS ----------------
     def is_email_error_visible(self):
-        return self.is_visible(self.ERROR_EMAIL)
+        try:
+            WebDriverWait(self.driver, 5).until(
+                EC.visibility_of_element_located(self.ERROR_EMAIL)
+            )
+            return True
+        except:
+            return False
 
     def is_company_error_visible(self):
-        return self.is_visible(self.ERROR_COMPANY)
+        try:
+            WebDriverWait(self.driver, 5).until(
+                EC.visibility_of_element_located(self.ERROR_COMPANY)
+            )
+            return True
+        except:
+            return False
+
+    # ---------------- SUCCESS ----------------
+    def wait_for_success(self):
+        toast = WebDriverWait(self.driver, 5).until(
+            EC.visibility_of_element_located(self.SUCCESS_TOAST)
+        )
+        return toast.text
+
+    # ---------------- IMPORTANT (MNC PRACTICE) ----------------
+    def disable_browser_validation(self):
+        script = """
+            const modal = document.querySelector('#showModal');
+            if (!modal) return;
+
+            const form = modal.querySelector('form');
+            if (!form) return;
+
+            form.setAttribute('novalidate', 'true');
+        """
+        self.driver.execute_script(script)
+

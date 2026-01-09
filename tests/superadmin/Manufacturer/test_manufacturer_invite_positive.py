@@ -10,7 +10,7 @@ class TestManufacturerInvitePositive:
     def test_send_invite_success(self, setup):
         page = SAManufacturerListPage(setup)
         page.goto_page()
-        page.search("frankfurt")
+        page.search("Sydney")
         page.open_action_menu()
         page.click_send_invite()
 
@@ -18,3 +18,4 @@ class TestManufacturerInvitePositive:
         invite.confirm_send()
         invite.wait_for_success()
         invite.click_ok()
+
