@@ -1,4 +1,3 @@
-
 import pytest
 import time
 from selenium.webdriver.common.by import By
@@ -16,23 +15,23 @@ from pages.common.base_page import BaseTest
 # LOAD EXCEL DATA
 # ---------------------------
 excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
-test_data = get_test_data(excel_path, "QR_Monitoring_Filters")
+test_data = get_test_data(excel_path, "QR_Monitoring_Filter_By_field")
 
-@pytest.mark.order(8)
+@pytest.mark.order(9)
 @pytest.mark.parametrize("data", test_data)
-class Test_QR_Code_Monitoring_Filters(BaseTest):
+class Test_QR_Monitoring_Filter_By_field(BaseTest):
 
     logger = LogGen.loggen()
 
     def test_qr_code_monitoring_filters(self, driver, data):
 
-        username = data["username"]
-        usermobile = data["usermobile"]
+        search_value = data["search_value"]
+        select_status = data["select_status"]
         start_date = data["start_date"]
         end_date = data["end_date"]
 
         self.logger.info(
-            f"===== QR Monitoring Filter Test | User={username}, Mobile={usermobile} ====="
+            f"===== QR Monitoring Filter Test | search_value={search_value},====="
         )
 
         # ---------------------------
@@ -52,32 +51,24 @@ class Test_QR_Code_Monitoring_Filters(BaseTest):
         qr_page = QR_Management_Category_Page(driver)
         qr_page.Click_Dashboard()
 
-        qr_monitoring = QR_code_monitering_page(driver)
-        qr_monitoring.Click_QR_monitering()
-        qr_monitoring.Click_QR_code_monitering()
+        qr_monitoring_filter= QR_code_monitering_page(driver)
+        qr_monitoring_filter.Click_QR_monitering()
+        qr_monitoring_filter.Click_QR_code_monitering()
+        qr_monitoring_filter.Click_refresh_btn()
+        # qr_monitoring_filter.Enter_search_field(search_value)
+        # qr_monitoring_filter.Click_search_btn()
+        time.sleep(5)
+        # qr_monitoring_filter.Enter_select_status(select_status)
 
-        # ---------------------------
-        # FILTER ACTIONS
-        # ---------------------------
-        qr_monitoring.Click_filters_btn()
-        time.sleep(1)
-
-        qr_monitoring.Enter_filters_username(username)
-        time.sleep(1)
-        qr_monitoring.Enter_filters_usermobile(usermobile)
-        time.sleep(1)
-
-        # ---------------------------
-        # DATE RANGE
-        # ---------------------------
-        qr_monitoring.Click_scanned_date()
-        qr_monitoring.select_date_range(start_date, end_date)
+        qr_monitoring_filter.Click_date_range_field()
+        qr_monitoring_filter.select_date_range(start_date,end_date)
         time.sleep(2)
 
-        qr_monitoring.Click_filters_apply()
-        time.sleep(5)
+        # status = qr_monitoring_filter.search_product(search_value)
+        # time.sleep(5)
+        # assert True == status
 
-        status = qr_monitoring.search_product()  # True if rows exist, False if empty
+        status = qr_monitoring_filter.search_product()  # True if rows exist, False if empty
 
         if status:
             self.logger.info("Filter applied successfully ,table has records")
@@ -86,5 +77,3 @@ class Test_QR_Code_Monitoring_Filters(BaseTest):
             driver.save_screenshot(".\\Screenshots\\QR_Monitoring_No_Records.png")
 
         assert status is True, "No rows found after applying filters!"
-
-

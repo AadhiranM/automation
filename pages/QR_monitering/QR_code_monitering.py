@@ -176,7 +176,6 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
 class QR_code_monitering_page:
 
     # ================= DASHBOARD & QR =================
@@ -187,9 +186,10 @@ class QR_code_monitering_page:
         By.XPATH,
         "//ul[@class='collapse-menu show']//span[@class='nav-sub-name'][normalize-space()='QR Code Monitoring']"
     )
-
+    fake_product_feedback=(By.XPATH,"//span[contains(text(),'Fake Product Feedback')]")
     # ================= SEARCH & FILTER =================
     search_field = (By.XPATH, "//input[@id='search-vale']")
+    search_btn=(By.XPATH,"//button[@id='search-btn']")
     date_range_field = (By.XPATH, "//input[@id='datepicker-range']")
     select_status = (By.XPATH, "//select[@id='idStatus']")
     refresh_btn = (
@@ -203,13 +203,15 @@ class QR_code_monitering_page:
     filters_username = (By.XPATH, "//input[@id='user_name']")
     filters_usermobile = (By.XPATH, "//input[@id='user_mobile']")
     filters_deviceName = (By.XPATH, "//input[@id='device_name']")
-    scanned_date = (By.XPATH, "//input[@id='scanned_at']")
+    scanned_date =(By.XPATH,"//input[@id='scanned_at']")
     filters_apply = (By.XPATH, "//button[normalize-space()='Apply']")
 
     # ================= REPORT EXPORT =================
     report_start_id = (By.XPATH, "//input[@id='fromId']")
     report_end_id = (By.XPATH, "//input[@id='toId']")
-    ID_select_user_drpdwn = (By.XPATH,"//select[@id='id-user-select']")
+    ID_select_user= (By.XPATH,"//select[@id='id-user-select']")
+    ID_select_user_drpdn=(By.XPATH,"//div[@id='idTabPane']//div[@class='choices__inner']")
+    ID_select_user_input=(By.XPATH,"//div[@id='idTabPane']//input[@name='search_terms']")
     submit_btn = (By.XPATH, "//button[@id='submitBtn']")
 
     # ================= USER EXPORT =================
@@ -220,12 +222,16 @@ class QR_code_monitering_page:
 
     # ================= BULK EXPORT =================
     bulk_id_tab = (By.XPATH, "//button[@id='bulk-tab']")
-    enter_bulk_id = (By.XPATH, "//textarea[@id='bulkId']")
+    enter_bulk_id= (By.XPATH, "//textarea[@id='bulkId']")
 
     # ================= DATE BASED EXPORT =================
     date_based_tab = (By.XPATH, "//button[@id='date-tab']")
     date_based_date_range = (By.XPATH, "//input[@id='export_datepicker_range']")
-    table_rows = (By.XPATH, "//table[@id='crudTable']//tbody//tr")
+    table_rows=(By.XPATH,"//table[@id='crudTable']//tbody//tr")
+    go_to_report_page=(By.XPATH,"//a[normalize-space()='Go to Reports Page']")
+    report_table_download_row=(By.XPATH,"//table[@id='crudTable']//tbody//tr[1]//td[9]")
+
+    report_download=(By.XPATH,"//a[@title='Download Report']")
 
     # ================= INIT =================
     def __init__(self, driver):
@@ -242,12 +248,27 @@ class QR_code_monitering_page:
     def Click_QR_monitering(self):
         self.driver.find_element(*self.QR_monitering).click()
 
+    def Click_fake_product_feedback(self):
+        self.driver.find_element(*self.fake_product_feedback).click()
+
     def Click_QR_code_monitering(self):
         self.driver.find_element(*self.QR_code_monitering).click()
 
     # ================= FILTER ACTIONS =================
     def Click_refresh_btn(self):
         self.driver.find_element(*self.refresh_btn).click()
+
+    def Enter_search_field(self,search_value):
+        self.driver.find_element(*self.search_field).send_keys(search_value)
+
+    def Click_search_btn(self):
+        self.driver.find_element(*self.search_btn).click()
+
+    def Enter_select_status(self,select_status):
+        self.driver.find_element(*self.select_status).send_keys(select_status)
+
+    def Click_date_range_field(self):
+        self.driver.find_element(*self.date_range_field).click()
 
     def Click_filters_btn(self):
         self.driver.find_element(*self.filters_btn).click()
@@ -282,13 +303,56 @@ class QR_code_monitering_page:
     def Enter_report_end_id(self,Report_end_Id):
         self.driver.find_element(*self.report_end_id).send_keys(Report_end_Id)
 
-    def select_id_select_user_drpdwn(self,select_user):
-        drpdwn= Select(self.driver.find_element(*self.ID_select_user_drpdwn))
-        drpdwn.select_by_visible_text(select_user)
+    def Select_user_opt(self,):
+        self.driver.find_element(*self.ID_select_user_drpdn).click()
+
+    def Enter_id_select_user_input(self,select_user):
+        self.driver.find_element(*self.ID_select_user_input).send_keys(select_user)
+
+    def Click_bulk_id_tab(self):
+        self.driver.find_element(*self.bulk_id_tab).click()
+
+    def Enter_bulk_id(self,bulk_id):
+        self.driver.find_element(*self.enter_bulk_id).send_keys(bulk_id)
+
+    def click_date_based_id(self):
+        self.driver.find_element(*self.date_based_tab).click()
+
+    def click_select_date_range(self):
+        self.driver.find_element(*self.date_based_date_range).click()
+
+    def click_go_to_report_page(self):
+        self.driver.find_element(*self.go_to_report_page).click()
 
     def click_submit_btn(self):
         self.driver.find_element(*self.submit_btn).click()
 
+
+    def click_report_download_btn(self, search_value):
+        try:
+            search_value_text = self.driver.find_element(
+                By.XPATH, "//table[@id='crudTable']//tbody//tr[1]//td[2]"
+            ).text
+
+            if search_value_text == search_value:
+                # Try to find the download option
+                download_btn = self.driver.find_element(
+                    By.XPATH, "//table[@id='crudTable']//tbody//tr[1]//td[9]//a"
+                )
+                download_btn.click()
+                print("Download option found and clicked")
+            else:
+                print("Search value does not match")
+
+        except Exception:
+            try:
+                # If download is not present, check for no data
+                no_data = self.driver.find_element(
+                    By.XPATH, "//table[@id='crudTable']//tbody//tr[1]//td[9]"
+                )
+                print("No data available:", no_data.text)
+            except Exception:
+                print("Neither download option nor no data found")
 
     # ================= FLATPICKR DATE RANGE =================
     def select_date_range(self, start_date, end_date):
@@ -360,11 +424,8 @@ class QR_code_monitering_page:
         Check if the QR Monitoring table has any rows after applying filter.
         Returns True if table has rows, False if empty.
         """
-        from selenium.webdriver.support.ui import WebDriverWait
-        from selenium.webdriver.support import expected_conditions as EC
-
         try:
-            wait = WebDriverWait(self.driver, timeout)
+            wait= WebDriverWait(self.driver, timeout)
             # Wait until table is present
             wait.until(EC.presence_of_element_located((By.ID, "crudTable")))
 
@@ -406,3 +467,7 @@ class QR_code_monitering_page:
         if "dataTables_empty" in rows[0].get_attribute("class"):
             return 0
         return len(rows)
+
+
+
+

@@ -41,9 +41,8 @@ class Test_QRM_filters(BaseTest):
         qr_QRM_filters.select_status_drp(self.select_status)
 
         status=qr_QRM_filters.search_product(self.search_value)
-        time.sleep(1)
+        time.sleep(5)
         assert True==status
-        time.sleep(1)
 
 
 

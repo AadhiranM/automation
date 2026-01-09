@@ -61,6 +61,11 @@ class Test_QR_Code_Monitoring_export(BaseTest):
         time.sleep(1)
         qr_monitoring_export_id.Enter_report_end_id(Report_end_Id)
         time.sleep(1)
-        qr_monitoring_export_id.select_id_select_user_drpdwn(select_user)
+
+        qr_monitoring_export_id.Select_user_opt()
+        time.sleep(3)
+        # qr_monitoring_export_id.select_id_select_user(select_user)
+        qr_monitoring_export_id.Enter_id_select_user_input(select_user)
+        time.sleep(3)
         qr_monitoring_export_id.click_submit_btn()
 
