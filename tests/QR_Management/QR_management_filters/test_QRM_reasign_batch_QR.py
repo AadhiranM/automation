@@ -82,7 +82,7 @@ from utilities.read_excel import get_test_data
 from utilities.screenshot_util import take_screenshot
 
 # Excel path
-excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
+excel_path =r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "Reassign_Batch_QR")
 
 @pytest.mark.order(11)
