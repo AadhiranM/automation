@@ -9,12 +9,12 @@ from pages.QR_Management.QR_management_QR_m_filters import QR_Management_QR_m_fi
 from utilities.customlogger import LogGen
 from pages.common.base_page import BaseTest
 from utilities.read_excel import get_test_data
-
+from utilities.screenshot_util import take_screenshot
 # Excel path
 excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "Download_QR")
 
-@pytest.mark.order(9)
+@pytest.mark.order(6)
 @pytest.mark.parametrize("data", test_data)
 class Test_QRM_downloadQR_DDT(BaseTest):
     logger = LogGen.loggen()
@@ -25,14 +25,14 @@ class Test_QRM_downloadQR_DDT(BaseTest):
         select_status = data["select_status"]
 
         self.logger.info(f"===== QR Download Test Started | Search={search_value}, Status={select_status} =====")
-
-        # Login only once (same as products)
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Logged in successfully for first iteration")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # #
+        # # Login only once (same as products)
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Logged in successfully for first iteration")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         qr_page = QR_Management_Category_Page(driver)
         qr_page.Click_Dashboard()
@@ -53,6 +53,11 @@ class Test_QRM_downloadQR_DDT(BaseTest):
 
             self.logger.info(f"QR downloaded successfully for '{search_value}'")
         else:
-            driver.save_screenshot(f".\\Screenshots\\No_Data_{search_value}.png")
+            take_screenshot(
+                driver,
+                test_name="test_QR_download",
+                folder_name="Screenshots\\QRM_download_QR"
+            )
+
             self.logger.error(f"No matching data found for '{search_value}'")
             pytest.fail(f"No matching data found for '{search_value}'")

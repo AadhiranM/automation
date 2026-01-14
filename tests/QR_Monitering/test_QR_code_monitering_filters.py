@@ -1,4 +1,3 @@
-
 import pytest
 import time
 from selenium.webdriver.common.by import By
@@ -11,6 +10,8 @@ from utilities.customlogger import LogGen
 from utilities.readproperties import Readconfig
 from utilities.read_excel import get_test_data
 from pages.common.base_page import BaseTest
+from utilities.screenshot_util import take_screenshot
+
 
 # ---------------------------
 # LOAD EXCEL DATA
@@ -83,7 +84,7 @@ class Test_QR_Code_Monitoring_Filters(BaseTest):
             self.logger.info("Filter applied successfully ,table has records")
         else:
             self.logger.error("Filter applied but no records found in table")
-            driver.save_screenshot(".\\Screenshots\\QR_Monitoring_No_Records.png")
+            driver.save_screenshot(".\\Screenshots\\QR_monitering_filters\\QR_Monitoring_No_Records.png")
 
         assert status is True, "No rows found after applying filters!"
 

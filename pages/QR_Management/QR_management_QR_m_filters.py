@@ -23,8 +23,8 @@ class QR_Management_QR_m_filters:
     table_column=(By.XPATH,"//table[@id='crudTable']//tbody//tr//td")
     table_xpath=(By.XPATH,"//table[@id='crudTable']")
     status_drp=(By.XPATH,"//select[@id='idStatus']")
-    batch_QR=(By.XPATH,"//table[@id='crudTable']//tbody//tr//td[13]//a")
-    unit_QR=(By.XPATH,"//table[@id='crudTable']//tbody//tr//td[14]//a")
+    batch_QR=(By.XPATH,"//table[@id='crudTable']//tbody//tr//td[14]//a")
+    unit_QR=(By.XPATH,"//table[@id='crudTable']//tbody//tr//td[15]//a")
     action_btn=(By.XPATH,"//tbody/tr[1]/td[15]/div[1]/button[1]")
     invalidate_opt=(By.XPATH,"//ul[@class='dropdown-menu dropdown-menu-end show']//a[@class='dropdown-item status-item-btn'][normalize-space()='Invalidate']")
     yes_btn=(By.XPATH,"//button[@class='btn btn-danger status-record']")
@@ -102,8 +102,30 @@ class QR_Management_QR_m_filters:
         self.driver.find_element(*self.filter_product_name).clear()
         self.driver.find_element(*self.filter_product_name).send_keys(product_name)
 
+    # def Click_filters_apply_btn(self):
+    #     self.driver.find_element(*self.filters_apply_btn).click()
+
     def Click_filters_apply_btn(self):
-        self.driver.find_element(*self.filters_apply_btn).click()
+        wait = WebDriverWait(self.driver, 20)
+
+        apply_btn = wait.until(
+            EC.presence_of_element_located(self.filters_apply_btn)
+        )
+
+        # Scroll into view
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", apply_btn)
+        time.sleep(1)
+
+        # Wait until button is clickable (enabled + no overlay)
+        wait.until(EC.element_to_be_clickable(self.filters_apply_btn))
+
+        try:
+            apply_btn.click()
+        except Exception:
+            # Fallback to JS click
+            self.driver.execute_script("arguments[0].click();", apply_btn)
+
+
 
     def Click_manufacturer_date(self):
         self.driver.find_element(*self.filters_mftr_date).click()
@@ -154,7 +176,6 @@ class QR_Management_QR_m_filters:
     def set_expiry_date(self, date_string):
         self.wait.until(EC.element_to_be_clickable(self.filters_exp_date)).click()
         self.select_date(date_string)
-
 
     def download_batch_QR(self):
         self.driver.find_element(*self.batch_QR).click()

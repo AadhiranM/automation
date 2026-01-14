@@ -9,11 +9,12 @@ from pages.QR_Management.QR_management_category import QR_Management_Category_Pa
 from utilities.customlogger import LogGen
 from pages.common.base_page import BaseTest
 from utilities.read_excel import get_test_data
+from utilities.screenshot_util import take_screenshot
 
-@pytest.mark.order(7)
+@pytest.mark.order(9)
 class Test_QRM_import(BaseTest):
     logger = LogGen.loggen()
-    upload_file = r"C:\Users\Suresh V\Downloads\qr-import-sample (1).xlsx"
+    upload_file = r"C:\Users\Suresh V\Downloads\qr-import-sample (8).xlsx"
 
     def test_QR_management_generate_import(self, driver):
         self.logger.info("===== QR Management QR Test Started =====")
@@ -35,14 +36,18 @@ class Test_QRM_import(BaseTest):
         qr_QR_page.Enter_upload_QR_file(self.upload_file)
         time.sleep(1)
         qr_QR_page.Click_upload_btn()
-        time.sleep(2)
+        time.sleep(1)
 
         try:
             WebDriverWait(driver, 25).until(EC.text_to_be_present_in_element((By.TAG_NAME, "body"),"QR import initiated successfully."))
             self.logger.info("file import successfully!")
-            time.sleep(10)
+
         except:
-            driver.save_screenshot(".\\Screenshots\\test_QR file import_failed_scr.png")
+            take_screenshot(
+                driver,
+                test_name="test_QR file import_failed_scr.png",
+                folder_name="Screenshots\\QRM_import"
+            )
             self.logger.error("File import failed")
             assert False
 

@@ -8,6 +8,7 @@ from utilities.read_excel import get_test_data  # your existing Excel utility
 from utilities.readproperties import Readconfig
 from utilities.customlogger import LogGen
 from pages.common.base_page import BaseTest
+from utilities.screenshot_util import take_screenshot
 
 # Excel file containing category data
 excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
@@ -48,7 +49,11 @@ class Test_QRM_category(BaseTest):
             self.logger.info("Category created successfully")
 
         else:
-            driver.save_screenshot(".\\Screenshots\\test_create_category_scr.png")
+            take_screenshot(
+                driver,
+                test_name="test_create_category_failed",
+                folder_name="Screenshots\\QRM_category"
+            )
             self.logger.error("Create category failed")
             qr_page.Click_exit_option()
             assert False

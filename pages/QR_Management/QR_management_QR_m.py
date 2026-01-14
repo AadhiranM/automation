@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class QR_Management_QR_m_Page:
     ## Xpath for all the elements
+    QR_Management= (By.XPATH, "//span[@class='nav-name'][normalize-space()='QR Management']")
     Qr_management = (By.XPATH, "//ul[@class='collapse-menu show']//span[@class='nav-sub-name'][normalize-space()='QR Management']")
     generate_QR_code = (By.XPATH, "//a[normalize-space()='Generate QR Code']")
     import_btn=(By.XPATH,"//button[normalize-space()='Import']")
@@ -29,6 +30,7 @@ class QR_Management_QR_m_Page:
     Dimension=(By.XPATH,"//select[@id='dimensionDropdown']")
     batch_delivery_location_opt = (By.XPATH, "//div[@bp-field-name='batch_location']//div[@class='choices__inner']")
     batch_delivery_location_field = (By.XPATH, "//div[@bp-field-name='batch_location']//input[@name='search_terms']")
+    service_drpdwn=(By.XPATH,"//select[@id='serviceDropdown']")
     genarate_QR = (By.XPATH, "//button[@type='submit']")
 
     def __init__(self, driver):
@@ -36,8 +38,13 @@ class QR_Management_QR_m_Page:
         self.wait = WebDriverWait(driver, 10)
 
     # ---------------- Actions ----------------
+
+    def Click_QR_management(self):
+        self.driver.find_element(*self.QR_Management).click()
+
     def Click_Qr_management(self):
         self.driver.find_element(*self.Qr_management).click()
+
 
     def Click_import_btn(self):
         self.driver.find_element(*self.import_btn).click()
@@ -161,6 +168,11 @@ class QR_Management_QR_m_Page:
     def select_dimension(self,dimension_value):
         drpdwn_dimension=Select(self.driver.find_element(*self.Dimension))
         drpdwn_dimension.select_by_visible_text(dimension_value)
+
+    def select_service_drpdwn(self,service):
+        drpdwn_service = Select(self.driver.find_element(*self.service_drpdwn))
+        drpdwn_service.select_by_visible_text(service)
+
 
     def click_batch_delivery_opt(self):
         self.driver.find_element(*self.batch_delivery_location_opt).click()

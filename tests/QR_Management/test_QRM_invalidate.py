@@ -9,6 +9,7 @@ from pages.QR_Management.QR_management_QR_m_filters import QR_Management_QR_m_fi
 from utilities.customlogger import LogGen
 from pages.common.base_page import BaseTest
 from utilities.read_excel import get_test_data
+from utilities.screenshot_util import take_screenshot
 
 # Excel path
 excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
@@ -27,12 +28,12 @@ class Test_QRM_invalidate(BaseTest):
         self.logger.info(f"===== Invalidate QR Started | Search={search_value}, Status={select_status} =====")
 
         # Login only once (same as products & download QR)
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Logged in successfully for first iteration")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Logged in successfully for first iteration")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         qr_page = QR_Management_Category_Page(driver)
         qr_page.Click_Dashboard()

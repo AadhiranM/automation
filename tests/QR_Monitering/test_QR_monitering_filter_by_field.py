@@ -10,6 +10,8 @@ from utilities.customlogger import LogGen
 from utilities.readproperties import Readconfig
 from utilities.read_excel import get_test_data
 from pages.common.base_page import BaseTest
+from utilities.screenshot_util import take_screenshot
+
 
 # ---------------------------
 # LOAD EXCEL DATA
@@ -23,7 +25,7 @@ class Test_QR_Monitoring_Filter_By_field(BaseTest):
 
     logger = LogGen.loggen()
 
-    def test_qr_code_monitoring_filters(self, driver, data):
+    def test_qr_monitoring_filters_By_field(self, driver, data):
 
         search_value = data["search_value"]
         select_status = data["select_status"]
@@ -74,6 +76,6 @@ class Test_QR_Monitoring_Filter_By_field(BaseTest):
             self.logger.info("Filter applied successfully ,table has records")
         else:
             self.logger.error("Filter applied but no records found in table")
-            driver.save_screenshot(".\\Screenshots\\QR_Monitoring_No_Records.png")
+            driver.save_screenshot(".\\Screenshots\\QR_monitering_filters\\QR_Monitoring_No_Records.png")
 
         assert status is True, "No rows found after applying filters!"

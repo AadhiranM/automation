@@ -6,6 +6,8 @@ from pages.QR_Management.QR_management_variants import QR_Management_variants_Pa
 from utilities.customlogger import LogGen
 from pages.common.base_page import BaseTest
 from utilities.read_excel import get_test_data  # your Excel utility
+from utilities.screenshot_util import take_screenshot
+
 
 # Excel file containing variants data
 excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
@@ -20,12 +22,12 @@ class Test_QRM_variants(BaseTest):
         self.logger.info("===== QR Management Variants Test Started =====")
 
         # this need to enable if want to run this specific module
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Login completed for first iteration")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Login completed for first iteration")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         category_name = data["Category"]        # Match Excel header
         variants_type = data["variants_type"]
@@ -64,7 +66,11 @@ class Test_QRM_variants(BaseTest):
             assert True
             self.logger.info(f"Variants '{variants_value}' saved successfully for category '{category_name}'")
         else:
-            driver.save_screenshot(f".\\Screenshots\\test_create_variant_{variants_value}.png")
+            take_screenshot(
+                driver,
+                test_name="test_create_variant.png",
+                folder_name="Screenshots\\QRM_Variants"
+            )
             self.logger.error(f"Create variant failed for '{variants_value}'")
             assert False
         time.sleep(3)

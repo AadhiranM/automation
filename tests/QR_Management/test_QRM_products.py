@@ -9,6 +9,7 @@ from pages.QR_Management.QR_management_products import QR_Management_products_Pa
 from utilities.customlogger import LogGen
 from pages.common.base_page import BaseTest
 from utilities.read_excel import get_test_data
+from utilities.screenshot_util import take_screenshot
 
 # Excel path
 excel_path = os.path.join(os.getcwd(),r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx")
@@ -22,7 +23,7 @@ class Test_QRM_products(BaseTest):
     def test_QR_management_products_flow(self, driver,data):
         self.logger.info(f"===== QR Management products Test Started for {data['product_name']} =====")
 
-        # Login only once
+        # # Login only once
         # if data == test_data[0]:
         #     self.driver = driver
         #     self.login_and_access()
@@ -69,14 +70,19 @@ class Test_QRM_products(BaseTest):
         qr_products_page.ClicK_continue_video_btn()
         time.sleep(1)
         qr_products_page.Click_create_product_submit_btn()
-        time.sleep(1)
+
         try:
-            WebDriverWait(driver, 8).until(
+            WebDriverWait(driver, 15).until(
                 EC.text_to_be_present_in_element((By.TAG_NAME, "body"), "Product created successfully!")
             )
             self.logger.info(f"Product '{data['product_name']}' created successfully!")
         except:
-            driver.save_screenshot(f".\\Screenshots\\test_create_product_{data['product_name']}.png")
+
+            take_screenshot(
+                driver,
+                test_name="test_create_product.png",
+                folder_name="Screenshots\\QRM_products"
+            )
             self.logger.error(f"Create product failed for '{data['product_name']}'")
             assert False
-            return  # skip this product and continue
+            return

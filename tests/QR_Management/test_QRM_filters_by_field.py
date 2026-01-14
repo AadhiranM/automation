@@ -10,7 +10,7 @@ from pages.QR_Management.QR_management_QR_m_filters import QR_Management_QR_m_fi
 from utilities.customlogger import LogGen
 from pages.common.base_page import BaseTest
 from utilities.read_excel import get_test_data
-
+from utilities.screenshot_util import take_screenshot
 @pytest.mark.order(7)
 class Test_QRM_filters(BaseTest):
     logger = LogGen.loggen()
@@ -20,9 +20,9 @@ class Test_QRM_filters(BaseTest):
 
     def test_QR_management_filters(self, driver):
         self.logger.info(f"===== QR Management QR Test Started for QR management filters=====")
-
-        self.driver = driver
-        self.login_and_access()
+        #
+        # self.driver = driver
+        # self.login_and_access()
 
         qr_page = QR_Management_Category_Page(driver)
         qr_page.Click_Dashboard()

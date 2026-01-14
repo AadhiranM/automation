@@ -10,7 +10,7 @@ from pages.QR_Management.QR_management_QR_m_filters import QR_Management_QR_m_fi
 from utilities.customlogger import LogGen
 from pages.common.base_page import BaseTest
 from utilities.read_excel import get_test_data
-
+from utilities.screenshot_util import take_screenshot
 @pytest.mark.order(8)
 class Test_QRM_filter_option(BaseTest):
     logger = LogGen.loggen()
@@ -21,8 +21,8 @@ class Test_QRM_filter_option(BaseTest):
 
     def test_QR_management_filters(self, driver):
         self.logger.info(f"===== QR Management QR Test Started for QR management filters=====")
-        self.driver = driver
-        self.login_and_access()
+        # self.driver = driver
+        # self.login_and_access()
 
         qr_page = QR_Management_Category_Page(driver)
         qr_page.Click_Dashboard()
@@ -41,9 +41,9 @@ class Test_QRM_filter_option(BaseTest):
         # time.sleep(1)
         # qr_QRM_filters.set_manufacturing_date(self.manufacturing_date)
         # qr_QRM_filters.set_expiry_date(self.expiry_date)
-        # time.sleep(1)
+        time.sleep(1)
         qr_QRM_filters.Click_filters_apply_btn()
-        time.sleep(2)
+
         # qr_QRM_filters.select_status_drp(self.select_status)
 
         status=qr_QRM_filters.search_product(self.product_name)
