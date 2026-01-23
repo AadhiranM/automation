@@ -61,3 +61,7 @@ class Test_QRM_invalidate(BaseTest):
             driver.save_screenshot(f".\\Screenshots\\Invalidate_No_Data_{search_value}.png")
             self.logger.error(f"No matching data found for '{search_value}'")
             pytest.fail(f"No matching data found for '{search_value}'")
+
+
+
+

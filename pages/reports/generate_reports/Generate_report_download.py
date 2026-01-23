@@ -23,3 +23,11 @@ class Generate_reports_download_page:
     filters_select_status=(By.XPATH,"//select[@id='status']")
     created_date_range=(By.XPATH,"//input[@id='date_range']")
     filters_apply_btn=(By.XPATH,"//button[normalize-space()='Apply']")
+    filters_clr_btn=(By.XPATH,"//button[@id='clear-filter-btn']")
+    create_Batch_status_report=(By.XPATH,"//select[@id='schedule_report_name']")
+    create_select_format=(By.XPATH,"//select[@id='schedule_report_name']")
+    create_choose_mail_receiving_duration=(By.XPATH,"//select[@id='mail_send_at']")
+    create_select_duration=(By.XPATH,"//select[@id='duration']")
+
+
+
