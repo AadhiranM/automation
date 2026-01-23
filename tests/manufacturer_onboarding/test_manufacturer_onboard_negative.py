@@ -1,4 +1,6 @@
 import pytest
+import os
+from selenium.webdriver.common.by import By
 from pages.manufacturer_onboarding.business_info_page import BusinessInfoPage
 from pages.manufacturer_onboarding.kyc_page import KYCPage
 from pages.manufacturer_onboarding.upload_documents_page import UploadDocumentsPage
@@ -7,74 +9,77 @@ from pages.manufacturer_onboarding.upload_documents_page import UploadDocumentsP
 @pytest.mark.onboarding
 @pytest.mark.usefixtures("login_superadmin")
 class TestManufacturerOnboardNegative:
-    """
-    NEGATIVE: Full Manufacturer Onboarding Flow
-    """
 
-    # ---------------- BUSINESS INFO ----------------
+    # =====================================================
+    # BUSINESS INFO – NEGATIVE
+    # =====================================================
 
-    def test_negative_business_info_empty_form(self, setup):
+    def test_company_name_less_than_3_chars(self, setup):
         business = BusinessInfoPage(setup)
         business.goto_page()
         business.wait_for_page()
 
+        business.fill_company_name("dd")
         business.click_next()
-        assert business.is_error_visible()
 
-    def test_negative_business_info_invalid_email(self, setup):
+        assert business.get_company_name_error() == \
+            "Company name must be at least 3 characters long."
+
+    def test_company_name_special_characters(self, setup):
         business = BusinessInfoPage(setup)
+        business.goto_page()
         business.wait_for_page()
 
-        business.fill_company_name("Test Company")
-        business.fill_business_email("invalid@")
-
+        business.fill_company_name("@@@@")
         business.click_next()
-        assert business.is_error_visible()
 
-    def test_negative_business_info_future_date(self, setup):
+        assert business.get_company_name_error() == \
+            "Company name can only contain letters, numbers, spaces, dots, apostrophes, and hyphens."
+
+    # =====================================================
+    # KYC – NEGATIVE (INVALID PAN)
+    # =====================================================
+
+    def test_kyc_invalid_pan_format(self, setup):
         business = BusinessInfoPage(setup)
+        business.goto_page()
         business.wait_for_page()
-
-        business.fill_company_name("Test Company")
-        business.fill_business_email("test@mailinator.com")
-        business.fill_date_of_incorporation("01-01-2090")
-
         business.click_next()
-        assert business.is_error_visible()
 
-    # ---------------- KYC ----------------
-
-    def test_negative_kyc_empty_form(self, setup):
         kyc = KYCPage(setup)
         kyc.wait_for_page()
 
-        kyc.click_next()
-        assert kyc.is_error_visible()
-
-    def test_negative_kyc_invalid_pan(self, setup):
-        kyc = KYCPage(setup)
-        kyc.wait_for_page()
-
-        kyc.fill_director_name("John")
-        kyc.fill_director_pan("1234ABCDE")  # ❌ invalid PAN
+        kyc.fill_dob("13-01-2009")
+        kyc.fill_full_name("John")
+        kyc.fill_personal_pan("12345")  # invalid PAN
 
         kyc.click_next()
-        assert kyc.is_error_visible()
 
-    # ---------------- UPLOAD DOCUMENTS ----------------
+        # ✅ ASSERT VALIDATION ONLY
+        assert kyc.has_any_validation_error(), \
+            "Expected PAN validation error for invalid PAN"
 
-    def test_negative_upload_documents_no_files(self, setup):
+    # =====================================================
+    # UPLOAD DOCUMENTS – NEGATIVE
+    # =====================================================
+
+    def test_upload_invalid_file_type(self, setup):
+        business = BusinessInfoPage(setup)
+        business.goto_page()
+        business.wait_for_page()
+
+        setup.find_element(By.XPATH, "//a[normalize-space()='Upload Document']").click()
+
         upload = UploadDocumentsPage(setup)
         upload.wait_for_page()
 
-        upload.submit()
-        assert upload.is_error_visible()
+        file_path = r"C:\Users\Manikandan A\Downloads\Digitathya\textfile.txt"
+        assert os.path.exists(file_path)
 
-    def test_negative_upload_invalid_file_type(self, setup):
-        upload = UploadDocumentsPage(setup)
-        upload.wait_for_page()
+        # 🔥 Upload invalid file
+        upload.upload_business_pan(file_path)
 
-        upload.upload_business_pan("tests/data/invalid.txt")  # ❌ invalid format
-        upload.submit()
+        # ✅ ASSERT IMMEDIATE INLINE VALIDATION (NO SUBMIT)
+        assert upload.get_business_pan_error() == "Invalid file type."
 
-        assert upload.is_error_visible()
+

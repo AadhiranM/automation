@@ -25,5 +25,15 @@
   "tests/superadmin/Manufacturer/test_manufacturer_create_negative.py::TestManufacturerCreateNegative::test_create_manufacturer_with_short_company_name": true,
   "tests/superadmin/Manufacturer/test_manufacturer_create_negative.py::TestManufacturerCreateNegative::test_create_manufacturer_with_existing_email_and_company_name": true,
   "tests/manufacturer_onboarding/test_manufacturer_onboard_positive.py::TestManufacturerOnboardPositive::test_positive_kyc": true,
-  "tests/manufacturer_onboarding/test_manufacturer_onboard_positive.py::TestManufacturerOnboardPositive::test_full_onboarding_positive_flow": true
+  "tests/webapp/test_contact_us.py::TestContactUs::test_submit_valid_enquiry": true,
+  "tests/manufacturer_onboarding/test_manufacturer_onboard_negative.py::TestManufacturerOnboardNegative::test_negative_business_info_invalid_email": true,
+  "tests/manufacturer_onboarding/test_manufacturer_onboard_negative.py::TestManufacturerOnboardNegative::test_negative_business_info_future_date": true,
+  "tests/manufacturer_onboarding/test_manufacturer_onboard_negative.py::TestManufacturerOnboardNegative::test_negative_kyc_empty_form": true,
+  "tests/manufacturer_onboarding/test_manufacturer_onboard_negative.py::TestManufacturerOnboardNegative::test_negative_kyc_invalid_pan": true,
+  "tests/manufacturer_onboarding/test_manufacturer_onboard_negative.py::TestManufacturerOnboardNegative::test_negative_upload_documents_no_files": true,
+  "tests/manufacturer_onboarding/test_manufacturer_onboard_negative.py::TestManufacturerOnboardNegative::test_negative_upload_invalid_file_type": true,
+  "tests/manufacturer_onboarding/test_manufacturer_onboard_negative.py::TestManufacturerOnboardNegative::test_kyc_access_without_business_info_using_tab_click": true,
+  "tests/manufacturer_onboarding/test_manufacturer_onboard_negative.py::TestManufacturerOnboardNegative::test_business_info_company_name_less_than_3_chars": true,
+  "tests/manufacturer_onboarding/test_manufacturer_onboard_negative.py::TestManufacturerOnboardNegative::test_business_info_company_name_special_characters": true,
+  "tests/manufacturer_onboarding/test_manufacturer_onboard_negative.py::TestManufacturerOnboardNegative::test_upload_access_without_kyc_completion": true
 }

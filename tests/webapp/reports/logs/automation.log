@@ -1,0 +1,75 @@
+2026-01-12 15:08:16,951 [INFO] 📘 Logger initialized — fresh run, old logs cleared
+2026-01-12 15:08:19,202 [INFO] Typing into ('name', 'access_code'): '2560'
+2026-01-12 15:08:19,203 [INFO] Waiting for: ('name', 'access_code')
+2026-01-12 15:08:19,759 [INFO] Typed successfully in ('name', 'access_code')
+2026-01-12 15:08:19,761 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-01-12 15:08:19,762 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-01-12 15:08:20,414 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-01-12 15:08:20,416 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-01-12 15:08:23,082 [INFO] Typing into ('id', 'name'): 'Manikandan A'
+2026-01-12 15:08:23,082 [INFO] Waiting for: ('id', 'name')
+2026-01-12 15:08:23,524 [INFO] Typed successfully in ('id', 'name')
+2026-01-12 15:08:23,524 [INFO] Typing into ('id', 'phone'): '9876543210'
+2026-01-12 15:08:23,524 [INFO] Waiting for: ('id', 'phone')
+2026-01-12 15:08:23,993 [INFO] Typed successfully in ('id', 'phone')
+2026-01-12 15:08:23,993 [INFO] Typing into ('id', 'email'): 'mani@test.com'
+2026-01-12 15:08:23,995 [INFO] Waiting for: ('id', 'email')
+2026-01-12 15:08:24,396 [INFO] Typed successfully in ('id', 'email')
+2026-01-12 15:08:24,398 [INFO] Typing into ('id', 'company'): 'Digitathya Pvt Ltd'
+2026-01-12 15:08:24,400 [INFO] Waiting for: ('id', 'company')
+2026-01-12 15:08:24,839 [INFO] Typed successfully in ('id', 'company')
+2026-01-12 15:08:24,840 [INFO] Typing into ('id', 'message'): 'Testing enquiry automation flow'
+2026-01-12 15:08:24,841 [INFO] Waiting for: ('id', 'message')
+2026-01-12 15:08:25,239 [INFO] Typed successfully in ('id', 'message')
+2026-01-12 15:08:25,239 [INFO] Clicking: ('id', 'contactSubmit')
+2026-01-12 15:08:25,241 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-01-12 15:08:25,726 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-01-12 15:08:25,726 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-01-12 15:08:35,796 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff74bf288d5
+	0x7ff74bf28930
+	0x7ff74bd0165d
+	0x7ff74bd59a33
+	0x7ff74bd59d3c
+	0x7ff74bdadf67
+	0x7ff74bdaac97
+	0x7ff74bd4ac29
+	0x7ff74bd4ba93
+	0x7ff74c240620
+	0x7ff74c23af60
+	0x7ff74c2596c6
+	0x7ff74bf45dd4
+	0x7ff74bf4ed7c
+	0x7ff74bf31ff4
+	0x7ff74bf321a5
+	0x7ff74bf17ed2
+	0x7ff8c312e8d7
+	0x7ff8c3e8c53c
+
+2026-01-12 15:08:36,067 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260112_150835.png
+2026-01-12 15:08:36,068 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff74bf288d5
+	0x7ff74bf28930
+	0x7ff74bd0165d
+	0x7ff74bd59a33
+	0x7ff74bd59d3c
+	0x7ff74bdadf67
+	0x7ff74bdaac97
+	0x7ff74bd4ac29
+	0x7ff74bd4ba93
+	0x7ff74c240620
+	0x7ff74c23af60
+	0x7ff74c2596c6
+	0x7ff74bf45dd4
+	0x7ff74bf4ed7c
+	0x7ff74bf31ff4
+	0x7ff74bf321a5
+	0x7ff74bf17ed2
+	0x7ff8c312e8d7
+	0x7ff8c3e8c53c
+
+2026-01-12 15:08:36,311 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260112_150836.png

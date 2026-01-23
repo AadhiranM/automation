@@ -107,19 +107,30 @@ class BasePage:
     # -------------------------------------------------------------------
     # 🔥 TYPE (clear + send keys safely)
     # -------------------------------------------------------------------
-    def type(self, locator, text):
+    def type(self, locator, text, timeout=15):
+        element = WebDriverWait(self.driver, timeout).until(
+            EC.presence_of_element_located(locator)
+        )
+
+        WebDriverWait(self.driver, timeout).until(
+            lambda d: element.is_enabled()
+                      and element.get_attribute("readonly") is None
+        )
+
         try:
-            logger.info(f"Typing into {locator}: '{text}'")
-            element = self.wait(locator, EC.visibility_of_element_located)
             element.clear()
-            time.sleep(0.05)
             element.send_keys(text)
-            time.sleep(0.15)
-            logger.info(f"Typed successfully in {locator}")
-        except Exception as e:
-            logger.error(f"[TYPE FAILED] {locator} text='{text}' → {e}")
-            self._screenshot("type_failed")
-            raise
+        except Exception:
+            # 🔥 Fallback for React-controlled inputs
+            self.driver.execute_script(
+                """
+                arguments[0].value = arguments[1];
+                arguments[0].dispatchEvent(new Event('input', { bubbles: true }));
+                arguments[0].dispatchEvent(new Event('change', { bubbles: true }));
+                """,
+                element,
+                text
+            )
 
     # -------------------------------------------------------------------
     # 🔥 GET TEXT
@@ -185,3 +196,20 @@ class BasePage:
         element = self.driver.find_element(*locator)
         select = Select(element)
         select.select_by_visible_text(text)
+
+    def wait_until_enabled(self, locator, timeout=15):
+        WebDriverWait(self.driver, timeout).until(
+            lambda d: d.find_element(*locator).is_enabled()
+        )
+
+    def make_editable(self, locator):
+        element = self.driver.find_element(*locator)
+        self.driver.execute_script(
+            "arguments[0].removeAttribute('readonly')", element
+        )
+
+    def has_any_validation_error(self):
+        return (
+                len(self.driver.find_elements(By.CLASS_NAME, "invalid-feedback")) > 0
+                or len(self.driver.find_elements(By.XPATH, "//div[contains(@class,'toast-body')]")) > 0
+        )

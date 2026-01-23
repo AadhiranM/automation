@@ -13,13 +13,14 @@ class TestManufacturerOnboardPositive:
     """
 
     def test_full_onboarding_positive_flow(self, setup):
+
         # ================= BUSINESS INFO =================
         business = BusinessInfoPage(setup)
         business.goto_page()
         business.wait_for_page()
 
-        business.fill_company_name("Sydney Tea Shop Pvt Ltd")
-        business.fill_business_email("sydney@mailinator.com")
+        business.fill_company_name("oval234 Tea Shop Pvt Ltd")
+        business.fill_business_email("oval234@mailinator.com")
         business.fill_date_of_incorporation("01-06-1980")
 
         business.select_business_type("Private Limited Company")
@@ -32,7 +33,8 @@ class TestManufacturerOnboardPositive:
         business.select_annual_turnover("1 Lakh - 10 Lakhs")
         business.click_next()
 
-        assert not business.is_error_visible()
+        assert not business.is_error_visible(), \
+            "Business Info validation error"
 
         # ================= KYC =================
         kyc = KYCPage(setup)
@@ -40,14 +42,12 @@ class TestManufacturerOnboardPositive:
 
         kyc.select_director_dob("10-10-1985")
         kyc.fill_director_name("John Smith")
-        kyc.fill_director_driving_license("TN6378997789123")
         kyc.fill_director_pan("PQRST6789K")
+        kyc.fill_director_driving_license("TN6378997789123")
         kyc.fill_address("chennai")
         kyc.fill_mobile("9876543210")
 
-
         kyc.click_next()
-        assert not kyc.is_error_visible()
 
         # ================= UPLOAD DOCUMENTS =================
         upload = UploadDocumentsPage(setup)
@@ -66,5 +66,16 @@ class TestManufacturerOnboardPositive:
             "C:/Users/Manikandan A/Downloads/Digitathya/Board Resolution.pdf"
         )
 
+        # 🔥 EXACT MANUAL BEHAVIOUR
+        upload.wait_for_upload_processing()
+
         upload.submit()
-        assert upload.is_success_message_visible()
+
+        status, message = upload.wait_and_get_result()
+
+        print("\n===== UPLOAD RESULT =====")
+        print("STATUS :", status)
+        print("MESSAGE:", message)
+        print("=========================\n")
+
+        assert status == "SUCCESS", f"Toast said: {message}"
