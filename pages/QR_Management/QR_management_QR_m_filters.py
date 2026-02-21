@@ -42,6 +42,9 @@ class QR_Management_QR_m_filters:
     def Click_Qr_management(self):
         self.driver.find_element(*self.Qr_management).click()
 
+
+    def getNoOfRows(self):
+        return len(self.driver.find_elements(*self.table_rows))
     def Click_reset_btn(self):
         self.driver.find_element(*self.reset_btn).click()
 
@@ -54,9 +57,6 @@ class QR_Management_QR_m_filters:
     def select_status_drp(self,select_status):
         drpdwn_status=Select(self.driver.find_element(*self.status_drp))
         drpdwn_status.select_by_visible_text(select_status)
-
-    def getNoOfRows(self):
-        return len(self.driver.find_elements(*self.table_rows))
 
     def getNoOfColumns(self):
         return len(self.driver.find_elements(*self.table_column))
@@ -84,10 +84,11 @@ class QR_Management_QR_m_filters:
                 time.sleep(1)
 
                 print(product_name, batch_no)
-
                 if search_value == product_name or search_value == batch_no:
+
                     flag = True
                     break
+
 
         except Exception as e:
             print(f"Exception in searching product: {e}")
@@ -124,8 +125,6 @@ class QR_Management_QR_m_filters:
         except Exception:
             # Fallback to JS click
             self.driver.execute_script("arguments[0].click();", apply_btn)
-
-
 
     def Click_manufacturer_date(self):
         self.driver.find_element(*self.filters_mftr_date).click()

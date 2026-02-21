@@ -83,5 +83,3 @@ class Test_R_Batch_status_report(BaseTest):
         report.click_report_download_btn(report_name)
         time.sleep(5)
 
-
-
