@@ -74,7 +74,7 @@ class Test_R_schedule_report_filters(BaseTest):
         if not status:
             take_screenshot(
                 driver,
-                test_name="schedule_report_filter_fail",
+                test_name="schedule_report_filter_failed",
                 folder_name="Screenshots\\reports\\schedule_reports"
             )
             self.logger.error("Filter applied but no records found in table")
@@ -88,6 +88,7 @@ class Test_R_schedule_report_filters(BaseTest):
             reports.Click_deactivate_icon()
             reports.Click_yes_deactivate_btn()
             reports.Click_submitted_ok_btn()
+
         except:
             reports.Click_activate_icon()
             reports.Click_yes_activate_btn()
