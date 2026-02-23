@@ -67,19 +67,31 @@ class Test_R_schedule_report_filters(BaseTest):
         reports.Choose_filters_status(select_status)
 
         reports.Click_filters_apply_btn()
-        time.sleep(1)
 
-        status = reports.search_product(report_name)   # True if rows exist, False if empty
+        # Wait properly here instead of sleep
+        status = reports.search_product(report_name)  # True if rows exist
 
-        if status:
-            self.logger.info("Filter applied successfully ,table has records")
-            reports.Click_actions_button()
+        if not status:
+            take_screenshot(
+                driver,
+                test_name="schedule_report_filter_fail",
+                folder_name="Screenshots\\reports\\schedule_reports"
+            )
+            self.logger.error("Filter applied but no records found in table")
+
+        assert status, "No rows found after applying filters!"
+        self.logger.info("Filter applied successfully, table has records")
+
+        reports.Click_actions_button()
+
+        try:
             reports.Click_deactivate_icon()
             reports.Click_yes_deactivate_btn()
-            time.sleep(2)
+            reports.Click_submitted_ok_btn()
+        except:
+            reports.Click_activate_icon()
+            reports.Click_yes_activate_btn()
+            reports.Click_submitted_ok_btn()
 
-        else:
-            self.logger.error("Filter applied but no records found in table")
-            driver.save_screenshot(".\\Screenshots\\reports\\schedule_reports\\schedule_report_filter_fail.png")
 
-        assert status is True, "No rows found after applying filters!"
+

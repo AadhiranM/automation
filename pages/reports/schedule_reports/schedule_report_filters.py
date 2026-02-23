@@ -28,7 +28,10 @@ class Generate_reports_page:
     Create_btn_save_btn=(By.XPATH,"//button[@id='submitReportBtn']")
     actions_icon=(By.XPATH,"//button[@class='btn btn-primary btn-sm dropdown']")
     deactivate=(By.XPATH,"//button[normalize-space()='Deactivate']")
+    activate=(By.XPATH,"//button[normalize-space()='Activate']")
     yes_deactivate_button=(By.XPATH,"//button[normalize-space()='Yes, deactivate']")
+    yes_activate_button=(By.XPATH,"//button[normalize-space()='Yes, activate']")
+    submitted_ok_btn=(By.XPATH,"//button[normalize-space()='OK']")
 
 
     def __init__(self, driver):
@@ -164,8 +167,19 @@ class Generate_reports_page:
     def Click_deactivate_icon(self):
         self.driver.find_element(*self.deactivate).click()
 
+    def Click_activate_icon(self):
+        self.driver.find_element(*self.activate).click()
+
     def Click_yes_deactivate_btn(self):
         self.driver.find_element(*self.yes_deactivate_button).click()
+
+    def Click_yes_activate_btn(self):
+        self.driver.find_element(*self.yes_activate_button).click()
+
+    def Click_submitted_ok_btn(self):
+        self.driver.find_element(*self.submitted_ok_btn).click()
+
+
 
 
 
