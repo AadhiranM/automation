@@ -2,15 +2,15 @@ import pytest
 import time
 from selenium.webdriver.common.by import By
 
-from PAGES.common.AccessCodePage import AccessCodePage
-from PAGES.QR_Management.login_page import Loginpage
-from PAGES.QR_Management.QR_management_category import QR_Management_Category_Page
-from PAGES.QR_monitering.QR_code_monitering import QR_code_monitering_page
-from PAGES.reports.schedule_reports.schedule_report_filters import Generate_reports_page
+from pages.common.AccessCodePage import AccessCodePage
+from pages.QR_Management.login_page import Loginpage
+from pages.QR_Management.QR_management_category import QR_Management_Category_Page
+from pages.QR_monitering.QR_code_monitering import QR_code_monitering_page
+from pages.reports.schedule_reports.schedule_report_filters import Generate_reports_page
 from utilities.customlogger import LogGen
 from utilities.readproperties import Readconfig
 from utilities.read_excel import get_test_data
-from PAGES.common.base_page import BaseTest
+from pages.common.base_page import BaseTest
 from utilities.screenshot_util import take_screenshot
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC

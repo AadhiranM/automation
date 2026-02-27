@@ -2,14 +2,14 @@ import pytest
 import time
 from selenium.webdriver.common.by import By
 
-from PAGES.common.AccessCodePage import AccessCodePage
-from PAGES.QR_Management.login_page import Loginpage
-from PAGES.User_Management.Roles_and_Permission.create import Roles_and_permission_create
-from PAGES.QR_monitering.QR_code_monitering import QR_code_monitering_page
+from pages.common.AccessCodePage import AccessCodePage
+from pages.QR_Management.login_page import Loginpage
+from pages.User_Management.Roles_and_Permission.create import Roles_and_permission_create
+from pages.QR_monitering.QR_code_monitering import QR_code_monitering_page
 from utilities.customlogger import LogGen
 from utilities.readproperties import Readconfig
 from utilities.read_excel import get_test_data
-from PAGES.common.base_page import BaseTest
+from pages.common.base_page import BaseTest
 from utilities.screenshot_util import take_screenshot
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC

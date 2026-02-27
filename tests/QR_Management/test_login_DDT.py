@@ -1,7 +1,7 @@
 import time
 import pytest
-from PAGES.common.AccessCodePage import AccessCodePage
-from PAGES.QR_Management.login_page import Loginpage
+from pages.common.AccessCodePage import AccessCodePage
+from pages.QR_Management.login_page import Loginpage
 from utilities.customlogger import LogGen
 from utilities.readproperties import Readconfig
 from utilities.read_excel import get_test_data

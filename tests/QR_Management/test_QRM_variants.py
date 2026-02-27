@@ -1,10 +1,10 @@
 import pytest
 import time
 from selenium.webdriver.common.by import By
-from PAGES.QR_Management.QR_management_category import QR_Management_Category_Page
-from PAGES.QR_Management.QR_management_variants import QR_Management_variants_Page
+from pages.QR_Management.QR_management_category import QR_Management_Category_Page
+from pages.QR_Management.QR_management_variants import QR_Management_variants_Page
 from utilities.customlogger import LogGen
-from PAGES.common.base_page import BaseTest
+from pages.common.base_page import BaseTest
 from utilities.read_excel import get_test_data  # your Excel utility
 from utilities.screenshot_util import take_screenshot
 
