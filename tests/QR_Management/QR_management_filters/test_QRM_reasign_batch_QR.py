@@ -4,10 +4,10 @@
 # from selenium.webdriver.common.by import By
 # from selenium.webdriver.support.ui import WebDriverWait
 # from selenium.webdriver.support import expected_conditions as EC
-# from pages.QR_Management.QR_management_category import QR_Management_Category_Page
-# from pages.QR_Management.QR_management_QR_m_filters import QR_Management_QR_m_filters
+# from PAGES.QR_Management.QR_management_category import QR_Management_Category_Page
+# from PAGES.QR_Management.QR_management_QR_m_filters import QR_Management_QR_m_filters
 # from utilities.customlogger import LogGen
-# from pages.common.base_page import BaseTest
+# from PAGES.common.base_page import BaseTest
 # from utilities.read_excel import get_test_data
 #
 # # Excel path
@@ -74,10 +74,10 @@ import os
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from pages.QR_Management.QR_management_category import QR_Management_Category_Page
-from pages.QR_Management.QR_management_QR_m_filters import QR_Management_QR_m_filters
+from PAGES.QR_Management.QR_management_category import QR_Management_Category_Page
+from PAGES.QR_Management.QR_management_QR_m_filters import QR_Management_QR_m_filters
 from utilities.customlogger import LogGen
-from pages.common.base_page import BaseTest
+from PAGES.common.base_page import BaseTest
 from utilities.read_excel import get_test_data
 from utilities.screenshot_util import take_screenshot
 

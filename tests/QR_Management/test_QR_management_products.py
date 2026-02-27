@@ -1,11 +1,11 @@
 # import pytest
 # import time
 # from selenium.webdriver.common.by import By
-# from pages.QR_Management.QR_management_category import QR_Management_Category_Page
-# from pages.QR_Management.QR_management_variants import QR_Management_variants_Page
+# from PAGES.QR_Management.QR_management_category import QR_Management_Category_Page
+# from PAGES.QR_Management.QR_management_variants import QR_Management_variants_Page
 # from utilities.customlogger import LogGen
-# from pages.QR_Management.QR_management_products import QR_Management_products_Page
-# from pages.common.base_page import BaseTest
+# from PAGES.QR_Management.QR_management_products import QR_Management_products_Page
+# from PAGES.common.base_page import BaseTest
 #
 # # @pytest.mark.order(4)
 # class Test_004_QR_management_products(BaseTest):

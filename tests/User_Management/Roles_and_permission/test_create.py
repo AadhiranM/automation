@@ -4,9 +4,8 @@ from selenium.webdriver.common.by import By
 
 from PAGES.common.AccessCodePage import AccessCodePage
 from PAGES.QR_Management.login_page import Loginpage
-from PAGES.QR_Management.QR_management_category import QR_Management_Category_Page
+from PAGES.User_Management.Roles_and_Permission.create import Roles_and_permission_create
 from PAGES.QR_monitering.QR_code_monitering import QR_code_monitering_page
-from PAGES.reports.schedule_reports.schedule_report_filters import Generate_reports_page
 from utilities.customlogger import LogGen
 from utilities.readproperties import Readconfig
 from utilities.read_excel import get_test_data
@@ -20,25 +19,23 @@ from selenium.webdriver.support import expected_conditions as EC
 # LOAD EXCEL DATA
 # ---------------------------
 excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
-test_data = get_test_data(excel_path, "schedule_report_create")
+test_data = get_test_data(excel_path, "Roles_and_permission_create")
 
 @pytest.mark.order(1)
 @pytest.mark.parametrize("data", test_data)
-class Test_R_schedule_report_create(BaseTest):
+class Test_UM_Roles_and_permission_create(BaseTest):
 
     logger = LogGen.loggen()
 
-    def test_schedule_report_create(self, driver, data):
+    def test_Roles_and_permission_create(self, driver, data):
 
-        select_report = data["select_report"]
-        select_format = data["select_format"]
-        select_duration = data["select_duration"]
-        mail_receiving_duration=data["mail_receiving_duration"]
+        Role_name = data["Role_name"]
+        User_type = data["User_type"]
+        select_status = data["select_status"]
 
         self.logger.info(
-            f"===== schedule_report_create | select_report={select_report},====="
+            f"===== Roles_and_permission_create ====="
         )
-
         # ---------------------------
         # LOGIN (ONLY ONCE)
         # ---------------------------
@@ -53,41 +50,36 @@ class Test_R_schedule_report_create(BaseTest):
         # ---------------------------
         # NAVIGATION
         # ---------------------------
-        qr_page = QR_Management_Category_Page(driver)
-        qr_page.Click_Dashboard()
-
-        reports= Generate_reports_page(driver)
-        reports.Click_reports_tab()
-        reports.Click_schedule_report()
-        reports.Click_create_btn()
-        reports.choose_create_btn_select_report(select_report)
-        reports.choose_create_btn_select_format(select_format)
-        reports.choose_create_btn_select_duration(select_duration)
-        reports.choose_create_btn_mail_receiving_duration(mail_receiving_duration)
-
-        reports.Click_Create_btn_save_btn()
+        UM_roles_and_per = Roles_and_permission_create(driver)
+        UM_roles_and_per.Click_Dashboard()
+        UM_roles_and_per.Click_User_management()
+        UM_roles_and_per.Click_roles_and_permission()
+        UM_roles_and_per.Click_create()
+        UM_roles_and_per.Enter_role_name(Role_name)
+        UM_roles_and_per.select_user_type(User_type)
+        UM_roles_and_per.select_status(select_status)
+        UM_roles_and_per.select_check_all_btn()
+        UM_roles_and_per.Click_submit_btn()
 
         try:
-            WebDriverWait(driver,2).until(
+            WebDriverWait(driver,10).until(
                 EC.text_to_be_present_in_element(
                     (By.TAG_NAME, "body"),
-                    "Report schedule saved successfully."
+                    "Role created successfully"
                 )
             )
             self.logger.info(
-                f"Schedule report saved successfully | "
-                f"Report={select_report}, Format={select_format}"
+                f"Role created successfully | "
             )
 
         except:
             take_screenshot(
                 driver,
-                test_name="schedule_report_create_fail",
-                folder_name="Screenshots\\reports\\schedule_reports"
+                test_name="UM_Role_create_fail",
+                folder_name="Screenshots\\User_Management\\Roles_and_permission"
             )
             self.logger.error(
-                f"Schedule report creation failed | "
-                f"Report={select_report}, Format={select_format}"
+                f"Role creation failed | "
             )
             assert False
 

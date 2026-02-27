@@ -1,6 +1,6 @@
 
-from pages.common.AccessCodePage import AccessCodePage
-from pages.QR_Management.login_page import Loginpage
+from PAGES.common.AccessCodePage import AccessCodePage
+from PAGES.QR_Management.login_page import Loginpage
 from utilities.readproperties import Readconfig
 
 class BaseTest:
