@@ -79,12 +79,12 @@ class Test_UM_Roles_and_permission_filters(BaseTest):
         try:
             UM_roles_and_per_filters.Click_inactive_opt()
             UM_roles_and_per_filters.Click_yes_Iam_sure_btn()
-            time.sleep(5)
+            time.sleep(3)
 
         except:
             UM_roles_and_per_filters.Click_active_opt()
             UM_roles_and_per_filters.Click_yes_Iam_sure_btn()
-            time.sleep(5)
+            time.sleep(3)
 
 
 
