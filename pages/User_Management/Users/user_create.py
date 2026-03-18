@@ -61,7 +61,6 @@ class user_create:
         submit = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable(self.submit_btn)
         )
-
         # Scroll to element
         self.driver.execute_script("arguments[0].scrollIntoView(true);", submit)
         time.sleep(1)
