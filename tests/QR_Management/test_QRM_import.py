@@ -49,6 +49,6 @@ class Test_QRM_import(BaseTest):
                 folder_name="Screenshots\\QRM_import"
             )
             self.logger.error("File import failed")
-            assert False
+            assert False,"import failed"
 
 

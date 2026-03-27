@@ -167,7 +167,9 @@ class Test_QRM_Generate_QR(BaseTest):
         expiry_date = data["expiry_date"]
         dimension = data["dimension"]
         delivery_location = data["delivery_location"]
-        service = data["service"]
+        image_format=data["image_format"]
+        QR_Type = data["QR_Type"]
+
 
         self.logger.info(f"===== Running QR Generation for SKU: {sku_id}, Batch: {batch_no} =====")
 
@@ -176,8 +178,16 @@ class Test_QRM_Generate_QR(BaseTest):
         #     self.driver = driver
         #     self.login_and_access()
         #     self.logger.info("Logged in successfully for first iteration")
+        #
         # else:
         #     self.logger.info("Skipping login — already logged in")
+        #
+
+        # Check if login succeeded
+        if "dashboard" not in driver.current_url.lower():  # or use some element only visible on dashboard
+            self.logger.error("Login failed! Check username/password")
+            driver.save_screenshot(".\\screenshots\\test_login_failed.png")
+            assert False, "Login failed Check username/password — cannot proceed to QR generation"
 
         # Navigate to QR Management
         qr_page = QR_Management_Category_Page(driver)
@@ -194,9 +204,10 @@ class Test_QRM_Generate_QR(BaseTest):
         qr_QR_page.Enter_product_sku_field(sku_id)
         qr_QR_page.Enter_add_batch(batch_no)
         time.sleep(2)
-
-        qr_QR_page.Click_variant_skuID_opt()
-        time.sleep(2)
+        qr_QR_page.Click_product_name()
+        # qr_QR_page.Click_variant_skuID_opt()
+        # time.sleep(1)
+        # qr_QR_page.Enter_varinat_sku_field(variant_sku)
 
         # Popup check
         if qr_QR_page.is_popup_message_present("Batch number already exists for a different product."):
@@ -214,6 +225,7 @@ class Test_QRM_Generate_QR(BaseTest):
         if not qr_QR_page.is_variant_field_editable():
             self.logger.info(f"Existing Batch detected → Auto-fill mode for Batch: {batch_no}")
             qr_QR_page.Enter_Quantity(quantity)
+            time.sleep(1)
             qr_QR_page.click_genarate_QR_button()
 
             try:
@@ -236,7 +248,7 @@ class Test_QRM_Generate_QR(BaseTest):
             return
 
         # NEW Batch → All fields editable
-        qr_QR_page.Enter_varinat_sku_field(variant_sku)
+
         time.sleep(1)
         qr_QR_page.Enter_Quantity(quantity)
         time.sleep(1)
@@ -254,8 +266,9 @@ class Test_QRM_Generate_QR(BaseTest):
         qr_QR_page.click_batch_delivery_opt()
         qr_QR_page.Enter_batch_delivery_field(delivery_location)
         time.sleep(1)
-        qr_QR_page.select_service_drpdwn(service)
-
+        qr_QR_page.select_QR_Type_drpdwn(QR_Type)
+        qr_QR_page.select_QR_Image_format(image_format)
+        time.sleep(1)
         # Generate QR
         qr_QR_page.click_genarate_QR_button()
 
@@ -276,5 +289,4 @@ class Test_QRM_Generate_QR(BaseTest):
             self.logger.error(f"QR generation failed for SKU={sku_id}")
             assert False
 
-        time.sleep(5)
 

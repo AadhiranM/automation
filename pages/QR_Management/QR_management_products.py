@@ -19,12 +19,12 @@ class QR_Management_products_Page:
     enter_manual_url=(By.XPATH,"//input[@placeholder='https://example.com/manual.pdf']")
     product_url=(By.XPATH,"//input[@id='product_url']")
     SKU_ID=(By.XPATH,"//input[@id='product_ref_id']")
-    drp_category=(By.XPATH,"//div[@class='mb-3']//div[@class='choices__inner']")
+    drp_category=(By.XPATH,"//div[@class='choices__item choices__item--selectable']")
     select_category=(By.XPATH,"//input[@aria-label='Select Category']")
-    drp_status=(By.XPATH,"//select[@id='product_status']")
+    drp_status=(By.XPATH,"//div[@aria-label='Status *']//div[@class='choices__inner']")
     description=(By.XPATH,"//textarea[@id='product_description']")
-    country_opt=(By.XPATH,"//div[@class='mb-3 ui_product-createCoo']//div[@class='choices__inner']")
-    country_of_origin=(By.XPATH,"//input[@aria-label='Select Country']")
+    country_opt=(By.XPATH,"//div[@class='ui_product-createCoo']//div[@class='choices__inner']")
+    country_of_origin=(By.XPATH,"//input[@aria-label='Select Country Of origin']")
     regulatory_name=(By.XPATH,"//select[@id='regulatory_id']")
     regulatory_code=(By.XPATH,"//input[@id='regulatory_codes']")
     proceed_to_child_SKU=(By.XPATH,"//div[@class='col-md-12 text-end']//button[@id='nextButton']")
@@ -87,9 +87,21 @@ class QR_Management_products_Page:
         elem.send_keys(select_category)
         elem.send_keys(Keys.ENTER)
 
-    def select_status_drp(self,select_status):
-        drpdwn_status=Select(self.driver.find_element(*self.drp_status))
-        drpdwn_status.select_by_visible_text(select_status)
+
+
+    def select_status_drp(self,status):
+        # Click the dropdown container
+        dropdown = self.driver.find_element(*self.drp_status)
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", dropdown)
+        dropdown.click()
+
+    # Wait for options to be visible and clickable
+        option_xpath = f"//div[contains(@class,'choices__list--dropdown')]//div[normalize-space()='{status}']"
+        option = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, option_xpath))
+        )
+        option.click()
+
 
     def Enter_description(self,description):
         self.driver.find_element(*self.description).send_keys(description)

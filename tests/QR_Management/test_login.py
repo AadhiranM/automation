@@ -1,6 +1,10 @@
 
 import time
 import pytest
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from utilities.screenshot_util import take_screenshot
+
 from pages.common.AccessCodePage import AccessCodePage
 from pages.QR_Management.login_page import Loginpage
 from utilities.customlogger import LogGen
@@ -20,7 +24,7 @@ class Test_001_QR_management_login:
             self.logger.info("Access code page not present, continuing")
 
         act_title = driver.title
-        if act_title == "Admin | DigiTathya":
+        if act_title == "|DigiTathya - Admin Panel":
             assert True
             self.logger.info("Homepage title verified successfully")
         else:
@@ -32,13 +36,17 @@ class Test_001_QR_management_login:
         lp.setUserName(Readconfig.getUsername())
         lp.setPassword(Readconfig.getUserpassword())
         lp.clickLogin()
+        title = driver.title
+        time.sleep(1)
+        print(title)
 
-        act_title = driver.title
-        if act_title == "| DigiTathya - Admin Panel - Admin Panel":
-            assert True
+
+        current_url = driver.current_url
+
+        if "dashboard" in current_url:
             self.logger.info("Login successful")
+            assert True
         else:
             driver.save_screenshot(".\\screenshots\\test_login.png")
             self.logger.error("Login failed")
             assert False
-

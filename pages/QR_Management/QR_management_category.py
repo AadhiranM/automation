@@ -10,7 +10,7 @@ class QR_Management_Category_Page:
     QR_Management= (By.XPATH, "//span[@class='nav-name'][normalize-space()='QR Management']")
     category = (By.XPATH, "//ul[@class='collapse-menu show']//span[@class='nav-sub-name'][normalize-space()='Categories']")
     create_category_button= (By.XPATH,"(//button[@class='btn btn-soft-primary createCategoryFun'])[1]")
-    Enter_category=(By.XPATH,"//div[@class='form-group col-sm-12']//input[@placeholder='Enter Category']")
+    Enter_category=(By.XPATH,"//div[@class='form-group col-sm-12']//input[@placeholder='Enter Category Name']")
     category_status=(By.XPATH,"//div[@class='form-group col-sm-12']//select[@name='status']")
     save_button=(By.XPATH,"//button[normalize-space()='Save']")
     exit_option=(By.XPATH,"//div[@class='modal-header p-3 bg-primary-subtle']//button[@aria-label='Close']")

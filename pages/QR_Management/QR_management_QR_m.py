@@ -17,11 +17,15 @@ class QR_Management_QR_m_Page:
     upload_btn=(By.XPATH,"//button[@id='uploadButton']")
     product_sku_id_opt = (By.XPATH, "//div[@class='choices__item choices__placeholder choices__item--selectable'][normalize-space()='Select Product SKU ID']")
     product_sku_field=(By.XPATH,"//div[@bp-field-name='product_ref_id']//input[@name='search_terms']")
-    add_batch = (By.XPATH, "//input[@placeholder='Enter Batch']")
+    add_batch = (By.XPATH, "//input[@placeholder='Enter Batch Number']")
     variant_sku_id_opt = (By.XPATH, "//div[@bp-field-name='variant_sku_id']//div[@class='choices__inner']")
     variant_sku_field = (By.XPATH, "//div[@bp-field-name='variant_sku_id']//input[@name='search_terms']")
     Quantity=(By.XPATH, "//input[@placeholder='Enter Quantity']")
     Mftr_date = (By.XPATH, "//input[@id='manufacturing_date']")
+    QR_image_format=(By.XPATH,"//select[@id='qrImageFormatDropdown']")
+    product_name=(By.XPATH,"//input[@placeholder='Enter Product Name']")
+
+
     # Fixed calendar XPaths
     date_year = (By.XPATH, "//div[contains(@class,'flatpickr-calendar')]//input[@aria-label='Year']")
     date_month = (By.XPATH, "//div[contains(@class,'flatpickr-calendar')]//select[@aria-label='Month']")
@@ -30,7 +34,7 @@ class QR_Management_QR_m_Page:
     Dimension=(By.XPATH,"//select[@id='dimensionDropdown']")
     batch_delivery_location_opt = (By.XPATH, "//div[@bp-field-name='batch_location']//div[@class='choices__inner']")
     batch_delivery_location_field = (By.XPATH, "//div[@bp-field-name='batch_location']//input[@name='search_terms']")
-    service_drpdwn=(By.XPATH,"//select[@id='serviceDropdown']")
+    QR_Type_drpdwn=(By.XPATH,"//select[@id='serviceDropdown']")
     genarate_QR = (By.XPATH, "//button[@type='submit']")
 
     def __init__(self, driver):
@@ -73,6 +77,9 @@ class QR_Management_QR_m_Page:
     def Enter_add_batch(self, batch_no):
         self.driver.find_element(*self.add_batch).send_keys(batch_no)
 
+    def Click_product_name(self):
+        self.driver.find_element(*self.product_name).click()
+
     def Enter_Quantity(self, quantity):
         qntity=self.driver.find_element(*self.Quantity)
         qntity.clear()
@@ -93,18 +100,39 @@ class QR_Management_QR_m_Page:
         except Exception:
             return False
 
+    # def is_variant_field_editable(self):
+    #     try:
+    #         # Locate the variant input field
+    #         element = self.driver.find_element(By.XPATH, "//div[@class='form-group col-sm-12 required']//div[@class='choices__inner']")
+    #
+    #         # Check if element is displayed and enabled (editable)
+    #         if element.is_displayed() and element.is_enabled():
+    #             return True
+    #         else:
+    #             return False
+    #     except:
+    #         # Element not found → treat as not editable
+    #         return False
+
     def is_variant_field_editable(self):
         try:
-            # Locate the variant input field
-            element = self.driver.find_element(By.XPATH, "//div[@bp-field-name='variant_sku_id']//input[@name='search_terms']")
+            element = self.driver.find_element(
+                By.XPATH,
+                "//div[@class='form-group col-sm-12 required']//div[contains(@class,'choices__list--single')]"
+            )
 
-            # Check if element is displayed and enabled (editable)
-            if element.is_displayed() and element.is_enabled():
-                return True
-            else:
+            # Check aria-disabled attribute
+            aria_disabled = element.get_attribute("aria-disabled")
+
+            print("aria-disabled:", aria_disabled)  # debug
+
+            if aria_disabled == "true":
                 return False
-        except:
-            # Element not found → treat as not editable
+            else:
+                return True
+
+        except Exception as e:
+            print("Error:", e)
             return False
 
     def Click_variant_skuID_opt(self):
@@ -169,9 +197,9 @@ class QR_Management_QR_m_Page:
         drpdwn_dimension=Select(self.driver.find_element(*self.Dimension))
         drpdwn_dimension.select_by_visible_text(dimension_value)
 
-    def select_service_drpdwn(self,service):
-        drpdwn_service = Select(self.driver.find_element(*self.service_drpdwn))
-        drpdwn_service.select_by_visible_text(service)
+    def select_QR_Type_drpdwn(self,QR_Type):
+        drpdwn_qr_type = Select(self.driver.find_element(*self.QR_Type_drpdwn))
+        drpdwn_qr_type.select_by_visible_text(QR_Type)
 
 
     def click_batch_delivery_opt(self):
@@ -184,6 +212,12 @@ class QR_Management_QR_m_Page:
         time.sleep(2)
         add.send_keys(Keys.ENTER)
 
+    def select_QR_Image_format(self,image_format):
+        drpdwn_dimension=Select(self.driver.find_element(*self.QR_image_format))
+        drpdwn_dimension.select_by_visible_text(image_format)
+
     def click_genarate_QR_button(self):
-        self.driver.find_element(*self.genarate_QR).click()
+        btn=self.driver.find_element(*self.genarate_QR)
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", btn)
+        self.driver.execute_script("arguments[0].click();", btn)
 

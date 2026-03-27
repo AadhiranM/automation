@@ -23,13 +23,13 @@ class Test_QRM_products(BaseTest):
     def test_QR_management_products_flow(self, driver,data):
         self.logger.info(f"===== QR Management products Test Started for {data['product_name']} =====")
 
-        # # Login only once
+        # Login only once
         # if data == test_data[0]:
         #     self.driver = driver
         #     self.login_and_access()
         #     self.logger.info("Logged in successfully for first iteration")
         # else:
-        #     self.logger.info("Skipping login — already logged in")
+        #     self.logger.info("Skipping login ")
 
         qr_page = QR_Management_Category_Page(driver)
         qr_page.Click_Dashboard()
@@ -55,7 +55,8 @@ class Test_QRM_products(BaseTest):
         time.sleep(1)
         qr_products_page.Enter_category_name(data["select_category"])
         time.sleep(1)
-        qr_products_page.select_status_drp(data["select_status"])
+        qr_products_page.select_status_drp(data["status"])
+        time.sleep(1)
         qr_products_page.Enter_description(data["description"])
         time.sleep(2)
         qr_products_page.Country_option()
@@ -63,10 +64,7 @@ class Test_QRM_products(BaseTest):
         qr_products_page.Country_of_origin(data["country"])
         qr_products_page.Click_Proceed_to_child_SKU_button()
         time.sleep(1)
-        qr_products_page.Click_select_variant_type_drp(data["variant_type"])
-        time.sleep(1)
-        qr_products_page.Click_select_value_drp(data["variant_value"])
-        time.sleep(1)
+
         qr_products_page.ClicK_continue_video_btn()
         time.sleep(1)
         qr_products_page.Click_create_product_submit_btn()
@@ -84,5 +82,5 @@ class Test_QRM_products(BaseTest):
                 folder_name="Screenshots\\QRM_products"
             )
             self.logger.error(f"Create product failed for '{data['product_name']}'")
-            assert False
+            assert False,"please check all the fields entered correctly"
             return

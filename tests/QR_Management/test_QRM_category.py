@@ -24,12 +24,21 @@ class Test_QRM_category(BaseTest):
         category = data["Category"]
         status = data["status"]
 
+        # for one by one execution
+
         if data == test_data[0]:
             self.driver = driver
             self.login_and_access()
             self.logger.info("Login completed for first iteration")
+
+            # # Check if login succeeded
+            # if "dashboard" not in driver.current_url.lower():  # or use some element only visible on dashboard
+            #     self.logger.error("Login failed! Check username/password")
+            #     driver.save_screenshot(".\\screenshots\\test_login_failed.png")
+            #     assert False, "Login failed Check username/password — cannot proceed to QR category"
+
         else:
-            self.logger.info("Skipping login — already logged in")
+            self.logger.info("Skipping login ")
 
         # Step 3: Category actions
         qr_page = QR_Management_Category_Page(driver)
@@ -54,8 +63,8 @@ class Test_QRM_category(BaseTest):
                 test_name="test_create_category_failed",
                 folder_name="Screenshots\\QRM_category"
             )
-            self.logger.error("Create category failed")
+            self.logger.error("Create category failed,  please Enter category field correctly ")
             qr_page.Click_exit_option()
-            assert False
+            assert False," please  Enter category field correctly"
 
         time.sleep(3)

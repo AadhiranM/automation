@@ -7,7 +7,7 @@ class QR_Management_variants_Page:
    ## Xpath for all the elements
     # QR_Management= (By.XPATH, "//span[@class='nav-name'][normalize-space()='QR Management']")
     variants= (By.XPATH, "//ul[@class='collapse-menu show']//span[@class='nav-sub-name'][normalize-space()='Variants']")
-    create_button= (By.XPATH,"//a[normalize-space()='Create']")
+    create_button= (By.XPATH,"//a[normalize-space()='Create Variants']")
     category_option=(By.XPATH,"//span[@role='combobox']")
     category_field=(By.XPATH,"//input[@placeholder='Enter Category Name']")
     category_Entered_name=(By.XPATH,"//li[@class='select2-results__option select2-results__option--selectable select2-results__option--highlighted']")

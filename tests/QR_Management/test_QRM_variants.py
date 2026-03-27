@@ -27,7 +27,7 @@ class Test_QRM_variants(BaseTest):
         #     self.login_and_access()
         #     self.logger.info("Login completed for first iteration")
         # else:
-        #     self.logger.info("Skipping login — already logged in")
+        #     self.logger.info("Skipping login")
 
         category_name = data["Category"]        # Match Excel header
         variants_type = data["variants_type"]
@@ -50,7 +50,7 @@ class Test_QRM_variants(BaseTest):
             qr_variants_page.Click_Category_Entered_name()
         except:
             self.logger.warning(f"No category found with name '{category_name}'. Variant '{variants_value}' cannot be created.")
-            assert False
+            assert False,"No category found in that name"
             return
 
         # qr_variants_page.Click_Category_Entered_name()
@@ -72,5 +72,5 @@ class Test_QRM_variants(BaseTest):
                 folder_name="Screenshots\\QRM_Variants"
             )
             self.logger.error(f"Create variant failed for '{variants_value}'")
-            assert False
+            assert False," please enter correct details "
         time.sleep(3)
