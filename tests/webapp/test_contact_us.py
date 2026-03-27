@@ -17,7 +17,7 @@ class TestContactUs:
         page.fill_form(
             name="Manikandan A",
             phone="9876543210",
-            email="mani@test.com",
+            email="mani@mailinator.com",
             company="Digitathya Pvt Ltd",
             message="Testing enquiry automation flow"
         )

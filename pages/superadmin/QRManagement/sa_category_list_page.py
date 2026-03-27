@@ -179,3 +179,17 @@ class SACategoryListPage(BasePage):
 
     def get_no_data_message(self):
         return self.driver.find_element(*self.NO_DATA_ROW).text.strip()
+
+    # =====================================================================
+    # 15. CREATE + VALIDATION HELPERS
+    # =====================================================================
+
+    def click_create(self):
+        self.click(self.CREATE_CATEGORY_BTN)
+
+    def is_category_present(self, category_name):
+        rows = self.driver.find_elements(By.XPATH, "//table//tbody/tr")
+        for row in rows:
+            if category_name.lower() in row.text.lower():
+                return True
+        return False

@@ -1,75 +1,794 @@
-2026-01-12 15:08:16,951 [INFO] 📘 Logger initialized — fresh run, old logs cleared
-2026-01-12 15:08:19,202 [INFO] Typing into ('name', 'access_code'): '2560'
-2026-01-12 15:08:19,203 [INFO] Waiting for: ('name', 'access_code')
-2026-01-12 15:08:19,759 [INFO] Typed successfully in ('name', 'access_code')
-2026-01-12 15:08:19,761 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-01-12 15:08:19,762 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-01-12 15:08:20,414 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-01-12 15:08:20,416 [INFO] Opening URL: https://digitathya.com/contact-us
-2026-01-12 15:08:23,082 [INFO] Typing into ('id', 'name'): 'Manikandan A'
-2026-01-12 15:08:23,082 [INFO] Waiting for: ('id', 'name')
-2026-01-12 15:08:23,524 [INFO] Typed successfully in ('id', 'name')
-2026-01-12 15:08:23,524 [INFO] Typing into ('id', 'phone'): '9876543210'
-2026-01-12 15:08:23,524 [INFO] Waiting for: ('id', 'phone')
-2026-01-12 15:08:23,993 [INFO] Typed successfully in ('id', 'phone')
-2026-01-12 15:08:23,993 [INFO] Typing into ('id', 'email'): 'mani@test.com'
-2026-01-12 15:08:23,995 [INFO] Waiting for: ('id', 'email')
-2026-01-12 15:08:24,396 [INFO] Typed successfully in ('id', 'email')
-2026-01-12 15:08:24,398 [INFO] Typing into ('id', 'company'): 'Digitathya Pvt Ltd'
-2026-01-12 15:08:24,400 [INFO] Waiting for: ('id', 'company')
-2026-01-12 15:08:24,839 [INFO] Typed successfully in ('id', 'company')
-2026-01-12 15:08:24,840 [INFO] Typing into ('id', 'message'): 'Testing enquiry automation flow'
-2026-01-12 15:08:24,841 [INFO] Waiting for: ('id', 'message')
-2026-01-12 15:08:25,239 [INFO] Typed successfully in ('id', 'message')
-2026-01-12 15:08:25,239 [INFO] Clicking: ('id', 'contactSubmit')
-2026-01-12 15:08:25,241 [INFO] Waiting for: ('id', 'contactSubmit')
-2026-01-12 15:08:25,726 [INFO] Clicked successfully: ('id', 'contactSubmit')
-2026-01-12 15:08:25,726 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
-2026-01-12 15:08:35,796 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+2026-03-13 16:23:50,005 [INFO] 📘 Logger initialized — fresh run, old logs cleared
+2026-03-13 16:23:53,986 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:23:53,987 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:23:54,674 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:23:54,674 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-03-13 16:23:58,444 [INFO] Clicking: ('id', 'contactSubmit')
+2026-03-13 16:23:58,445 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-03-13 16:23:58,843 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-03-13 16:23:58,843 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-03-13 16:24:02,128 [INFO] Got text from ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]"): Your enquiry has been successfully submitted. Our team will review it and get back to you soon!
+2026-03-13 16:24:06,001 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:24:06,003 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:24:06,710 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:24:06,710 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-03-13 16:24:10,547 [INFO] Clicking: ('id', 'contactSubmit')
+2026-03-13 16:24:10,547 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-03-13 16:24:10,932 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-03-13 16:24:10,932 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-03-13 16:24:20,995 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
 Stacktrace:
 Symbols not available. Dumping unresolved backtrace:
-	0x7ff74bf288d5
-	0x7ff74bf28930
-	0x7ff74bd0165d
-	0x7ff74bd59a33
-	0x7ff74bd59d3c
-	0x7ff74bdadf67
-	0x7ff74bdaac97
-	0x7ff74bd4ac29
-	0x7ff74bd4ba93
-	0x7ff74c240620
-	0x7ff74c23af60
-	0x7ff74c2596c6
-	0x7ff74bf45dd4
-	0x7ff74bf4ed7c
-	0x7ff74bf31ff4
-	0x7ff74bf321a5
-	0x7ff74bf17ed2
-	0x7ff8c312e8d7
-	0x7ff8c3e8c53c
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
 
-2026-01-12 15:08:36,067 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260112_150835.png
-2026-01-12 15:08:36,068 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+2026-03-13 16:24:21,205 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260313_162420.png
+2026-03-13 16:24:21,206 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
 Stacktrace:
 Symbols not available. Dumping unresolved backtrace:
-	0x7ff74bf288d5
-	0x7ff74bf28930
-	0x7ff74bd0165d
-	0x7ff74bd59a33
-	0x7ff74bd59d3c
-	0x7ff74bdadf67
-	0x7ff74bdaac97
-	0x7ff74bd4ac29
-	0x7ff74bd4ba93
-	0x7ff74c240620
-	0x7ff74c23af60
-	0x7ff74c2596c6
-	0x7ff74bf45dd4
-	0x7ff74bf4ed7c
-	0x7ff74bf31ff4
-	0x7ff74bf321a5
-	0x7ff74bf17ed2
-	0x7ff8c312e8d7
-	0x7ff8c3e8c53c
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
 
-2026-01-12 15:08:36,311 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260112_150836.png
+2026-03-13 16:24:21,399 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260313_162421.png
+2026-03-13 16:24:25,905 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:24:25,906 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:24:26,568 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:24:26,569 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-03-13 16:24:30,537 [INFO] Clicking: ('id', 'contactSubmit')
+2026-03-13 16:24:30,537 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-03-13 16:24:30,936 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-03-13 16:24:30,936 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-03-13 16:24:51,464 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:24:51,685 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260313_162451.png
+2026-03-13 16:24:51,686 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:24:51,895 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260313_162451.png
+2026-03-13 16:24:55,785 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:24:55,788 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:24:56,439 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:24:56,440 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-03-13 16:25:00,460 [INFO] Clicking: ('id', 'contactSubmit')
+2026-03-13 16:25:00,461 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-03-13 16:25:00,893 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-03-13 16:25:00,893 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-03-13 16:25:10,927 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:25:11,093 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260313_162510.png
+2026-03-13 16:25:11,094 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:25:11,258 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260313_162511.png
+2026-03-13 16:25:17,871 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:25:17,872 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:25:18,226 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:25:18,226 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-03-13 16:25:24,023 [INFO] Clicking: ('id', 'contactSubmit')
+2026-03-13 16:25:24,023 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-03-13 16:25:24,439 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-03-13 16:25:24,439 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-03-13 16:25:34,477 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:25:34,675 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260313_162534.png
+2026-03-13 16:25:34,675 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:25:34,845 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260313_162534.png
+2026-03-13 16:25:38,765 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:25:38,766 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:25:39,128 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:25:39,131 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-03-13 16:25:43,282 [INFO] Clicking: ('id', 'contactSubmit')
+2026-03-13 16:25:43,283 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-03-13 16:25:43,693 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-03-13 16:25:43,693 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-03-13 16:25:53,749 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:25:53,911 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260313_162553.png
+2026-03-13 16:25:53,911 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:25:54,093 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260313_162553.png
+2026-03-13 16:25:58,003 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:25:58,004 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:25:58,684 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:25:58,685 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-03-13 16:26:02,592 [INFO] Clicking: ('id', 'contactSubmit')
+2026-03-13 16:26:02,593 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-03-13 16:26:02,987 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-03-13 16:26:02,987 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-03-13 16:26:13,006 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:26:13,205 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260313_162613.png
+2026-03-13 16:26:13,206 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:26:13,371 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260313_162613.png
+2026-03-13 16:26:17,302 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:26:17,303 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:26:18,009 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:26:18,010 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-03-13 16:26:21,686 [INFO] Clicking: ('id', 'contactSubmit')
+2026-03-13 16:26:21,687 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-03-13 16:26:22,092 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-03-13 16:26:22,093 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-03-13 16:26:32,145 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:26:32,306 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260313_162632.png
+2026-03-13 16:26:32,306 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:26:32,470 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260313_162632.png
+2026-03-13 16:26:36,366 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:26:36,372 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:26:37,068 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:26:37,071 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-03-13 16:26:40,851 [INFO] Clicking: ('id', 'contactSubmit')
+2026-03-13 16:26:40,851 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-03-13 16:26:41,263 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-03-13 16:26:41,263 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-03-13 16:26:51,275 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:26:51,443 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260313_162651.png
+2026-03-13 16:26:51,443 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:26:51,609 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260313_162651.png
+2026-03-13 16:26:55,439 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:26:55,442 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:26:55,798 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:26:55,799 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-03-13 16:26:59,887 [INFO] Clicking: ('id', 'contactSubmit')
+2026-03-13 16:26:59,888 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-03-13 16:27:00,283 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-03-13 16:27:00,283 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-03-13 16:27:10,345 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:27:10,507 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260313_162710.png
+2026-03-13 16:27:10,507 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:27:10,673 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260313_162710.png
+2026-03-13 16:27:14,681 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:27:14,683 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:27:15,424 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:27:15,427 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-03-13 16:27:19,436 [INFO] Clicking: ('id', 'contactSubmit')
+2026-03-13 16:27:19,436 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-03-13 16:27:19,851 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-03-13 16:27:19,852 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-03-13 16:27:29,915 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:27:30,158 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260313_162729.png
+2026-03-13 16:27:30,158 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:27:30,364 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260313_162730.png
+2026-03-13 16:27:34,244 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:27:34,245 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:27:34,612 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:27:34,616 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-03-13 16:27:38,664 [INFO] Clicking: ('id', 'contactSubmit')
+2026-03-13 16:27:38,664 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-03-13 16:27:39,088 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-03-13 16:27:39,089 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-03-13 16:27:49,119 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:27:49,277 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260313_162749.png
+2026-03-13 16:27:49,278 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:27:49,441 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260313_162749.png
+2026-03-13 16:27:53,280 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:27:53,281 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:27:54,011 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:27:54,011 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-03-13 16:27:57,821 [INFO] Clicking: ('id', 'contactSubmit')
+2026-03-13 16:27:57,822 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-03-13 16:27:58,209 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-03-13 16:27:58,209 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-03-13 16:28:08,232 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:28:08,393 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260313_162808.png
+2026-03-13 16:28:08,393 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:28:08,561 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260313_162808.png
+2026-03-13 16:28:12,456 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:28:12,458 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:28:12,815 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:28:12,816 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-03-13 16:28:16,850 [INFO] Clicking: ('id', 'contactSubmit')
+2026-03-13 16:28:16,850 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-03-13 16:28:17,294 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-03-13 16:28:17,294 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-03-13 16:28:27,310 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:28:27,483 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260313_162827.png
+2026-03-13 16:28:27,483 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:28:27,652 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260313_162827.png
+2026-03-13 16:28:31,503 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:28:31,504 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:28:32,240 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-03-13 16:28:32,240 [INFO] Opening URL: https://digitathya.com/contact-us
+2026-03-13 16:28:35,958 [INFO] Clicking: ('id', 'contactSubmit')
+2026-03-13 16:28:35,958 [INFO] Waiting for: ('id', 'contactSubmit')
+2026-03-13 16:28:36,359 [INFO] Clicked successfully: ('id', 'contactSubmit')
+2026-03-13 16:28:36,359 [INFO] Waiting for: ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]")
+2026-03-13 16:28:46,401 [ERROR] [WAIT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:28:46,608 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260313_162846.png
+2026-03-13 16:28:46,609 [ERROR] [GET TEXT FAILED] ('xpath', "//*[contains(text(),'success') or contains(text(),'Thank')]") → Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff735a0aa55
+	0x7ff735768630
+	0x7ff7354fd75d
+	0x7ff73555862e
+	0x7ff73555893c
+	0x7ff7355a8d87
+	0x7ff7355a591c
+	0x7ff735549098
+	0x7ff735549f83
+	0x7ff735a37810
+	0x7ff735a31afd
+	0x7ff735a52c1a
+	0x7ff735783345
+	0x7ff73578b81c
+	0x7ff735771924
+	0x7ff735771ad6
+	0x7ff735757e47
+	0x7ffb6beae8d7
+	0x7ffb6ce2c40c
+
+2026-03-13 16:28:46,801 [INFO] 📸 Screenshot saved: reports/screenshots/gettext_failed_20260313_162846.png

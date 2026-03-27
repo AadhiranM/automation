@@ -19,8 +19,8 @@ class TestManufacturerOnboardPositive:
         business.goto_page()
         business.wait_for_page()
 
-        business.fill_company_name("oval234 Tea Shop Pvt Ltd")
-        business.fill_business_email("oval234@mailinator.com")
+        business.fill_company_name("oval23 Tea Shop Pvt Ltd")
+        business.fill_business_email("oval23@mailinator.com")
         business.fill_date_of_incorporation("01-06-1980")
 
         business.select_business_type("Private Limited Company")

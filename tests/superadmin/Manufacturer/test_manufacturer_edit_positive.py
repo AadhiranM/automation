@@ -21,8 +21,8 @@ class TestManufacturerEditPositive:
         edit_page.wait_for_page()
 
         # 🔹 Use FIXED, CLEAN values (not derived)
-        new_email = "pea_updated@mailinator.com"
-        new_company = "Pea Updated"
+        new_email = "pea_updatedd@mailinator.com"
+        new_company = "Pea Updatedd"
 
         # 🔹 Clear + update
         edit_page.update_email(new_email)

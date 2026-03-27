@@ -4,7 +4,7 @@ access_code: "2560"   # replace with your real code
 
 users:
   superadmin:
-    username: "yivake3549@gusronk.com"
+    username: "loadtesting_superadmin2@mailinator.com"
     password: "Newuser@123"
 
   manufacturer:

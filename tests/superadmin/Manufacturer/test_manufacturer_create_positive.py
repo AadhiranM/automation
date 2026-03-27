@@ -18,8 +18,8 @@ class TestManufacturerCreatePositive:
         create_page.wait_for_page()
 
         # Enter details
-        create_page.fill_email("Sydneyy@mailinator.com")
-        create_page.fill_company_name("Sydneyy Tea Shop")
+        create_page.fill_email("Sydneyy79@mailinator.com")
+        create_page.fill_company_name("Sydneyy79 Tea Shop")
 
         # Save
         create_page.click_save()
@@ -27,4 +27,4 @@ class TestManufacturerCreatePositive:
         assert "Created Successfully" in msg
 
         # secondary validation
-        assert list_page.is_company_present("Sydney Tea Shop")
+        assert list_page.is_company_present("Sydneyy79 Tea Shop")
