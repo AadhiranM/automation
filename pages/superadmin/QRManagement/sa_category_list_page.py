@@ -187,9 +187,25 @@ class SACategoryListPage(BasePage):
     def click_create(self):
         self.click(self.CREATE_CATEGORY_BTN)
 
-    def is_category_present(self, category_name):
+    def wait_for_table_refresh(self):
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//table//tbody/tr"))
+        )
+
+    def is_category_present(self, name):
+        return WebDriverWait(self.driver, 15).until(
+            lambda d: len(d.find_elements(
+                By.XPATH,
+                f"//table//td[contains(normalize-space(),'{name}')]"
+            )) > 0
+        )
+
+    def get_category_status(self, name):
         rows = self.driver.find_elements(By.XPATH, "//table//tbody/tr")
+
         for row in rows:
-            if category_name.lower() in row.text.lower():
-                return True
-        return False
+            if name.lower() in row.text.lower():
+                return row.find_element(By.XPATH, "./td[4]").text.strip()
+                # ⚠️ Adjust column index if needed
+
+        return None

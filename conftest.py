@@ -9,9 +9,10 @@ from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 from selenium.webdriver.support.ui import WebDriverWait
-
+from pages.superadmin.Login.sa_login_page import SuperAdminLoginPage
 from utilities.read_yaml import read_config
-
+import pytest
+from utilities.data_generator import generate_category_name
 
 # =========================================================
 # Load config.yaml only once
@@ -164,25 +165,6 @@ def setup(request, get_browser, get_config, base_url):
 # =========================================================
 # LOGIN FIXTURE → Super Admin
 # =========================================================
-@pytest.fixture()
-def login_superadmin(setup, get_config):
-    from pages.superadmin.Login.sa_login_page import SuperAdminLoginPage
-
-    user = get_config["users"]["superadmin"]
-    SuperAdminLoginPage(setup).login(user["username"], user["password"])
-    return setup
-
-
-# =========================================================
-# LOGIN FIXTURE → Manufacturer
-# =========================================================
-@pytest.fixture()
-def login_manufacturer(setup, get_config):
-    from pages.manufacturer.mf_login_page import ManufacturerLogin
-
-    user = get_config["users"]["manufacturer"]
-    ManufacturerLogin(setup).login(user["username"], user["password"])
-    return setup
 
 
 # =========================================================
@@ -225,3 +207,19 @@ def pytest_runtest_makereport(item):
                     )
             except:
                 pass
+
+
+
+@pytest.fixture
+def category_name():
+    return generate_category_name()
+
+@pytest.fixture()
+def login_superadmin(setup, get_config):
+    user = get_config["users"]["superadmin"]
+    login_page = SuperAdminLoginPage(setup)
+    username = login_page.login(user["username"], user["password"])
+    return {
+        "driver": setup,
+        "username": username
+    }

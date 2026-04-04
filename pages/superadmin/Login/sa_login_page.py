@@ -1,4 +1,6 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+
 from pages.common.base_page import BasePage
 
 
@@ -6,7 +8,7 @@ class SuperAdminLoginPage(BasePage):
 
     # ---------- LOCATORS ----------
     LOGIN_BTN = (By.XPATH, "//button[contains(text(),'Login')]")
-
+    USER_NAME = (By.XPATH, "//span[contains(@class,'user-name-text')]")
     EMAIL = (By.NAME, "email")
     PASSWORD = (By.NAME, "password")
 
@@ -15,6 +17,10 @@ class SuperAdminLoginPage(BasePage):
     DASHBOARD_TITLE = (By.XPATH, "//p[normalize-space()='Dashboard']")
 
     # ---------- FIELD ACTIONS ----------
+
+    def get_logged_in_username(self):
+        return self.get_text(self.USER_NAME).strip()
+
     def enter_email(self, email):
         self.type(self.EMAIL, email)
 
@@ -33,6 +39,14 @@ class SuperAdminLoginPage(BasePage):
         self.enter_email(email)
         self.enter_password(password)
         self.click_login()
+
+        # Wait for dashboard
+        WebDriverWait(self.driver, 10).until(
+            lambda d: self.is_dashboard_loaded()
+        )
+
+        # Return username
+        return self.get_logged_in_username()
 
     # ---------- VALIDATION HELPERS ----------
     def get_error_message(self):

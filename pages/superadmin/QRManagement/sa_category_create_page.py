@@ -1,8 +1,9 @@
+import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from pages.common.base_page import BasePage
-
+from selenium.webdriver.common.keys import Keys
 
 class SACategoryCreatePage(BasePage):
 
@@ -16,18 +17,17 @@ class SACategoryCreatePage(BasePage):
     # =========================================================
     MANUFACTURER_DROPDOWN = (
         By.XPATH,
-        "//label[normalize-space()='Manufacturer Name']/following-sibling::div"
+        "//select[@id='manufacturer_id']/following-sibling::div"
     )
 
     MANUFACTURER_SEARCH = (
         By.XPATH,
-        "//div[contains(@class,'choices__list--dropdown') and contains(@class,'is-active')]//input"
+        "//div[contains(@class,'choices') and contains(@class,'is-open')]//input"
     )
 
-    MANUFACTURER_OPTIONS = (
+    MANUFACTURER_OPTION = (
         By.XPATH,
-        "//div[contains(@class,'choices__list--dropdown') and contains(@class,'is-active')]"
-        "//div[contains(@class,'choices__item--selectable')]"
+        "//div[@role='listbox']//div[contains(@class,'choices__item--choice') and contains(text(),'{name}')]"
     )
 
     # =========================================================
@@ -39,11 +39,16 @@ class SACategoryCreatePage(BasePage):
     )
 
     # =========================================================
-    # STATUS (Select2)
+    # STATUS (Choices.js)
     # =========================================================
     STATUS_DROPDOWN = (
         By.XPATH,
-        "//label[normalize-space()='Status']/following-sibling::div"
+        "//span[@id='select2-createcategoryStatus-container']"
+    )
+
+    STATUS_OPTION = (
+        By.XPATH,
+        "//ul[contains(@class,'select2-results__options')]//li[normalize-space()='{status}']"
     )
 
     # =========================================================
@@ -56,7 +61,30 @@ class SACategoryCreatePage(BasePage):
     # =========================================================
     SUCCESS_TOAST = (By.XPATH, "//div[contains(@class,'toastify')]")
 
-    # =========================================================
+    # ============================================
+    # COMMON ERROR LOCATOR
+    # ============================================
+    ERROR_MESSAGES = (
+        By.XPATH,
+        "//div[contains(@class,'invalid-feedback')]"
+    )
+
+    # ============================================
+    # GET ALL ERRORS
+    # ============================================
+    def get_all_error_messages(self):
+        elements = WebDriverWait(self.driver, 5).until(
+            EC.presence_of_all_elements_located(self.ERROR_MESSAGES)
+        )
+        return [el.text.strip() for el in elements if el.text.strip()]
+
+    # ============================================
+    # CHECK SPECIFIC ERROR
+    # ============================================
+    def is_error_present(self, text):
+        errors = self.get_all_error_messages()
+        return any(text.lower() in err.lower() for err in errors)
+
     # WAIT
     # =========================================================
     def wait_for_modal(self):
@@ -69,31 +97,27 @@ class SACategoryCreatePage(BasePage):
     # =========================================================
 
     def select_manufacturer(self, name):
-        # Click dropdown
+        # Step 1: click dropdown
         self.click(self.MANUFACTURER_DROPDOWN)
 
-        # Wait for dropdown active
-        WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located(self.MANUFACTURER_SEARCH)
+        # Step 2: wait for active input
+        search = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((
+                By.XPATH,
+                "//div[contains(@class,'choices') and contains(@class,'is-open')]//input[@type='search']"
+            ))
         )
 
-        # Type search
-        search = self.driver.find_element(*self.MANUFACTURER_SEARCH)
+        # Step 3: type slowly (IMPORTANT)
         search.clear()
         search.send_keys(name)
 
-        # Wait for options
-        options = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_all_elements_located(self.MANUFACTURER_OPTIONS)
-        )
+        # Step 4: WAIT for dropdown to stabilize
+        time.sleep(1)  # 🔥 IMPORTANT (don’t remove now)
 
-        # Click matching option
-        for opt in options:
-            if name.lower() in opt.text.lower():
-                self.driver.execute_script("arguments[0].click();", opt)
-                return
-
-        raise Exception(f"Manufacturer '{name}' not found")
+        # Step 5: press DOWN + ENTER (BEST for this UI)
+        search.send_keys(Keys.ARROW_DOWN)
+        search.send_keys(Keys.ENTER)
 
     def enter_category_name(self, name):
         WebDriverWait(self.driver, 10).until(
@@ -103,10 +127,12 @@ class SACategoryCreatePage(BasePage):
         self.type(self.CATEGORY_NAME, name)
 
     def select_status(self, status="Active"):
-        # Click dropdown
-        self.click(self.STATUS_DROPDOWN)
+        # Step 1: Click dropdown
+        WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(self.STATUS_DROPDOWN)
+        ).click()
 
-        # Wait for dropdown open
+        # Step 2: Wait for dropdown to open
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((
                 By.XPATH,
@@ -114,18 +140,35 @@ class SACategoryCreatePage(BasePage):
             ))
         )
 
-        # Select option
-        option = (
-            By.XPATH,
-            f"//li[contains(@class,'select2-results__option') and normalize-space()='{status}']"
+        # Step 3: Select EXACT option (STRICT locator)
+        option = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                f"//li[@role='option' and normalize-space()='{status}']"
+            ))
         )
 
+        option.click()
+
+        # Step 4: VERIFY selection (MANDATORY)
         WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(option)
-        ).click()
+            EC.text_to_be_present_in_element(
+                self.STATUS_DROPDOWN,
+                status
+            )
+        )
 
     def click_save(self):
-        self.click(self.SAVE_BTN)
+        # Wait for button
+        save_btn = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(self.SAVE_BTN)
+        )
+
+        # Scroll (important sometimes)
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", save_btn)
+
+        # Click using JS (bypass overlay issues)
+        self.driver.execute_script("arguments[0].click();", save_btn)
 
     # =========================================================
     # VALIDATION
@@ -135,3 +178,12 @@ class SACategoryCreatePage(BasePage):
             EC.visibility_of_element_located(self.SUCCESS_TOAST)
         )
         return toast.text
+
+    def wait_for_modal_to_close(self):
+        WebDriverWait(self.driver, 10).until(
+            EC.invisibility_of_element_located(self.MODAL)
+        )
+
+    def is_manufacturer_selected(self, name):
+        selected = self.driver.find_element(*self.MANUFACTURER_DROPDOWN).text
+        return name.lower() in selected.lower()

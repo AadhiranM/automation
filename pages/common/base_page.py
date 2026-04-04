@@ -9,20 +9,24 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
 
 # -----------------------------------------------------------
-# ALWAYS use the global logger (NO fallback logger here)
+# LOGGER
 # -----------------------------------------------------------
 from utilities.logger import logger
+
+# ✅ NEW: config integration
+from utilities.read_yaml import get_config
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 
 class BasePage:
-    def __init__(self, driver, timeout=10):
+    def __init__(self, driver, timeout=None):   # ✅ UPDATED
         self.driver = driver
-        self.timeout = timeout
+        # ✅ take from config if not passed
+        self.timeout = timeout if timeout else get_config("explicit_wait", 10)
 
     # -------------------------------------------------------------------
-    # 📸 Take Screenshot (used internally on failure)
+    # 📸 Take Screenshot
     # -------------------------------------------------------------------
     def _screenshot(self, name="failure"):
         folder = "reports/screenshots"
@@ -38,10 +42,6 @@ class BasePage:
             logger.error(f"Failed saving screenshot: {e}")
 
     def is_element_visible(self, locator, timeout=5):
-        """
-        Returns True if element becomes visible within timeout.
-        Returns False if not found / not visible.
-        """
         try:
             WebDriverWait(self.driver, timeout).until(
                 EC.visibility_of_element_located(locator)
@@ -51,7 +51,7 @@ class BasePage:
             return False
 
     # -------------------------------------------------------------------
-    # 🔥 WAIT helper (all waits use this)
+    # 🔥 WAIT helper
     # -------------------------------------------------------------------
     def wait(self, locator, condition=EC.visibility_of_element_located, timeout=None):
         t = timeout if timeout is not None else self.timeout
@@ -64,7 +64,7 @@ class BasePage:
             raise
 
     # -------------------------------------------------------------------
-    # 🔥 CLICK (scroll → normal click → JS click → retry)
+    # 🔥 CLICK (ENHANCED)
     # -------------------------------------------------------------------
     def click(self, locator):
         attempts = 3
@@ -72,7 +72,9 @@ class BasePage:
         for attempt in range(attempts):
             try:
                 logger.info(f"Clicking: {locator}")
-                element = self.wait(locator, EC.presence_of_element_located)
+
+                # ✅ UPDATED: wait for clickable instead of presence
+                element = self.wait(locator, EC.element_to_be_clickable)
 
                 # Scroll into center
                 try:
@@ -81,9 +83,9 @@ class BasePage:
                     )
                 except:
                     pass
+
                 time.sleep(0.1)
 
-                # Normal click
                 try:
                     element.click()
                 except:
@@ -105,23 +107,20 @@ class BasePage:
                 time.sleep(0.5)
 
     # -------------------------------------------------------------------
-    # 🔥 TYPE (clear + send keys safely)
+    # 🔥 TYPE (ENHANCED)
     # -------------------------------------------------------------------
-    def type(self, locator, text, timeout=15):
-        element = WebDriverWait(self.driver, timeout).until(
-            EC.presence_of_element_located(locator)
-        )
+    def type(self, locator, text, timeout=None):   # ✅ UPDATED
+        t = timeout if timeout else self.timeout
 
-        WebDriverWait(self.driver, timeout).until(
-            lambda d: element.is_enabled()
-                      and element.get_attribute("readonly") is None
+        element = WebDriverWait(self.driver, t).until(
+            EC.element_to_be_clickable(locator)   # ✅ UPDATED
         )
 
         try:
             element.clear()
             element.send_keys(text)
         except Exception:
-            # 🔥 Fallback for React-controlled inputs
+            # React fallback
             self.driver.execute_script(
                 """
                 arguments[0].value = arguments[1];
@@ -147,16 +146,12 @@ class BasePage:
             raise
 
     # -------------------------------------------------------------------
-    # 🔥 IS VISIBLE
-    # -------------------------------------------------------------------
     def is_visible(self, locator):
         try:
             return self.wait(locator)
         except:
             return False
 
-    # -------------------------------------------------------------------
-    # 🔥 OPEN URL
     # -------------------------------------------------------------------
     def open(self, url):
         try:
@@ -168,10 +163,8 @@ class BasePage:
             self._screenshot("open_failed")
             raise
 
-    # existing code...
-
+    # -------------------------------------------------------------------
     def is_present(self, locator, timeout=3):
-        """Return True if element is present, False otherwise"""
         try:
             WebDriverWait(self.driver, timeout).until(
                 EC.presence_of_element_located(locator)
@@ -185,14 +178,10 @@ class BasePage:
         return element.get_attribute("value")
 
     def clear(self, locator):
-        element = self.wait(locator)
+        element = self.wait(locator, EC.element_to_be_clickable)  # ✅ UPDATED
         element.clear()
 
     def select_by_visible_text(self, locator, text):
-        """
-        Select dropdown option by visible text
-        Used for normal <select> dropdowns
-        """
         element = self.driver.find_element(*locator)
         select = Select(element)
         select.select_by_visible_text(text)
