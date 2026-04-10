@@ -22,12 +22,12 @@ class Test_QRM_variants(BaseTest):
         self.logger.info("===== QR Management Variants Test Started =====")
 
         # this need to enable if want to run this specific module
-        # if data == test_data[0]:
-        #     self.driver = driver
-        #     self.login_and_access()
-        #     self.logger.info("Login completed for first iteration")
-        # else:
-        #     self.logger.info("Skipping login")
+        if data == test_data[0]:
+            self.driver = driver
+            self.login_and_access()
+            self.logger.info("Login completed for first iteration")
+        else:
+            self.logger.info("Skipping login")
 
         category_name = data["Category"]        # Match Excel header
         variants_type = data["variants_type"]
@@ -74,3 +74,6 @@ class Test_QRM_variants(BaseTest):
             self.logger.error(f"Create variant failed for '{variants_value}'")
             assert False," please enter correct details "
         time.sleep(3)
+
+
+

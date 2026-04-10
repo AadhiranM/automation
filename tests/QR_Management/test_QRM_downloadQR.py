@@ -20,19 +20,18 @@ class Test_QRM_downloadQR_DDT(BaseTest):
     logger = LogGen.loggen()
 
     def test_QR_management_download_QR(self, driver, data):
-
         search_value = data["search_value"]
         select_status = data["select_status"]
 
         self.logger.info(f"===== QR Download Test Started | Search={search_value}, Status={select_status} =====")
         # #
-        # # Login only once (same as products)
-        # if data == test_data[0]:
-        #     self.driver = driver
-        #     self.login_and_access()
-        #     self.logger.info("Logged in successfully for first iteration")
-        # else:
-        #     self.logger.info("Skipping login")
+        # Login only once (same as products)
+        if data == test_data[0]:
+            self.driver = driver
+            self.login_and_access()
+            self.logger.info("Logged in successfully for first iteration")
+        else:
+            self.logger.info("Skipping login")
 
         qr_page = QR_Management_Category_Page(driver)
         qr_page.Click_Dashboard()
@@ -61,6 +60,43 @@ class Test_QRM_downloadQR_DDT(BaseTest):
         #
         #     self.logger.error(f"No matching data found for '{search_value}'")
         #     pytest.fail(f"No matching data found for '{search_value}'")
+        #
+        # status = qr_filters.search_product(search_value)
+        # if status:
+        #     # Check if QR generation is still in progress
+        #     progress_elements = driver.find_elements(
+        #         By.XPATH, "//table[@id='crudTable']//tbody//tr//td[13]//div[@class='progress-bar-box']"
+        #     )
+        #     if progress_elements:
+        #         print(f"QR for '{search_value}' is still in progress...")
+        #         self.logger.info(f"QR for '{search_value}' is still in progress")
+        #     else:
+        #         # Check if download links are available
+        #         download_elements = driver.find_elements(
+        #             By.XPATH, "//table[@id='crudTable']//tbody//tr//td[14]//a"
+        #         )
+        #         if download_elements:
+        #             for elem in download_elements:
+        #                 qr_link = elem.get_attribute("href")  # Get the download URL
+        #                 print(f"QR ready for '{search_value}'! Download link: {qr_link}")
+        #             # Click to download
+        #             qr_filters.download_batch_QR()
+        #             time.sleep(1)
+        #             qr_filters.download_unit_QR()
+        #             time.sleep(1)
+        #             self.logger.info(f"QR downloaded successfully for '{search_value}'")
+        #         else:
+        #             print(f"No progress or download link found for '{search_value}'")
+        #             self.logger.warning(f"No QR available yet for '{search_value}'")
+        # else:
+        #     take_screenshot(
+        #         driver,
+        #         test_name="test_QR_download",
+        #         folder_name="Screenshots\\QRM_download_QR"
+        #     )
+        #     self.logger.error(f"No matching data found for '{search_value}'")
+        #     pytest.fail(f"No matching data found for '{search_value}'")
+
 
         status = qr_filters.search_product(search_value)
         if status:
@@ -97,3 +133,4 @@ class Test_QRM_downloadQR_DDT(BaseTest):
             )
             self.logger.error(f"No matching data found for '{search_value}'")
             pytest.fail(f"No matching data found for '{search_value}'")
+

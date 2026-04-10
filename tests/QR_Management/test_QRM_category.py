@@ -20,12 +20,10 @@ class Test_QRM_category(BaseTest):
     logger = LogGen.loggen()
 
     def test_QR_management_category_flow(self, driver, data):
-
         category = data["Category"]
         status = data["status"]
 
         # for one by one execution
-
         if data == test_data[0]:
             self.driver = driver
             self.login_and_access()

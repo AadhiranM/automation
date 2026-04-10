@@ -16,7 +16,6 @@ class Test_QR_management_login_DDT:
 
     def test_homepageTitle(self, driver, data):
         self.logger.info("***** Verifying Homepage *****")
-
         username = data["username"]
         password = data["password"]
 

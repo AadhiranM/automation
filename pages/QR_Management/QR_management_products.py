@@ -111,7 +111,6 @@ class QR_Management_products_Page:
         self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});",country_opt)
         self.driver.execute_script("arguments[0].click();",country_opt)
 
-
     def Country_of_origin(self,country):
         ele=(self.driver.find_element(*self.country_of_origin))
         ele.send_keys(country)

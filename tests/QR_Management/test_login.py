@@ -39,8 +39,6 @@ class Test_001_QR_management_login:
         title = driver.title
         time.sleep(1)
         print(title)
-
-
         current_url = driver.current_url
 
         if "dashboard" in current_url:

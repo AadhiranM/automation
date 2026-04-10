@@ -402,7 +402,6 @@ class QR_code_monitering_page:
         #     if d.text == str(int(start_day)) and "disabled" not in d.get_attribute("class"):
         #         d.click()
         #         break
-
         time.sleep(2)
 
         # END DATE

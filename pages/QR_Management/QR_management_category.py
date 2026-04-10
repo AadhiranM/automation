@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class QR_Management_Category_Page:
    ## Xpath for all the elements
+
     Dashboard=(By.XPATH,"//span[@class='nav-name'][normalize-space()='Dashboard']")
     QR_Management= (By.XPATH, "//span[@class='nav-name'][normalize-space()='QR Management']")
     category = (By.XPATH, "//ul[@class='collapse-menu show']//span[@class='nav-sub-name'][normalize-space()='Categories']")

@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+
 class AccessCodePage:
     ACCESS_CODE_INPUT = (By.NAME, "access_code")
     SUBMIT_BUTTON = (By.XPATH, "//button[normalize-space()='Submit']")  # Update if needed

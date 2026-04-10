@@ -1,4 +1,3 @@
-
 from pages.common.AccessCodePage import AccessCodePage
 from pages.QR_Management.login_page import Loginpage
 from utilities.readproperties import Readconfig

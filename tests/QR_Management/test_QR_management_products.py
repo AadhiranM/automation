@@ -65,7 +65,7 @@
 #         # qr_products_page.select_regulatory_name(self.regulatory_name)
 #         # qr_products_page.Enter_regulatory_code(self.regulatory_code)
 #         qr_products_page.Click_Proceed_to_child_SKU_button()
-#         time.sleep(3)
+#         time.sleep(2)
 #         # qr_products_page.child_SKU()
 #         qr_products_page.Click_select_variant_type_drp(self.variant_type)
 #         qr_products_page.Click_select_value_drp(self.variant_value)
