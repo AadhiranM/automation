@@ -41,5 +41,6 @@
   "tests/superadmin/QRManagement/test_category_list_positive.py::TestCategoryListPositive::test_filter_created_date_range": true,
   "tests/superadmin/QRManagement/test_variant_list_positive.py::TestVariantListPositive::test_filter_created_date_range": true,
   "tests/superadmin/QRManagement/test_variant_create_positive.py::TestVariantCreatePositive::test_create_variant_multiple_values": true,
-  "tests/superadmin/QRManagement/test_variant_create_positive.py::TestVariantCreatePositive::test_create_variant_with_multiple_operations": true
+  "tests/superadmin/QRManagement/test_variant_create_positive.py::TestVariantCreatePositive::test_create_variant_with_multiple_operations": true,
+  "tests/superadmin/QRManagement/test_variant_create_positive.py::TestVariantCreatePositive::test_create_multiple_variant_sections": true
 }

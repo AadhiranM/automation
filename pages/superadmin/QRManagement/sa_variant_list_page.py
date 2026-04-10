@@ -1,167 +1,137 @@
-from datetime import datetime
-import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 
 from pages.common.base_page import BasePage
-from utilities.flatpickr import FlatpickrRangePicker
 
 
 class SAVariantListPage(BasePage):
 
-    # =============================
-    # BUTTONS
-    # =============================
-    CREATE_VARIANT_BTN = (By.XPATH, "//a[normalize-space()='Create Variants']")
+    # ===== SEARCH =====
+    SEARCH_BOX = (By.XPATH, "//input[contains(@placeholder,'Search')]")
+    SEARCH_BTN = (By.XPATH, "//button[contains(@class,'search')]")
+    REFRESH_BUTTON = (By.XPATH, "//button[contains(@class,'refresh')]")
 
+    # ===== TABLE =====
+    TABLE_ROWS = (By.XPATH, "//table//tbody//tr")
+    NO_DATA = (By.XPATH, "//td[contains(@class,'dataTables_empty')]")
+
+    # ===== PAGINATION =====
+    NEXT_BTN = (By.XPATH, "//a[text()='Next']")
+    PREV_BTN = (By.XPATH, "//a[text()='Previous']")
+
+    # ===== ACTIONS =====
+    ACTION_BTN = "//table//tbody//tr[{}]//button"
+    VIEW_BTN = (By.XPATH, "//a[normalize-space()='View']")
+    EDIT_BTN = (By.XPATH, "//a[normalize-space()='Edit']")
+
+    # ===== DROPDOWN =====
+    ENTRIES_DROPDOWN = (By.XPATH, "//select[@name='crudTable_length']")
+
+    # =============================
+    # BASIC
+    # =============================
+    def goto_page(self):
+        self.driver.get("https://beta.digitathya.com/admin/variant?reset_filters=1")
+
+    def wait_for_table(self):
+        WebDriverWait(self.driver, 10).until(
+            lambda d: len(d.find_elements(*self.TABLE_ROWS)) > 0
+        )
 
     # =============================
     # SEARCH
     # =============================
-    SEARCH_BOX = (By.ID, "search-vale")
-    SEARCH_BTN = (By.ID, "search-btn")
+    def search(self, text):
+        self.type(self.SEARCH_BOX, text)
+        self.click(self.SEARCH_BTN)
+        self.wait_for_table()   # ✅ important
 
-    # =============================
-    # ENTRIES PER PAGE
-    # =============================
-    ENTRIES_DROPDOWN = (By.XPATH, "//select[@name='crudTable_length']")
+    def is_no_result_displayed(self):
+        return len(self.driver.find_elements(*self.NO_DATA)) > 0
+
+    def click_refresh(self):
+        self.click(self.REFRESH_BUTTON)
+
+        # ✅ stronger wait (handles refresh properly)
+        WebDriverWait(self.driver, 5).until(
+            lambda d: len(d.find_elements(*self.TABLE_ROWS)) > 0
+        )
 
     # =============================
     # PAGINATION
     # =============================
-    NEXT_BTN = (By.XPATH, "//a[text()='Next']")
-    PREV_BTN = (By.XPATH, "//a[text()='Previous']")
-
-    # =============================
-    # TABLE
-    # =============================
-    FIRST_ROW = (By.XPATH, "(//table//tbody/tr)[1]")
-    NO_DATA_ROW = (By.XPATH, "//td[contains(@class,'dataTables_empty')]")
-    CREATED_AT_COL = (By.XPATH, "//table//tbody/tr/td[4]")  # ⚠️ adjust if needed
-
-    # =============================
-    # DATE FILTER
-    # =============================
-    INLINE_CREATED_AT = (By.XPATH, "//input[contains(@placeholder,'Created At')]")
-
-    PAGE_LOADED_MARKER = (By.XPATH, "//table")
-    # =============================
-    # CREATED BY COLUMN
-    # =============================
-    CREATED_BY_TEXT = (By.XPATH, "//table//tbody/tr//span[@class='ms-2']")
-    CATEGORY_COLUMN = (By.XPATH, "//table//tbody/tr/td[2]")
-
-    # =============================
-    # NAVIGATION
-    # =============================
-    def goto_page(self):
-        self.driver.get("https://beta.digitathya.com/admin/variant?reset_filters=1")
-        self.wait_for_results()
-
-    def wait_for_results(self):
-        WebDriverWait(self.driver, self.timeout).until(
-            lambda d: d.find_elements(*self.FIRST_ROW)
-            or d.find_elements(*self.NO_DATA_ROW)
-        )
-
-    # =============================
-    # ACTIONS
-    # =============================
-    def search(self, text):
-        self.wait_for_page_loaded()
-
-        # get old first row text (if exists)
-        old_text = ""
-        rows = self.driver.find_elements(*self.FIRST_ROW)
-        if rows:
-            old_text = rows[0].text
-
-        self.type(self.SEARCH_BOX, text)
-        self.click(self.SEARCH_BTN)
-
-        # wait until table data changes
-        WebDriverWait(self.driver, 10).until(
-            lambda d: (
-                    d.find_elements(*self.NO_DATA_ROW) or
-                    (
-                            d.find_elements(*self.FIRST_ROW) and
-                            d.find_elements(*self.FIRST_ROW)[0].text != old_text
-                    )
-            )
-        )
-
-    def set_entries_per_page(self, value):
-        dropdown = self.wait(self.ENTRIES_DROPDOWN)
-        Select(dropdown).select_by_value(str(value))
-        time.sleep(0.3)
-        self.wait_for_results()
-
     def click_next(self):
         self.click(self.NEXT_BTN)
-        self.wait_for_results()
+        self.wait_for_table()   # ✅ avoid stale
 
     def click_previous(self):
-        WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(self.PREV_BTN)
-        ).click()
-        self.wait_for_results()
+        self.click(self.PREV_BTN)
+        self.wait_for_table()   # ✅ avoid stale
 
+    # =============================
+    # ACTIONS (GENERIC + FINAL)
+    # =============================
+    def click_actions_with_option(self, require_view=False, require_edit=False):
+        rows = self.driver.find_elements(*self.TABLE_ROWS)
+
+        for i in range(len(rows)):
+            locator = (By.XPATH, self.ACTION_BTN.format(i + 1))
+            self.click(locator)
+
+            # wait dropdown
+            WebDriverWait(self.driver, 5).until(
+                EC.presence_of_element_located(self.EDIT_BTN)
+            )
+
+            view_present = len(self.driver.find_elements(*self.VIEW_BTN)) > 0
+            edit_present = len(self.driver.find_elements(*self.EDIT_BTN)) > 0
+
+            # ✅ LOGIC
+            if require_view and require_edit:
+                if view_present and edit_present:
+                    return
+
+            elif require_view:
+                if view_present:
+                    return
+
+            elif require_edit:
+                if edit_present:
+                    return
+
+            else:
+                # default → both required
+                if view_present and edit_present:
+                    return
+
+            # ❌ not matching → close dropdown and try next
+            self.driver.execute_script("document.body.click()")
+
+        raise Exception("No matching row found for required actions")
+
+    def click_view(self):
+        WebDriverWait(self.driver, 5).until(
+            EC.element_to_be_clickable(self.VIEW_BTN)
+        )
+        self.click(self.VIEW_BTN)
+
+    def click_edit(self):
+        WebDriverWait(self.driver, 5).until(
+            EC.element_to_be_clickable(self.EDIT_BTN)
+        )
+        self.click(self.EDIT_BTN)
 
     # =============================
     # HELPERS
     # =============================
     def is_row_present(self):
-        return bool(self.driver.find_elements(*self.FIRST_ROW))
+        return len(self.driver.find_elements(*self.TABLE_ROWS)) > 0
 
-    def wait_for_page_loaded(self):
-        WebDriverWait(self.driver, 15).until(
-            EC.presence_of_element_located(self.PAGE_LOADED_MARKER)
+    def set_entries_per_page(self, value):
+        dropdown = WebDriverWait(self.driver, 5).until(
+            EC.presence_of_element_located(self.ENTRIES_DROPDOWN)
         )
+        Select(dropdown).select_by_value(str(value))
 
-    def has_no_data_message(self):
-        return bool(self.driver.find_elements(*self.NO_DATA_ROW))
-
-    def get_no_data_message(self):
-        return self.driver.find_element(*self.NO_DATA_ROW).text.strip()
-
-    # =============================
-    # CREATE VALIDATION
-    # =============================
-    def click_create(self):
-        self.wait_for_page_loaded()
-        self.click(self.CREATE_VARIANT_BTN)
-
-    def wait_for_table_refresh(self):
-        WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//table//tbody/tr"))
-        )
-
-    def is_variant_present(self, value):
-        return WebDriverWait(self.driver, 15).until(
-            lambda d: len(d.find_elements(
-                By.XPATH,
-                f"//table//td[contains(normalize-space(),'{value}')]"
-            )) > 0
-        )
-
-    def is_created_by_present(self, username):
-        elements = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_all_elements_located(self.CREATED_BY_TEXT)
-        )
-
-        return any(username.lower() in e.text.lower() for e in elements)
-
-    def is_category_present(self, category_name):
-        elements = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_all_elements_located(self.CATEGORY_COLUMN)
-        )
-
-        for e in elements:
-            try:
-                if category_name.lower() in e.text.lower():
-                    return True
-            except:
-                return False
-
-        return False
+        self.wait_for_table()

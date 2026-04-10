@@ -202,3 +202,16 @@ class BasePage:
                 len(self.driver.find_elements(By.CLASS_NAME, "invalid-feedback")) > 0
                 or len(self.driver.find_elements(By.XPATH, "//div[contains(@class,'toast-body')]")) > 0
         )
+
+    def send_keys(self, locator, value):
+        self.driver.find_element(*locator).send_keys(value)
+
+    def get_element(self, locator):
+        return WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located(locator)
+        )
+
+    def enter_text(self, locator, text):
+        element = self.get_element(locator)
+        element.clear()
+        element.send_keys(text)

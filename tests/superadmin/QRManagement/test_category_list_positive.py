@@ -53,3 +53,4 @@ class TestCategoryListPositive:
 
         for r in rows:
             assert start <= r <= end
+
