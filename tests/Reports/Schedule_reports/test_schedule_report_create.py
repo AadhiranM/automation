@@ -24,7 +24,7 @@ test_data = get_test_data(excel_path, "schedule_report_create")
 
 @pytest.mark.order(1)
 @pytest.mark.parametrize("data", test_data)
-class Test_R_schedule_report_create(BaseTest):
+class Test_SR_schedule_report_create(BaseTest):
 
     logger = LogGen.loggen()
 

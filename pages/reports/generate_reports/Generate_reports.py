@@ -9,15 +9,15 @@ from selenium.webdriver.support import expected_conditions as EC
 class Generate_reports_page:
     Reports_tab=(By.XPATH,"//span[normalize-space()='Reports']")
     generate_reports=(By.XPATH,"//ul[@class='collapse-menu show']//span[@class='nav-sub-name'][normalize-space()='Generate Reports']")
-    Batch_status_report=(By.XPATH,"//a[@data-title='Batch Status Report']//i[@class='ri-file-chart-line']")
-    scan_analytics_report=(By.XPATH,"//a[@data-title='Scan Analytics Report']//i[@class='ri-file-chart-line']")
-    product_analytics_report=(By.XPATH,"//a[@data-title='Product Analysis Report']//i[@class='ri-file-chart-line']")
-    fraud_detection_report=(By.XPATH,"//a[@data-title='Fraud Detection Report']//i[@class='ri-file-chart-line']")
-    print_Audit_report=(By.XPATH,"//a[@data-title='Print Audit Report']//i[@class='ri-file-chart-line']")
+    Batch_status_report=(By.XPATH,"//a[@data-title='Batch Status Report']")
+    scan_analytics_report=(By.XPATH,"//a[@data-title='Scan Analytics Report']")
+    product_analytics_report=(By.XPATH,"//a[@data-title='Product Analysis Report']")
+    fraud_detection_report=(By.XPATH,"Fraud Detection Report")
+    print_Audit_report=(By.XPATH,"//a[@data-title='Print Audit Report']")
 
     report_name=(By.XPATH,"//div[@class='row g-3']//div[@class='col-lg-12']//input[@id='report_name']")
-    select_format=(By.XPATH,"//label[contains(normalize-space(.),'Select Format')]/parent::div//select")
-    select_duration=(By.XPATH,"//select[@class='form-select list_date report_duration']")
+    select_format=(By.XPATH,"//select[@id='selectFormat']")
+    select_duration=(By.XPATH,"//select[@id='selectDuration']")
     generate_btn=(By.XPATH,"//button[@id='add_report']")
 
     def __init__(self, driver):

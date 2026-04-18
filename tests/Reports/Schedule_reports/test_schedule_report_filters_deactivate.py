@@ -23,7 +23,7 @@ test_data = get_test_data(excel_path, "schedule_report_filters")
 
 @pytest.mark.order(2)
 @pytest.mark.parametrize("data", test_data)
-class Test_R_schedule_report_filters(BaseTest):
+class Test_SR_schedule_report_filters(BaseTest):
 
     logger = LogGen.loggen()
 

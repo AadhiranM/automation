@@ -18,8 +18,8 @@ class Test_QRM_import(BaseTest):
 
     def test_QR_management_generate_import(self, driver):
         self.logger.info("===== QR Management QR Test Started =====")
-        # self.driver = driver
-        # self.login_and_access()
+        self.driver = driver
+        self.login_and_access()
 
         qr_page = QR_Management_Category_Page(driver)
         qr_page.Click_Dashboard()

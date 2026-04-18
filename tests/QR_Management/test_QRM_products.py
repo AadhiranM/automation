@@ -24,12 +24,12 @@ class Test_QRM_products(BaseTest):
         self.logger.info(f"===== QR Management products Test Started for {data['product_name']} =====")
 
         # Login only once
-        # if data == test_data[0]:
-        #     self.driver = driver
-        #     self.login_and_access()
-        #     self.logger.info("Logged in successfully for first iteration")
-        # else:
-        #     self.logger.info("Skipping login ")
+        if data == test_data[0]:
+            self.driver = driver
+            self.login_and_access()
+            self.logger.info("Logged in successfully for first iteration")
+        else:
+            self.logger.info("Skipping login ")
 
         qr_page = QR_Management_Category_Page(driver)
         qr_page.Click_Dashboard()
