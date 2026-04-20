@@ -49,46 +49,6 @@ class SAVariantCreatePage(BasePage):
     # ==========================
     # SELECT2 HANDLING
     # ==========================
-    def select_from_select2(self, dropdown_locator, value):
-        self.click(dropdown_locator)
-
-        search = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located(self.SELECT2_SEARCH_INPUT)
-        )
-
-        search.clear()
-        search.send_keys(value)
-
-        # ✅ WAIT UNTIL THE EXPECTED TEXT APPEARS IN DROPDOWN
-        option = WebDriverWait(self.driver, 15).until(
-            lambda d: next(
-                (
-                    el for el in d.find_elements(
-                    By.XPATH,
-                    "//li[contains(@class,'select2-results__option')]"
-                )
-                    if value.lower() in el.text.lower()
-                ),
-                None
-            )
-        )
-
-        if not option:
-            raise Exception(f"Value '{value}' not found in dropdown")
-
-        # ✅ SCROLL + CLICK
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", option)
-
-        WebDriverWait(self.driver, 5).until(
-            EC.element_to_be_clickable(option)
-        )
-
-        option.click()
-
-        # ✅ WAIT UNTIL DROPDOWN CLOSES
-        WebDriverWait(self.driver, 10).until(
-            EC.invisibility_of_element_located(self.SELECT2_SEARCH_INPUT)
-        )
 
     def select_manufacturer(self, name):
         self.select_from_select2(self.MANUFACTURER_DROPDOWN, name)

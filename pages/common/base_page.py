@@ -4,9 +4,10 @@ import os
 from datetime import datetime
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
+from selenium.webdriver.common.keys import Keys
 
 # -----------------------------------------------------------
 # LOGGER
@@ -215,3 +216,50 @@ class BasePage:
         element = self.get_element(locator)
         element.clear()
         element.send_keys(text)
+
+    def select_searchable_dropdown(self, locator, value):
+        self.click(locator)
+
+        search = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((
+                By.XPATH,
+                "//div[contains(@class,'choices') and contains(@class,'is-open')]//input"
+            ))
+        )
+
+        search.clear()
+        search.send_keys(value)
+
+        # ✅ WAIT UNTIL OPTION APPEARS (REAL FIX)
+        option = WebDriverWait(self.driver, 15).until(
+            lambda d: next(
+                (
+                    el for el in d.find_elements(
+                    By.XPATH,
+                    "//div[contains(@class,'choices__list--dropdown')]//div[@role='option']"
+                )
+                    if value.lower() in el.text.lower()
+                ),
+                None
+            )
+        )
+
+        if not option:
+            raise Exception(f"{value} not found in dropdown")
+
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", option)
+        option.click()
+
+    def select_status_keyboard(self, locator, value):
+        self.click(locator)
+        time.sleep(1)
+
+        active_element = self.driver.switch_to.active_element
+
+        if value.lower() == "active":
+            active_element.send_keys(Keys.ARROW_DOWN)
+        elif value.lower() == "inactive":
+            active_element.send_keys(Keys.ARROW_DOWN)
+            active_element.send_keys(Keys.ARROW_DOWN)
+
+        active_element.send_keys(Keys.ENTER)
