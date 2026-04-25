@@ -29,7 +29,7 @@ class TestProductCreate:
 
         # ✅ Step 4: Child Page
         child = SAProductCreateChildPage(driver)
-        child.wait_for_page()
+        child.open_child_tab()
         child.select_variant()
         child.go_to_video()
 

@@ -75,8 +75,8 @@ class BasePage:
                 logger.info(f"Clicking: {locator}")
 
                 # ✅ UPDATED: wait for clickable instead of presence
-                element = self.wait(locator, EC.element_to_be_clickable)
-
+                # element = self.wait(locator, EC.element_to_be_clickable)
+                element = self.wait(locator, EC.presence_of_element_located)
                 # Scroll into center
                 try:
                     self.driver.execute_script(
@@ -263,3 +263,30 @@ class BasePage:
             active_element.send_keys(Keys.ARROW_DOWN)
 
         active_element.send_keys(Keys.ENTER)
+
+    # 🔥 ADD THIS IN BasePage
+
+    def select_dropdown(self, locator, text):
+
+        # click dropdown
+        dropdown = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(locator)
+        )
+        dropdown.click()
+
+        # wait for options (VERY IMPORTANT)
+        options = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_all_elements_located((
+                By.XPATH, "//div[@role='option']"
+            ))
+        )
+
+        print("OPTIONS FOUND:", [o.text for o in options])
+
+        # click matching option
+        for option in options:
+            if text.strip() in option.text.strip():
+                option.click()
+                return
+
+        raise Exception(f"❌ Option '{text}' not found")

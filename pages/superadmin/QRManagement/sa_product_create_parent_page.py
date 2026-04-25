@@ -117,6 +117,14 @@ class SAProductCreateParentPage(BasePage):
         self.go_to_child()
 
     def go_to_child(self):
-        WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(self.PROCEED_BTN)
-        ).click()
+        btn = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located(self.PROCEED_BTN)
+        )
+
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", btn)
+
+        try:
+            btn.click()
+        except:
+            print("Normal click failed → using JS click")
+            self.driver.execute_script("arguments[0].click();", btn)

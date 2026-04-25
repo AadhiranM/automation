@@ -48,6 +48,5 @@
   "tests/superadmin/QRManagement/test_variant_list_negative.py::TestVariantListNegative::test_filter_created_date_no_data": true,
   "tests/superadmin/QRManagement/test_product_list_positive.py::TestProductListPositive": true,
   "tests/superadmin/QRManagement/test_product_list_negative.py::TestProductListNegative::test_filter_date_no_data": true,
-  "tests/superadmin/QRManagement/test_product_create_e2e.py::TestProductCreate::test_create_product": true,
   "tests/superadmin/QRManagement/test_product_create_e2e.py::TestProductCreate::TestProductCreate::test_create_product": true
 }
