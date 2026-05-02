@@ -5,7 +5,6 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class QR_Management_variants_Page:
    ## Xpath for all the elements
-    # QR_Management= (By.XPATH, "//span[@class='nav-name'][normalize-space()='QR Management']")
     variants= (By.XPATH, "//ul[@class='collapse-menu show']//span[@class='nav-sub-name'][normalize-space()='Variants']")
     create_button= (By.XPATH,"//a[normalize-space()='Create Variants']")
     category_option=(By.XPATH,"//span[@role='combobox']")

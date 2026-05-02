@@ -71,7 +71,6 @@ class Test_UM_Roles_and_permission_create(BaseTest):
             self.logger.info(
                 f"Role created successfully | "
             )
-
         except:
             take_screenshot(
                 driver,

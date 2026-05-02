@@ -65,8 +65,6 @@ class QR_Management_products_Page:
         self.driver.find_element(*self.user_manual__upload_file).send_keys(user_manual_file)
 
     def Enter_Product_URL(self,product_url):
-        # self.driver.find_element(*self.product_url).clear()
-        # self.driver.find_element(*self.product_url).send_keys(product_url)
         field = self.driver.find_element(*self.product_url)
         self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", field)
         self.driver.execute_script("arguments[0].value = '';", field)  # JS clear

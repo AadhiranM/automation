@@ -43,12 +43,12 @@ class Test_UM_users_create(BaseTest):
         # ---------------------------
         # LOGIN (ONLY ONCE)
         # ---------------------------
-        # if data == test_data[0]:
-        #     self.driver = driver
-        #     self.login_and_access()
-        #     self.logger.info("Login successful (first iteration)")
-        # else:
-        #     self.logger.info("Skipping login — already logged in")
+        if data == test_data[0]:
+            self.driver = driver
+            self.login_and_access()
+            self.logger.info("Login successful (first iteration)")
+        else:
+            self.logger.info("Skipping login — already logged in")
 
         UM_create = user_create(driver)
         UM_create.Click_Dashboard()

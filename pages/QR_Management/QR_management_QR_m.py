@@ -100,19 +100,7 @@ class QR_Management_QR_m_Page:
         except Exception:
             return False
 
-    # def is_variant_field_editable(self):
-    #     try:
-    #         # Locate the variant input field
-    #         element = self.driver.find_element(By.XPATH, "//div[@class='form-group col-sm-12 required']//div[@class='choices__inner']")
-    #
-    #         # Check if element is displayed and enabled (editable)
-    #         if element.is_displayed() and element.is_enabled():
-    #             return True
-    #         else:
-    #             return False
-    #     except:
-    #         # Element not found → treat as not editable
-    #         return False
+
 
     def is_variant_field_editable(self):
         try:

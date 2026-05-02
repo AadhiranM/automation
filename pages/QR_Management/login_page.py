@@ -11,6 +11,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 # Set up the WebDriver using webdriver-manager to handle GeckoDriver
 service=Service(GeckoDriverManager().install())
 
+
 class Loginpage:
     def __init__(self, driver):
         self.driver=driver

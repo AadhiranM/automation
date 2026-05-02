@@ -44,7 +44,6 @@ class Test_QRM_downloadQR_DDT(BaseTest):
         qr_filters.select_status_drp(select_status)
         time.sleep(2)
 
-
         status = qr_filters.search_product(search_value)
         if status:
             # Check if QR generation is still in progress

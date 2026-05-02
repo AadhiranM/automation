@@ -103,8 +103,6 @@ class QR_Management_QR_m_filters:
         self.driver.find_element(*self.filter_product_name).clear()
         self.driver.find_element(*self.filter_product_name).send_keys(product_name)
 
-    # def Click_filters_apply_btn(self):
-    #     self.driver.find_element(*self.filters_apply_btn).click()
 
     def Click_filters_apply_btn(self):
         wait = WebDriverWait(self.driver, 20)

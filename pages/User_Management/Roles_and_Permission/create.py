@@ -48,8 +48,6 @@ class Roles_and_permission_create:
     def select_check_all_btn(self):
         self.driver.find_element(*self.check_all).click()
 
-    # def Click_submit_btn(self):
-    #     self.driver.find_element(*self.submit_btn).click()
 
     def Click_submit_btn(self):
         submit = WebDriverWait(self.driver, 10).until(

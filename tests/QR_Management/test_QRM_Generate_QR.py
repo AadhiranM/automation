@@ -38,13 +38,13 @@ class Test_QRM_Generate_QR(BaseTest):
         self.logger.info(f"===== Running QR Generation for SKU: {sku_id}, Batch: {batch_no} =====")
 
         # Login only once
-        # if data == test_data[0]:
-        #     self.driver = driver
-        #     self.login_and_access()
-        #     self.logger.info("Logged in successfully for first iteration")
-        #
-        # else:
-        #     self.logger.info("Skipping login — already logged in")
+        if data == test_data[0]:
+            self.driver = driver
+            self.login_and_access()
+            self.logger.info("Logged in successfully for first iteration")
+
+        else:
+            self.logger.info("Skipping login — already logged in")
 
 
         # Check if login succeeded

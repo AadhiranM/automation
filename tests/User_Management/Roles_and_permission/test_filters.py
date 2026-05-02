@@ -39,13 +39,13 @@ class Test_UM_Roles_and_permission_filters(BaseTest):
         # ---------------------------
         # LOGIN (ONLY ONCE)
         # ---------------------------
-        # if data == test_data[0]:
-        #     self.driver = driver
-        #     self.login_and_access()
-        #
-        #     self.logger.info("Login successful (first iteration)")
-        # else:
-        #     self.logger.info("Skipping login — already logged in")
+        if data == test_data[0]:
+            self.driver = driver
+            self.login_and_access()
+
+            self.logger.info("Login successful (first iteration)")
+        else:
+            self.logger.info("Skipping login — already logged in")
 
         # ---------------------------
         # NAVIGATION

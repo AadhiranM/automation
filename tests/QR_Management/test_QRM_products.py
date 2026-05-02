@@ -84,3 +84,5 @@ class Test_QRM_products(BaseTest):
             self.logger.error(f"Create product failed for '{data['product_name']}'")
             assert False,"please check all the fields entered correctly"
             return
+
+

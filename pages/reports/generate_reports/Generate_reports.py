@@ -12,7 +12,7 @@ class Generate_reports_page:
     Batch_status_report=(By.XPATH,"//a[@data-title='Batch Status Report']")
     scan_analytics_report=(By.XPATH,"//a[@data-title='Scan Analytics Report']")
     product_analytics_report=(By.XPATH,"//a[@data-title='Product Analysis Report']")
-    fraud_detection_report=(By.XPATH,"Fraud Detection Report")
+    fraud_detection_report=(By.XPATH,"//a[@data-title='Fraud Detection Report']")
     print_Audit_report=(By.XPATH,"//a[@data-title='Print Audit Report']")
 
     report_name=(By.XPATH,"//div[@class='row g-3']//div[@class='col-lg-12']//input[@id='report_name']")
@@ -86,6 +86,7 @@ class Generate_reports_page:
                     By.XPATH, "//table[@id='crudTable']//tbody//tr[1]//td[9]"
                 )
                 print("No data available:", no_data.text)
+
 
             except Exception:
                 print("Neither download option nor no data found")
