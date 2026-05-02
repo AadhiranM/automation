@@ -25,6 +25,8 @@ class BasePage:
         self.driver = driver
         # ✅ take from config if not passed
         self.timeout = timeout if timeout else get_config("explicit_wait", 10)
+        full_url = get_config("url")  # https://beta.digitathya.com/admin/login
+        self.base_url = full_url.split("/admin")[0]  # https://beta.digitathya.com
 
     # -------------------------------------------------------------------
     # 📸 Take Screenshot
@@ -266,27 +268,78 @@ class BasePage:
 
     # 🔥 ADD THIS IN BasePage
 
-    def select_dropdown(self, locator, text):
+    # def select_dropdown(self, locator, text):
+    #
+    #     # click dropdown
+    #     dropdown = WebDriverWait(self.driver, 10).until(
+    #         EC.element_to_be_clickable(locator)
+    #     )
+    #     dropdown.click()
+    #
+    #     # wait for options (VERY IMPORTANT)
+    #     options = WebDriverWait(self.driver, 10).until(
+    #         EC.presence_of_all_elements_located((
+    #             By.XPATH, "//div[@role='option']"
+    #         ))
+    #     )
+    #
+    #     print("OPTIONS FOUND:", [o.text for o in options])
+    #
+    #     # click matching option
+    #     for option in options:
+    #         if text.strip() in option.text.strip():
+    #             option.click()
+    #             return
+    #
+    #     raise Exception(f"❌ Option '{text}' not found")
 
-        # click dropdown
-        dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(locator)
-        )
-        dropdown.click()
+    def select_dropdown(self, locator, value):
 
-        # wait for options (VERY IMPORTANT)
-        options = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_all_elements_located((
-                By.XPATH, "//div[@role='option']"
+        # CLICK DROPDOWN
+        self.click(locator)
+
+        # GET CURRENT ACTIVE DROPDOWN ONLY
+        active_dropdown = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((
+                By.XPATH,
+                "//div[contains(@class,'choices__list--dropdown') and contains(@class,'is-active')]"
             ))
         )
 
-        print("OPTIONS FOUND:", [o.text for o in options])
+        # GET OPTIONS INSIDE THIS DROPDOWN ONLY
+        options = active_dropdown.find_elements(By.XPATH, ".//div[@role='option']")
 
-        # click matching option
-        for option in options:
-            if text.strip() in option.text.strip():
-                option.click()
+        print("Dropdown options:", [o.text for o in options])  # debug
+
+        for opt in options:
+            if value.strip().lower() == opt.text.strip().lower():
+                self.driver.execute_script("arguments[0].click();", opt)
+                print(f"✅ Selected: {value}")
                 return
 
-        raise Exception(f"❌ Option '{text}' not found")
+        raise Exception(f"{value} not found in dropdown")
+
+    def click_with_events(self, element):
+        # scroll
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});", element
+        )
+
+        # normal click
+        try:
+            element.click()
+        except:
+            self.driver.execute_script("arguments[0].click();", element)
+
+        # 🔥 force JS events (CRITICAL)
+        self.driver.execute_script("""
+            arguments[0].dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
+            arguments[0].dispatchEvent(new MouseEvent('mouseup', {bubbles: true}));
+            arguments[0].dispatchEvent(new MouseEvent('click', {bubbles: true}));
+            arguments[0].dispatchEvent(new Event('change', {bubbles: true}));
+        """, element)
+
+    def wait_until_dropdown_updated(self, element):
+        WebDriverWait(self.driver, 10).until(
+            lambda d: element.text.strip() != "" and "Select" not in element.text
+        )
