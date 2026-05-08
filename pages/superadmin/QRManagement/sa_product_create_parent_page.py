@@ -116,6 +116,7 @@ class SAProductCreateParentPage(BasePage):
         # ---------- PROCEED ----------
         self.go_to_child()
 
+
     def go_to_child(self):
         btn = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located(self.PROCEED_BTN)

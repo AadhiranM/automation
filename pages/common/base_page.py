@@ -2,6 +2,8 @@
 import time
 import os
 from datetime import datetime
+
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait, Select
@@ -69,6 +71,46 @@ class BasePage:
     # -------------------------------------------------------------------
     # 🔥 CLICK (ENHANCED)
     # -------------------------------------------------------------------
+    # def click(self, locator):
+    #     attempts = 3
+    #
+    #     for attempt in range(attempts):
+    #         try:
+    #             logger.info(f"Clicking: {locator}")
+    #
+    #             # ✅ UPDATED: wait for clickable instead of presence
+    #             # element = self.wait(locator, EC.element_to_be_clickable)
+    #             element = self.wait(locator, EC.presence_of_element_located)
+    #             # Scroll into center
+    #             try:
+    #                 self.driver.execute_script(
+    #                     "arguments[0].scrollIntoView({block: 'center'});", element
+    #                 )
+    #             except:
+    #                 pass
+    #
+    #             time.sleep(0.1)
+    #
+    #             try:
+    #                 element.click()
+    #             except:
+    #                 # JS fallback
+    #                 self.driver.execute_script("arguments[0].click();", element)
+    #
+    #             time.sleep(0.2)
+    #             logger.info(f"Clicked successfully: {locator}")
+    #             return
+    #
+    #         except Exception as e:
+    #             logger.warning(f"[CLICK FAILED] Attempt {attempt+1}/3 for {locator} → {e}")
+    #
+    #             if attempt == attempts - 1:
+    #                 self._screenshot("click_failed")
+    #                 logger.error(f"Click ultimately failed: {locator}")
+    #                 raise
+    #
+    #             time.sleep(0.5)
+
     def click(self, locator):
         attempts = 3
 
@@ -79,6 +121,7 @@ class BasePage:
                 # ✅ UPDATED: wait for clickable instead of presence
                 # element = self.wait(locator, EC.element_to_be_clickable)
                 element = self.wait(locator, EC.presence_of_element_located)
+
                 # Scroll into center
                 try:
                     self.driver.execute_script(
@@ -98,9 +141,11 @@ class BasePage:
                 time.sleep(0.2)
                 logger.info(f"Clicked successfully: {locator}")
                 return
-
             except Exception as e:
-                logger.warning(f"[CLICK FAILED] Attempt {attempt+1}/3 for {locator} → {e}")
+
+                logger.warning(
+                    f"[CLICK FAILED] Attempt {attempt+1}/3 for {locator} → {e}"
+                )
 
                 if attempt == attempts - 1:
                     self._screenshot("click_failed")
@@ -252,19 +297,66 @@ class BasePage:
         self.driver.execute_script("arguments[0].scrollIntoView(true);", option)
         option.click()
 
+
+
     def select_status_keyboard(self, locator, value):
-        self.click(locator)
+        wait = WebDriverWait(self.driver, 10)
+
+        # Step 1: Click dropdown
+        dropdown = wait.until(EC.element_to_be_clickable(locator))
+        dropdown.click()
+
+        # Step 2: Wait for dropdown options to appear
+        options = wait.until(EC.presence_of_all_elements_located((
+            By.XPATH,
+            "//div[contains(@class,'choices__list--dropdown') and not(contains(@class,'is-hidden'))]//div[@role='option']"
+        )))
+
+        # Step 3: Find correct option
+        for opt in options:
+            if value.lower() in opt.text.lower():
+                opt.click()
+                break
+        else:
+            raise Exception(f"Option '{value}' not found in dropdown")
+
+        # # Step 4: Wait dropdown close
+        # wait.until(EC.invisibility_of_element_located((
+        #     By.XPATH, "//div[contains(@class,'choices__list--dropdown')]"
+        # )))
+
+        # Step 4: Force close dropdown properly
+
+        from selenium.webdriver.common.keys import Keys
+
+        # remove focus
+        self.driver.switch_to.active_element.send_keys(Keys.ESCAPE)
+
         time.sleep(1)
 
-        active_element = self.driver.switch_to.active_element
+        # wait dropdown close
+        wait.until(EC.invisibility_of_element_located((
+            By.XPATH,
+            "//div[contains(@class,'choices__list--dropdown') and not(contains(@class,'is-hidden'))]"
+        )))
 
-        if value.lower() == "active":
-            active_element.send_keys(Keys.ARROW_DOWN)
-        elif value.lower() == "inactive":
-            active_element.send_keys(Keys.ARROW_DOWN)
-            active_element.send_keys(Keys.ARROW_DOWN)
+    # def select_status_keyboard(self, locator, value):
+    #     self.click(locator)
+    #     time.sleep(1)
+    #
+    #     active_element = self.driver.switch_to.active_element
+    #
+    #     if value.lower() == "active":
+    #         active_element.send_keys(Keys.ARROW_DOWN)
+    #     elif value.lower() == "inactive":
+    #         active_element.send_keys(Keys.ARROW_DOWN)
+    #         active_element.send_keys(Keys.ARROW_DOWN)
+    #
+    #     active_element.send_keys(Keys.ENTER)
 
-        active_element.send_keys(Keys.ENTER)
+
+
+
 
     # 🔥 ADD THIS IN BasePage
 
@@ -343,3 +435,92 @@ class BasePage:
         WebDriverWait(self.driver, 10).until(
             lambda d: element.text.strip() != "" and "Select" not in element.text
         )
+
+    # def safe_click(self, locator):
+    #     wait = WebDriverWait(self.driver, 15)
+    #
+    #     el = wait.until(EC.element_to_be_clickable(locator))
+    #
+    #     # scroll
+    #     self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", el)
+    #
+    #     # close any open dropdown
+    #     self.driver.find_element(By.TAG_NAME, "body").click()
+    #
+    #     # wait overlay gone
+    #     try:
+    #         wait.until(EC.invisibility_of_element_located((
+    #             By.XPATH, "//div[contains(@class,'choices__list--dropdown')]"
+    #         )))
+    #     except:
+    #         pass
+    #
+    #     el.click()
+
+    def safe_type(self, locator, value):
+        wait = WebDriverWait(self.driver, 15)
+
+        el = wait.until(EC.element_to_be_clickable(locator))
+
+        # scroll
+        self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", el)
+
+        # close dropdown overlay
+        self.driver.find_element(By.TAG_NAME, "body").click()
+
+        el.click()
+        time.sleep(0.3)
+
+        el.clear()
+        el.send_keys(value)
+
+        time.sleep(0.5)
+
+    def close_overlay(self):
+
+        try:
+            body = self.driver.find_element(By.TAG_NAME, "body")
+            body.click()
+
+            WebDriverWait(self.driver, 5).until_not(
+                EC.presence_of_element_located(
+                    (By.CLASS_NAME, "flatpickr-calendar")
+                )
+            )
+
+        except:
+            pass
+
+    def wait_for_loader_disappear(self):
+
+        try:
+            WebDriverWait(self.driver, 15).until_not(
+                EC.presence_of_element_located(
+                    (By.CLASS_NAME, "loading")
+                )
+            )
+        except:
+            pass
+
+    def safe_click(self, locator):
+
+        wait = WebDriverWait(self.driver, 15)
+
+        element = wait.until(
+            EC.element_to_be_clickable(locator)
+        )
+
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            element
+        )
+
+        try:
+            element.click()
+
+        except Exception:
+
+            self.driver.execute_script(
+                "arguments[0].click();",
+                element
+            )

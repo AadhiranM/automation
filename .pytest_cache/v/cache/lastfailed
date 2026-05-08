@@ -49,5 +49,5 @@
   "tests/superadmin/QRManagement/test_product_list_positive.py::TestProductListPositive": true,
   "tests/superadmin/QRManagement/test_product_list_negative.py::TestProductListNegative::test_filter_date_no_data": true,
   "tests/superadmin/QRManagement/test_product_create_e2e.py::TestProductCreate::TestProductCreate::test_create_product": true,
-  "tests/superadmin/QRManagement/test_qr_generation.py::TestQRGeneration::test_generate_qr_success": true
+  "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_export_id_based": true
 }
