@@ -36,8 +36,8 @@ class QR_Management_products_Page:
     continue_to_video_btn=(By.XPATH,"//div[@class='d-flex align-items-start gap-3 mt-4']//button[@id='nextButton']")
 
     ##Video_details
-    video_title=(By.XPATH,"//input[@id='newVideoTitle']")
-    choose_video_file=(By.XPATH,"//input[@id='newVideoFile']")
+    video_title=(By.XPATH,"//input[@placeholder='Video Title']")
+    choose_video_file=(By.XPATH,"//input[@name='video_file[]']")
     add_button=(By.XPATH,"//button[@id='add-video-btn']")
     create_product_submit_button=(By.XPATH,"//button[@id='submitButton']")
 
@@ -134,6 +134,12 @@ class QR_Management_products_Page:
     def Click_select_value_drp(self,variant_value):
         v_value=Select(self.driver.find_element(*self.select_value))
         v_value.select_by_visible_text(variant_value)
+
+    def Enter_video_title(self,video_title):
+        self.driver.find_element(*self.video_title).send_keys(video_title)
+
+    def Choose_video_file(self,video_file):
+        self.driver.find_element(*self.choose_video_file).send_keys(video_file)
 
     def ClicK_continue_video_btn(self):
         self.driver.find_element(*self.continue_to_video_btn).click()

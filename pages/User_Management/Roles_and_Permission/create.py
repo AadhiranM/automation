@@ -12,10 +12,12 @@ class Roles_and_permission_create:
     roles_and_permission=(By.XPATH,"//ul[@class='collapse-menu show']//span[@class='nav-sub-name'][normalize-space()='Roles & Permissions']")
     create=(By.XPATH,"//a[normalize-space()='Create']")
     Role_name=(By.XPATH,"//input[@placeholder='Enter Role Name']")
-    user_type=(By.XPATH,"//select[@name='user_type']")
-    status=(By.XPATH,"//select[@name='status']")
+    user_type_dropdown=(By.XPATH,"//span[@id='select2-idSelectuser-container']")
+    user_type_input=(By.XPATH,"//input[@aria-label='Search']")
+
+    status=(By.XPATH,"//select[@id='idSelectstatus']")
     submit_btn=(By.XPATH,"//button[normalize-space()='Submit']")
-    check_all=(By.XPATH,"//div[@class='d-flex justify-content-between align-items-center mb-3']//button[@id='check-all']")
+    check_all=(By.XPATH,"//div[@class='d-flex justify-content-between align-items-center mb-3 permission_field']//button[@id='check-all']")
 
 
 
@@ -39,11 +41,36 @@ class Roles_and_permission_create:
     def Enter_role_name(self,Role_name):
         self.driver.find_element(*self.Role_name).send_keys(Role_name)
 
-    def select_user_type(self,user_type):
-        self.driver.find_element(*self.user_type).send_keys(user_type)
 
-    def select_status(self,select_status):
-        self.driver.find_element(*self.status).send_keys(select_status)
+    def select_user_type(self, user_type):
+        # click dropdown
+        self.wait.until(
+            EC.element_to_be_clickable(self.user_type_dropdown)
+        ).click()
+
+        # enter value in search field
+        search_box = self.wait.until(
+            EC.visibility_of_element_located(self.user_type_input)
+        )
+
+        search_box.send_keys(user_type)
+
+        # select option
+        self.wait.until(
+            EC.element_to_be_clickable(
+                (By.XPATH, f"//li[contains(text(),'{user_type}')]")
+            )
+        ).click()
+
+    # def select_status(self,select_status):
+    #     self.driver.find_element(*self.status).send_keys(select_status)
+
+    def select_status(self, select_status):
+        element = self.wait.until(
+            EC.element_to_be_clickable(self.status)
+        )
+
+        Select(element).select_by_visible_text(select_status)
 
     def select_check_all_btn(self):
         self.driver.find_element(*self.check_all).click()

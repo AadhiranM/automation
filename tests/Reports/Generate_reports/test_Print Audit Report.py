@@ -11,12 +11,14 @@ from pages.reports.generate_reports.Generate_reports import Generate_reports_pag
 from utilities.readproperties import Readconfig
 from utilities.read_excel import get_test_data
 from pages.common.base_page import BaseTest
+from utilities.screenshot_util import take_screenshot
+
 
 # ---------------------------
 # LOAD EXCEL DATA
 # ---------------------------
 excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
-test_data = get_test_data(excel_path, "Batch_status_report")
+test_data = get_test_data(excel_path, "Reports")
 
 @pytest.mark.order(14)
 @pytest.mark.parametrize("data", test_data)
@@ -36,13 +38,13 @@ class Test_R_print_audit_report(BaseTest):
         # ---------------------------
         # LOGIN (ONLY ONCE)
         # ---------------------------
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-
-            self.logger.info("Login successful (first iteration)")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #
+        #     self.logger.info("Login successful (first iteration)")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         # ---------------------------
         # NAVIGATION
@@ -54,28 +56,34 @@ class Test_R_print_audit_report(BaseTest):
         report.Click_reports_tab()
         report.Click_generate_report()
         report.Click_print_Audit_report()
-        time.sleep(1)
         report.Enter_report_name(report_name)
-        time.sleep(1)
         report.choose_select_format(select_format)
-        time.sleep(1)
         report.choose_select_duration(select_duration)
-        time.sleep(1)
         report.Click_generate_btn()
-        time.sleep(1)
-
-        success_msg = driver.find_element(By.TAG_NAME, "body").text
-        time.sleep(1)
-        if "Report generation has been initiated successfully!" in success_msg:
-            assert True
-            self.logger.info("print_audit report generated")
-
-        else:
-            driver.save_screenshot(".\\Screenshots\\test_Scan_analytics_report_scr.png")
-            self.logger.error("print_audit report failed")
-            assert False
         time.sleep(2)
 
+        toast_text = driver.execute_script("""
+            let toast = document.querySelector('.toastify');
+            return toast ? toast.innerText : null;
+        """)
+
+        if toast_text:
+            print("Toast:", toast_text)
+
+        # validation
+        if toast_text and "Report generation has been initiated successfully!" in toast_text:
+            self.logger.info("print Audit report successful")
+
+        else:
+            take_screenshot(
+                driver,
+                test_name="test_print Audit_report_failed",
+                folder_name="Screenshots\\reports\\Generate_reports\\print Audit_Report"
+            )
+
+            self.logger.error("print Audit report failed")
+            assert False, "print Audit report generation failed"
+        time.sleep(1)
         report.click_report_download_btn(report_name)
-        time.sleep(5)
+
 

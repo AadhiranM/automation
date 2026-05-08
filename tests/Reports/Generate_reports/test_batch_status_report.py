@@ -14,12 +14,13 @@ from pages.reports.generate_reports.Generate_reports import Generate_reports_pag
 from utilities.readproperties import Readconfig
 from utilities.read_excel import get_test_data
 from pages.common.base_page import BaseTest
+from utilities.screenshot_util import take_screenshot
 
 # ---------------------------
 # LOAD EXCEL DATA
 # ---------------------------
 excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
-test_data = get_test_data(excel_path, "Batch_status_report")
+test_data = get_test_data(excel_path, "Reports")
 
 @pytest.mark.order(10)
 @pytest.mark.parametrize("data", test_data)
@@ -58,28 +59,38 @@ class Test_R_Batch_status_report(BaseTest):
         report.Click_reports_tab()
         report.Click_generate_report()
         report.Click_Batch_status_reports()
-        time.sleep(1)
+
         report.Enter_report_name(report_name)
-        time.sleep(1)
+
         report.choose_select_format(select_format)
-        time.sleep(1)
+
         report.choose_select_duration(select_duration)
-        time.sleep(1)
+
         report.Click_generate_btn()
         time.sleep(1)
 
-        success_msg = driver.find_element(By.TAG_NAME, "body").text
-        time.sleep(1)
-        if "Report generation has been initiated successfully!" in success_msg:
-            assert True
-            self.logger.info("batch status report successfull")
+        toast_text = driver.execute_script(""" 
+            let toast = document.querySelector('.toastify');
+            return toast ? toast.innerText : null;
+        """)
+
+        if toast_text:
+            print("Toast:", toast_text)
+
+        # validation
+        if toast_text and "Report generation has been initiated successfully!" in toast_text:
+            self.logger.info("batch status report successful")
 
         else:
-            driver.save_screenshot(".\\Screenshots\\test_batch_status_report_scr.png")
-            self.logger.error("batch status report failed")
-            assert False
-        time.sleep(2)
+            take_screenshot(
+                driver,
+                test_name="test_batch_status_report_failed",
+                folder_name="Screenshots\\reports\\Generate_reports\\Batch_Status_Report"
+            )
 
+            self.logger.error("batch status report failed")
+            assert False, "Batch status report generation failed"
+        time.sleep(1)
         report.click_report_download_btn(report_name)
-        time.sleep(5)
+
 

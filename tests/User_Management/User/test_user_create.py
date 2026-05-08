@@ -1,8 +1,6 @@
-
 import pytest
 import time
 from selenium.webdriver.common.by import By
-
 from pages.common.AccessCodePage import AccessCodePage
 from pages.QR_Management.login_page import Loginpage
 from pages.User_Management.Users.user_create import user_create
@@ -14,14 +12,13 @@ from pages.common.base_page import BaseTest
 from utilities.screenshot_util import take_screenshot
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from selenium.common.exceptions import TimeoutException
 
 # ---------------------------
 # LOAD EXCEL DATA
 # ---------------------------
 excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "users_create")
-
 
 @pytest.mark.order(3)
 @pytest.mark.parametrize("data", test_data)
@@ -51,54 +48,52 @@ class Test_UM_users_create(BaseTest):
             self.logger.info("Skipping login — already logged in")
 
         UM_create = user_create(driver)
+        driver.refresh()
         UM_create.Click_Dashboard()
         UM_create.Click_User_management()
         UM_create.Click_users()
         UM_create.Click_create()
 
-            # ---------------------------
-            # FILL FORM (ONLY IF DATA EXISTS)
-            # ---------------------------
+        # ---------------------------
+        # FILL FORM (ONLY IF DATA EXISTS)
+        # ---------------------------
 
         if user_name:
             UM_create.Enter_username(user_name)
-
         if Email:
             UM_create.Enter_Email(Email)
-
         if select_Role:
-            UM_create.select_Role(select_Role)
-
+            UM_create.select_Role_drpdown()
+            UM_create.Enter_Role_input(select_Role)
         if select_status:
             UM_create.Choose_select_status(select_status)
-
         if Mobile_number:
             UM_create.Enter_Mobile_number(Mobile_number)
-
         if password:
             UM_create.Enter_password(password)
-
         UM_create.Click_submit_btn()
 
         try:
-            WebDriverWait(driver, 10).until(
-                EC.text_to_be_present_in_element(
-                    (By.TAG_NAME, "body"),
-                    "User created successfully"
+            toast_text= WebDriverWait(driver,7).until(
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, ".toastify")
                 )
-            )
-            self.logger.info("User created successfully")
+            ).text
+            if toast_text:
+                print("Toast:", toast_text)
 
-        except:
+        # validation
+            if toast_text and "User created successfully" in toast_text:
+                self.logger.info("Roles and permission , User created successfully")
+
+        except TimeoutException:
             take_screenshot(
                 driver,
                 test_name="UM_user_create_fail",
-                folder_name="Screenshots\\User_Management\\Users"
+                folder_name="Screenshots\\User_Management\\Users\\create"
             )
-            self.logger.error(
-                f"User creation failed | Took screenshot "
-            )
-            assert False
+            self.logger.error(f"Roles and permission , User creation failed | Took screenshot")
+            assert False, "please enter correct details"
 
 
 

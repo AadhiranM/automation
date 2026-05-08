@@ -15,7 +15,6 @@ from utilities.screenshot_util import take_screenshot
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
 # ---------------------------
 # LOAD EXCEL DATA
 # ---------------------------
@@ -24,7 +23,7 @@ test_data = get_test_data(excel_path, "schedule_report_create")
 
 @pytest.mark.order(1)
 @pytest.mark.parametrize("data", test_data)
-class Test_SR_schedule_report_create(BaseTest):
+class Test_SR_create(BaseTest):
 
     logger = LogGen.loggen()
 
@@ -54,45 +53,45 @@ class Test_SR_schedule_report_create(BaseTest):
         # NAVIGATION
         # ---------------------------
         qr_page = QR_Management_Category_Page(driver)
+        driver.refresh()
         qr_page.Click_Dashboard()
 
         reports= Generate_reports_page(driver)
         reports.Click_reports_tab()
         reports.Click_schedule_report()
         reports.Click_create_btn()
+        time.sleep(2)
         reports.choose_create_btn_select_report(select_report)
         reports.choose_create_btn_select_format(select_format)
         reports.choose_create_btn_select_duration(select_duration)
         reports.choose_create_btn_mail_receiving_duration(mail_receiving_duration)
-
         reports.Click_Create_btn_save_btn()
 
-        try:
-            WebDriverWait(driver,2).until(
-                EC.text_to_be_present_in_element(
-                    (By.TAG_NAME, "body"),
-                    "Report schedule saved successfully."
-                )
+        toast_text = WebDriverWait(driver,3).until(
+            EC.visibility_of_element_located(
+                (By.CSS_SELECTOR, ".toastify")
             )
+        ).text
+        if toast_text:
+            print("Toast:", toast_text)
+
+        # validation
+        if toast_text and "Report schedule saved successfully" in toast_text:
             self.logger.info(
                 f"Schedule report saved successfully | "
                 f"Report={select_report}, Format={select_format}"
             )
-
-        except:
+        else:
             take_screenshot(
                 driver,
                 test_name="schedule_report_create_fail",
                 folder_name="Screenshots\\reports\\schedule_reports"
             )
+
             self.logger.error(
                 f"Schedule report creation failed | "
                 f"Report={select_report}, Format={select_format}"
             )
-            assert False
-
-
-
-
+            assert False, "please enter correct details"
 
 

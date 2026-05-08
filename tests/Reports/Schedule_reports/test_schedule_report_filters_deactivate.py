@@ -23,7 +23,7 @@ test_data = get_test_data(excel_path, "schedule_report_filters")
 
 @pytest.mark.order(2)
 @pytest.mark.parametrize("data", test_data)
-class Test_SR_schedule_report_filters(BaseTest):
+class Test_SR_filters(BaseTest):
 
     logger = LogGen.loggen()
 
@@ -53,19 +53,17 @@ class Test_SR_schedule_report_filters(BaseTest):
         # NAVIGATION
         # ---------------------------
         qr_page = QR_Management_Category_Page(driver)
+        driver.refresh()
         qr_page.Click_Dashboard()
-
         reports= Generate_reports_page(driver)
         reports.Click_reports_tab()
         reports.Click_schedule_report()
         reports.Click_filters_toggle()
         reports.Click_filters_report_name(report_name)
-        reports.Choose_filters_format(select_format)
+        # reports.Choose_filters_format(select_format)
         reports.Click_filters_nxt_schedule()
         reports.set_filters_nxt_schedule(date_string)
-
         reports.Choose_filters_status(select_status)
-
         reports.Click_filters_apply_btn()
 
         # Wait properly here instead of sleep

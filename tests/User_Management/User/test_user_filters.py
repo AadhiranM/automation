@@ -38,7 +38,6 @@ class Test_UM_user_filters(BaseTest):
         )
         # ---------------------------
 
-
         # LOGIN (ONLY ONCE)
         # ---------------------------
         if data == test_data[0]:
@@ -67,25 +66,25 @@ class Test_UM_user_filters(BaseTest):
             take_screenshot(
                 driver,
                 test_name="user_filter_failed",
-                folder_name="Screenshots\\User_Management\\Users"
+                folder_name="Screenshots\\User_Management\\Users\\filter"
             )
-            self.logger.error("Filter applied but no records found in table")
-
-        assert status, "No rows found after applying filters!"
+            self.logger.error("Roles and permission , Filter applied but no records found in table")
+            assert status, "No rows found after applying filters!"
         self.logger.info("Filter applied successfully, table has records")
         time.sleep(2)
 
-        # UM_roles_and_per_filters.Click_actions_icon()
+        UM_user_filters.Click_actions_icon()
         #
-        # try:
-        #     UM_roles_and_per_filters.Click_inactive_opt()
-        #     UM_roles_and_per_filters.Click_yes_Iam_sure_btn()
-        #     time.sleep(2)
-        #
-        # except:
-        #     UM_roles_and_per_filters.Click_active_opt()
-        #     UM_roles_and_per_filters.Click_yes_Iam_sure_btn()
-        #     time.sleep(2)
+        try:
+            UM_user_filters.Click_suspend_opt()
+            UM_user_filters.Click_suspend_btn()
+            time.sleep(2)
+
+        except:
+            UM_user_filters.Click_activate_opt()
+            UM_user_filters.Click_Activate_btn()
+            time.sleep(2)
+
 
 
 

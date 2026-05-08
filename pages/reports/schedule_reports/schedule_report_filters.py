@@ -19,7 +19,7 @@ class Generate_reports_page:
     filters_report_name=(By.XPATH,"//input[@id='report_name']")
     filters_format=(By.XPATH,"//select[@id='format']")
     filters_nxt_schedule=(By.XPATH,"//input[@id='next_schedule_at']")
-    filters_status=(By.XPATH,"//select[@id='status']")
+    filters_status=(By.XPATH,"//select[@id='sb_status']")
     filters_apply_btn=(By.XPATH,"//button[normalize-space()='Apply']")
     create_btn_select_report=(By.XPATH,"//select[@id='schedule_report_name']")
     create_btn_select_format=(By.XPATH,"//select[@id='schedule_format']")
@@ -49,7 +49,7 @@ class Generate_reports_page:
         self.driver.find_element(*self.create_btn).click()
 
     def choose_create_btn_select_report(self,select_report):
-        drpdwn = Select(self.driver.find_element(*self.create_btn_select_report))
+        drpdwn=Select(self.driver.find_element(*self.create_btn_select_report))
         drpdwn.select_by_visible_text(select_report)
 
     def choose_create_btn_select_format(self,select_format):

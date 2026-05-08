@@ -1,7 +1,6 @@
 import pytest
 import time
 from selenium.webdriver.common.by import By
-
 from pages.common.AccessCodePage import AccessCodePage
 from pages.QR_Management.login_page import Loginpage
 from pages.QR_Management.QR_management_category import QR_Management_Category_Page
@@ -12,7 +11,6 @@ from utilities.read_excel import get_test_data
 from pages.common.base_page import BaseTest
 from utilities.screenshot_util import take_screenshot
 
-
 # ---------------------------
 # LOAD EXCEL DATA
 # ---------------------------
@@ -21,10 +19,8 @@ test_data = get_test_data(excel_path, "QR_Monitoring_Filters")
 
 @pytest.mark.order(8)
 @pytest.mark.parametrize("data", test_data)
-class Test_QR_Code_Monitoring_Filters(BaseTest):
-
+class Test_QR_Monitoring_Filters_opt(BaseTest):
     logger = LogGen.loggen()
-
     def test_qr_code_monitoring_filters(self, driver, data):
 
         username = data["username"]
@@ -51,6 +47,7 @@ class Test_QR_Code_Monitoring_Filters(BaseTest):
         # NAVIGATION
         # ---------------------------
         qr_page = QR_Management_Category_Page(driver)
+        driver.refresh()  # Refresh to ensure the latest state
         qr_page.Click_Dashboard()
 
         qr_monitoring = QR_code_monitering_page(driver)

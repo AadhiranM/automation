@@ -21,8 +21,10 @@ class BaseTest:
         lp.setUserName(Readconfig.getUsername())
         lp.setPassword(Readconfig.getUserpassword())
         lp.clickLogin()
+        time.sleep(1)
 
         current_url = self.driver.current_url
+        time.sleep(1)
 
         if "dashboard" in current_url:
             self.logger.info("Login successful")

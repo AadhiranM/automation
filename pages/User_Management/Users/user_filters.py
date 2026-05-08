@@ -15,9 +15,11 @@ class user_filters:
     search_field=(By.XPATH,"//input[@id='search-vale']")
     filter_calender=(By.XPATH,"//input[@id='datepicker-range']")
     select_status=(By.XPATH,"//select[@id='idStatus']")
-    actions_icon=(By.XPATH,"(//button[@type='button'])[12]")
-    suspend=(By.XPATH,"//ul[@class='dropdown-menu dropdown-menu-end show']//a[@class='dropdown-item status-item-btn'][normalize-space()='Suspend']")
-    yes_Iam_sure_btn=(By.XPATH,"//button[@class='btn btn-danger status-record']")
+    actions_icon=(By.XPATH,"(//button[@type='button'])[13]")
+    suspend_opt=(By.XPATH,"//a[normalize-space()='Suspend']")
+    suspend_btn=(By.XPATH,"//button[normalize-space()='Suspend']")
+    Activate_opt=(By.XPATH,"//a[normalize-space()='Activate']")
+    Activate_btn=(By.XPATH,"//button[normalize-space()='Activate']")
 
 
     def __init__(self, driver):
@@ -122,7 +124,6 @@ class user_filters:
 
                 print(search_result)
                 if search_name == search_result:
-
                     flag = True
                     break
 
@@ -131,7 +132,6 @@ class user_filters:
             flag = False
 
         return flag
-
 
     def Click_refresh_btn(self):
         self.driver.find_element(*self.refresh_btn).click()
@@ -150,10 +150,17 @@ class user_filters:
         self.driver.find_element(*self.actions_icon).click()
 
     def Click_suspend_opt(self):
-        self.driver.find_element(*self.suspend).click()
+        self.driver.find_element(*self.suspend_opt).click()
 
-    def Click_yes_Iam_sure_btn(self):
-        self.driver.find_element(*self.yes_Iam_sure_btn).click()
+    def Click_suspend_btn(self):
+        self.driver.find_element(*self.suspend_btn).click()
+
+    def Click_activate_opt(self):
+        self.driver.find_element(*self.Activate_opt).click()
+
+    def Click_Activate_btn(self):
+        self.driver.find_element(*self.Activate_btn).click()
+
 
 
 

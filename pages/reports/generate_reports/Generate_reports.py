@@ -65,10 +65,11 @@ class Generate_reports_page:
             report_name_text = self.driver.find_element(
                 By.XPATH, "//table[@id='crudTable']//tbody//tr[1]//td[2]"
             ).text
+            time.sleep(1)
             print(report_name_text)
             if report_name_text == report_name:
                 # Try to find the download option
-                wait = WebDriverWait(self.driver, 10)
+                wait = WebDriverWait(self.driver,10)
                 download_btn = wait.until(
                     EC.element_to_be_clickable(
                         (By.XPATH, "//table[@id='crudTable']//tbody//tr[1]//td[9]//a")
@@ -76,8 +77,8 @@ class Generate_reports_page:
                 )
                 download_btn.click()
                 print("Download option found and clicked")
-            else:
-                print("Search value does not match")
+            # else:
+            #     print("Search value does not match")
 
         except Exception:
             try:
@@ -86,7 +87,6 @@ class Generate_reports_page:
                     By.XPATH, "//table[@id='crudTable']//tbody//tr[1]//td[9]"
                 )
                 print("No data available:", no_data.text)
-
 
             except Exception:
                 print("Neither download option nor no data found")

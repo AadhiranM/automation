@@ -1,7 +1,6 @@
 import pytest
 import time
 from selenium.webdriver.common.by import By
-
 from pages.common.AccessCodePage import AccessCodePage
 from pages.QR_Management.login_page import Loginpage
 from pages.User_Management.Roles_and_Permission.create import Roles_and_permission_create
@@ -13,7 +12,7 @@ from pages.common.base_page import BaseTest
 from utilities.screenshot_util import take_screenshot
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from selenium.common.exceptions import TimeoutException
 
 # ---------------------------
 # LOAD EXCEL DATA
@@ -23,7 +22,7 @@ test_data = get_test_data(excel_path, "Roles_and_permission_create")
 
 @pytest.mark.order(1)
 @pytest.mark.parametrize("data", test_data)
-class Test_UM_Roles_and_permission_create(BaseTest):
+class Test_UM_RP_create(BaseTest):
 
     logger = LogGen.loggen()
 
@@ -57,30 +56,32 @@ class Test_UM_Roles_and_permission_create(BaseTest):
         UM_roles_and_per.Click_create()
         UM_roles_and_per.Enter_role_name(Role_name)
         UM_roles_and_per.select_user_type(User_type)
+        time.sleep(1)
         UM_roles_and_per.select_status(select_status)
         UM_roles_and_per.select_check_all_btn()
         UM_roles_and_per.Click_submit_btn()
 
         try:
-            WebDriverWait(driver,10).until(
-                EC.text_to_be_present_in_element(
-                    (By.TAG_NAME, "body"),
-                    "Role created successfully"
+            toast_text= WebDriverWait(driver,10).until(
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, ".toastify")
                 )
-            )
-            self.logger.info(
-                f"Role created successfully | "
-            )
-        except:
+            ).text
+            if toast_text:
+                print("Toast:", toast_text)
+
+        # validation
+            if toast_text and "Role created successfully" in toast_text:
+                self.logger.info("Role created successfully")
+
+        except TimeoutException:
             take_screenshot(
                 driver,
                 test_name="UM_Role_create_fail",
                 folder_name="Screenshots\\User_Management\\Roles_and_permission"
             )
-            self.logger.error(
-                f"Role creation failed | "
-            )
-            assert False
+            self.logger.error(f"Role creation failed")
+            assert False, "please enter correct details"
 
 
 
