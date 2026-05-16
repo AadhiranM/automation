@@ -1,7 +1,6 @@
 import pytest
 import time
 from selenium.webdriver.common.by import By
-
 from pages.common.AccessCodePage import AccessCodePage
 from pages.QR_Management.login_page import Loginpage
 from pages.QR_Management.QR_management_category import QR_Management_Category_Page
@@ -14,6 +13,7 @@ from pages.common.base_page import BaseTest
 from utilities.screenshot_util import take_screenshot
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 # ---------------------------
 # LOAD EXCEL DATA
@@ -23,7 +23,7 @@ test_data = get_test_data(excel_path, "schedule_report_filters")
 
 @pytest.mark.order(2)
 @pytest.mark.parametrize("data", test_data)
-class Test_SR_filters(BaseTest):
+class Test_SR_filter_toggle_change_to_active(BaseTest):
 
     logger = LogGen.loggen()
 
@@ -60,6 +60,7 @@ class Test_SR_filters(BaseTest):
         reports.Click_schedule_report()
         reports.Click_filters_toggle()
         reports.Click_filters_report_name(report_name)
+        time.sleep(1)
         # reports.Choose_filters_format(select_format)
         reports.Click_filters_nxt_schedule()
         reports.set_filters_nxt_schedule(date_string)
@@ -67,7 +68,7 @@ class Test_SR_filters(BaseTest):
         reports.Click_filters_apply_btn()
 
         # Wait properly here instead of sleep
-        status = reports.search_product(report_name)  # True if rows exist
+        status = reports.search_product(report_name,"Inactive")  # True if rows exist
 
         if not status:
             take_screenshot(
@@ -75,22 +76,14 @@ class Test_SR_filters(BaseTest):
                 test_name="schedule_report_filter_failed",
                 folder_name="Screenshots\\reports\\schedule_reports"
             )
-            self.logger.error("Filter applied but no records found in table")
-
-        assert status, "No rows found after applying filters!"
+            self.logger.error("FILTER FAILED | No data found or status mismatch after applying filters")
+            assert status, "FILTER FAILED | No data found or status mismatch after applying filters"
         self.logger.info("Filter applied successfully, table has records")
 
         reports.Click_actions_button()
-
-        try:
-            reports.Click_deactivate_icon()
-            reports.Click_yes_deactivate_btn()
-            reports.Click_submitted_ok_btn()
-
-        except:
-            reports.Click_activate_icon()
-            reports.Click_yes_activate_btn()
-            reports.Click_submitted_ok_btn()
+        reports.Click_activate_icon()
+        reports.Click_activate_btn()
+        time.sleep(5)
 
 
 

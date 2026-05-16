@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from utilities.customlogger import LogGen
 
 class user_filters:
     Dashboard = (By.XPATH, "//span[@class='nav-name'][normalize-space()='Dashboard']")
@@ -25,6 +26,7 @@ class user_filters:
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
+        self.logger = LogGen.loggen()
 
     # ================= NAVIGATION =================
     def Click_Dashboard(self):
@@ -100,38 +102,91 @@ class user_filters:
 
         time.sleep(1)
 
-    def search_product(self, search_name):
-        flag = False
+    # def search_product(self, search_name):
+    #     flag = False
+    #     try:
+    #         # Check if table has empty message
+    #         empty_cells = self.driver.find_elements(By.XPATH, "//table[@id='crudTable']//td[@class='dataTables_empty']")
+    #         if empty_cells:
+    #             print("Table is empty")
+    #             return False
+    #
+    #         # Get all rows in tbody
+    #         rows = self.driver.find_elements(By.XPATH, "//table[@id='crudTable']//tbody//tr")
+    #
+    #         for r in range(1, len(rows) + 1):
+    #             # Get product_name and batch_no using full XPath
+    #             search_result = self.driver.find_element(
+    #                 By.XPATH, f"//table[@id='crudTable']//tbody//tr[{r}]//td[2]"
+    #             ).text.strip()
+    #             # batch_no = self.driver.find_element(
+    #             #     By.XPATH, f"//table[@id='crudTable']//tbody//tr[{r}]//td[3]"
+    #             # ).text.strip()
+    #             time.sleep(1)
+    #
+    #             print(search_result)
+    #             if search_name == search_result:
+    #                 flag = True
+    #                 break
+    #
+    #     except Exception as e:
+    #         print(f"Exception in searching product: {e}")
+    #         flag = False
+    #
+    #     return flag
+
+
+    def search_product(self, search_name, expected_status=None):
         try:
-            # Check if table has empty message
-            empty_cells = self.driver.find_elements(By.XPATH, "//table[@id='crudTable']//td[@class='dataTables_empty']")
+            empty_cells = self.driver.find_elements(
+                By.XPATH, "//table[@id='crudTable']//td[@class='dataTables_empty']"
+            )
             if empty_cells:
-                print("Table is empty")
+                self.logger.warning("Table is empty")
                 return False
 
-            # Get all rows in tbody
-            rows = self.driver.find_elements(By.XPATH, "//table[@id='crudTable']//tbody//tr")
+            rows = self.driver.find_elements(
+                By.XPATH, "//table[@id='crudTable']//tbody//tr"
+            )
 
             for r in range(1, len(rows) + 1):
-                # Get product_name and batch_no using full XPath
-                search_result = self.driver.find_element(
+
+                role_name = self.driver.find_element(
                     By.XPATH, f"//table[@id='crudTable']//tbody//tr[{r}]//td[2]"
                 ).text.strip()
-                # batch_no = self.driver.find_element(
-                #     By.XPATH, f"//table[@id='crudTable']//tbody//tr[{r}]//td[3]"
-                # ).text.strip()
                 time.sleep(1)
 
-                print(search_result)
-                if search_name == search_result:
-                    flag = True
-                    break
+                active_status = self.driver.find_element(
+                    By.XPATH, f"//table[@id='crudTable']//tbody//tr[{r}]//td[8]"
+                ).text.strip()
+                time.sleep(1)
+
+                if search_name == role_name:
+                    print(f"Data found: {role_name}")
+                    # Match found
+                    self.logger.info(f"Product found: {role_name}")
+                    if expected_status:
+                        if active_status == expected_status:
+                            print(f"Data found with matching status: {role_name} | {active_status}")
+                            self.logger.info(
+                                f"Status matched: {role_name} | {active_status}"
+                            )
+                            return True
+                        else:
+                            print(f"Status mismatch for {role_name}: expected {expected_status}, got {active_status}")
+                            self.logger.error(
+                                f"Status mismatch: {role_name} | Expected: {expected_status}, Got: {active_status}"
+                            )
+                            return False
+
+                    return True
+
+            self.logger.error(f"Product not found: {search_name}")
+            return False
 
         except Exception as e:
-            print(f"Exception in searching product: {e}")
-            flag = False
-
-        return flag
+            self.logger.error(f"Exception in search_product: {e}")
+            return False
 
     def Click_refresh_btn(self):
         self.driver.find_element(*self.refresh_btn).click()
