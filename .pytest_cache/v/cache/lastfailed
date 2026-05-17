@@ -49,5 +49,11 @@
   "tests/superadmin/QRManagement/test_product_list_positive.py::TestProductListPositive": true,
   "tests/superadmin/QRManagement/test_product_list_negative.py::TestProductListNegative::test_filter_date_no_data": true,
   "tests/superadmin/QRManagement/test_product_create_e2e.py::TestProductCreate::TestProductCreate::test_create_product": true,
-  "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_export_id_based": true
+  "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_filter_status[Not Scannable]": true,
+  "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_next_previous_page": true,
+  "tests/superadmin/QRcodemonitoring/test_fake_product_feedback.py::TestFakeProductFeedback::test_filter_status[Open]": true,
+  "tests/superadmin/QRcodemonitoring/test_fake_product_feedback.py::TestFakeProductFeedback::test_filter_status[Closed]": true,
+  "tests/superadmin/QRManagement/test_qr_generation.py::TestQRGeneration::test_generate_qr_success": true,
+  "tests/superadmin/QRcodemonitoring/test_fake_product_feedback.py::TestFakeProductFeedback::test_view_feedback": true,
+  "tests/superadmin/QRcodemonitoring/test_fake_product_feedback.py::TestFakeProductFeedback::test_export_csv_report": true
 }

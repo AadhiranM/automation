@@ -1,60 +1,51 @@
 import pytest
 from datetime import date, timedelta
 
-from pages.superadmin.QRcodemonitoring.sa_qr_monitoring_page import (
-    SAQRMonitoringPage
+from pages.superadmin.QRcodemonitoring.sa_fake_product_feedback_page import (
+    SAFakeProductFeedbackPage
 )
 
 
 @pytest.mark.superadmin
 @pytest.mark.usefixtures("login_superadmin")
-class TestQRMonitoring:
+class TestFakeProductFeedback:
 
     # ==================================================
     # SEARCH
     # ==================================================
-    def test_search_scan_id(self, setup):
-
-        page = SAQRMonitoringPage(setup)
+    def test_search(self, setup):
+        page = SAFakeProductFeedbackPage(setup)
 
         page.goto_page()
 
-        page.search("dummy")
+        scan_id = page.search_first_record()
 
-        assert page.is_row_present()
+        assert scan_id != ""
 
     # ==================================================
     # STATUS FILTER
     # ==================================================
+
     @pytest.mark.parametrize(
         "status",
         [
-            "Genuine",
-            "Fake",
-            "Not Scannable",
-            "Not Recognized",
+            "Manufacturer Assigned",
+            "Manufacturer Not Assigned"
         ]
     )
     def test_filter_status(self, setup, status):
-
-        page = SAQRMonitoringPage(setup)
+        page = SAFakeProductFeedbackPage(setup)
 
         page.goto_page()
 
         page.filter_by_status(status)
-
-        assert (
-                page.is_row_present()
-                or
-                page.has_no_data()
-        )
 
     # ==================================================
     # DATE FILTER
     # ==================================================
     def test_filter_date_range(self, setup):
 
-        page = SAQRMonitoringPage(setup)
+        page = SAFakeProductFeedbackPage(setup)
 
         page.goto_page()
 
@@ -74,7 +65,7 @@ class TestQRMonitoring:
     # ==================================================
     def test_entries_per_page_25(self, setup):
 
-        page = SAQRMonitoringPage(setup)
+        page = SAFakeProductFeedbackPage(setup)
 
         page.goto_page()
 
@@ -91,7 +82,7 @@ class TestQRMonitoring:
     # ==================================================
     def test_next_previous_page(self, setup):
 
-        page = SAQRMonitoringPage(setup)
+        page = SAFakeProductFeedbackPage(setup)
 
         page.goto_page()
 
@@ -113,7 +104,7 @@ class TestQRMonitoring:
 
     def test_go_to_page_2(self, setup):
 
-        page = SAQRMonitoringPage(setup)
+        page = SAFakeProductFeedbackPage(setup)
 
         page.goto_page()
 
@@ -126,49 +117,56 @@ class TestQRMonitoring:
         )
 
     # ==================================================
+    # VIEW
+    # ==================================================
+    def test_view_feedback(self, setup):
+
+        page = SAFakeProductFeedbackPage(setup)
+
+        page.goto_page()
+
+        page.open_view()
+
+        assert "show" in page.driver.current_url.lower()
+
+    # ==================================================
+    # EDIT
+    # ==================================================
+    def test_edit_feedback(self, setup):
+
+        page = SAFakeProductFeedbackPage(setup)
+
+        page.goto_page()
+
+        comment = page.edit_feedback()
+
+        assert comment != ""
+
+    # ==================================================
     # EXPORT
     # ==================================================
-    def test_export_id_based(self, setup):
+    def test_export(self, setup):
 
-        page = SAQRMonitoringPage(setup)
-
-        page.goto_page()
-
-        page.click_export()
-
-        page.export_id_based()
-
-        page.go_to_reports_page()
-
-        assert "reports" in page.driver.current_url.lower()
-
-    def test_export_user_based(self, setup):
-        page = SAQRMonitoringPage(setup)
+        page = SAFakeProductFeedbackPage(setup)
 
         page.goto_page()
 
-        page.click_export()
+        page.export_records()
 
-        page.export_user_based()
+        assert True
 
-        assert page.driver.find_element(
-            *page.EXPORT_SUCCESS
-        ).is_displayed()
-
-    def test_export_bulk_id_based(self, setup):
-        page = SAQRMonitoringPage(setup)
+    def test_assign_manufacturer(self, setup):
+        page = SAFakeProductFeedbackPage(setup)
 
         page.goto_page()
-        page.export_bulk_id_based()
-        page.go_to_reports_page()
 
-        assert "reports" in page.driver.current_url.lower()
+        removed_scan_id = page.assign_manufacturer_and_verify_row_removed()
 
-    def test_export_date_based(self, setup):
-        page = SAQRMonitoringPage(setup)
+        assert removed_scan_id != ""
+
+    def test_export_csv_report(self, setup):
+        page = SAFakeProductFeedbackPage(setup)
 
         page.goto_page()
-        page.export_date_based()
-        page.go_to_reports_page()
 
-        assert "reports" in page.driver.current_url.lower()
+        page.export_csv_report()

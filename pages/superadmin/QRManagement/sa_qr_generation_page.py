@@ -84,6 +84,7 @@ class SAQRGenerationPage(BasePage):
 
         time.sleep(1)
 
+
     def select_variant_sku(self):
         wait = WebDriverWait(self.driver, 10)
 
