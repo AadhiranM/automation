@@ -1,5 +1,4 @@
 import time
-
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
@@ -84,8 +83,6 @@ class QR_Management_products_Page:
         elem=self.driver.find_element(*self.select_category)
         elem.send_keys(select_category)
         elem.send_keys(Keys.ENTER)
-
-
 
     def select_status_drp(self,status):
         # Click the dropdown container

@@ -25,7 +25,6 @@ class QR_Management_QR_m_Page:
     QR_image_format=(By.XPATH,"//select[@id='qrImageFormatDropdown']")
     product_name=(By.XPATH,"//input[@placeholder='Enter Product Name']")
 
-
     # Fixed calendar XPaths
     date_year = (By.XPATH, "//div[contains(@class,'flatpickr-calendar')]//input[@aria-label='Year']")
     date_month = (By.XPATH, "//div[contains(@class,'flatpickr-calendar')]//select[@aria-label='Month']")
@@ -48,7 +47,6 @@ class QR_Management_QR_m_Page:
 
     def Click_Qr_management(self):
         self.driver.find_element(*self.Qr_management).click()
-
 
     def Click_import_btn(self):
         self.driver.find_element(*self.import_btn).click()
@@ -181,9 +179,9 @@ class QR_Management_QR_m_Page:
         self.wait.until(EC.element_to_be_clickable(self.Exp_date)).click()
         self.select_date(date_string)
 
-    def select_dimension(self,dimension_value):
+    def select_dimension(self, dimension):
         drpdwn_dimension=Select(self.driver.find_element(*self.Dimension))
-        drpdwn_dimension.select_by_visible_text(dimension_value)
+        drpdwn_dimension.select_by_visible_text(dimension)
 
     def select_QR_Type_drpdwn(self,QR_Type):
         drpdwn_qr_type = Select(self.driver.find_element(*self.QR_Type_drpdwn))

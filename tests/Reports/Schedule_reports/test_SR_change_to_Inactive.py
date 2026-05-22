@@ -69,13 +69,13 @@ from selenium.common.exceptions import TimeoutException
 excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "schedule_report_filters")
 
-@pytest.mark.order(2)
+@pytest.mark.order(3)
 @pytest.mark.parametrize("data", test_data)
-class Test_SR_filters(BaseTest):
+class Test_SR_change_to_Inactive(BaseTest):
 
     logger = LogGen.loggen()
 
-    def test_schedule_report_filters(self, driver, data):
+    def test_SR_change_to_Inactive(self, driver, data):
 
         search_name = data["search_name"]
         select_status = data["select_status"]

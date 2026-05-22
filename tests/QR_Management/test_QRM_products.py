@@ -309,9 +309,7 @@ class Test_QRM_products(BaseTest):
         qr_products_page.Enter_description(data["description"])
         qr_products_page.Country_option()
         qr_products_page.Country_of_origin(data["country"])
-
         self.logger.info("Filled all product details")
-
         qr_products_page.Click_Proceed_to_child_SKU_button()
         qr_products_page.ClicK_continue_video_btn()
 

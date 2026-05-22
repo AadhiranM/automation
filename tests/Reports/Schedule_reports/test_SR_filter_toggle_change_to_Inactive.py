@@ -22,7 +22,7 @@ from selenium.common.exceptions import TimeoutException
 excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "schedule_report_filters")
 
-@pytest.mark.order(2)
+@pytest.mark.order(5)
 @pytest.mark.parametrize("data", test_data)
 class Test_SR_filters(BaseTest):
 
@@ -42,13 +42,13 @@ class Test_SR_filters(BaseTest):
         # ---------------------------
         # LOGIN (ONLY ONCE)
         # ---------------------------
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-
-            self.logger.info("Login successful (first iteration)")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #
+        #     self.logger.info("Login successful (first iteration)")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         # ---------------------------
         # NAVIGATION
@@ -64,7 +64,7 @@ class Test_SR_filters(BaseTest):
         # reports.Choose_filters_format(select_format)
         reports.Click_filters_nxt_schedule()
         reports.set_filters_nxt_schedule(date_string)
-        reports.Choose_filters_status(select_status)
+        # reports.Choose_filters_status(select_status)
         reports.Click_filters_apply_btn()
 
         # Wait properly here instead of sleep

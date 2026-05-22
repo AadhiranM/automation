@@ -1,4 +1,3 @@
-#
 # import pytest
 # import time
 # from selenium.webdriver.common.by import By
@@ -97,7 +96,6 @@
 #             )
 #             assert False, f"Category creation failed | Toast: {toast}"
 
-
 import pytest
 import time
 from selenium.webdriver.common.by import By
@@ -111,17 +109,14 @@ from pages.common.base_page import BaseTest
 from utilities.screenshot_util import take_screenshot
 from selenium.common.exceptions import TimeoutException
 
-
 excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "category")
-
 
 @pytest.mark.order(2)
 @pytest.mark.parametrize("data", test_data)
 class Test_QRM_category(BaseTest):
 
     logger = LogGen.loggen()
-
     def test_QR_management_category_flow(self, driver, data):
 
         category = data["Category"]
@@ -191,7 +186,6 @@ class Test_QRM_category(BaseTest):
             self.logger.info("===== TEST PASSED =====")
 
         else:
-
             self.logger.error(
                 f"Category creation failed | Toast: {toast}"
             )

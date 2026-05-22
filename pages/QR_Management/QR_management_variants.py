@@ -14,7 +14,6 @@ class QR_Management_variants_Page:
     variants_value_field=(By.XPATH,"//input[@placeholder='Enter Variant Value']")
     save_variants_button=(By.XPATH,"//button[normalize-space()='Save Variants']")
 
-
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
