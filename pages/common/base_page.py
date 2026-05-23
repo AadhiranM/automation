@@ -436,26 +436,6 @@ class BasePage:
             lambda d: element.text.strip() != "" and "Select" not in element.text
         )
 
-    # def safe_click(self, locator):
-    #     wait = WebDriverWait(self.driver, 15)
-    #
-    #     el = wait.until(EC.element_to_be_clickable(locator))
-    #
-    #     # scroll
-    #     self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", el)
-    #
-    #     # close any open dropdown
-    #     self.driver.find_element(By.TAG_NAME, "body").click()
-    #
-    #     # wait overlay gone
-    #     try:
-    #         wait.until(EC.invisibility_of_element_located((
-    #             By.XPATH, "//div[contains(@class,'choices__list--dropdown')]"
-    #         )))
-    #     except:
-    #         pass
-    #
-    #     el.click()
 
     def safe_type(self, locator, value):
         wait = WebDriverWait(self.driver, 15)

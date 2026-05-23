@@ -76,250 +76,36 @@ class SAFakeProductFeedbackPage(BasePage):
         By.XPATH,
         "//table/tbody/tr[1]/td[2]"
     )
-    PREVIOUS_BTN = (
-        By.XPATH,
-        "//a[normalize-space()='Previous']"
-    )
+    def view_feedback(self):
+        wait = WebDriverWait(self.driver, 20)
 
-    PAGE_NUMBER = "//a[normalize-space()='{}']"
-
-    # ======================================================
-    # THREE DOTS
-    # ======================================================
-    ACTIONS_BTN = (
-        By.XPATH,
-        "(//table/tbody/tr[1]//button[contains(@class,'btn')])[last()]"
-    )
-
-    EDIT_BTN = (
-        By.XPATH,
-        "//a[contains(.,'Edit')]"
-    )
-
-    VIEW_BTN = (
-        By.XPATH,
-        "//div[contains(@class,'dropdown-menu') and contains(@class,'show')]//a[normalize-space()='View']"
-    )
-
-
-
-    # ======================================================
-    # EDIT PAGE
-    # ======================================================
-    PRODUCT_DROPDOWN = (
-        By.XPATH,
-        "//label[contains(text(),'Product')]/following::div[contains(@class,'choices__inner')][1]"
-    )
-
-    PRODUCT_SEARCH = (
-        By.XPATH,
-        "//input[contains(@class,'select2-search__field')]"
-    )
-
-    COMMENTS_BOX = (
-        By.NAME,
-        "comments"
-    )
-
-    SUBMIT_BTN = (
-         By.XPATH,
-         "//button[contains(text(),'Submit')]"
-    )
-
-    SUCCESS_MSG = (
-        By.XPATH,
-        "//*[contains(text(),'successfully')]"
-    )
-
-    # ======================================================
-    # EXPORT
-    # ======================================================
-    EXPORT_BTN = (
-        By.XPATH,
-        "//button[contains(.,'Export')]"
-    )
-
-
-    EXPORT_CSV = (By.XPATH, "//a[contains(text(),'Export as CSV')]")
-    DATE_INPUT = (By.XPATH, "//input[@placeholder='Select date']")
-    DATE_SUBMIT = (By.XPATH, "//button[contains(text(),'Submit')]")
-
-    # ======================================================
-    # NAVIGATION
-    # ======================================================
-    def goto_page(self):
-        self.driver.get(
-            "https://beta.digitathya.com/admin/qr-fake-product-feedback?reset_filters=1"
-        )
-        self.wait_for_results()
-
-    # ======================================================
-    # WAIT
-    # ======================================================
-    def wait_for_results(self):
-
-        WebDriverWait(self.driver, 15).until(
-            lambda d:
-            d.find_elements(*self.FIRST_ROW)
-            or
-            d.find_elements(*self.NO_DATA)
-        )
-
-    # ======================================================
-    # SEARCH
-    # ======================================================
-    def search_first_record(self):
-        scan_id = self.get_text(
-            self.FIRST_SCAN_ID
-        ).strip()
-
-        self.type(self.SEARCH_BOX, scan_id)
-        self.click(self.SEARCH_BTN)
-
-        self.wait_for_results()
-
-        return scan_id
-
-    # ======================================================
-    # STATUS FILTER
-    # ======================================================
-    def filter_by_status(self, status):
-        wait = WebDriverWait(self.driver, 30)
-
-        print(f"Selecting status = {status}")
-
-        # exact visible status dropdown
-        dropdown = wait.until(
-            EC.presence_of_element_located((
-                By.XPATH,
-                "//span[@id='select2-idStatus-container']"
-            ))
-        )
-
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block:'center'});",
-            dropdown
-        )
-        time.sleep(2)
-
-        # ActionChains click (stronger than normal click)
-        ActionChains(self.driver).move_to_element(dropdown).click().perform()
-
-        print("Status dropdown clicked")
-        time.sleep(2)
-
-        # select option from opened dropdown
-        option = wait.until(
+        action_btn = wait.until(
             EC.element_to_be_clickable((
                 By.XPATH,
-                f"//li[@role='option' and normalize-space()='{status}']"
+                "(//table/tbody/tr[1]//button[contains(@class,'dropdown')])[1]"
             ))
         )
 
         self.driver.execute_script(
-            "arguments[0].scrollIntoView({block:'nearest'});",
-            option
-        )
-        time.sleep(1)
-
-        ActionChains(self.driver).move_to_element(option).click().perform()
-
-        print(f"Selected status = {status}")
-
-        time.sleep(3)
-
-        rows = self.driver.find_elements(
-            By.XPATH,
-            "//table/tbody/tr"
-        )
-
-        no_data = self.driver.find_elements(
-            By.XPATH,
-            "//*[contains(text(),'No data available')]"
-        )
-
-        assert len(rows) > 0 or len(no_data) > 0
-
-    # ======================================================
-    # DATE FILTER
-    # ======================================================
-    def filter_date(self, start, end):
-
-        self.click(self.DATE_FILTER)
-
-        picker = FlatpickrRangePicker(self.driver)
-
-        picker.select_range(start, end)
-
-        self.wait_for_results()
-
-    # ======================================================
-    # ENTRIES
-    # ======================================================
-    def set_entries_per_page(self, value):
-
-        dropdown = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located(
-                self.ENTRIES_DROPDOWN
-            )
-        )
-
-        Select(dropdown).select_by_value(str(value))
-
-        self.wait_for_results()
-
-    # ======================================================
-    # PAGINATION
-    # ======================================================
-    def click_next(self):
-
-        next_btn = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(self.NEXT_BTN)
-        )
-
-        self.driver.execute_script(
             "arguments[0].click();",
-            next_btn
+            action_btn
         )
 
-        self.wait_for_results()
+        print("Action dropdown clicked")
 
-    def click_previous(self):
-
-        prev_btn = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(self.PREVIOUS_BTN)
-        )
-
-        self.driver.execute_script(
-            "arguments[0].click();",
-            prev_btn
-        )
-
-        self.wait_for_results()
-
-    def go_to_page(self, number):
-
-        page = WebDriverWait(self.driver, 10).until(
+        view_btn = wait.until(
             EC.element_to_be_clickable((
                 By.XPATH,
-                self.PAGE_NUMBER.format(number)
+                "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//a[contains(.,'View')]"
             ))
         )
 
         self.driver.execute_script(
             "arguments[0].click();",
-            page
+            view_btn
         )
 
-        self.wait_for_results()
-
-    # ======================================================
-    # VIEW
-    # ======================================================
-    def open_view(self):
-
-        self.click(self.ACTIONS_BTN)
-        self.click(self.VIEW_BTN)
+        print("View clicked")
 
     # ======================================================
     # EDIT
@@ -392,6 +178,246 @@ class SAFakeProductFeedbackPage(BasePage):
         assert hidden.strip() != "", "Product was not selected"
 
         time.sleep(2)
+
+    PREVIOUS_BTN = (
+        By.XPATH,
+        "//a[normalize-space()='Previous']"
+    )
+
+    PAGE_NUMBER = "//a[normalize-space()='{}']"
+    # ======================================================
+    # THREE DOTS
+    # ======================================================
+
+    ACTIONS_BTN = (
+        By.XPATH,
+        "(//table/tbody/tr[1]//button[contains(@class,'btn')])[last()]"
+    )
+
+    EDIT_BTN = (
+        By.XPATH,
+        "//a[contains(.,'Edit')]"
+    )
+
+
+
+    VIEW_BTN = (
+        By.XPATH,
+        "//div[contains(@class,'dropdown-menu') and contains(@class,'show')]//a[normalize-space()='View']"
+    )
+    # ======================================================
+    # EDIT PAGE
+    # ======================================================
+
+    PRODUCT_DROPDOWN = (
+        By.XPATH,
+        "//label[contains(text(),'Product')]/following::div[contains(@class,'choices__inner')][1]"
+    )
+
+    PRODUCT_SEARCH = (
+        By.XPATH,
+        "//input[contains(@class,'select2-search__field')]"
+    )
+
+    COMMENTS_BOX = (
+        By.NAME,
+        "comments"
+    )
+
+    SUBMIT_BTN = (
+         By.XPATH,
+         "//button[contains(text(),'Submit')]"
+    )
+
+    SUCCESS_MSG = (
+        By.XPATH,
+        "//*[contains(text(),'successfully')]"
+    )
+    # ======================================================
+    # EXPORT
+    # ======================================================
+
+
+    EXPORT_BTN = (
+        By.XPATH,
+        "//button[contains(.,'Export')]"
+    )
+    EXPORT_CSV = (By.XPATH, "//a[contains(text(),'Export as CSV')]")
+    DATE_INPUT = (By.XPATH, "//input[@placeholder='Select date']")
+
+    DATE_SUBMIT = (By.XPATH, "//button[contains(text(),'Submit')]")
+    # ======================================================
+    # NAVIGATION
+    # ======================================================
+
+    def goto_page(self):
+        self.driver.get(
+            "https://beta.digitathya.com/admin/qr-fake-product-feedback?reset_filters=1"
+        )
+        self.wait_for_results()
+    # ======================================================
+    # WAIT
+    # ======================================================
+
+    def wait_for_results(self):
+
+        WebDriverWait(self.driver, 15).until(
+            lambda d:
+            d.find_elements(*self.FIRST_ROW)
+            or
+            d.find_elements(*self.NO_DATA)
+        )
+    # ======================================================
+    # SEARCH
+    # ======================================================
+
+    def search_first_record(self):
+        scan_id = self.get_text(
+            self.FIRST_SCAN_ID
+        ).strip()
+
+        self.type(self.SEARCH_BOX, scan_id)
+        self.click(self.SEARCH_BTN)
+
+        self.wait_for_results()
+
+        return scan_id
+    # ======================================================
+    # STATUS FILTER
+    # ======================================================
+
+    def filter_by_status(self, status):
+        wait = WebDriverWait(self.driver, 30)
+
+        print(f"Selecting status = {status}")
+
+        # exact visible status dropdown
+        dropdown = wait.until(
+            EC.presence_of_element_located((
+                By.XPATH,
+                "//span[@id='select2-idStatus-container']"
+            ))
+        )
+
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            dropdown
+        )
+        time.sleep(2)
+
+        # ActionChains click (stronger than normal click)
+        ActionChains(self.driver).move_to_element(dropdown).click().perform()
+
+        print("Status dropdown clicked")
+        time.sleep(2)
+
+        # select option from opened dropdown
+        option = wait.until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                f"//li[@role='option' and normalize-space()='{status}']"
+            ))
+        )
+
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'nearest'});",
+            option
+        )
+        time.sleep(1)
+
+        ActionChains(self.driver).move_to_element(option).click().perform()
+
+        print(f"Selected status = {status}")
+
+        time.sleep(3)
+
+        rows = self.driver.find_elements(
+            By.XPATH,
+            "//table/tbody/tr"
+        )
+
+        no_data = self.driver.find_elements(
+            By.XPATH,
+            "//*[contains(text(),'No data available')]"
+        )
+
+        assert len(rows) > 0 or len(no_data) > 0
+    # ======================================================
+    # DATE FILTER
+    # ======================================================
+
+    def filter_date(self, start, end):
+
+        self.click(self.DATE_FILTER)
+
+        picker = FlatpickrRangePicker(self.driver)
+
+        picker.select_range(start, end)
+
+        self.wait_for_results()
+    # ======================================================
+    # ENTRIES
+    # ======================================================
+
+    def set_entries_per_page(self, value):
+
+        dropdown = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located(
+                self.ENTRIES_DROPDOWN
+            )
+        )
+
+        Select(dropdown).select_by_value(str(value))
+
+        self.wait_for_results()
+    # ======================================================
+    # PAGINATION
+    # ======================================================
+
+    def click_next(self):
+
+        next_btn = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(self.NEXT_BTN)
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            next_btn
+        )
+
+        self.wait_for_results()
+
+    def click_previous(self):
+
+        prev_btn = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(self.PREVIOUS_BTN)
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            prev_btn
+        )
+
+        self.wait_for_results()
+
+    def go_to_page(self, number):
+
+        page = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                self.PAGE_NUMBER.format(number)
+            ))
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            page
+        )
+
+        self.wait_for_results()
+    # ======================================================
+    # VIEW
+    # ======================================================
 
     def edit_feedback(self):
         wait = WebDriverWait(self.driver, 30)
@@ -549,78 +575,89 @@ class SAFakeProductFeedbackPage(BasePage):
             glob.glob(os.path.join(downloads_path, "*.csv"))
         )
 
+        # dynamic dates
+        today = datetime.today()
+        yesterday = today - timedelta(days=1)
+
+        start_label = today.strftime("%B %d, %Y")
+        end_label = yesterday.strftime("%B %d, %Y")
+
+        print("Yesterday =", end_label)
+        print("Today =", start_label)
+
         # export button
         export_btn = wait.until(
             EC.element_to_be_clickable(self.EXPORT_BTN)
         )
-
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block:'center'});",
-            export_btn
-        )
-
-        time.sleep(1)
-
-        self.driver.execute_script(
-            "arguments[0].click();",
-            export_btn
-        )
-
+        export_btn.click()
         print("Export button clicked")
 
-        # export csv option
+        # export csv
         export_csv = wait.until(
             EC.element_to_be_clickable(self.EXPORT_CSV)
         )
-
-        time.sleep(1)
-
-        self.driver.execute_script(
-            "arguments[0].click();",
-            export_csv
-        )
-
+        export_csv.click()
         print("Export CSV clicked")
 
-        # wait for modal
+        # modal open
         wait.until(
             EC.visibility_of_element_located(
-                (By.XPATH, "//h5[contains(text(),'Select Date Range')]")
+                (By.ID, "FakedateRangeModal")
             )
         )
 
         print("Date popup opened")
 
-        # yesterday to today
-        today = datetime.today()
-        yesterday = today - timedelta(days=1)
-
-        from_date = yesterday.strftime("%d-%m-%Y")
-        to_date = today.strftime("%d-%m-%Y")
-
-        date_range = f"{from_date} to {to_date}"
-
-        print("Date range selected:", date_range)
-
-        # date input
+        # open calendar
         date_input = wait.until(
-            EC.presence_of_element_located(self.DATE_INPUT)
+            EC.element_to_be_clickable(self.DATE_INPUT)
         )
-
-        self.driver.execute_script("""
-            arguments[0].value = arguments[1];
-            arguments[0].dispatchEvent(new Event('input', { bubbles: true }));
-            arguments[0].dispatchEvent(new Event('change', { bubbles: true }));
-            arguments[0].dispatchEvent(new Event('blur', { bubbles: true }));
-        """, date_input, date_range)
-
-        print("Date entered:", date_range)
+        date_input.click()
 
         time.sleep(2)
 
-        # submit
+        # yesterday
+        start_date = wait.until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                f"//div[contains(@class,'flatpickr-calendar') and contains(@class,'open')]"
+                f"//span[@aria-label='{end_label}']"
+            ))
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            start_date
+        )
+
+        print("Yesterday selected")
+
+        time.sleep(1)
+
+        # today
+        end_date = wait.until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                f"//div[contains(@class,'flatpickr-calendar') and contains(@class,'open')]"
+                f"//span[@aria-label='{start_label}']"
+            ))
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            end_date
+        )
+
+        print("Today selected")
+
+        time.sleep(2)
+
+        # modal submit
         submit_btn = wait.until(
-            EC.element_to_be_clickable(self.SUBMIT_BTN)
+            EC.element_to_be_clickable((
+                By.XPATH,
+                "//div[@id='FakedateRangeModal']//button[@type='submit']"
+            ))
         )
 
         self.driver.execute_script(
@@ -630,19 +667,21 @@ class SAFakeProductFeedbackPage(BasePage):
 
         print("Export submit clicked")
 
-        # wait for download
         downloaded = False
 
-        for i in range(30):
-            files = glob.glob(
-                os.path.join(downloads_path, "*.csv")
+        for _ in range(20):
+            time.sleep(2)
+
+            after_files = set(
+                glob.glob(os.path.join(downloads_path, "*.csv"))
             )
 
-            if len(files) > len(before_files):
+            new_files = after_files - before_files
+
+            if new_files:
                 downloaded = True
-                print("CSV downloaded successfully")
                 break
 
-            time.sleep(1)
-
         assert downloaded, f"CSV file not downloaded in {downloads_path}"
+
+        print("CSV downloaded successfully")

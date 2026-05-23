@@ -1,20 +1,20 @@
 import pytest
 from datetime import date, timedelta
 
-from pages.superadmin.QRcodemonitoring.sa_fake_product_feedback_page import (
-    SAFakeProductFeedbackPage
+from pages.superadmin.QRcodemonitoring.sa_not_scannable_feedback_page import (
+    SANotScannableFeedbackPage
 )
 
 
 @pytest.mark.superadmin
 @pytest.mark.usefixtures("login_superadmin")
-class TestFakeProductFeedback:
+class TestnotscannableFeedback:
 
     # ==================================================
     # SEARCH
     # ==================================================
     def test_search(self, setup):
-        page = SAFakeProductFeedbackPage(setup)
+        page = SANotScannableFeedbackPage(setup)
 
         page.goto_page()
 
@@ -34,7 +34,7 @@ class TestFakeProductFeedback:
         ]
     )
     def test_filter_status(self, setup, status):
-        page = SAFakeProductFeedbackPage(setup)
+        page = SANotScannableFeedbackPage(setup)
 
         page.goto_page()
 
@@ -45,7 +45,7 @@ class TestFakeProductFeedback:
     # ==================================================
     def test_filter_date_range(self, setup):
 
-        page = SAFakeProductFeedbackPage(setup)
+        page = SANotScannableFeedbackPage(setup)
 
         page.goto_page()
 
@@ -62,10 +62,10 @@ class TestFakeProductFeedback:
 
     # ==================================================
     # ENTRIES
-    # ==============d====================================
+    # ==================================================
     def test_entries_per_page_25(self, setup):
 
-        page = SAFakeProductFeedbackPage(setup)
+        page = SANotScannableFeedbackPage(setup)
 
         page.goto_page()
 
@@ -82,7 +82,7 @@ class TestFakeProductFeedback:
     # ==================================================
     def test_next_previous_page(self, setup):
 
-        page = SAFakeProductFeedbackPage(setup)
+        page = SANotScannableFeedbackPage(setup)
 
         page.goto_page()
 
@@ -104,7 +104,7 @@ class TestFakeProductFeedback:
 
     def test_go_to_page_2(self, setup):
 
-        page = SAFakeProductFeedbackPage(setup)
+        page = SANotScannableFeedbackPage(setup)
 
         page.goto_page()
 
@@ -121,7 +121,7 @@ class TestFakeProductFeedback:
     # ==================================================
     def test_view_feedback(self, setup):
 
-        page = SAFakeProductFeedbackPage(setup)
+        page = SANotScannableFeedbackPage(setup)
 
         page.goto_page()
 
@@ -134,7 +134,7 @@ class TestFakeProductFeedback:
     # ==================================================
     def test_edit_feedback(self, setup):
 
-        page = SAFakeProductFeedbackPage(setup)
+        page = SANotScannableFeedbackPage(setup)
 
         page.goto_page()
 
@@ -147,7 +147,7 @@ class TestFakeProductFeedback:
     # ==================================================
     def test_export(self, setup):
 
-        page = SAFakeProductFeedbackPage(setup)
+        page = SANotScannableFeedbackPage(setup)
 
         page.goto_page()
 
@@ -156,7 +156,7 @@ class TestFakeProductFeedback:
         assert True
 
     def test_assign_manufacturer(self, setup):
-        page = SAFakeProductFeedbackPage(setup)
+        page = SANotScannableFeedbackPage(setup)
 
         page.goto_page()
 
@@ -165,7 +165,7 @@ class TestFakeProductFeedback:
         assert removed_scan_id != ""
 
     def test_export_csv_report(self, setup):
-        page = SAFakeProductFeedbackPage(setup)
+        page = SANotScannableFeedbackPage(setup)
 
         page.goto_page()
 

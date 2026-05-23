@@ -12,7 +12,7 @@ import glob
 from datetime import datetime, timedelta
 
 
-class SAFakeProductFeedbackPage(BasePage):
+class SANotScannableFeedbackPage(BasePage):
 
     # ======================================================
     # SEARCH
@@ -149,7 +149,7 @@ class SAFakeProductFeedbackPage(BasePage):
     # ======================================================
     def goto_page(self):
         self.driver.get(
-            "https://beta.digitathya.com/admin/qr-fake-product-feedback?reset_filters=1"
+            "https://beta.digitathya.com/admin/qr-notscannable-product-feedback?reset_filters=1"
         )
         self.wait_for_results()
 
@@ -316,10 +316,36 @@ class SAFakeProductFeedbackPage(BasePage):
     # ======================================================
     # VIEW
     # ======================================================
-    def open_view(self):
+    def view_feedback(self):
+        wait = WebDriverWait(self.driver, 20)
 
-        self.click(self.ACTIONS_BTN)
-        self.click(self.VIEW_BTN)
+        action_btn = wait.until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                "(//table/tbody/tr[1]//button[contains(@class,'dropdown')])[1]"
+            ))
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            action_btn
+        )
+
+        print("Action dropdown clicked")
+
+        view_btn = wait.until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//a[contains(.,'View')]"
+            ))
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            view_btn
+        )
+
+        print("View clicked")
 
     # ======================================================
     # EDIT
@@ -398,7 +424,7 @@ class SAFakeProductFeedbackPage(BasePage):
 
         # get product from list page
         product_name = self.get_text(
-            (By.XPATH, "//table/tbody/tr[1]/td[6]")
+            (By.XPATH, "//table/tbody/tr[1]/td[4]")
         ).strip()
 
         print(f"PRODUCT FROM TABLE = {product_name}")
@@ -549,17 +575,13 @@ class SAFakeProductFeedbackPage(BasePage):
             glob.glob(os.path.join(downloads_path, "*.csv"))
         )
 
-        # export button
+        # EXPORT BUTTON
         export_btn = wait.until(
-            EC.element_to_be_clickable(self.EXPORT_BTN)
+            EC.element_to_be_clickable((
+                By.XPATH,
+                "//button[contains(@class,'dropdown-toggle') and contains(.,'Export')]"
+            ))
         )
-
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block:'center'});",
-            export_btn
-        )
-
-        time.sleep(1)
 
         self.driver.execute_script(
             "arguments[0].click();",
@@ -568,12 +590,15 @@ class SAFakeProductFeedbackPage(BasePage):
 
         print("Export button clicked")
 
-        # export csv
-        export_csv = wait.until(
-            EC.element_to_be_clickable(self.EXPORT_CSV)
-        )
+        time.sleep(2)
 
-        time.sleep(1)
+        # EXPORT CSV (CORRECT LOCATOR)
+        export_csv = wait.until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                "//a[contains(@class,'dropdown-item') and contains(text(),'Export as Csv')]"
+            ))
+        )
 
         self.driver.execute_script(
             "arguments[0].click();",
@@ -582,45 +607,70 @@ class SAFakeProductFeedbackPage(BasePage):
 
         print("Export CSV clicked")
 
-        # WAIT FOR MODAL
+        # WAIT MODAL
         wait.until(
-            EC.visibility_of_element_located(
-                (By.XPATH, "//h5[contains(text(),'Select Date Range')]")
-            )
+            EC.visibility_of_element_located((
+                By.ID,
+                "dateRangeModal"
+            ))
         )
 
         print("Date popup opened")
 
+        # DATE INPUT
         date_input = wait.until(
             EC.element_to_be_clickable(self.DATE_INPUT)
         )
 
+        date_input.click()
+
         time.sleep(2)
 
-        yesterday = datetime.today() - timedelta(days=1)
-        one_week_before = yesterday - timedelta(days=7)
+        today = datetime.today()
+        yesterday = today - timedelta(days=1)
 
-        from_date = one_week_before.strftime("%d-%m-%Y")
-        to_date = yesterday.strftime("%d-%m-%Y")
+        if os.name == "nt":
+            start_label = yesterday.strftime("%B %#d, %Y")
+            end_label = today.strftime("%B %#d, %Y")
+        else:
+            start_label = yesterday.strftime("%B %-d, %Y")
+            end_label = today.strftime("%B %-d, %Y")
 
-        date_range = f"{from_date} to {to_date}"
+        print(start_label, end_label)
 
-        print("Date range selected:", date_range)
-
-        # readonly input -> JS set value
-        self.driver.execute_script(
-            "arguments[0].value = arguments[1];",
-            date_input,
-            date_range
+        # START DATE
+        start_date = wait.until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                f"//div[contains(@class,'flatpickr-calendar') and contains(@class,'open')]"
+                f"//span[@aria-label='{start_label}']"
+            ))
         )
-
-        print("Date entered:", date_range)
-
-        submit_btn = wait.until(
-            EC.element_to_be_clickable(self.DATE_SUBMIT)
-        )
+        start_date.click()
 
         time.sleep(1)
+
+        # END DATE
+        end_date = wait.until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                f"//div[contains(@class,'flatpickr-calendar') and contains(@class,'open')]"
+                f"//span[@aria-label='{end_label}']"
+            ))
+        )
+        end_date.click()
+
+        print("Dates selected")
+
+        time.sleep(1)
+
+        # SUBMIT INSIDE MODAL
+        submit_btn = wait.until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                "//div[@id='dateRangeModal']//button[@type='submit']"
+            ))
+        )
 
         self.driver.execute_script(
             "arguments[0].click();",
@@ -629,14 +679,19 @@ class SAFakeProductFeedbackPage(BasePage):
 
         print("Export submit clicked")
 
-        time.sleep(10)
+        downloaded = False
 
-        after_files = set(
-            glob.glob(os.path.join(downloads_path, "*.csv"))
-        )
+        for _ in range(20):
+            time.sleep(2)
 
-        new_files = after_files - before_files
+            after_files = set(
+                glob.glob(os.path.join(downloads_path, "*.csv"))
+            )
 
-        assert len(new_files) > 0, "CSV file not downloaded"
+            if after_files - before_files:
+                downloaded = True
+                break
+
+        assert downloaded, f"CSV file not downloaded in {downloads_path}"
 
         print("CSV downloaded successfully")

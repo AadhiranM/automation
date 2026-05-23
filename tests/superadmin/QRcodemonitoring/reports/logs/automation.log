@@ -1,10 +1,1 @@
-2026-05-18 00:05:28,323 [INFO] 📘 Logger initialized — fresh run, old logs cleared
-2026-05-18 00:05:30,362 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-05-18 00:05:30,366 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-05-18 00:05:31,023 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-05-18 00:05:31,530 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
-2026-05-18 00:05:31,530 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
-2026-05-18 00:05:31,909 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
-2026-05-18 00:05:31,909 [INFO] Waiting for: ('xpath', "//p[normalize-space()='Dashboard']")
-2026-05-18 00:05:33,991 [INFO] Waiting for: ('xpath', "//span[contains(@class,'user-name-text')]")
-2026-05-18 00:05:34,041 [INFO] Got text from ('xpath', "//span[contains(@class,'user-name-text')]"): Load testing Superadmin two
+2026-05-21 11:43:47,793 [INFO] 📘 Logger initialized — fresh run, old logs cleared
