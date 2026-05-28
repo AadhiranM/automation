@@ -1,5 +1,4 @@
 import time
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -71,62 +70,6 @@ class SAGenerateReportsPage(BasePage):
 
         time.sleep(3)
 
-    # def select_manufacturer(self, manufacturer_name="sydneyyy"):
-    #     wait = WebDriverWait(self.driver, 30)
-    #
-    #     print(f"MANUFACTURER TO SELECT = {manufacturer_name}")
-    #
-    #     dropdown = wait.until(
-    #         EC.element_to_be_clickable((
-    #             By.XPATH,
-    #             "//label[contains(text(),'Manufacturer')]/following::div[contains(@class,'choices')][1]"
-    #         ))
-    #     )
-    #
-    #     self.driver.execute_script(
-    #         "arguments[0].scrollIntoView({block:'center'});",
-    #         dropdown
-    #     )
-    #
-    #     time.sleep(2)
-    #
-    #     ActionChains(self.driver).move_to_element(dropdown).click().perform()
-    #
-    #     print("Manufacturer dropdown clicked")
-    #
-    #     time.sleep(2)
-    #
-    #     active = self.driver.switch_to.active_element
-    #
-    #     partial = manufacturer_name[:20]
-    #
-    #     for ch in partial:
-    #         active.send_keys(ch)
-    #         time.sleep(0.2)
-    #
-    #     print(f"Typed manufacturer: {partial}")
-    #
-    #     time.sleep(3)
-    #
-    #     option = wait.until(
-    #         EC.element_to_be_clickable((
-    #             By.XPATH,
-    #             f"//div[@role='option'][contains(., '{partial}')]"
-    #         ))
-    #     )
-    #
-    #     self.driver.execute_script(
-    #         "arguments[0].scrollIntoView({block:'nearest'});",
-    #         option
-    #     )
-    #
-    #     time.sleep(1)
-    #
-    #     ActionChains(self.driver).move_to_element(option).click().perform()
-    #
-    #     print("Manufacturer selected successfully")
-    #
-    #     time.sleep(2)
 
     def select_manufacturer(self):
         wait = WebDriverWait(self.driver, 30)

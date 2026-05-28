@@ -1,205 +1,164 @@
-2025-12-16 17:57:32,555 [INFO] 📘 Logger initialized — fresh run, old logs cleared
-2025-12-16 17:57:33,944 [INFO] Typing into ('name', 'access_code'): '2560'
-2025-12-16 17:57:33,945 [INFO] Waiting for: ('name', 'access_code')
-2025-12-16 17:57:34,260 [INFO] Typed successfully in ('name', 'access_code')
-2025-12-16 17:57:34,260 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2025-12-16 17:57:34,261 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2025-12-16 17:57:34,638 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2025-12-16 17:57:34,639 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
-2025-12-16 17:57:34,640 [INFO] Waiting for: ('name', 'email')
-2025-12-16 17:57:35,582 [INFO] Typed successfully in ('name', 'email')
-2025-12-16 17:57:35,582 [INFO] Typing into ('name', 'password'): 'Newuser@123'
-2025-12-16 17:57:35,582 [INFO] Waiting for: ('name', 'password')
-2025-12-16 17:57:35,872 [INFO] Typed successfully in ('name', 'password')
-2025-12-16 17:57:35,872 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
-2025-12-16 17:57:35,872 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
-2025-12-16 17:57:36,250 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
-2025-12-16 17:57:38,972 [INFO] Waiting for: ('id', 'search-vale')
-2025-12-16 17:57:38,985 [INFO] Typing into ('id', 'search-vale'): 'test99999999999'
-2025-12-16 17:57:38,985 [INFO] Waiting for: ('id', 'search-vale')
-2025-12-16 17:57:39,262 [INFO] Typed successfully in ('id', 'search-vale')
-2025-12-16 17:57:39,303 [INFO] Clicking: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2025-12-16 17:57:39,304 [INFO] Waiting for: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2025-12-16 17:57:39,451 [WARNING] [CLICK FAILED] Attempt 1/3 for ('css selector', 'div.dropdown > button.btn > i.ri-more-fill') → Message: stale element reference: stale element not found in the current frame
-  (Session info: chrome=143.0.7499.41); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#staleelementreferenceexception
+2026-05-25 20:18:33,361 [INFO] 📘 Logger initialized — fresh run, old logs cleared
+2026-05-25 20:18:35,005 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-05-25 20:18:35,006 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-05-25 20:18:36,064 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-05-25 20:18:36,246 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2026-05-25 20:18:36,247 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2026-05-25 20:18:36,621 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2026-05-25 20:18:36,621 [INFO] Waiting for: ('xpath', "//p[normalize-space()='Dashboard']")
+2026-05-25 20:18:38,687 [INFO] Waiting for: ('xpath', "//span[contains(@class,'user-name-text')]")
+2026-05-25 20:18:38,733 [INFO] Got text from ('xpath', "//span[contains(@class,'user-name-text')]"): Load testing Superadmin two
+2026-05-25 20:18:39,553 [INFO] Clicking: ('id', 'search-btn')
+2026-05-25 20:18:39,553 [INFO] Waiting for: ('id', 'search-btn')
+2026-05-25 20:18:39,960 [INFO] Clicked successfully: ('id', 'search-btn')
+2026-05-25 20:18:40,005 [INFO] Clicking: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
+2026-05-25 20:18:40,005 [INFO] Waiting for: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
+2026-05-25 20:18:40,384 [INFO] Clicked successfully: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
+2026-05-25 20:18:40,384 [INFO] Waiting for: ('xpath', "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//a[normalize-space()='Follow Up']")
+2026-05-25 20:18:40,416 [INFO] Clicking: ('xpath', "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//a[normalize-space()='Follow Up']")
+2026-05-25 20:18:40,416 [INFO] Waiting for: ('xpath', "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//a[normalize-space()='Follow Up']")
+2026-05-25 20:18:41,631 [INFO] Clicked successfully: ('xpath', "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//a[normalize-space()='Follow Up']")
+2026-05-25 20:18:41,631 [INFO] Waiting for: ('xpath', "//div[contains(@class,'ck-editor__editable') and @contenteditable='true']")
+2026-05-25 20:18:41,990 [INFO] Clicking: ('xpath', "//button[normalize-space()='Submit']")
+2026-05-25 20:18:41,991 [INFO] Waiting for: ('xpath', "//button[normalize-space()='Submit']")
+2026-05-25 20:18:52,045 [ERROR] [WAIT FAILED] ('xpath', "//button[normalize-space()='Submit']") → Message: 
 Stacktrace:
-Symbols not available. Dumping unresolved backtrace:
-	0x7ff7dc488245
-	0x7ff7dc4882a0
-	0x7ff7dc26165d
-	0x7ff7dc2692cc
-	0x7ff7dc26c74e
-	0x7ff7dc30c05f
-	0x7ff7dc2e1fda
-	0x7ff7dc30ac97
-	0x7ff7dc2aac29
-	0x7ff7dc2aba93
-	0x7ff7dc79ffe0
-	0x7ff7dc79a920
-	0x7ff7dc7b9086
-	0x7ff7dc4a5744
-	0x7ff7dc4ae6ec
-	0x7ff7dc491964
-	0x7ff7dc491b15
-	0x7ff7dc477842
-	0x7ffaa782e8d7
-	0x7ffaa868c53c
+	chromedriver!GetHandleVerifier [0x7ff713a67de5+14895]
+	chromedriver!GetHandleVerifier [0x7ff713a67e50+14900]
+	chromedriver!(No symbol) [0x7ff7137cd5ad]
+	chromedriver!(No symbol) [0x7ff713827822]
+	chromedriver!(No symbol) [0x7ff713827b2c]
+	chromedriver!(No symbol) [0x7ff713877d17]
+	chromedriver!(No symbol) [0x7ff71387486f]
+	chromedriver!(No symbol) [0x7ff713819df8]
+	chromedriver!(No symbol) [0x7ff71381ace3]
+	chromedriver!GetHandleVerifier [0x7ff713d7cc49+3296f9]
+	chromedriver!GetHandleVerifier [0x7ff713d77375+323e25]
+	chromedriver!GetHandleVerifier [0x7ff713d9bc82+348732]
+	chromedriver!GetHandleVerifier [0x7ff713a86045+32af5]
+	chromedriver!GetHandleVerifier [0x7ff713a8ecec+3b79c]
+	chromedriver!GetHandleVerifier [0x7ff713a71bc4+1e674]
+	chromedriver!GetHandleVerifier [0x7ff713a71d54+1e804]
+	chromedriver!GetHandleVerifier [0x7ff713a560e7+2b97]
+	KERNEL32!BaseThreadInitThunk [0x7ffc4fabe957+17]
+	ntdll!RtlUserThreadStart [0x7ffc50a4427c+2c]
 
-2025-12-16 17:57:39,954 [INFO] Clicking: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2025-12-16 17:57:39,954 [INFO] Waiting for: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2025-12-16 17:57:49,990 [ERROR] [WAIT FAILED] ('css selector', 'div.dropdown > button.btn > i.ri-more-fill') → Message: 
+2026-05-25 20:18:52,149 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260525_201852.png
+2026-05-25 20:18:52,150 [WARNING] [CLICK FAILED] Attempt 1/3 for ('xpath', "//button[normalize-space()='Submit']") → Message: 
 Stacktrace:
-Symbols not available. Dumping unresolved backtrace:
-	0x7ff7dc488245
-	0x7ff7dc4882a0
-	0x7ff7dc26165d
-	0x7ff7dc2b9a33
-	0x7ff7dc2b9d3c
-	0x7ff7dc30df67
-	0x7ff7dc30ac97
-	0x7ff7dc2aac29
-	0x7ff7dc2aba93
-	0x7ff7dc79ffe0
-	0x7ff7dc79a920
-	0x7ff7dc7b9086
-	0x7ff7dc4a5744
-	0x7ff7dc4ae6ec
-	0x7ff7dc491964
-	0x7ff7dc491b15
-	0x7ff7dc477842
-	0x7ffaa782e8d7
-	0x7ffaa868c53c
+	chromedriver!GetHandleVerifier [0x7ff713a67de5+14895]
+	chromedriver!GetHandleVerifier [0x7ff713a67e50+14900]
+	chromedriver!(No symbol) [0x7ff7137cd5ad]
+	chromedriver!(No symbol) [0x7ff713827822]
+	chromedriver!(No symbol) [0x7ff713827b2c]
+	chromedriver!(No symbol) [0x7ff713877d17]
+	chromedriver!(No symbol) [0x7ff71387486f]
+	chromedriver!(No symbol) [0x7ff713819df8]
+	chromedriver!(No symbol) [0x7ff71381ace3]
+	chromedriver!GetHandleVerifier [0x7ff713d7cc49+3296f9]
+	chromedriver!GetHandleVerifier [0x7ff713d77375+323e25]
+	chromedriver!GetHandleVerifier [0x7ff713d9bc82+348732]
+	chromedriver!GetHandleVerifier [0x7ff713a86045+32af5]
+	chromedriver!GetHandleVerifier [0x7ff713a8ecec+3b79c]
+	chromedriver!GetHandleVerifier [0x7ff713a71bc4+1e674]
+	chromedriver!GetHandleVerifier [0x7ff713a71d54+1e804]
+	chromedriver!GetHandleVerifier [0x7ff713a560e7+2b97]
+	KERNEL32!BaseThreadInitThunk [0x7ffc4fabe957+17]
+	ntdll!RtlUserThreadStart [0x7ffc50a4427c+2c]
 
-2025-12-16 17:57:50,147 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20251216_175749.png
-2025-12-16 17:57:50,147 [WARNING] [CLICK FAILED] Attempt 2/3 for ('css selector', 'div.dropdown > button.btn > i.ri-more-fill') → Message: 
+2026-05-25 20:18:52,653 [INFO] Clicking: ('xpath', "//button[normalize-space()='Submit']")
+2026-05-25 20:18:52,653 [INFO] Waiting for: ('xpath', "//button[normalize-space()='Submit']")
+2026-05-25 20:19:13,218 [ERROR] [WAIT FAILED] ('xpath', "//button[normalize-space()='Submit']") → Message: 
 Stacktrace:
-Symbols not available. Dumping unresolved backtrace:
-	0x7ff7dc488245
-	0x7ff7dc4882a0
-	0x7ff7dc26165d
-	0x7ff7dc2b9a33
-	0x7ff7dc2b9d3c
-	0x7ff7dc30df67
-	0x7ff7dc30ac97
-	0x7ff7dc2aac29
-	0x7ff7dc2aba93
-	0x7ff7dc79ffe0
-	0x7ff7dc79a920
-	0x7ff7dc7b9086
-	0x7ff7dc4a5744
-	0x7ff7dc4ae6ec
-	0x7ff7dc491964
-	0x7ff7dc491b15
-	0x7ff7dc477842
-	0x7ffaa782e8d7
-	0x7ffaa868c53c
+	chromedriver!GetHandleVerifier [0x7ff713a67de5+14895]
+	chromedriver!GetHandleVerifier [0x7ff713a67e50+14900]
+	chromedriver!(No symbol) [0x7ff7137cd5ad]
+	chromedriver!(No symbol) [0x7ff713827822]
+	chromedriver!(No symbol) [0x7ff713827b2c]
+	chromedriver!(No symbol) [0x7ff713877d17]
+	chromedriver!(No symbol) [0x7ff71387486f]
+	chromedriver!(No symbol) [0x7ff713819df8]
+	chromedriver!(No symbol) [0x7ff71381ace3]
+	chromedriver!GetHandleVerifier [0x7ff713d7cc49+3296f9]
+	chromedriver!GetHandleVerifier [0x7ff713d77375+323e25]
+	chromedriver!GetHandleVerifier [0x7ff713d9bc82+348732]
+	chromedriver!GetHandleVerifier [0x7ff713a86045+32af5]
+	chromedriver!GetHandleVerifier [0x7ff713a8ecec+3b79c]
+	chromedriver!GetHandleVerifier [0x7ff713a71bc4+1e674]
+	chromedriver!GetHandleVerifier [0x7ff713a71d54+1e804]
+	chromedriver!GetHandleVerifier [0x7ff713a560e7+2b97]
+	KERNEL32!BaseThreadInitThunk [0x7ffc4fabe957+17]
+	ntdll!RtlUserThreadStart [0x7ffc50a4427c+2c]
 
-2025-12-16 17:57:50,648 [INFO] Clicking: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2025-12-16 17:57:50,648 [INFO] Waiting for: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2025-12-16 17:58:00,687 [ERROR] [WAIT FAILED] ('css selector', 'div.dropdown > button.btn > i.ri-more-fill') → Message: 
+2026-05-25 20:19:13,317 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260525_201913.png
+2026-05-25 20:19:13,318 [WARNING] [CLICK FAILED] Attempt 2/3 for ('xpath', "//button[normalize-space()='Submit']") → Message: 
 Stacktrace:
-Symbols not available. Dumping unresolved backtrace:
-	0x7ff7dc488245
-	0x7ff7dc4882a0
-	0x7ff7dc26165d
-	0x7ff7dc2b9a33
-	0x7ff7dc2b9d3c
-	0x7ff7dc30df67
-	0x7ff7dc30ac97
-	0x7ff7dc2aac29
-	0x7ff7dc2aba93
-	0x7ff7dc79ffe0
-	0x7ff7dc79a920
-	0x7ff7dc7b9086
-	0x7ff7dc4a5744
-	0x7ff7dc4ae6ec
-	0x7ff7dc491964
-	0x7ff7dc491b15
-	0x7ff7dc477842
-	0x7ffaa782e8d7
-	0x7ffaa868c53c
+	chromedriver!GetHandleVerifier [0x7ff713a67de5+14895]
+	chromedriver!GetHandleVerifier [0x7ff713a67e50+14900]
+	chromedriver!(No symbol) [0x7ff7137cd5ad]
+	chromedriver!(No symbol) [0x7ff713827822]
+	chromedriver!(No symbol) [0x7ff713827b2c]
+	chromedriver!(No symbol) [0x7ff713877d17]
+	chromedriver!(No symbol) [0x7ff71387486f]
+	chromedriver!(No symbol) [0x7ff713819df8]
+	chromedriver!(No symbol) [0x7ff71381ace3]
+	chromedriver!GetHandleVerifier [0x7ff713d7cc49+3296f9]
+	chromedriver!GetHandleVerifier [0x7ff713d77375+323e25]
+	chromedriver!GetHandleVerifier [0x7ff713d9bc82+348732]
+	chromedriver!GetHandleVerifier [0x7ff713a86045+32af5]
+	chromedriver!GetHandleVerifier [0x7ff713a8ecec+3b79c]
+	chromedriver!GetHandleVerifier [0x7ff713a71bc4+1e674]
+	chromedriver!GetHandleVerifier [0x7ff713a71d54+1e804]
+	chromedriver!GetHandleVerifier [0x7ff713a560e7+2b97]
+	KERNEL32!BaseThreadInitThunk [0x7ffc4fabe957+17]
+	ntdll!RtlUserThreadStart [0x7ffc50a4427c+2c]
 
-2025-12-16 17:58:00,807 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20251216_175800.png
-2025-12-16 17:58:00,808 [WARNING] [CLICK FAILED] Attempt 3/3 for ('css selector', 'div.dropdown > button.btn > i.ri-more-fill') → Message: 
+2026-05-25 20:19:13,820 [INFO] Clicking: ('xpath', "//button[normalize-space()='Submit']")
+2026-05-25 20:19:13,820 [INFO] Waiting for: ('xpath', "//button[normalize-space()='Submit']")
+2026-05-25 20:19:23,826 [ERROR] [WAIT FAILED] ('xpath', "//button[normalize-space()='Submit']") → Message: 
 Stacktrace:
-Symbols not available. Dumping unresolved backtrace:
-	0x7ff7dc488245
-	0x7ff7dc4882a0
-	0x7ff7dc26165d
-	0x7ff7dc2b9a33
-	0x7ff7dc2b9d3c
-	0x7ff7dc30df67
-	0x7ff7dc30ac97
-	0x7ff7dc2aac29
-	0x7ff7dc2aba93
-	0x7ff7dc79ffe0
-	0x7ff7dc79a920
-	0x7ff7dc7b9086
-	0x7ff7dc4a5744
-	0x7ff7dc4ae6ec
-	0x7ff7dc491964
-	0x7ff7dc491b15
-	0x7ff7dc477842
-	0x7ffaa782e8d7
-	0x7ffaa868c53c
+	chromedriver!GetHandleVerifier [0x7ff713a67de5+14895]
+	chromedriver!GetHandleVerifier [0x7ff713a67e50+14900]
+	chromedriver!(No symbol) [0x7ff7137cd5ad]
+	chromedriver!(No symbol) [0x7ff713827822]
+	chromedriver!(No symbol) [0x7ff713827b2c]
+	chromedriver!(No symbol) [0x7ff713877d17]
+	chromedriver!(No symbol) [0x7ff71387486f]
+	chromedriver!(No symbol) [0x7ff713819df8]
+	chromedriver!(No symbol) [0x7ff71381ace3]
+	chromedriver!GetHandleVerifier [0x7ff713d7cc49+3296f9]
+	chromedriver!GetHandleVerifier [0x7ff713d77375+323e25]
+	chromedriver!GetHandleVerifier [0x7ff713d9bc82+348732]
+	chromedriver!GetHandleVerifier [0x7ff713a86045+32af5]
+	chromedriver!GetHandleVerifier [0x7ff713a8ecec+3b79c]
+	chromedriver!GetHandleVerifier [0x7ff713a71bc4+1e674]
+	chromedriver!GetHandleVerifier [0x7ff713a71d54+1e804]
+	chromedriver!GetHandleVerifier [0x7ff713a560e7+2b97]
+	KERNEL32!BaseThreadInitThunk [0x7ffc4fabe957+17]
+	ntdll!RtlUserThreadStart [0x7ffc50a4427c+2c]
 
-2025-12-16 17:58:00,953 [INFO] 📸 Screenshot saved: reports/screenshots/click_failed_20251216_175800.png
-2025-12-16 17:58:00,953 [ERROR] Click ultimately failed: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2025-12-16 17:58:04,756 [INFO] Typing into ('name', 'access_code'): '2560'
-2025-12-16 17:58:04,756 [INFO] Waiting for: ('name', 'access_code')
-2025-12-16 17:58:05,056 [INFO] Typed successfully in ('name', 'access_code')
-2025-12-16 17:58:05,056 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2025-12-16 17:58:05,056 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2025-12-16 17:58:05,587 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2025-12-16 17:58:05,587 [INFO] Typing into ('name', 'email'): 'yivake3549@gusronk.com'
-2025-12-16 17:58:05,588 [INFO] Waiting for: ('name', 'email')
-2025-12-16 17:58:06,354 [INFO] Typed successfully in ('name', 'email')
-2025-12-16 17:58:06,354 [INFO] Typing into ('name', 'password'): 'Newuser@123'
-2025-12-16 17:58:06,354 [INFO] Waiting for: ('name', 'password')
-2025-12-16 17:58:06,642 [INFO] Typed successfully in ('name', 'password')
-2025-12-16 17:58:06,643 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
-2025-12-16 17:58:06,643 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
-2025-12-16 17:58:07,007 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
-2025-12-16 17:58:10,089 [INFO] Waiting for: ('id', 'search-vale')
-2025-12-16 17:58:10,104 [INFO] Typing into ('id', 'search-vale'): 'test'
-2025-12-16 17:58:10,104 [INFO] Waiting for: ('id', 'search-vale')
-2025-12-16 17:58:10,377 [INFO] Typed successfully in ('id', 'search-vale')
-2025-12-16 17:58:10,418 [INFO] Clicking: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2025-12-16 17:58:10,418 [INFO] Waiting for: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2025-12-16 17:58:10,585 [WARNING] [CLICK FAILED] Attempt 1/3 for ('css selector', 'div.dropdown > button.btn > i.ri-more-fill') → Message: stale element reference: stale element not found in the current frame
-  (Session info: chrome=143.0.7499.41); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#staleelementreferenceexception
+2026-05-25 20:19:23,940 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260525_201923.png
+2026-05-25 20:19:23,940 [WARNING] [CLICK FAILED] Attempt 3/3 for ('xpath', "//button[normalize-space()='Submit']") → Message: 
 Stacktrace:
-Symbols not available. Dumping unresolved backtrace:
-	0x7ff7dc488245
-	0x7ff7dc4882a0
-	0x7ff7dc26165d
-	0x7ff7dc2692cc
-	0x7ff7dc26c74e
-	0x7ff7dc30c05f
-	0x7ff7dc2e1fda
-	0x7ff7dc30ac97
-	0x7ff7dc2aac29
-	0x7ff7dc2aba93
-	0x7ff7dc79ffe0
-	0x7ff7dc79a920
-	0x7ff7dc7b9086
-	0x7ff7dc4a5744
-	0x7ff7dc4ae6ec
-	0x7ff7dc491964
-	0x7ff7dc491b15
-	0x7ff7dc477842
-	0x7ffaa782e8d7
-	0x7ffaa868c53c
+	chromedriver!GetHandleVerifier [0x7ff713a67de5+14895]
+	chromedriver!GetHandleVerifier [0x7ff713a67e50+14900]
+	chromedriver!(No symbol) [0x7ff7137cd5ad]
+	chromedriver!(No symbol) [0x7ff713827822]
+	chromedriver!(No symbol) [0x7ff713827b2c]
+	chromedriver!(No symbol) [0x7ff713877d17]
+	chromedriver!(No symbol) [0x7ff71387486f]
+	chromedriver!(No symbol) [0x7ff713819df8]
+	chromedriver!(No symbol) [0x7ff71381ace3]
+	chromedriver!GetHandleVerifier [0x7ff713d7cc49+3296f9]
+	chromedriver!GetHandleVerifier [0x7ff713d77375+323e25]
+	chromedriver!GetHandleVerifier [0x7ff713d9bc82+348732]
+	chromedriver!GetHandleVerifier [0x7ff713a86045+32af5]
+	chromedriver!GetHandleVerifier [0x7ff713a8ecec+3b79c]
+	chromedriver!GetHandleVerifier [0x7ff713a71bc4+1e674]
+	chromedriver!GetHandleVerifier [0x7ff713a71d54+1e804]
+	chromedriver!GetHandleVerifier [0x7ff713a560e7+2b97]
+	KERNEL32!BaseThreadInitThunk [0x7ffc4fabe957+17]
+	ntdll!RtlUserThreadStart [0x7ffc50a4427c+2c]
 
-2025-12-16 17:58:11,087 [INFO] Clicking: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2025-12-16 17:58:11,088 [INFO] Waiting for: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2025-12-16 17:58:11,473 [INFO] Clicked successfully: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
-2025-12-16 17:58:11,473 [INFO] Waiting for: ('xpath', "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//a[normalize-space()='Follow Up']")
-2025-12-16 17:58:11,490 [INFO] Clicking: ('xpath', "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//a[normalize-space()='Follow Up']")
-2025-12-16 17:58:11,491 [INFO] Waiting for: ('xpath', "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//a[normalize-space()='Follow Up']")
-2025-12-16 17:58:12,511 [INFO] Clicked successfully: ('xpath', "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//a[normalize-space()='Follow Up']")
-2025-12-16 17:58:12,511 [INFO] Waiting for: ('xpath', "//div[contains(@class,'ck-editor__editable') and @contenteditable='true']")
-2025-12-16 17:58:12,711 [INFO] Clicking: ('xpath', "//button[normalize-space()='Submit']")
-2025-12-16 17:58:12,711 [INFO] Waiting for: ('xpath', "//button[normalize-space()='Submit']")
-2025-12-16 17:58:13,072 [INFO] Clicked successfully: ('xpath', "//button[normalize-space()='Submit']")
-2025-12-16 17:58:13,072 [INFO] Waiting for: ('id', 'content_error')
+2026-05-25 20:19:24,041 [INFO] 📸 Screenshot saved: reports/screenshots/click_failed_20260525_201923.png
+2026-05-25 20:19:24,042 [ERROR] Click ultimately failed: ('xpath', "//button[normalize-space()='Submit']")

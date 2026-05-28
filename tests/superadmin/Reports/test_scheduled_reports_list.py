@@ -124,3 +124,28 @@ class TestScheduledReports:
             or
             page.has_no_data()
         )
+
+    # ==========================
+    # EDIT REPORT
+    # ==========================
+    def test_edit_schedule_report(self, setup):
+        page = SAScheduledReportsPage(setup)
+
+        page.goto_page()
+
+        result = page.edit_first_schedule_report()
+
+        assert result is True
+
+        # ==========================
+        # TOGGLE STATUS
+        # ==========================
+
+    def test_toggle_schedule_report_status(self, setup):
+        page = SAScheduledReportsPage(setup)
+
+        page.goto_page()
+
+        old_status, new_status = page.toggle_first_schedule_report_status()
+
+        assert old_status != new_status

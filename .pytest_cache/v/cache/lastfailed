@@ -82,6 +82,12 @@
   "tests/superadmin/Reports/test_scheduled_reports_list.py::TestScheduledReportsList::test_pagination_previous": true,
   "tests/superadmin/Reports/test_scheduled_reports_list.py::TestScheduledReportsList::test_click_create_popup": true,
   "tests/superadmin/Reports/test_scheduled_reports_list.py::TestScheduledReports::test_entries_per_page[20]": true,
-  "tests/superadmin/Reports/test_scheduled_reports_create.py::TestScheduledReportsCreate::test_create_scan_analytics_report": true,
-  "tests/superadmin/Reports/test_scheduled_reports_create.py::TestScheduledReportsCreate::test_create_product_analysis_report": true
+  "tests/superadmin/Reports/test_scheduled_reports_list.py::TestScheduledReports::test_activate_schedule_report": true,
+  "tests/superadmin/Enquiries/test_enquiry_assign_positive.py::TestEnquiryAssignUnassignPositive::test_assign_internal_user_success": true,
+  "tests/superadmin/Enquiries/test_enquiry_followup_positive.py::TestFollowUpPositive::test_add_followup_success": true,
+  "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_date": true,
+  "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_format[XLSX]": true,
+  "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_status[Pending]": true,
+  "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_status[Processing]": true,
+  "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_status[Failed]": true
 }

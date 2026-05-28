@@ -340,50 +340,6 @@ class BasePage:
             "//div[contains(@class,'choices__list--dropdown') and not(contains(@class,'is-hidden'))]"
         )))
 
-    # def select_status_keyboard(self, locator, value):
-    #     self.click(locator)
-    #     time.sleep(1)
-    #
-    #     active_element = self.driver.switch_to.active_element
-    #
-    #     if value.lower() == "active":
-    #         active_element.send_keys(Keys.ARROW_DOWN)
-    #     elif value.lower() == "inactive":
-    #         active_element.send_keys(Keys.ARROW_DOWN)
-    #         active_element.send_keys(Keys.ARROW_DOWN)
-    #
-    #     active_element.send_keys(Keys.ENTER)
-
-
-
-
-
-    # 🔥 ADD THIS IN BasePage
-
-    # def select_dropdown(self, locator, text):
-    #
-    #     # click dropdown
-    #     dropdown = WebDriverWait(self.driver, 10).until(
-    #         EC.element_to_be_clickable(locator)
-    #     )
-    #     dropdown.click()
-    #
-    #     # wait for options (VERY IMPORTANT)
-    #     options = WebDriverWait(self.driver, 10).until(
-    #         EC.presence_of_all_elements_located((
-    #             By.XPATH, "//div[@role='option']"
-    #         ))
-    #     )
-    #
-    #     print("OPTIONS FOUND:", [o.text for o in options])
-    #
-    #     # click matching option
-    #     for option in options:
-    #         if text.strip() in option.text.strip():
-    #             option.click()
-    #             return
-    #
-    #     raise Exception(f"❌ Option '{text}' not found")
 
     def select_dropdown(self, locator, value):
 
@@ -551,3 +507,12 @@ class BasePage:
             "arguments[0].click();",
             option
         )
+
+    def select_select2(self, dropdown_locator, option_text):
+        wait = WebDriverWait(self.driver, 20)
+
+        wait.until(
+            EC.element_to_be_clickable(dropdown_locator)).click()
+        (wait.until(
+            EC.element_to_be_clickable((By.XPATH, f"//li[normalize-space()='{option_text}']")))
+         .click())

@@ -25,7 +25,7 @@ class TestScheduledReportsCreate:
             file_format="CSV",
             mail_time="2",
             duration="Daily",
-            manufacturer_required=False
+            manufacturer_required=True
         )
 
     def test_create_product_analysis_report(self, setup):

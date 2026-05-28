@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 import pytest
 from pages.superadmin.Reports.sa_download_reports_page import (
     SADownloadReportsPage
@@ -23,17 +25,20 @@ class TestDownloadReports:
     # ==========================================
     # DATE FILTER
     # ==========================================
-    def test_filter_by_date(self, setup):
+    def test_filter_date_range(self, setup):
         page = SADownloadReportsPage(setup)
 
         page.goto_page()
 
-        page.filter_by_date()
+        start = date.today() - timedelta(days=7)
+        end = date.today()
+
+        page.filter_by_date(start, end)
 
         assert (
-            page.is_row_present()
-            or
-            page.has_no_data()
+                page.is_row_present()
+                or
+                page.has_no_data()
         )
 
     # ==========================================
@@ -135,7 +140,7 @@ class TestDownloadReports:
 
         page.goto_page()
 
-        page.go_to_page_2()
+        page.go_to_page("2")
 
         assert (
             page.is_row_present()
@@ -151,6 +156,6 @@ class TestDownloadReports:
 
         page.goto_page()
 
-        page.download_first_report()
+        result = page.download_first_report()
 
-        assert True
+        assert result in ["DOWNLOADED", "NO_DATA"]
