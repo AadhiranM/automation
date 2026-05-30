@@ -98,8 +98,6 @@ class QR_Management_QR_m_Page:
         except Exception:
             return False
 
-
-
     def is_variant_field_editable(self):
         try:
             element = self.driver.find_element(
@@ -186,7 +184,6 @@ class QR_Management_QR_m_Page:
     def select_QR_Type_drpdwn(self,QR_Type):
         drpdwn_qr_type = Select(self.driver.find_element(*self.QR_Type_drpdwn))
         drpdwn_qr_type.select_by_visible_text(QR_Type)
-
 
     def click_batch_delivery_opt(self):
         self.driver.find_element(*self.batch_delivery_location_opt).click()

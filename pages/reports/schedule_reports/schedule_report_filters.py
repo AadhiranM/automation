@@ -158,10 +158,18 @@ class Generate_reports_page:
             time.sleep(1)
 
         for d in self.driver.find_elements(By.XPATH, calendar_popup + "//span[contains(@class,'flatpickr-day')]"):
-            if d.text == str(int(end_day)) and "disabled" not in d.get_attribute("class"):
+
+            classes = d.get_attribute("class")
+
+            if (
+                    d.text == str(int(end_day))
+                    and "flatpickr-disabled" not in classes
+                    and "notAllowed" not in classes
+                    and "prevMonthDay" not in classes
+                    and "nextMonthDay" not in classes
+            ):
                 d.click()
                 break
-        time.sleep(1)
 
     def select_date(self, date_string):
         day, month, year = date_string.split("-")
