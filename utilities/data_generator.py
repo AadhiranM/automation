@@ -26,3 +26,20 @@ def generate_brand_name():
 def generate_sku():
     random_str = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
     return f"SKU_{random_str}"
+
+def generate_user_name():
+    random_str = ''.join(random.choices(string.ascii_letters, k=8))
+    return f"AutoUser{random_str}"
+
+
+def generate_user_email():
+    random_str = ''.join(random.choices(string.ascii_lowercase, k=6))
+    return f"{random_str}@gmail.com"
+
+
+def generate_mobile_number():
+    return "9" + ''.join(random.choices(string.digits, k=9))
+
+
+def generate_password():
+    return "Test@123"

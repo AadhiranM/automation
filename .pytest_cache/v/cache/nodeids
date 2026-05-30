@@ -140,5 +140,16 @@
   "tests/superadmin/Reports/test_scheduled_reports_list.py::TestScheduledReportsList::test_filter_inactive_status",
   "tests/superadmin/Reports/test_scheduled_reports_list.py::TestScheduledReportsList::test_pagination_next",
   "tests/superadmin/Reports/test_scheduled_reports_list.py::TestScheduledReportsList::test_pagination_previous",
-  "tests/superadmin/Reports/test_scheduled_reports_list.py::TestScheduledReportsList::test_search_report"
+  "tests/superadmin/Reports/test_scheduled_reports_list.py::TestScheduledReportsList::test_search_report",
+  "tests/superadmin/UserManagement/test_create_user.py::TestCreateUser::test_create_user",
+  "tests/superadmin/UserManagement/test_roles_permissions.py::TestCreateRole::test_create_role",
+  "tests/superadmin/UserManagement/test_user_actions.py::TestUserActions::test_user_actions",
+  "tests/superadmin/UserManagement/test_user_list.py::TestUserList::test_entries_per_page[10]",
+  "tests/superadmin/UserManagement/test_user_list.py::TestUserList::test_entries_per_page[25]",
+  "tests/superadmin/UserManagement/test_user_list.py::TestUserList::test_entries_per_page[50]",
+  "tests/superadmin/UserManagement/test_user_list.py::TestUserList::test_filter_by_status[Active]",
+  "tests/superadmin/UserManagement/test_user_list.py::TestUserList::test_filter_by_status[Suspended]",
+  "tests/superadmin/UserManagement/test_user_list.py::TestUserList::test_go_to_page_2",
+  "tests/superadmin/UserManagement/test_user_list.py::TestUserList::test_next_previous_page",
+  "tests/superadmin/UserManagement/test_user_list.py::TestUserList::test_search_user"
 ]

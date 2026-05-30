@@ -89,5 +89,6 @@
   "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_format[XLSX]": true,
   "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_status[Pending]": true,
   "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_status[Processing]": true,
-  "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_status[Failed]": true
+  "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_status[Failed]": true,
+  "tests/superadmin/UserManagement/test_user_actions.py::TestUserActions::test_user_actions": true
 }
