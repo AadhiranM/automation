@@ -70,6 +70,7 @@ class QR_Management_Category_Page:
 
     def Enter_search_field(self,search_value):
         self.driver.find_element(*self.search_input_field).clear()
+        time.sleep(1)
         self.driver.find_element(*self.search_input_field).send_keys(search_value)
 
     def Click_calender_date_range(self):
@@ -149,6 +150,7 @@ class QR_Management_Category_Page:
 
     def Enter_filter_toggle_category_field(self,category_name):
         self.driver.find_element(*self.filter_toggle_category_field).clear()
+        time.sleep(1)
         self.driver.find_element(*self.filter_toggle_category_field).send_keys(category_name)
 
 

@@ -75,6 +75,8 @@ class Generate_reports_page:
                         (By.XPATH, "//table[@id='crudTable']//tbody//tr[1]//td[9]//a")
                     )
                 )
+                status=self.driver.find_element(By.XPATH, "//table[@id='crudTable']//tbody//tr[1]//td[7]").text
+                print("status of the report name",status)
                 download_btn.click()
                 print("Download option found and clicked")
             # else:
@@ -82,6 +84,8 @@ class Generate_reports_page:
 
         except Exception:
             try:
+                status = self.driver.find_element(By.XPATH, "//table[@id='crudTable']//tbody//tr[1]//td[7]").text
+                print("status of the report:", status)
                 # If download is not present, check for no data
                 no_data = self.driver.find_element(
                     By.XPATH, "//table[@id='crudTable']//tbody//tr[1]//td[9]"

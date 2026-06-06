@@ -165,39 +165,61 @@ class Test_SR_create(BaseTest):
         # =========================
         # NAVIGATION LOGS
         # =========================
-        self.logger.info("Navigating to Dashboard")
+        self.logger.info("Starting navigation to Schedule Reports module")
 
         qr_page = QR_Management_Category_Page(driver)
-        driver.refresh()
-        qr_page.Click_Dashboard()
 
-        self.logger.info("Opening Reports module")
+        driver.refresh()
+        self.logger.info("Page refreshed successfully")
+
+        qr_page.Click_Dashboard()
+        self.logger.info("Clicked Dashboard")
 
         reports = Generate_reports_page(driver)
+
         reports.Click_reports_tab()
+        self.logger.info("Clicked Reports tab")
 
-        self.logger.info("Opening Schedule Reports section")
         reports.Click_schedule_report()
+        self.logger.info("Opened Schedule Report page")
 
-        self.logger.info("Opening Create Schedule Report form")
         reports.Click_create_btn()
+        self.logger.info("Opened Create Schedule Report form")
 
         time.sleep(2)
 
-        self.logger.info("Entering schedule report details")
+        self.logger.info(
+            f"Entering schedule report details | "
+            f"Report: {select_report} | "
+            f"Format: {select_format} | "
+            f"Duration: {select_duration} | "
+            f"Mail Receiving Duration: {mail_receiving_duration}"
+        )
 
         reports.choose_create_btn_select_report(select_report)
+        self.logger.info(f"Selected Report: {select_report}")
+
         reports.choose_create_btn_select_format(select_format)
+        self.logger.info(f"Selected Format: {select_format}")
+
         reports.choose_create_btn_select_duration(select_duration)
+        self.logger.info(f"Selected Duration: {select_duration}")
+
         reports.choose_create_btn_mail_receiving_duration(mail_receiving_duration)
+        self.logger.info(
+            f"Selected Mail Receiving Duration: {mail_receiving_duration}"
+        )
 
         self.logger.info("Submitting schedule report creation request")
 
         reports.Click_Create_btn_save_btn()
+        self.logger.info("Clicked Save button")
 
         # =========================
         # TOAST HANDLING
         # =========================
+        self.logger.info("Waiting for toast message")
+
         try:
             toast_text = WebDriverWait(driver, 3).until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, ".toastify"))
@@ -205,12 +227,16 @@ class Test_SR_create(BaseTest):
 
             print("Toast:", toast_text)
 
+            self.logger.info(f"Toast received: {toast_text}")
+
         except TimeoutException:
             toast_text = "Toast message not displayed"
 
             print("Toast:", toast_text)
 
-            self.logger.error("Toast message not displayed after schedule report creation")
+            self.logger.error(
+                "Toast message not displayed after schedule report creation"
+            )
 
         # =========================
         # VALIDATION LOGS
@@ -237,6 +263,10 @@ class Test_SR_create(BaseTest):
                 driver,
                 test_name="schedule_report_create_fail",
                 folder_name="Screenshots\\reports\\schedule_reports"
+            )
+
+            self.logger.error(
+                "Screenshot captured for failed schedule report creation"
             )
 
             assert False, (
