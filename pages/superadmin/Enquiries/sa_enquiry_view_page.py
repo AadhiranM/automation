@@ -1,29 +1,56 @@
-# pages/superadmin/Enquiries/sa_enquiry_view_page.py
-
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from pages.common.base_page import BasePage
 
 
 class SAEnquiryViewPage(BasePage):
 
-    # View page fields (always in 2nd <td> cell)
-    NAME = (By.XPATH, "//strong[text()='Name:']/ancestor::tr/td[2]/span")
-    PHONE = (By.XPATH, "//strong[text()='Phone:']/ancestor::tr/td[2]/span")
-    EMAIL = (By.XPATH, "//strong[text()='Business Email:']/ancestor::tr/td[2]/span")
-    COMPANY = (By.XPATH, "//strong[text()='Company:']/ancestor::tr/td[2]/span")
-    STATUS = (By.XPATH, "//strong[text()='Status:']/ancestor::tr/td[2]/span")
-    MESSAGE = (By.XPATH, "//strong[text()='Message:']/ancestor::tr/td[2]/span")
+    NAME = (
+        By.XPATH,
+        "//strong[contains(text(),'Name')]/parent::td/following-sibling::td"
+    )
 
-    EDIT_BUTTON = (By.XPATH, "//a[normalize-space()='Edit']")
+    EMAIL = (
+        By.XPATH,
+        "//strong[contains(text(),'Business Email')]/parent::td/following-sibling::td"
+    )
+
+    COMPANY = (
+        By.XPATH,
+        "//strong[contains(text(),'Company')]/parent::td/following-sibling::td"
+    )
+
+    STATUS = (
+        By.XPATH,
+        "//strong[contains(text(),'Status')]/parent::td/following-sibling::td"
+    )
+
+    EDIT_BUTTON = (
+        By.XPATH,
+        "//a[contains(.,'Edit')]"
+    )
 
     def wait_until_loaded(self):
-        """Ensures that essential fields are visible before assertions."""
-        self.is_visible(self.NAME)
-        self.is_visible(self.EMAIL)
-        self.is_visible(self.STATUS)
 
-    def click_edit(self):
-        self.click(self.EDIT_BUTTON)
+        WebDriverWait(
+            self.driver,
+            15
+        ).until(
+            EC.visibility_of_element_located(
+                self.NAME
+            )
+        )
 
+    def get_name(self):
+        return self.get_text(self.NAME).strip()
 
+    def get_email(self):
+        return self.get_text(self.EMAIL).strip()
 
+    def get_company(self):
+        return self.get_text(self.COMPANY).strip()
+
+    def get_status(self):
+        return self.get_text(self.STATUS).strip()

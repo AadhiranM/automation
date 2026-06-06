@@ -29,7 +29,7 @@ class SAEnquirySendEmailPage(BasePage):
     )
 
     SEND_BUTTON = (
-        By.XPATH, "//button[normalize-space()='Submit']"
+        By.XPATH, "//button[normalize-space()='submit']"
     )
 
     # ---------------- VALIDATION ERRORS ----------------

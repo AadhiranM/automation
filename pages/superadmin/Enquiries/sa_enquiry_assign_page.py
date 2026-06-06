@@ -47,6 +47,7 @@ class SAEnquiryAssignPage(BasePage):
     )
     UNASSIGN_CONFIRM_YES = (
         By.XPATH,
+
         "//button[normalize-space()='Yes, un-assign']"
     )
 

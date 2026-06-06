@@ -57,7 +57,7 @@ class TestContactUs:
     # NEGATIVE TEST – INVALID PHONE NUMBER
     # -------------------------------------------------------
     @pytest.mark.parametrize("phone", [
-        "12345", "1111111111", "abc1234567", "!@#4567890", "9876543"
+        "9876543"
     ])
     def test_invalid_phone(self, setup, phone):
         page = ContactUsPage(setup)

@@ -90,5 +90,13 @@
   "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_status[Pending]": true,
   "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_status[Processing]": true,
   "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_status[Failed]": true,
-  "tests/superadmin/UserManagement/test_user_actions.py::TestUserActions::test_user_actions": true
+  "tests/Applicationusers/test_application_user.py::TestApplicationUsers::test_application_user_actions": true,
+  "tests/superadmin/Enquiries/test_enquiry_list_positive.py::TestEnquiryListPositive::test_filter_inline_created_date": true,
+  "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_inline_filter_future_date": true,
+  "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_panel_filter_future_date": true,
+  "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_clear_panel_filter_without_applying": true,
+  "tests/superadmin/Enquiries/test_enquiry_sendemail_positive.py::TestSendEmailPositive::test_send_email": true,
+  "tests/superadmin/Enquiries/test_enquiry_sendemail_positive.py::TestSendEmailPositive::test_send_email_and_verify_history": true,
+  "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_future_date_filter_inline": true,
+  "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_future_date_filter_panel": true
 }

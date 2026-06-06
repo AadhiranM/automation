@@ -2,7 +2,6 @@ import time
 import pytest
 
 from pages.superadmin.UserManagement.sa_user_list_page import SAUserListPage
-
 from utilities.data_generator import generate_user_name
 
 
@@ -16,7 +15,9 @@ class TestUserActions:
 
         page.goto_page()
 
-        # VIEW
+        # =========================
+        # VIEW USER
+        # =========================
 
         page.click_view()
 
@@ -26,7 +27,9 @@ class TestUserActions:
 
         time.sleep(3)
 
+        # =========================
         # EDIT USER
+        # =========================
 
         page.click_edit()
 
@@ -34,15 +37,17 @@ class TestUserActions:
 
         page.update_user_name(updated_name)
 
-        time.sleep(4)
+        time.sleep(3)
 
-        # VALIDATE UPDATED NAME
+        page.goto_page()
 
         first_row_name = page.get_first_row_name()
 
         assert updated_name == first_row_name
 
+        # =========================
         # ROLE & PERMISSIONS
+        # =========================
 
         page.click_role_permissions()
 
@@ -52,30 +57,44 @@ class TestUserActions:
 
         time.sleep(3)
 
-        # STATUS VALIDATION
+        page.goto_page()
+
+        # =========================
+        # STATUS CHANGE
+        # =========================
 
         current_status = page.get_first_row_status()
 
+        print(f"BEFORE STATUS = {current_status}")
+
         if current_status == "Active":
 
-            page.click_three_dots()
+            page.suspend_user()
 
-            page.click_suspend()
+            time.sleep(3)
 
-            page.confirm_suspend()
+            setup.refresh()
+
+            page.wait_for_results()
 
             updated_status = page.get_first_row_status()
+
+            print(f"AFTER STATUS = {updated_status}")
 
             assert updated_status == "Suspended"
 
         else:
 
-            page.click_three_dots()
+            page.activate_user()
 
-            page.confirm_activate()
+            time.sleep(3)
 
-            page.confirm_activate()
+            setup.refresh()
+
+            page.wait_for_results()
 
             updated_status = page.get_first_row_status()
+
+            print(f"AFTER STATUS = {updated_status}")
 
             assert updated_status == "Active"

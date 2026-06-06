@@ -1,200 +1,680 @@
-from datetime import datetime
 import time
+from datetime import datetime
+
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from pages.common.base_page import BasePage
 from utilities.flatpickr import FlatpickrRangePicker
-
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 
 class SAEnquiryListPage(BasePage):
 
-    # ----------------- SEARCH -----------------
+    # =====================================================
+    # SEARCH
+    # =====================================================
+
     SEARCH_BOX = (By.ID, "search-vale")
     SEARCH_BTN = (By.ID, "search-btn")
 
-    # ----------------- STATUS FILTER -----------------
-    STATUS_SELECT = (By.ID, "idStatus")   # Native <select>
-    STATUS_OPTION = "//select[@id='idStatus']/option[text()='{}']"
+    # =====================================================
+    # FILTERS
+    # =====================================================
 
-    # ----------------- ENTRIES PER PAGE -----------------
-    ENTRIES_DROPDOWN = (By.XPATH, "//select[@name='crudTable_length']")
-    ENTRIES_OPTION = "//select[@name='crudTable_length']/option[@value='{}']"
+    INLINE_DATE_FILTER = (
+        By.XPATH,
+        "//input[@placeholder='Filter by : Created At']"
+    )
 
-    # ----------------- PAGINATION -----------------
-    NEXT_BTN = (By.XPATH, "//a[text()='Next']")
-    PREV_BTN = (By.XPATH, "//a[text()='Previous']")
-    PAGE_NUMBER = "//a[text()='{}']"
+    FILTER_PANEL_BTN = (
+        By.ID,
+        "filterToggleBtn"
+    )
 
-    # ----------------- TABLE -----------------
-    FIRST_ROW = (By.XPATH, "(//table[contains(@class,'table')]//tbody/tr)[1]")
-    NO_DATA_ROW = (By.XPATH, "//td[contains(@class,'dataTables_empty')]")
-    CREATED_AT_COL = (By.XPATH, "//table[contains(@class,'table')]//tbody/tr/td[8]")
+    PANEL_DATE_FILTER = (
+        By.ID,
+        "date_range"
+    )
 
-    # ----------------- ACTIONS -----------------
-    # IMPORTANT FIX: Correct 3-dots button locator
-    ACTION_BTN = (By.CSS_SELECTOR, "div.dropdown > button.btn > i.ri-more-fill")
+    APPLY_BTN = (
+        By.XPATH,
+        "//button[normalize-space()='Apply']"
+    )
 
-    ACTION_VIEW = (By.XPATH, "//a[normalize-space()='View']")
-    ACTION_EDIT = (By.XPATH, "//a[normalize-space()='Edit']")
+    CLEAR_FILTER_BTN = (
+        By.XPATH,
+        "//button[contains(text(),'Clear Filter')]"
+    )
 
-    # ----------------- DATE FILTERS -----------------
-    INLINE_CREATED_AT = (By.XPATH, "//input[@placeholder='Filter by : Created At']")
-    FILTER_PANEL_BTN = (By.ID, "filterToggleBtn")
-    PANEL_DATE_RANGE = (By.ID, "date_range")
-    APPLY_BTN = (By.XPATH, "//button[normalize-space()='Apply']")
-    CLEAR_BTN = (By.XPATH, "//button[normalize-space()='Clear Filter']")
-    FILTER_CLOSE_ICON = (By.CSS_SELECTOR, "div.offcanvas-header button.close")
+    STATUS_DROPDOWN = (
+        By.ID,
+        "idStatus"
+    )
 
-    STATUS_BADGE = (By.XPATH, "//table//tbody/tr[1]//td[5]//span")
+    FILTER_CLOSE_ICON = (
+        By.CSS_SELECTOR,
+        ".offcanvas-header button"
+    )
+
+    # =====================================================
+    # TABLE
+    # =====================================================
+
+    FIRST_ROW = (
+        By.XPATH,
+        "//table/tbody/tr[1]"
+    )
+
+    NO_DATA = (
+        By.XPATH,
+        "//td[contains(@class,'dataTables_empty')]"
+    )
+
+    FIRST_ROW_ID = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[1]"
+    )
+
+    FIRST_ROW_NAME = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[2]"
+    )
+
+    FIRST_ROW_EMAIL = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[3]"
+    )
+
+    FIRST_ROW_COMPANY = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[4]"
+    )
+
+    FIRST_ROW_STATUS = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[5]//span"
+    )
+
+    CREATED_AT_COLUMN = (
+        By.XPATH,
+        "//table/tbody/tr/td[8]"
+    )
+
+    # =====================================================
+    # ACTIONS
+    # =====================================================
+
+    FIRST_ROW_THREE_DOTS = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[last()]//button"
+    )
+
+    VIEW_OPTION = (
+        By.XPATH,
+        "//a[contains(.,'View')]"
+    )
+
+    EDIT_OPTION = (
+        By.XPATH,
+        "//a[contains(.,'Edit')]"
+    )
+
+    SEND_EMAIL_OPTION = (
+        By.XPATH,
+        "//a[contains(.,'Send Email')]"
+    )
+
+    FOLLOW_UP_OPTION = (
+        By.XPATH,
+        "//a[contains(.,'Follow Up')]"
+    )
+
+    # =====================================================
+    # ENTRIES
+    # =====================================================
+
+    ENTRIES_DROPDOWN = (
+        By.NAME,
+        "crudTable_length"
+    )
+
+    # =====================================================
+    # PAGINATION
+    # =====================================================
+
+    NEXT_BTN = (
+        By.XPATH,
+        "//a[normalize-space()='Next']"
+    )
+
+    PREVIOUS_BTN = (
+        By.XPATH,
+        "//a[normalize-space()='Previous']"
+    )
+
+    PAGE_NUMBER = (
+        "//a[normalize-space()='{}']"
+    )
+
+    # =====================================================
+    # PAGE LOAD
+    # =====================================================
 
     PAGE_LOADED_MARKER = (
-        By.XPATH, "//table[contains(@class,'dataTable')]"
+        By.ID,
+        "crudTable"
     )
 
-    # ----------------- ACTIONS -----------------
-    ACTION_SEND_EMAIL = (By.XPATH, "//a[normalize-space()='Send Email']")
+    # ==========================
+    # PANEL FILTER
+    # ==========================
 
-    ACTION_FOLLOW_UP = (
+    PANEL_NAME = (
+        By.NAME,
+        "name"
+    )
+
+    PANEL_EMAIL = (
+        By.NAME,
+        "business_email"
+    )
+
+    PANEL_COMPANY = (
+        By.NAME,
+        "company"
+    )
+
+    # PANEL_STATUS = (
+    #     By.XPATH,
+    #     "//label[contains(text(),'Status')]/following::div[contains(@class,'choices')][1]"
+    # )
+
+    PANEL_STATUS = (
         By.XPATH,
-        "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//a[normalize-space()='Follow Up']"
+        "//label[normalize-space()='Status']/following::div[contains(@class,'choices')][1]"
     )
 
-    # ----------------- NAVIGATION -----------------
+    PANEL_STATUS_OPTION = (
+        "//li[contains(text(),'{}')]"
+    )
+
+    PANEL_DATE = (
+        By.ID,
+        "date_range"
+    )
+
+    def get_first_row_id(self):
+        return self.get_text(self.FIRST_ROW_ID).strip()
+
+    def get_first_row_name(self):
+        return self.get_text(self.FIRST_ROW_NAME).strip()
+
+    def get_first_row_email(self):
+        return self.get_text(self.FIRST_ROW_EMAIL).strip()
+
+    def get_first_row_company(self):
+        return self.get_text(self.FIRST_ROW_COMPANY).strip()
+
+    def get_first_row_status(self):
+        return self.get_text(self.FIRST_ROW_STATUS).strip()
+
+    # =====================================================
+    # NAVIGATION
+    # =====================================================
+
+    def open_filter_panel(self):
+
+        self.click(
+            self.FILTER_PANEL_BTN
+        )
+
+        WebDriverWait(
+            self.driver,
+            10
+        ).until(
+            EC.visibility_of_element_located(
+                self.PANEL_NAME
+            )
+        )
+
+    def panel_filter_by_name(
+            self,
+            name
+    ):
+
+        self.open_filter_panel()
+
+        self.type(
+            self.PANEL_NAME,
+            name
+        )
+
+        self.click(
+            self.APPLY_BTN
+        )
+
+        self.wait_for_results()
+
+    def panel_filter_by_email(
+            self,
+            email
+    ):
+
+        self.open_filter_panel()
+
+        self.type(
+            self.PANEL_EMAIL,
+            email
+        )
+
+        self.click(
+            self.APPLY_BTN
+        )
+
+        self.wait_for_results()
+
+    def panel_filter_by_company(
+            self,
+            company
+    ):
+
+        self.open_filter_panel()
+
+        self.type(
+            self.PANEL_COMPANY,
+            company
+        )
+
+        self.click(
+            self.APPLY_BTN
+        )
+
+        self.wait_for_results()
+
     def goto_page(self):
-        self.driver.get("https://beta.digitathya.com/admin/enquires?reset_filters=1")
-        self.wait_for_results()
 
-    def wait_for_results(self):
-        WebDriverWait(self.driver, self.timeout).until(
-            lambda d: d.find_elements(*self.FIRST_ROW)
-                      or d.find_elements(*self.NO_DATA_ROW)
+        self.driver.get(
+            "https://beta.digitathya.com/admin/enquires?reset_filters=1"
         )
 
-    def wait_first_row_loaded(self, timeout=10):
-        WebDriverWait(self.driver, timeout).until(
-            lambda d: d.find_elements(*self.FIRST_ROW)
-                      or d.find_elements(*self.NO_DATA_ROW)
+        self.wait_for_results()
+
+    # =====================================================
+    # WAITS
+    # =====================================================
+
+
+
+    def panel_filter_select_first_status(self):
+
+        self.open_filter_panel()
+
+        wait = WebDriverWait(
+            self.driver,
+            20
         )
 
-    # ----------------- SEARCH -----------------
-    def search(self, text):
-        self.wait_for_page_loaded()
-        self.type(self.SEARCH_BOX, text)
-        self.click(self.SEARCH_BTN)  # 🔑 important
-        self.wait_for_results()
-
-    # ----------------- STATUS FILTER -----------------
-    def filter_by_status(self, status):
-        dropdown = self.wait(self.STATUS_SELECT)
-        Select(dropdown).select_by_visible_text(status)
-        self.click(self.SEARCH_BTN)  # 🔑 required
-        self.wait_for_results()
-
-    # ----------------- ENTRIES PER PAGE -----------------
-    def set_entries_per_page(self, value):
-        dropdown = self.wait(self.ENTRIES_DROPDOWN)
-        Select(dropdown).select_by_value(str(value))
-        time.sleep(0.4)
-        self.wait_for_results()
-
-    # ----------------- PAGINATION -----------------
-    def click_next(self):
-        self.click(self.NEXT_BTN)
-        time.sleep(0.4)
-        self.wait_for_results()
-
-    def click_previous(self):
-        self.click(self.PREV_BTN)
-        time.sleep(0.4)
-        self.wait_for_results()
-
-    def go_to_page(self, number):
-        locator = (By.XPATH, self.PAGE_NUMBER.format(number))
-        self.click(locator)
-        time.sleep(0.4)
-        self.wait_for_results()
-
-    # ----------------- ACTION MENU -----------------
-    def open_action_menu(self):
-        self.click(self.ACTION_BTN)
-
-    def click_view(self):
-        self.click(self.ACTION_VIEW)
-
-    def click_edit(self):
-        self.click(self.ACTION_EDIT)
-
-    # ----------------- CREATED DATE HANDLER -----------------
-    def get_all_created_dates(self):
-        rows = self.driver.find_elements(*self.CREATED_AT_COL)
-        result = []
-        for r in rows:
-            try:
-                dt = datetime.strptime(r.text.strip(), "%d %b %Y %I:%M %p").date()
-                result.append(dt)
-            except:
-                pass
-        return result
-
-    # ----------------- INLINE DATE FILTER -----------------
-    def filter_inline_created_at(self, start, end):
-        self.click(self.INLINE_CREATED_AT)
-
-        WebDriverWait(self.driver, 5).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "flatpickr-calendar"))
+        dropdown = wait.until(
+            EC.element_to_be_clickable(
+                self.PANEL_STATUS
+            )
         )
 
-        picker = FlatpickrRangePicker(self.driver)
-        picker.select_range(start, end)
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            dropdown
+        )
 
-        self.click(self.SEARCH_BTN)  # 🔑 mandatory
-        self.wait_for_results()
+        time.sleep(1)
 
-    # ----------------- PANEL DATE FILTER -----------------
-    def filter_panel_created_at(self, start, end):
-        self.click(self.FILTER_PANEL_BTN)
-        time.sleep(0.3)
+        self.driver.execute_script(
+            "arguments[0].click();",
+            dropdown
+        )
 
-        self.click(self.PANEL_DATE_RANGE)
-        picker = FlatpickrRangePicker(self.driver)
-        ok = picker.select_range(start, end)
+        time.sleep(1)
+
+        active = self.driver.switch_to.active_element
+
+        active.send_keys(Keys.ENTER)
+        selected_status = self.get_text(
+            self.PANEL_STATUS
+        ).strip()
+        time.sleep(1)
 
         self.click(self.APPLY_BTN)
-        self.close_filter_panel()
+
         self.wait_for_results()
-        return ok
+        return selected_status
 
-    # ----------------- HELPERS -----------------
-    def is_row_present(self):
-        return bool(self.driver.find_elements(*self.FIRST_ROW))
+    def panel_filter_by_date(
+            self,
+            start,
+            end
+    ):
 
-    def has_no_results(self):
-        return bool(self.driver.find_elements(*self.NO_DATA_ROW))
+        self.open_filter_panel()
+
+        self.click(
+            self.PANEL_DATE
+        )
+
+        picker = FlatpickrRangePicker(
+            self.driver
+        )
+
+        picker.select_range(
+            start,
+            end
+        )
+
+        self.click(
+            self.APPLY_BTN
+        )
+
+        self.wait_for_results()
+    def wait_for_results(self):
+
+        WebDriverWait(self.driver, 15).until(
+            lambda d:
+            d.find_elements(*self.FIRST_ROW)
+            or
+            d.find_elements(*self.NO_DATA)
+        )
+
+    def wait_for_page_loaded(self):
+
+        WebDriverWait(self.driver, 15).until(
+            EC.presence_of_element_located(
+                self.PAGE_LOADED_MARKER
+            )
+        )
+
+    # =====================================================
+    # SEARCH
+    # =====================================================
+
+    def search(self, text):
+
+        self.type(self.SEARCH_BOX, text)
+
+        self.click(self.SEARCH_BTN)
+
+        self.wait_for_results()
+
+    def search_first_enquiry_name(self):
+
+        name = self.get_first_row_name()
+
+        self.search(name)
+
+        return name
+
+    def search_first_enquiry_email(self):
+
+        email = self.get_first_row_email()
+
+        self.search(email)
+
+        return email
+
+    # =====================================================
+    # GETTERS
+    # =====================================================
+
+    def get_first_row_name(self):
+
+        return self.get_text(
+            self.FIRST_ROW_NAME
+        ).strip()
+
+    def get_first_row_email(self):
+
+        return self.get_text(
+            self.FIRST_ROW_EMAIL
+        ).strip()
+
+    def get_first_row_company(self):
+
+        return self.get_text(
+            self.FIRST_ROW_COMPANY
+        ).strip()
+
+    def get_first_row_status(self):
+
+        return self.get_text(
+            self.FIRST_ROW_STATUS
+        ).strip()
+
+    # =====================================================
+    # STATUS FILTER
+    # =====================================================
+
+    def filter_by_status(self, status):
+
+        dropdown = WebDriverWait(
+            self.driver,
+            10
+        ).until(
+            EC.presence_of_element_located(
+                self.STATUS_DROPDOWN
+            )
+        )
+
+        Select(dropdown).select_by_visible_text(status)
+
+        self.wait_for_results()
+
+    # =====================================================
+    # DATE FILTER
+    # =====================================================
+
+    def filter_by_date(
+            self,
+            start_date,
+            end_date,
+            from_panel=False
+    ):
+
+        if from_panel:
+
+            self.click(
+                self.FILTER_PANEL_BTN
+            )
+
+            time.sleep(1)
+
+            self.click(
+                self.PANEL_DATE_FILTER
+            )
+
+        else:
+
+            self.click(
+                self.INLINE_DATE_FILTER
+            )
+
+        picker = FlatpickrRangePicker(
+            self.driver
+        )
+
+        picker.select_range(
+            start_date,
+            end_date
+        )
+
+        if from_panel:
+
+            self.click(
+                self.APPLY_BTN
+            )
+
+            self.close_filter_panel()
+
+        else:
+
+            self.click(
+                self.SEARCH_BTN
+            )
+
+        self.wait_for_results()
 
     def close_filter_panel(self):
+
         try:
-            if self.driver.find_elements(*self.FILTER_CLOSE_ICON):
-                self.click(self.FILTER_CLOSE_ICON)
+
+            if self.driver.find_elements(
+                    *self.FILTER_CLOSE_ICON
+            ):
+                self.click(
+                    self.FILTER_CLOSE_ICON
+                )
+
         except:
             pass
 
-    def get_first_row_status(self):
-        el = self.wait(self.STATUS_BADGE)
-        return el.text.strip()
+    # =====================================================
+    # ENTRIES
+    # =====================================================
 
+    def set_entries_per_page(self, value):
 
-    def wait_for_page_loaded(self):
-        WebDriverWait(self.driver, 15).until(
-            EC.presence_of_element_located(self.PAGE_LOADED_MARKER)
+        dropdown = Select(
+            self.driver.find_element(
+                *self.ENTRIES_DROPDOWN
+            )
         )
 
+        dropdown.select_by_value(
+            str(value)
+        )
+
+        self.wait_for_results()
+
+    # =====================================================
+    # PAGINATION
+    # =====================================================
+
+    def click_next(self):
+
+        self.click(
+            self.NEXT_BTN
+        )
+
+        self.wait_for_results()
+
+    def click_previous(self):
+
+        self.click(
+            self.PREVIOUS_BTN
+        )
+
+        self.wait_for_results()
+
+    def go_to_page(self, number):
+
+        self.click((
+            By.XPATH,
+            self.PAGE_NUMBER.format(number)
+        ))
+
+        self.wait_for_results()
+
+    # =====================================================
+    # ACTIONS
+    # =====================================================
+
+    def open_first_row_actions(self):
+
+        self.click(
+            self.FIRST_ROW_THREE_DOTS
+        )
+
+        time.sleep(1)
+
+    def click_view(self):
+
+        self.open_first_row_actions()
+
+        self.click(
+            self.VIEW_OPTION
+        )
+
+    def click_edit(self):
+
+        self.open_first_row_actions()
+
+        self.click(
+            self.EDIT_OPTION
+        )
 
     def click_send_email(self):
-        self.click(self.ACTION_SEND_EMAIL)
+
+        self.open_first_row_actions()
+
+        self.click(
+            self.SEND_EMAIL_OPTION
+        )
 
     def click_follow_up(self):
-        """Click Follow Up from action menu"""
-        self.wait(self.ACTION_FOLLOW_UP)
-        self.click(self.ACTION_FOLLOW_UP)
+
+        self.open_first_row_actions()
+
+        self.click(
+            self.FOLLOW_UP_OPTION
+        )
+
+    # =====================================================
+    # VALIDATIONS
+    # =====================================================
+
+    def is_row_present(self):
+
+        return len(
+            self.driver.find_elements(
+                *self.FIRST_ROW
+            )
+        ) > 0
+
+    def has_no_data(self):
+
+        return len(
+            self.driver.find_elements(
+                *self.NO_DATA
+            )
+        ) > 0
+
+    def get_all_created_dates(self):
+
+        rows = self.driver.find_elements(
+            *self.CREATED_AT_COLUMN
+        )
+
+        dates = []
+
+        for row in rows:
+
+            try:
+
+                dt = datetime.strptime(
+                    row.text.strip(),
+                    "%d %b %Y %I:%M %p"
+                ).date()
+
+                dates.append(dt)
+
+            except Exception:
+                pass
+
+        return dates
+
+    def verify_search_result(self, expected_text):
+
+        row_text = self.get_text(
+            self.FIRST_ROW
+        )
+
+        return expected_text.lower() in row_text.lower()

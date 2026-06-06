@@ -1,12 +1,12 @@
-2026-05-30 09:49:52,284 [INFO] 📘 Logger initialized — fresh run, old logs cleared
-2026-05-30 09:49:54,590 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-05-30 09:49:54,595 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-05-30 09:49:55,297 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-05-30 09:49:56,062 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
-2026-05-30 09:49:56,063 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
-2026-05-30 09:49:56,995 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
-2026-05-30 09:49:56,996 [INFO] Waiting for: ('xpath', "//p[normalize-space()='Dashboard']")
-2026-05-30 09:49:59,595 [INFO] Waiting for: ('xpath', "//span[contains(@class,'user-name-text')]")
-2026-05-30 09:49:59,707 [INFO] Got text from ('xpath', "//span[contains(@class,'user-name-text')]"): Load testing Superadmin two
-2026-05-30 09:50:32,345 [INFO] Waiting for: ('xpath', '//table/tbody/tr[1]/td[2]')
-2026-05-30 09:50:32,638 [INFO] Got text from ('xpath', '//table/tbody/tr[1]/td[2]'): AutoUseroAZHrfdC Role
+2026-06-03 13:27:52,356 [INFO] 📘 Logger initialized — fresh run, old logs cleared
+2026-06-03 13:27:54,874 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-06-03 13:27:54,875 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-06-03 13:27:55,593 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-06-03 13:27:56,597 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2026-06-03 13:27:56,598 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2026-06-03 13:28:00,232 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2026-06-03 13:28:00,232 [INFO] Waiting for: ('xpath', "//p[normalize-space()='Dashboard']")
+2026-06-03 13:28:00,317 [INFO] Waiting for: ('xpath', "//span[contains(@class,'user-name-text')]")
+2026-06-03 13:28:00,433 [INFO] Got text from ('xpath', "//span[contains(@class,'user-name-text')]"): Load testing Superadmin two
+2026-06-03 13:28:43,389 [INFO] Waiting for: ('xpath', '//table/tbody/tr[1]/td[2]')
+2026-06-03 13:28:43,435 [INFO] Got text from ('xpath', '//table/tbody/tr[1]/td[2]'): AutoUserPLNwsLsV

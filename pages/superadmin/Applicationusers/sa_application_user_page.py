@@ -1,23 +1,30 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait, Select
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
-from pages.common.base_page import BasePage
 import time
 
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-class SAUserListPage(BasePage):
+from pages.common.base_page import BasePage
+from utilities.flatpickr import FlatpickrRangePicker
 
-    # =====================================================
-    # SEARCH
-    # =====================================================
-
+class SAApplicationUserPage(BasePage):
     SEARCH_BOX = (By.ID, "search-vale")
     SEARCH_BTN = (By.ID, "search-btn")
 
     # =====================================================
     # STATUS FILTER
     # =====================================================
+    DATE_FILTER = (
+        By.XPATH,
+        "//input[@type='text' and @placeholder='Filter by : Created At']"
+    )
+
+    FILTER_BTN = (
+        By.XPATH,
+        "//button[contains(text(),'Filter')]"
+    )
 
     STATUS_DROPDOWN = (
         By.XPATH,
@@ -42,7 +49,6 @@ class SAUserListPage(BasePage):
         By.XPATH,
         "//table/tbody/tr[1]/td[2]"
     )
-
 
     # =====================================================
     # ENTRIES
@@ -73,12 +79,10 @@ class SAUserListPage(BasePage):
     # PAGE LOAD
     # =====================================================
 
-
     VIEW_OPTION = (
         By.XPATH,
         "//a[contains(.,'View')]"
     )
-
 
     FIRST_ROW_THREE_DOTS = (
         By.XPATH,
@@ -138,10 +142,11 @@ class SAUserListPage(BasePage):
         By.XPATH,
         "//table/tbody/tr[1]//span[contains(text(),'Suspended')]"
     )
+
     def goto_page(self):
 
         self.driver.get(
-            "https://beta.digitathya.com/admin/user?reset_filters=1"
+            "https://beta.digitathya.com/admin/onboarded-user?reset_filters=1"
         )
 
         self.wait_for_results()
@@ -202,6 +207,7 @@ class SAUserListPage(BasePage):
             activate.click()
 
             return "Active"
+
     def confirm_suspend(self):
 
         self.safe_click(self.CONFIRM_SUSPEND_BTN)
@@ -226,6 +232,7 @@ class SAUserListPage(BasePage):
         )
 
         time.sleep(2)
+
     def click_view(self):
         self.open_first_row_actions()
         self.safe_click(self.VIEW_OPTION)
@@ -297,24 +304,8 @@ class SAUserListPage(BasePage):
 
         return "Unknown"
 
-    def click_role_permissions(self):
 
-        # Re-open 3 dots menu
-        self.click_three_dots()
 
-        role_btn = WebDriverWait(self.driver, 20).until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                "//a[contains(.,'Role & Permissions')]"
-            ))
-        )
-
-        self.driver.execute_script(
-            "arguments[0].click();",
-            role_btn
-        )
-
-        time.sleep(3)
     def wait_for_results(self):
 
         WebDriverWait(self.driver, 15).until(
@@ -368,9 +359,9 @@ class SAUserListPage(BasePage):
 
         time.sleep(1)
 
-        ActionChains(self.driver)\
-            .move_to_element(dropdown)\
-            .click()\
+        ActionChains(self.driver) \
+            .move_to_element(dropdown) \
+            .click() \
             .perform()
 
         print("Status dropdown clicked")
@@ -384,9 +375,9 @@ class SAUserListPage(BasePage):
             ))
         )
 
-        ActionChains(self.driver)\
-            .move_to_element(option)\
-            .click()\
+        ActionChains(self.driver) \
+            .move_to_element(option) \
+            .click() \
             .perform()
 
         print(f"Selected status = {status}")
@@ -411,7 +402,7 @@ class SAUserListPage(BasePage):
 
         self.wait_for_results()
 
-    # =====================================================
+    # ===============+++======================================
     # PAGINATION
     # =====================================================
 
@@ -487,21 +478,28 @@ class SAUserListPage(BasePage):
             self.FIRST_ROW_NAME
         ).strip()
 
-    def update_user_name(self, new_name):
-        WebDriverWait(self.driver, 20).until(
-            EC.visibility_of_element_located(self.EDIT_NAME_INPUT)
+    def filter_by_date(self, start, end):
+        wait = WebDriverWait(self.driver, 15)
+
+        date_input = wait.until(
+            EC.presence_of_element_located(self.DATE_FILTER)
         )
 
-        name_field = self.driver.find_element(*self.EDIT_NAME_INPUT)
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            date_input
+        )
 
-        name_field.clear()
+        self.driver.execute_script(
+            "arguments[0].click();",
+            date_input
+        )
 
         time.sleep(1)
 
-        name_field.send_keys(new_name)
+        picker = FlatpickrRangePicker(self.driver)
+        picker.select_range(start, end)
 
-        time.sleep(1)
+        self.click(self.FILTER_BTN)
 
-        self.safe_click(self.UPDATE_BTN)
-
-        time.sleep(4)
+        self.wait_for_results()
