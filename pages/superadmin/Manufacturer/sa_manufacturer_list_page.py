@@ -65,6 +65,20 @@ class SAManufacturerListPage(BasePage):
         By.XPATH,
         "//button[contains(@class,'swal2-confirm') and normalize-space()='OK']"
     )
+    FIRST_ROW_COMPANY = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[1]"
+    )
+
+    FIRST_ROW_ACTIONS = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[last()]//button"
+    )
+
+    SEND_INVITE = (
+        By.XPATH,
+        "//a[contains(.,'Send Invite')]"
+    )
 
     # =====================================================================
     # 9. DATE FILTER
@@ -76,6 +90,38 @@ class SAManufacturerListPage(BasePage):
     # =====================================================================
     PAGE_LOADED_MARKER = (By.XPATH, "//table[contains(@class,'dataTable')]")
 
+
+    FIRST_COMPANY_NAME = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[1]"
+    )
+
+    def search(self, value):
+
+        self.type(
+            self.SEARCH_BOX,
+            value
+        )
+
+        time.sleep(2)
+
+    def get_first_company_name(self):
+
+        return self.get_text(
+            self.FIRST_COMPANY_NAME
+        )
+
+    def is_company_present(self, company_name):
+
+        try:
+
+            first_name = self.get_first_company_name()
+
+            return company_name.lower() in first_name.lower()
+
+        except Exception:
+
+            return False
     # =====================================================================
     # 11. NAVIGATION
     # =====================================================================
@@ -243,3 +289,28 @@ class SAManufacturerListPage(BasePage):
         )
 
         return len(rows) > 0
+
+    def get_first_row_company_name(self):
+
+        return self.get_text(
+            self.FIRST_ROW_COMPANY
+        ).strip()
+
+    def open_first_row_actions(self):
+
+        self.click(
+            self.FIRST_ROW_ACTIONS
+        )
+
+    def search_company(self, company_name):
+
+        self.clear(self.SEARCH_BOX)
+
+        self.type(
+            self.SEARCH_BOX,
+            company_name
+        )
+
+        self.click(
+            self.SEARCH_BTN
+        )

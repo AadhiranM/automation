@@ -84,7 +84,6 @@
   "tests/superadmin/Reports/test_scheduled_reports_list.py::TestScheduledReports::test_entries_per_page[20]": true,
   "tests/superadmin/Reports/test_scheduled_reports_list.py::TestScheduledReports::test_activate_schedule_report": true,
   "tests/superadmin/Enquiries/test_enquiry_assign_positive.py::TestEnquiryAssignUnassignPositive::test_assign_internal_user_success": true,
-  "tests/superadmin/Enquiries/test_enquiry_followup_positive.py::TestFollowUpPositive::test_add_followup_success": true,
   "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_date": true,
   "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_format[XLSX]": true,
   "tests/superadmin/Reports/test_download_reports.py::TestDownloadReports::test_filter_by_status[Pending]": true,
@@ -95,8 +94,13 @@
   "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_inline_filter_future_date": true,
   "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_panel_filter_future_date": true,
   "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_clear_panel_filter_without_applying": true,
-  "tests/superadmin/Enquiries/test_enquiry_sendemail_positive.py::TestSendEmailPositive::test_send_email": true,
-  "tests/superadmin/Enquiries/test_enquiry_sendemail_positive.py::TestSendEmailPositive::test_send_email_and_verify_history": true,
   "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_future_date_filter_inline": true,
-  "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_future_date_filter_panel": true
+  "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_future_date_filter_panel": true,
+  "tests/superadmin/Manufacturer/test_manufacturer_kyc_positive.py::TestKYCPositive::test_kyc_success": true,
+  "tests/superadmin/Manufacturer/test_manufacturer_create_negative.py::TestManufacturerCreateNegative::test_create_manufacturer_with_empty_fields": true,
+  "tests/superadmin/Manufacturer/test_manufacturer_create_negative.py::TestManufacturerCreateNegative::test_create_manufacturer_with_invalid_email_format": true,
+  "tests/superadmin/Manufacturer/test_manufacturer_filters_positive.py::TestManufacturerFilters::test_filter_by_clear_filter": true,
+  "tests/superadmin/QRManagement/test_category_create_negative.py::TestCategoryCreateNegative::test_all_fields_blank": true,
+  "tests/superadmin/QRManagement/test_category_create_positive.py::TestCategoryCreatePositive::test_create_category_inactive": true,
+  "tests/superadmin/QRManagement/test_category_create_positive.py::TestCategoryCreatePositive::test_create_category_active": true
 }

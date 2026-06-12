@@ -1,5 +1,7 @@
 import random
 import string
+import time
+from datetime import datetime
 
 def generate_category_name():
     random_str = ''.join(random.choices(string.ascii_letters, k=8))
@@ -43,3 +45,24 @@ def generate_mobile_number():
 
 def generate_password():
     return "Test@123"
+
+
+def unique_id():
+
+    return datetime.now().strftime(
+        "%Y%m%d%H%M%S"
+    )
+
+def generate_manufacturer_name():
+
+    return (
+        f"TechNova "
+        f"{unique_id()}"
+    )
+
+def generate_mailinator_email():
+
+    return (
+        f"technova{unique_id()}"
+        "@mailinator.com"
+    )

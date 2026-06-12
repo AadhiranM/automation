@@ -96,11 +96,15 @@ class SACategoryCreatePage(BasePage):
     # ACTIONS
     # =========================================================
 
-    def select_manufacturer(self, name):
-        # Step 1: click dropdown
+    def select_manufacturer(self):
+        """
+        Select first available manufacturer.
+        CI/CD safe.
+        No dependency on manufacturer name.
+        """
+
         self.click(self.MANUFACTURER_DROPDOWN)
 
-        # Step 2: wait for active input
         search = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located((
                 By.XPATH,
@@ -108,16 +112,19 @@ class SACategoryCreatePage(BasePage):
             ))
         )
 
-        # Step 3: type slowly (IMPORTANT)
-        search.clear()
-        search.send_keys(name)
+        # allow choices.js to load records
+        time.sleep(1)
 
-        # Step 4: WAIT for dropdown to stabilize
-        time.sleep(1)  # 🔥 IMPORTANT (don’t remove now)
+        # trigger dropdown records
+        search.send_keys(" ")
 
-        # Step 5: press DOWN + ENTER (BEST for this UI)
+        time.sleep(1)
+
+        # select first available option
         search.send_keys(Keys.ARROW_DOWN)
         search.send_keys(Keys.ENTER)
+
+        time.sleep(1)
 
     def enter_category_name(self, name):
         WebDriverWait(self.driver, 10).until(

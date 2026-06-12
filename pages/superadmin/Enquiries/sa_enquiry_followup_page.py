@@ -1,5 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.wait import WebDriverWait
+
 from pages.common.base_page import BasePage
 
 
@@ -28,23 +30,46 @@ class SAEnquiryFollowUpPage(BasePage):
         "(//ul[contains(@class,'list-group')]//li)[1]"
     )
 
-    FOLLOWUP_SENDER = (
-        By.XPATH, "//strong[normalize-space()='Load testing Superadmin']")
-
-    FOLLOWUP_TIME = (
+    LATEST_FOLLOWUP_CARD = (
         By.XPATH,
-        "(//ul[contains(@class,'list-group')]//li)[1]//span[contains(@class,'comment-meta')]"
+        "(//ul[contains(@class,'list-group')]//li)[1]"
     )
 
-    FOLLOWUP_TEXT = (
-        By.XPATH,
-        "(//ul[contains(@class,'list-group')]//li)[1]//p"
-    )
+
 
     # Validation error
     CONTENT_ERROR = (By.ID, "content_error")
 
     # ---------------- METHODS ----------------
+    def wait_for_followup_refresh(
+            self,
+            expected_message
+    ):
+        WebDriverWait(
+            self.driver,
+            20
+        ).until(
+            lambda d:
+            expected_message in
+            d.find_element(
+                *self.LATEST_FOLLOWUP_CARD
+            ).text
+        )
+
+    def latest_followup_contains(
+            self,
+            expected_text
+    ):
+        card_text = self.get_text(
+            self.LATEST_FOLLOWUP_CARD
+        )
+
+        return (
+                expected_text
+                in
+                card_text
+        )
+
     def type_followup(self, text):
         """Safe CKEditor typing."""
         editor = self.is_visible(self.BODY)
@@ -60,13 +85,6 @@ class SAEnquiryFollowUpPage(BasePage):
         """Wait for success toast (auto screenshot handled by BasePage)."""
         return self.is_visible(self.SUCCESS_TOAST)
 
-    def get_latest_followup(self):
-        """Return dict → sender, time, message"""
-        return {
-            "sender": self.get_text(self.FOLLOWUP_SENDER).strip(),
-            "time": self.get_text(self.FOLLOWUP_TIME).strip(),
-            "message": self.get_text(self.FOLLOWUP_TEXT).strip(),
-        }
 
     def get_toast_text(self):
         toast = self.wait(self.SUCCESS_TOAST)

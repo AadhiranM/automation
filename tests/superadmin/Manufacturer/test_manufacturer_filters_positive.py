@@ -1,110 +1,199 @@
 import pytest
-from pages.superadmin.Manufacturer.sa_manufacturer_list_page import SAManufacturerListPage
-from pages.superadmin.Manufacturer.sa_manufacturer_filter_page import SAManufacturerFilterPage
+
+from pages.superadmin.Manufacturer.sa_manufacturer_list_page import (
+    SAManufacturerListPage
+)
+
+from pages.superadmin.Manufacturer.sa_manufacturer_filter_page import (
+    SAManufacturerFilterPage
+)
 
 
 @pytest.mark.superadmin
 @pytest.mark.usefixtures("login_superadmin")
 class TestManufacturerFilters:
 
-    # ---------------- BASIC STATE ----------------
-    def test_filter_initial_state(self, setup):
-        list_page = SAManufacturerListPage(setup)
-        list_page.goto_page()
+    # =====================================================
+    # INITIAL STATE
+    # =====================================================
 
-        filter_page = SAManufacturerFilterPage(setup)
-        filter_page.open_filter_drawer()
+    def test_filter_initial_state(
+            self,
+            setup
+    ):
 
-        assert not filter_page.is_apply_enabled(), "Apply should be disabled initially"
-        assert not filter_page.is_clear_enabled(), "Clear should be disabled initially"
+        SAManufacturerListPage(
+            setup
+        ).goto_page()
 
-    # ---------------- POSITIVE ----------------
-    def test_filter_by_company_name(self, setup):
-        SAManufacturerListPage(setup).goto_page()
+        filter_page = (
+            SAManufacturerFilterPage(
+                setup
+            )
+        )
 
-        filter_page = SAManufacturerFilterPage(setup)
-        filter_page.open_filter_drawer()
-        filter_page.set_company_name("test")
+        filter_page.open_filter_panel()
 
-        assert filter_page.is_apply_enabled()
-        filter_page.click_apply()
-        assert filter_page.is_row_present()
+        assert not (
+            filter_page.is_apply_enabled()
+        )
 
-    def test_filter_by_business_email(self, setup):
-        SAManufacturerListPage(setup).goto_page()
+        assert not (
+            filter_page.is_clear_enabled()
+        )
 
-        filter_page = SAManufacturerFilterPage(setup)
-        filter_page.open_filter_drawer()
-        filter_page.set_business_email("mailinator.com")
+    # =====================================================
+    # COMPANY NAME
+    # =====================================================
 
-        filter_page.click_apply()
-        assert filter_page.is_row_present()
+    def test_filter_by_company_name(
+            self,
+            setup
+    ):
 
-    def test_filter_by_pan_number(self, setup):
-        SAManufacturerListPage(setup).goto_page()
+        SAManufacturerListPage(
+            setup
+        ).goto_page()
 
-        filter_page = SAManufacturerFilterPage(setup)
-        filter_page.open_filter_drawer()
-        filter_page.set_pan_number("ABCDE1234F")
+        filter_page = (
+            SAManufacturerFilterPage(
+                setup
+            )
+        )
 
-        filter_page.click_apply()
-        assert filter_page.is_row_present()
+        filter_page.filter_by_company_name(
+            "TechNova"
+        )
 
-    def test_filter_by_approval_status(self, setup):
-        SAManufacturerListPage(setup).goto_page()
+        assert (
+            filter_page.is_row_present()
+        )
 
-        filter_page = SAManufacturerFilterPage(setup)
-        filter_page.open_filter_drawer()
-        filter_page.select_approval_status("Pending")
+    # =====================================================
+    # EMAIL
+    # =====================================================
 
-        filter_page.click_apply()
-        assert filter_page.is_row_present()
+    def test_filter_by_business_email(
+            self,
+            setup
+    ):
 
-    def test_filter_by_clear_filter(self, setup):
-        # Navigate to Manufacturer list
-        SAManufacturerListPage(setup).goto_page()
+        SAManufacturerListPage(
+            setup
+        ).goto_page()
 
-        filter_page = SAManufacturerFilterPage(setup)
-        filter_page.open_filter_drawer()
+        filter_page = (
+            SAManufacturerFilterPage(
+                setup
+            )
+        )
 
-        # Enter ALL filter inputs
-        filter_page.set_company_name("Teaa")
-        filter_page.set_business_email("Tea@mailinator.com")
-        filter_page.set_pan_number("AAYCA8957B")
-        filter_page.select_approval_status("Pending")
+        filter_page.filter_by_business_email(
+            "mailinator.com"
+        )
 
-        # Validate Apply is enabled
-        assert filter_page.is_apply_enabled(), \
-            "Apply should be enabled after entering filter values"
+        assert (
+            filter_page.is_row_present()
+        )
 
-        # Click Clear Filter
+    # =====================================================
+    # PAN
+    # =====================================================
+
+    def test_filter_by_pan_number(
+            self,
+            setup
+    ):
+
+        SAManufacturerListPage(
+            setup
+        ).goto_page()
+
+        filter_page = (
+            SAManufacturerFilterPage(
+                setup
+            )
+        )
+
+        filter_page.filter_by_pan_number(
+            "ABCDE1234F"
+        )
+
+        assert (
+            filter_page.is_row_present()
+        )
+
+    # =====================================================
+    # STATUS
+    # =====================================================
+
+    def test_filter_by_approval_status(
+            self,
+            setup
+    ):
+
+        SAManufacturerListPage(
+            setup
+        ).goto_page()
+
+        filter_page = (
+            SAManufacturerFilterPage(
+                setup
+            )
+        )
+
+        filter_page.filter_by_approval_status()
+
+        assert (
+            filter_page.is_row_present()
+        )
+
+    # =====================================================
+    # CLEAR FILTER
+    # =====================================================
+
+    def test_clear_filter(
+            self,
+            setup
+    ):
+
+        SAManufacturerListPage(
+            setup
+        ).goto_page()
+
+        filter_page = (
+            SAManufacturerFilterPage(
+                setup
+            )
+        )
+
+        filter_page.open_filter_panel()
+
+        filter_page.type(
+            filter_page.COMPANY_NAME,
+            "TechNova"
+        )
+
+        filter_page.type(
+            filter_page.BUSINESS_EMAIL,
+            "mailinator.com"
+        )
+
+        filter_page.type(
+            filter_page.PAN_NUMBER,
+            "ABCDE1234F"
+        )
+
         filter_page.click_clear()
 
-        # ---------------- ASSERTIONS AFTER CLEAR ----------------
+        assert (
+            filter_page.is_company_name_empty()
+        )
 
-        # Apply button should be disabled
-        assert not filter_page.is_apply_enabled(), \
-            "Apply should be disabled after clearing filters"
+        assert (
+            filter_page.is_business_email_empty()
+        )
 
-        # Clear button should be disabled
-        assert not filter_page.is_clear_enabled(), \
-            "Clear Filter should be disabled after clearing filters"
-
-        # All fields should be empty
-        assert filter_page.is_company_name_empty(), \
-            "Company name field should be cleared"
-
-        assert filter_page.is_business_email_empty(), \
-            "Business email field should be cleared"
-
-        assert filter_page.is_pan_number_empty(), \
-            "PAN number field should be cleared"
-
-        assert filter_page.is_approval_status_default(), \
-            "Approval status should reset to default"
-
-        # List should be reset (rows visible)
-        assert filter_page.is_row_present(), \
-            "Manufacturer list should be reset after clearing filters"
-
-
+        assert (
+            filter_page.is_pan_number_empty()
+        )

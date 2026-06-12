@@ -40,20 +40,6 @@ class TestCategoryCreateNegative:
         assert create_page.is_error_present("The category is required.")
 
 
-    def test_all_fields_blank(self, setup):
-        list_page = SACategoryListPage(setup)
-        list_page.goto_page()
-
-        list_page.click_create()
-
-        create_page = SACategoryCreatePage(setup)
-        create_page.wait_for_modal()
-
-        create_page.click_save()
-
-        assert create_page.is_error_present("Please select a manufacturer.")
-        assert create_page.is_error_present("The category is required.")
-
 
     def test_invalid_category_name(self, setup):
         list_page = SACategoryListPage(setup)

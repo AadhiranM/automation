@@ -425,31 +425,7 @@ class SAEnquiryListPage(BasePage):
     # GETTERS
     # =====================================================
 
-    def get_first_row_name(self):
 
-        return self.get_text(
-            self.FIRST_ROW_NAME
-        ).strip()
-
-    def get_first_row_email(self):
-
-        return self.get_text(
-            self.FIRST_ROW_EMAIL
-        ).strip()
-
-    def get_first_row_company(self):
-
-        return self.get_text(
-            self.FIRST_ROW_COMPANY
-        ).strip()
-
-    def get_first_row_status(self):
-
-        return self.get_text(
-            self.FIRST_ROW_STATUS
-        ).strip()
-
-    # =====================================================
     # STATUS FILTER
     # =====================================================
 
@@ -678,3 +654,14 @@ class SAEnquiryListPage(BasePage):
         )
 
         return expected_text.lower() in row_text.lower()
+
+    def open_actions(self):
+
+        self.click(
+            (
+                By.XPATH,
+                "//table/tbody/tr[1]/td[last()]//button"
+            )
+        )
+
+        time.sleep(1)

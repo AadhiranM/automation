@@ -1,156 +1,28 @@
-2026-03-27 00:12:22,784 [INFO] 📘 Logger initialized — fresh run, old logs cleared
-2026-03-27 00:12:24,691 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-03-27 00:12:24,692 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-03-27 00:12:26,784 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-03-27 00:12:27,023 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
-2026-03-27 00:12:27,024 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
-2026-03-27 00:12:31,070 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
-2026-03-27 00:12:32,267 [INFO] Clicking: ('xpath', "//span[contains(@id,'select2-business_type_id-container')]")
-2026-03-27 00:12:32,268 [INFO] Waiting for: ('xpath', "//span[contains(@id,'select2-business_type_id-container')]")
-2026-03-27 00:12:32,663 [INFO] Clicked successfully: ('xpath', "//span[contains(@id,'select2-business_type_id-container')]")
-2026-03-27 00:12:32,879 [INFO] Clicking: ('xpath', "//span[contains(@id,'select2-industry_type_id-container')]")
-2026-03-27 00:12:32,879 [INFO] Waiting for: ('xpath', "//span[contains(@id,'select2-industry_type_id-container')]")
-2026-03-27 00:12:33,265 [INFO] Clicked successfully: ('xpath', "//span[contains(@id,'select2-industry_type_id-container')]")
-2026-03-27 00:12:33,996 [INFO] Clicking: ('xpath', "//button[normalize-space()='Next']")
-2026-03-27 00:12:33,996 [INFO] Waiting for: ('xpath', "//button[normalize-space()='Next']")
-2026-03-27 00:12:54,541 [ERROR] [WAIT FAILED] ('xpath', "//button[normalize-space()='Next']") → Message: 
-Stacktrace:
-	chromedriver!GetHandleVerifier [0x7ff6673829c5+2ed785]
-	chromedriver!GetHandleVerifier [0x7ff6670aa0d0+14e90]
-	chromedriver!(No symbol) [0x7ff666e0db2d]
-	chromedriver!(No symbol) [0x7ff666e66b9e]
-	chromedriver!(No symbol) [0x7ff666e66eac]
-	chromedriver!(No symbol) [0x7ff666eb6fe7]
-	chromedriver!(No symbol) [0x7ff666eb3b9b]
-	chromedriver!(No symbol) [0x7ff666e59298]
-	chromedriver!(No symbol) [0x7ff666e5a183]
-	chromedriver!GetHandleVerifier [0x7ff6673ade0d+318bcd]
-	chromedriver!GetHandleVerifier [0x7ff6673a8588+313348]
-	chromedriver!GetHandleVerifier [0x7ff6673c9d7a+334b3a]
-	chromedriver!GetHandleVerifier [0x7ff6670c6785+31545]
-	chromedriver!GetHandleVerifier [0x7ff6670cfacc+3a88c]
-	chromedriver!GetHandleVerifier [0x7ff6670b3634+1e3f4]
-	chromedriver!GetHandleVerifier [0x7ff6670b37e6+1e5a6]
-	chromedriver!GetHandleVerifier [0x7ff667097e37+2bf7]
-	KERNEL32!BaseThreadInitThunk [0x7ffcde40e8d7+17]
-	ntdll!RtlUserThreadStart [0x7ffce02ac48c+2c]
-
-2026-03-27 00:12:54,689 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260327_001254.png
-2026-03-27 00:12:54,689 [WARNING] [CLICK FAILED] Attempt 1/3 for ('xpath', "//button[normalize-space()='Next']") → Message: 
-Stacktrace:
-	chromedriver!GetHandleVerifier [0x7ff6673829c5+2ed785]
-	chromedriver!GetHandleVerifier [0x7ff6670aa0d0+14e90]
-	chromedriver!(No symbol) [0x7ff666e0db2d]
-	chromedriver!(No symbol) [0x7ff666e66b9e]
-	chromedriver!(No symbol) [0x7ff666e66eac]
-	chromedriver!(No symbol) [0x7ff666eb6fe7]
-	chromedriver!(No symbol) [0x7ff666eb3b9b]
-	chromedriver!(No symbol) [0x7ff666e59298]
-	chromedriver!(No symbol) [0x7ff666e5a183]
-	chromedriver!GetHandleVerifier [0x7ff6673ade0d+318bcd]
-	chromedriver!GetHandleVerifier [0x7ff6673a8588+313348]
-	chromedriver!GetHandleVerifier [0x7ff6673c9d7a+334b3a]
-	chromedriver!GetHandleVerifier [0x7ff6670c6785+31545]
-	chromedriver!GetHandleVerifier [0x7ff6670cfacc+3a88c]
-	chromedriver!GetHandleVerifier [0x7ff6670b3634+1e3f4]
-	chromedriver!GetHandleVerifier [0x7ff6670b37e6+1e5a6]
-	chromedriver!GetHandleVerifier [0x7ff667097e37+2bf7]
-	KERNEL32!BaseThreadInitThunk [0x7ffcde40e8d7+17]
-	ntdll!RtlUserThreadStart [0x7ffce02ac48c+2c]
-
-2026-03-27 00:12:55,191 [INFO] Clicking: ('xpath', "//button[normalize-space()='Next']")
-2026-03-27 00:12:55,192 [INFO] Waiting for: ('xpath', "//button[normalize-space()='Next']")
-2026-03-27 00:13:05,220 [ERROR] [WAIT FAILED] ('xpath', "//button[normalize-space()='Next']") → Message: 
-Stacktrace:
-	chromedriver!GetHandleVerifier [0x7ff6673829c5+2ed785]
-	chromedriver!GetHandleVerifier [0x7ff6670aa0d0+14e90]
-	chromedriver!(No symbol) [0x7ff666e0db2d]
-	chromedriver!(No symbol) [0x7ff666e66b9e]
-	chromedriver!(No symbol) [0x7ff666e66eac]
-	chromedriver!(No symbol) [0x7ff666eb6fe7]
-	chromedriver!(No symbol) [0x7ff666eb3b9b]
-	chromedriver!(No symbol) [0x7ff666e59298]
-	chromedriver!(No symbol) [0x7ff666e5a183]
-	chromedriver!GetHandleVerifier [0x7ff6673ade0d+318bcd]
-	chromedriver!GetHandleVerifier [0x7ff6673a8588+313348]
-	chromedriver!GetHandleVerifier [0x7ff6673c9d7a+334b3a]
-	chromedriver!GetHandleVerifier [0x7ff6670c6785+31545]
-	chromedriver!GetHandleVerifier [0x7ff6670cfacc+3a88c]
-	chromedriver!GetHandleVerifier [0x7ff6670b3634+1e3f4]
-	chromedriver!GetHandleVerifier [0x7ff6670b37e6+1e5a6]
-	chromedriver!GetHandleVerifier [0x7ff667097e37+2bf7]
-	KERNEL32!BaseThreadInitThunk [0x7ffcde40e8d7+17]
-	ntdll!RtlUserThreadStart [0x7ffce02ac48c+2c]
-
-2026-03-27 00:13:05,334 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260327_001305.png
-2026-03-27 00:13:05,334 [WARNING] [CLICK FAILED] Attempt 2/3 for ('xpath', "//button[normalize-space()='Next']") → Message: 
-Stacktrace:
-	chromedriver!GetHandleVerifier [0x7ff6673829c5+2ed785]
-	chromedriver!GetHandleVerifier [0x7ff6670aa0d0+14e90]
-	chromedriver!(No symbol) [0x7ff666e0db2d]
-	chromedriver!(No symbol) [0x7ff666e66b9e]
-	chromedriver!(No symbol) [0x7ff666e66eac]
-	chromedriver!(No symbol) [0x7ff666eb6fe7]
-	chromedriver!(No symbol) [0x7ff666eb3b9b]
-	chromedriver!(No symbol) [0x7ff666e59298]
-	chromedriver!(No symbol) [0x7ff666e5a183]
-	chromedriver!GetHandleVerifier [0x7ff6673ade0d+318bcd]
-	chromedriver!GetHandleVerifier [0x7ff6673a8588+313348]
-	chromedriver!GetHandleVerifier [0x7ff6673c9d7a+334b3a]
-	chromedriver!GetHandleVerifier [0x7ff6670c6785+31545]
-	chromedriver!GetHandleVerifier [0x7ff6670cfacc+3a88c]
-	chromedriver!GetHandleVerifier [0x7ff6670b3634+1e3f4]
-	chromedriver!GetHandleVerifier [0x7ff6670b37e6+1e5a6]
-	chromedriver!GetHandleVerifier [0x7ff667097e37+2bf7]
-	KERNEL32!BaseThreadInitThunk [0x7ffcde40e8d7+17]
-	ntdll!RtlUserThreadStart [0x7ffce02ac48c+2c]
-
-2026-03-27 00:13:05,836 [INFO] Clicking: ('xpath', "//button[normalize-space()='Next']")
-2026-03-27 00:13:05,836 [INFO] Waiting for: ('xpath', "//button[normalize-space()='Next']")
-2026-03-27 00:13:15,848 [ERROR] [WAIT FAILED] ('xpath', "//button[normalize-space()='Next']") → Message: 
-Stacktrace:
-	chromedriver!GetHandleVerifier [0x7ff6673829c5+2ed785]
-	chromedriver!GetHandleVerifier [0x7ff6670aa0d0+14e90]
-	chromedriver!(No symbol) [0x7ff666e0db2d]
-	chromedriver!(No symbol) [0x7ff666e66b9e]
-	chromedriver!(No symbol) [0x7ff666e66eac]
-	chromedriver!(No symbol) [0x7ff666eb6fe7]
-	chromedriver!(No symbol) [0x7ff666eb3b9b]
-	chromedriver!(No symbol) [0x7ff666e59298]
-	chromedriver!(No symbol) [0x7ff666e5a183]
-	chromedriver!GetHandleVerifier [0x7ff6673ade0d+318bcd]
-	chromedriver!GetHandleVerifier [0x7ff6673a8588+313348]
-	chromedriver!GetHandleVerifier [0x7ff6673c9d7a+334b3a]
-	chromedriver!GetHandleVerifier [0x7ff6670c6785+31545]
-	chromedriver!GetHandleVerifier [0x7ff6670cfacc+3a88c]
-	chromedriver!GetHandleVerifier [0x7ff6670b3634+1e3f4]
-	chromedriver!GetHandleVerifier [0x7ff6670b37e6+1e5a6]
-	chromedriver!GetHandleVerifier [0x7ff667097e37+2bf7]
-	KERNEL32!BaseThreadInitThunk [0x7ffcde40e8d7+17]
-	ntdll!RtlUserThreadStart [0x7ffce02ac48c+2c]
-
-2026-03-27 00:13:15,968 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260327_001315.png
-2026-03-27 00:13:15,968 [WARNING] [CLICK FAILED] Attempt 3/3 for ('xpath', "//button[normalize-space()='Next']") → Message: 
-Stacktrace:
-	chromedriver!GetHandleVerifier [0x7ff6673829c5+2ed785]
-	chromedriver!GetHandleVerifier [0x7ff6670aa0d0+14e90]
-	chromedriver!(No symbol) [0x7ff666e0db2d]
-	chromedriver!(No symbol) [0x7ff666e66b9e]
-	chromedriver!(No symbol) [0x7ff666e66eac]
-	chromedriver!(No symbol) [0x7ff666eb6fe7]
-	chromedriver!(No symbol) [0x7ff666eb3b9b]
-	chromedriver!(No symbol) [0x7ff666e59298]
-	chromedriver!(No symbol) [0x7ff666e5a183]
-	chromedriver!GetHandleVerifier [0x7ff6673ade0d+318bcd]
-	chromedriver!GetHandleVerifier [0x7ff6673a8588+313348]
-	chromedriver!GetHandleVerifier [0x7ff6673c9d7a+334b3a]
-	chromedriver!GetHandleVerifier [0x7ff6670c6785+31545]
-	chromedriver!GetHandleVerifier [0x7ff6670cfacc+3a88c]
-	chromedriver!GetHandleVerifier [0x7ff6670b3634+1e3f4]
-	chromedriver!GetHandleVerifier [0x7ff6670b37e6+1e5a6]
-	chromedriver!GetHandleVerifier [0x7ff667097e37+2bf7]
-	KERNEL32!BaseThreadInitThunk [0x7ffcde40e8d7+17]
-	ntdll!RtlUserThreadStart [0x7ffce02ac48c+2c]
-
-2026-03-27 00:13:16,072 [INFO] 📸 Screenshot saved: reports/screenshots/click_failed_20260327_001315.png
-2026-03-27 00:13:16,073 [ERROR] Click ultimately failed: ('xpath', "//button[normalize-space()='Next']")
+2026-06-12 15:54:03,773 [INFO] 📘 Logger initialized — fresh run, old logs cleared
+2026-06-12 15:54:05,420 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-06-12 15:54:05,421 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-06-12 15:54:06,111 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-06-12 15:54:06,628 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2026-06-12 15:54:06,629 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2026-06-12 15:54:07,500 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2026-06-12 15:54:07,500 [INFO] Waiting for: ('xpath', "//p[normalize-space()='Dashboard']")
+2026-06-12 15:54:09,261 [INFO] Waiting for: ('xpath', "//span[contains(@class,'user-name-text')]")
+2026-06-12 15:54:09,316 [INFO] Got text from ('xpath', "//span[contains(@class,'user-name-text')]"): Load testing Superadmin two
+2026-06-12 15:54:10,184 [INFO] Clicking: ('xpath', "//span[contains(@id,'select2-business_type_id-container')]")
+2026-06-12 15:54:10,185 [INFO] Waiting for: ('xpath', "//span[contains(@id,'select2-business_type_id-container')]")
+2026-06-12 15:54:10,577 [INFO] Clicked successfully: ('xpath', "//span[contains(@id,'select2-business_type_id-container')]")
+2026-06-12 15:54:10,638 [INFO] Clicking: ('xpath', "//span[contains(@id,'select2-industry_type_id-container')]")
+2026-06-12 15:54:10,638 [INFO] Waiting for: ('xpath', "//span[contains(@id,'select2-industry_type_id-container')]")
+2026-06-12 15:54:11,008 [INFO] Clicked successfully: ('xpath', "//span[contains(@id,'select2-industry_type_id-container')]")
+2026-06-12 15:54:11,439 [INFO] Clicking: ('xpath', "//span[@id='select2-annual_turnover-container']")
+2026-06-12 15:54:11,440 [INFO] Waiting for: ('xpath', "//span[@id='select2-annual_turnover-container']")
+2026-06-12 15:54:11,812 [INFO] Clicked successfully: ('xpath', "//span[@id='select2-annual_turnover-container']")
+2026-06-12 15:54:14,877 [INFO] Clicking: ('xpath', "//button[normalize-space()='Continue to KYC Verification']")
+2026-06-12 15:54:14,877 [INFO] Waiting for: ('xpath', "//button[normalize-space()='Continue to KYC Verification']")
+2026-06-12 15:54:15,239 [INFO] Clicked successfully: ('xpath', "//button[normalize-space()='Continue to KYC Verification']")
+2026-06-12 15:54:21,887 [INFO] Clicking: ('id', 'search-btn')
+2026-06-12 15:54:21,888 [INFO] Waiting for: ('id', 'search-btn')
+2026-06-12 15:54:22,349 [INFO] Clicked successfully: ('id', 'search-btn')
+2026-06-12 15:54:22,590 [INFO] Clicking: ('id', 'search-btn')
+2026-06-12 15:54:22,591 [INFO] Waiting for: ('id', 'search-btn')
+2026-06-12 15:54:22,959 [INFO] Clicked successfully: ('id', 'search-btn')

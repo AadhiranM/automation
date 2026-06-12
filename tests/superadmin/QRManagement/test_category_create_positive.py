@@ -16,7 +16,7 @@ class TestCategoryCreatePositive:
         create_page = SACategoryCreatePage(setup)
         create_page.wait_for_modal()
 
-        create_page.select_manufacturer("Sydneyyy Tea Shop Pvt Ltd")
+        create_page.select_manufacturer()
         create_page.enter_category_name(category_name)
         create_page.select_status("Inactive")
 
@@ -42,7 +42,7 @@ class TestCategoryCreatePositive:
         create_page.wait_for_modal()
 
 
-        create_page.select_manufacturer("Sydneyyy Tea Shop Pvt Ltd")
+        create_page.select_manufacturer()
         create_page.enter_category_name(category_name)
         create_page.select_status("Active")
 

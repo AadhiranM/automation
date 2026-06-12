@@ -102,3 +102,13 @@ class SAManufacturerCreatePage(BasePage):
         """
         self.driver.execute_script(script)
 
+    def wait_until_modal_closed(self):
+
+        WebDriverWait(
+            self.driver,
+            10
+        ).until(
+            EC.invisibility_of_element_located(
+                self.CREATE_MODAL
+            )
+        )

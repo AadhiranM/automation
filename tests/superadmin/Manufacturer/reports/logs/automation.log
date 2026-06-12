@@ -1,53 +1,59 @@
-2026-04-14 15:28:13,758 [INFO] 📘 Logger initialized — fresh run, old logs cleared
-2026-04-14 15:28:29,755 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-04-14 15:28:29,758 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-04-14 15:28:36,015 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-04-14 15:28:36,222 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
-2026-04-14 15:28:36,222 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
-2026-04-14 15:28:44,662 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
-2026-04-14 15:28:44,662 [INFO] Waiting for: ('xpath', "//p[normalize-space()='Dashboard']")
-2026-04-14 15:28:44,784 [INFO] Waiting for: ('xpath', "//span[contains(@class,'user-name-text')]")
-2026-04-14 15:28:44,851 [INFO] Got text from ('xpath', "//span[contains(@class,'user-name-text')]"): Load testing Superadmin two
-2026-04-14 15:28:54,959 [INFO] Clicking: ('xpath', "//button[contains(@class,'search')]")
-2026-04-14 15:28:54,960 [INFO] Waiting for: ('xpath', "//button[contains(@class,'search')]")
-2026-04-14 15:29:02,322 [INFO] Clicked successfully: ('xpath', "//button[contains(@class,'search')]")
-2026-04-14 15:29:07,157 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-04-14 15:29:07,159 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-04-14 15:29:07,528 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-04-14 15:29:09,441 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
-2026-04-14 15:29:09,441 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
-2026-04-14 15:29:09,862 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
-2026-04-14 15:29:09,862 [INFO] Waiting for: ('xpath', "//p[normalize-space()='Dashboard']")
-2026-04-14 15:29:16,886 [INFO] Waiting for: ('xpath', "//span[contains(@class,'user-name-text')]")
-2026-04-14 15:29:16,957 [INFO] Got text from ('xpath', "//span[contains(@class,'user-name-text')]"): Load testing Superadmin two
-2026-04-14 15:29:24,375 [INFO] Waiting for: ('xpath', "//select[contains(@class,'status')]")
-2026-04-14 15:29:34,442 [ERROR] [WAIT FAILED] ('xpath', "//select[contains(@class,'status')]") → Message: 
+2026-06-11 17:46:40,853 [INFO] 📘 Logger initialized — fresh run, old logs cleared
+2026-06-11 17:46:43,562 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-06-11 17:46:43,565 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-06-11 17:46:44,969 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-06-11 17:46:45,622 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2026-06-11 17:46:45,624 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2026-06-11 17:46:48,579 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2026-06-11 17:46:48,579 [INFO] Waiting for: ('xpath', "//p[normalize-space()='Dashboard']")
+2026-06-11 17:46:48,919 [INFO] Waiting for: ('xpath', "//span[contains(@class,'user-name-text')]")
+2026-06-11 17:46:49,043 [INFO] Got text from ('xpath', "//span[contains(@class,'user-name-text')]"): Load testing Superadmin two
+2026-06-11 17:46:49,966 [INFO] Clicking: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
+2026-06-11 17:46:49,967 [INFO] Waiting for: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
+2026-06-11 17:46:50,384 [INFO] Clicked successfully: ('css selector', 'div.dropdown > button.btn > i.ri-more-fill')
+2026-06-11 17:46:50,385 [INFO] Clicking: ('xpath', "//a[normalize-space()='Edit']")
+2026-06-11 17:46:50,385 [INFO] Waiting for: ('xpath', "//a[normalize-space()='Edit']")
+2026-06-11 17:46:50,877 [INFO] Clicked successfully: ('xpath', "//a[normalize-space()='Edit']")
+2026-06-11 17:46:51,635 [INFO] Waiting for: ('xpath', "//div[@id='showModal' and contains(@class,'show')]//input[@name='email']")
+2026-06-11 17:46:51,686 [INFO] Waiting for: ('xpath', "//div[@id='showModal' and contains(@class,'show')]//input[@name='email']")
+2026-06-11 17:46:52,265 [INFO] Waiting for: ('xpath', "//div[@id='showModal' and contains(@class,'show')]//input[@name='company_name']")
+2026-06-11 17:46:52,335 [INFO] Waiting for: ('xpath', "//div[@id='showModal' and contains(@class,'show')]//input[@name='company_name']")
+2026-06-11 17:46:52,718 [INFO] Clicking: ('xpath', "//div[@id='showModal']//button[normalize-space()='Update']")
+2026-06-11 17:46:52,719 [INFO] Waiting for: ('xpath', "//div[@id='showModal']//button[normalize-space()='Update']")
+2026-06-11 17:46:53,242 [INFO] Clicked successfully: ('xpath', "//div[@id='showModal']//button[normalize-space()='Update']")
+2026-06-11 17:46:53,837 [INFO] Waiting for: ('id', 'search-vale')
+2026-06-11 17:46:54,196 [INFO] Clicking: ('id', 'search-btn')
+2026-06-11 17:46:54,197 [INFO] Waiting for: ('id', 'search-btn')
+2026-06-11 17:46:54,916 [WARNING] [CLICK FAILED] Attempt 1/3 for ('id', 'search-btn') → Message: stale element reference: stale element not found
+  (Session info: chrome=149.0.7827.54); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#staleelementreferenceexception
 Stacktrace:
-	chromedriver!GetHandleVerifier [0x7ff6a5a80295+146d5]
-	chromedriver!GetHandleVerifier [0x7ff6a5a80300+14740]
-	chromedriver!(No symbol) [0x7ff6a57ed7cd]
-	chromedriver!(No symbol) [0x7ff6a5846c4e]
-	chromedriver!(No symbol) [0x7ff6a5846f5c]
-	chromedriver!(No symbol) [0x7ff6a5897cc7]
-	chromedriver!(No symbol) [0x7ff6a5894818]
-	chromedriver!(No symbol) [0x7ff6a5839018]
-	chromedriver!(No symbol) [0x7ff6a5839f03]
-	chromedriver!GetHandleVerifier [0x7ff6a5d95949+329d89]
-	chromedriver!GetHandleVerifier [0x7ff6a5d8fe96+3242d6]
-	chromedriver!GetHandleVerifier [0x7ff6a5db3102+347542]
-	chromedriver!GetHandleVerifier [0x7ff6a5a9d425+31865]
-	chromedriver!GetHandleVerifier [0x7ff6a5aa605c+3a49c]
-	chromedriver!GetHandleVerifier [0x7ff6a5a89684+1dac4]
-	chromedriver!GetHandleVerifier [0x7ff6a5a89836+1dc76]
-	chromedriver!GetHandleVerifier [0x7ff6a5a6e347+2787]
-	KERNEL32!BaseThreadInitThunk [0x7ffca227e8d7+17]
-	ntdll!RtlUserThreadStart [0x7ffca30cc48c+2c]
+	chromedriver!GetHandleVerifier [0x7ff7e22e3435+14875]
+	chromedriver!GetHandleVerifier [0x7ff7e22e3490+148d0]
+	chromedriver!(No symbol) [0x7ff7e1e3778d]
+	chromedriver!(No symbol) [0x7ff7e1e4f44d]
+	chromedriver!(No symbol) [0x7ff7e1e4db50]
+	chromedriver!(No symbol) [0x7ff7e1e40346]
+	chromedriver!(No symbol) [0x7ff7e1e404a6]
+	chromedriver!(No symbol) [0x7ff7e1e3e14e]
+	chromedriver!(No symbol) [0x7ff7e1e42a4f]
+	chromedriver!(No symbol) [0x7ff7e1edfc8e]
+	chromedriver!(No symbol) [0x7ff7e1eba27a]
+	chromedriver!(No symbol) [0x7ff7e1ede9fc]
+	chromedriver!(No symbol) [0x7ff7e1e83eb0]
+	chromedriver!(No symbol) [0x7ff7e1e84e23]
+	chromedriver!GetHandleVerifier [0x7ff7e28c6c91+5f80d1]
+	chromedriver!GetHandleVerifier [0x7ff7e28c101b+5f245b]
+	chromedriver!GetHandleVerifier [0x7ff7e28e6305+617745]
+	chromedriver!GetHandleVerifier [0x7ff7e23003ee+3182e]
+	chromedriver!GetHandleVerifier [0x7ff7e2308b0c+39f4c]
+	chromedriver!GetHandleVerifier [0x7ff7e22ecb04+1df44]
+	chromedriver!GetHandleVerifier [0x7ff7e22ecc94+1e0d4]
+	chromedriver!GetHandleVerifier [0x7ff7e22d0997+1dd7]
+	KERNEL32!BaseThreadInitThunk [0x7ff8e3fbe957+17]
+	ntdll!RtlUserThreadStart [0x7ff8e55c7c1c+2c]
 
-2026-04-14 15:29:34,553 [INFO] 📸 Screenshot saved: reports/screenshots/wait_failed_20260414_152934.png
-2026-04-14 15:29:38,855 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-04-14 15:29:38,857 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-04-14 15:29:40,861 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
-2026-04-14 15:29:41,024 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
-2026-04-14 15:29:41,024 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
-2026-04-14 15:29:41,403 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
-2026-04-14 15:29:41,403 [INFO] Waiting for: ('xpath', "//p[normalize-space()='Dashboard']")
+2026-06-11 17:46:55,419 [INFO] Clicking: ('id', 'search-btn')
+2026-06-11 17:46:55,419 [INFO] Waiting for: ('id', 'search-btn')
+2026-06-11 17:46:55,856 [INFO] Clicked successfully: ('id', 'search-btn')
+2026-06-11 17:46:55,891 [INFO] Waiting for: ('xpath', '//table/tbody/tr[1]/td[1]')
+2026-06-11 17:46:55,971 [INFO] Got text from ('xpath', '//table/tbody/tr[1]/td[1]'): TechNova 20260611174651

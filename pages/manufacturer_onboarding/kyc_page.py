@@ -18,8 +18,7 @@ class KYCPage(BasePage):
 
     NEXT_BTN = (
         By.XPATH,
-        "//div[contains(@class,'tab-pane') and contains(@class,'active')]"
-        "//button[normalize-space()='Next']"
+        "//button[normalize-space()='Continue to Upload Documents']"
     )
 
     # -------- PAGE LOAD --------

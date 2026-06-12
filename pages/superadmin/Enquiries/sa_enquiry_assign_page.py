@@ -1,208 +1,321 @@
-from selenium.webdriver.common.by import By
-from pages.common.base_page import BasePage
-from selenium.webdriver.support.ui import WebDriverWait, Select
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import StaleElementReferenceException
-from selenium.webdriver.common.action_chains import ActionChains
 import time
+
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
+from pages.common.base_page import BasePage
+
 
 class SAEnquiryAssignPage(BasePage):
 
-    # ----------------- ACTION (3 DOTS) -----------------
+    # ---------------- TABLE ----------------
+
     ACTION_DOTS = (
-    By.XPATH,
-    "//table[contains(@class,'dataTable')]//tbody/tr[1]//button[@data-bs-toggle='dropdown']"
-)
-
-    DROPDOWN_MENU_OPEN = (
         By.XPATH,
-        "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]"
+        "//table//tbody/tr[1]//button[@data-bs-toggle='dropdown']"
     )
 
-    # ----------------- ASSIGN INTERNAL USER -----------------
-    ASSIGN_BTN = (
-    By.XPATH,
-    "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]"
-    "//button[normalize-space()='Assign Internal User']"
-)
-
-    INTERNAL_USER_DROPDOWN = (By.ID, "assigned_to")
-    SUBMIT_ASSIGN = (By.XPATH, "//button[contains(text(),'Submit')]")
-
-    ASSIGN_SUCCESS_MSG = (
-        By.XPATH,
-        "//div[@class='swal2-html-container' and contains(text(),'Internal user assigned successfully')]"
-    )
-    ASSIGN_SUCCESS_OK = (By.XPATH, "//button[normalize-space()='OK']")
-
-    # ----------------- UNASSIGN -----------------
-    UNASSIGN_BTN = (
-    By.XPATH,
-    "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]"
-    "//button[contains(@class,'unassign-btn')]")
-
-    UNASSIGN_CONFIRM_CANCEL = (
-        By.XPATH,
-        "//button[normalize-space()='No, cancel']"
-    )
-    UNASSIGN_CONFIRM_YES = (
-        By.XPATH,
-
-        "//button[normalize-space()='Yes, un-assign']"
-    )
-
-    UNASSIGN_SUCCESS_POPUP = (
-        By.XPATH,
-        "//div[normalize-space()='Internal user un-assigned successfully.']"
-    )
-    UNASSIGN_SUCCESS_OK = (By.XPATH, "//button[normalize-space()='OK']")
-
-    # ----------------- TABLE COLUMN -----------------
     ASSIGNED_USER_COLUMN = (
         By.XPATH,
-        "//table//tbody/tr[1]/td[6]//span"
+        "//table//tbody/tr[1]/td[6]"
     )
 
-    # ================= ACTION METHODS =================
+    # ---------------- MENU OPTIONS ----------------
+
+    ASSIGN_INTERNAL_USER = (
+        By.XPATH,
+        "//button[contains(normalize-space(),'Assign Internal User')]"
+    )
+
+    UNASSIGN_INTERNAL_USER = (
+        By.XPATH,
+        "//button[contains(normalize-space(),'Un-assign Internal User')]"
+    )
+
+    # ---------------- ASSIGN POPUP ----------------
+
+    SELECT2_DROPDOWN = (
+        By.XPATH,
+        "//span[contains(@class,'select2-selection')]"
+    )
+
+    SELECT2_SEARCH = (
+        By.XPATH,
+        "//input[@type='search']"
+    )
+
+    SELECTED_USER_TEXT = (
+        By.XPATH,
+        "//span[contains(@id,'select2-assigned_to-container')]"
+    )
+
+    SUBMIT_BTN = (
+        By.XPATH,
+        "//button[normalize-space()='Submit']"
+    )
+
+    ASSIGN_SUCCESS_OK = (
+        By.XPATH,
+        "//button[normalize-space()='OK']"
+    )
+
+    ASSIGN_USER_DROPDOWN = (
+        By.XPATH,
+        "//div[@id='assignInternalUserModal']//span[contains(@class,'select2-selection--single')]"
+    )
+
+    SELECTED_USER = (
+        By.XPATH,
+        "//span[contains(@id,'select2-assigned_to-container')]"
+    )
+
+    SUBMIT_BTN = (
+        By.XPATH,
+        "//button[normalize-space()='Submit']"
+    )
+
+    SUCCESS_OK = (
+        By.XPATH,
+        "//button[normalize-space()='OK']"
+    )
+
+    # ---------------- UNASSIGN ----------------
+
+    UNASSIGN_YES = (
+        By.XPATH,
+        "//button[contains(.,'Yes, un-assign')]"
+    )
+
+    UNASSIGN_SUCCESS_OK = (
+        By.XPATH,
+        "//button[normalize-space()='OK']"
+    )
+
+    # =====================================================
 
     def open_actions(self):
-        for attempt in range(3):
-            try:
-                # 🔹 Wait for table row to be present
-                WebDriverWait(self.driver, 15).until(
-                    EC.presence_of_element_located(self.ACTION_DOTS)
-                )
 
-                # 🔹 Re-locate element every time (VERY IMPORTANT)
-                action_btn = WebDriverWait(self.driver, 15).until(
-                    EC.element_to_be_clickable(self.ACTION_DOTS)
-                )
-
-                # 🔹 Scroll into view (datatable issue)
-                self.driver.execute_script(
-                    "arguments[0].scrollIntoView({block:'center'});", action_btn
-                )
-                time.sleep(0.3)
-
-                # 🔹 Click using ActionChains (more reliable than .click())
-                ActionChains(self.driver).move_to_element(action_btn).click().perform()
-
-                # 🔹 Wait for dropdown menu to appear (IMPORTANT FIX)
-                WebDriverWait(self.driver, 10).until(
-                    EC.presence_of_element_located(self.DROPDOWN_MENU_OPEN)
-                )
-
-                return  # ✅ SUCCESS
-
-            except StaleElementReferenceException:
-                time.sleep(0.5)
-
-        raise AssertionError(" Failed to open action dropdown after retries")
-
-    def open_assign_user(self):
-        btn = WebDriverWait(self.driver, 15).until(
-            EC.presence_of_element_located(self.ASSIGN_BTN)
-        )
-        self.driver.execute_script("arguments[0].click();", btn)
-
-    def choose_internal_user(self, name):
-        """Select internal user from dropdown"""
-        dropdown = WebDriverWait(self.driver, 15).until(
-            EC.visibility_of_element_located(self.INTERNAL_USER_DROPDOWN)
-        )
-        Select(dropdown).select_by_visible_text(name)
-
-    def submit_assign_user(self):
-        self.click(self.SUBMIT_ASSIGN)
-
-    def confirm_assign_success(self):
-        """Confirm success popup after assigning internal user"""
-        WebDriverWait(self.driver, 15).until(
-            EC.visibility_of_element_located(self.ASSIGN_SUCCESS_MSG)
-        )
-        self.click(self.ASSIGN_SUCCESS_OK)
-
-        # Wait for popup to disappear before touching table
-        WebDriverWait(self.driver, 10).until(
-            EC.invisibility_of_element_located(self.ASSIGN_SUCCESS_MSG)
+        btn = WebDriverWait(
+            self.driver,
+            20
+        ).until(
+            EC.presence_of_element_located(
+                self.ACTION_DOTS
+            )
         )
 
-    # ================= TABLE VALUE (CRITICAL FIX) =================
-
-    def assigned_user_value(self, timeout=15):
-        """Stable read of Assigned User column (handles DataTable refresh)"""
-        def _get_value(driver):
-            try:
-                el = driver.find_element(*self.ASSIGNED_USER_COLUMN)
-                text = el.text.strip()
-                return text if text else False
-            except:
-                return False
-
-        return WebDriverWait(self.driver, timeout).until(_get_value)
-
-    # ================= UNASSIGN ACTIONS =================
-
-    def click_unassign(self):
-        btn = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located(self.UNASSIGN_BTN)
-        )
-        self.driver.execute_script("arguments[0].click();", btn)
-
-    def confirm_unassign_yes(self):
-        self.click(self.UNASSIGN_CONFIRM_YES)
-
-    def confirm_unassign_cancel(self):
-        self.click(self.UNASSIGN_CONFIRM_CANCEL)
-
-    def confirm_unassign_success(self):
-        WebDriverWait(self.driver, 15).until(
-            EC.visibility_of_element_located(self.UNASSIGN_SUCCESS_POPUP)
-        )
-        self.click(self.UNASSIGN_SUCCESS_OK)
-
-        WebDriverWait(self.driver, 10).until(
-            EC.invisibility_of_element_located(self.UNASSIGN_SUCCESS_POPUP)
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            btn
         )
 
-    def wait_until_unassigned(self):
-        WebDriverWait(self.driver, 15).until(
-            lambda d: self.assigned_user_value() == "Not Assigned"
+        time.sleep(1)
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            btn
         )
 
-    # ================= STATE SAFE METHOD =================
+        time.sleep(3)
 
-    def ensure_user_assigned(self, name="Sunio Soni"):
-        """Ensures user is assigned before test continues"""
-        current = self.assigned_user_value()
+        print("===== DROPDOWN HTML =====")
 
-        if current != name:
-            self.open_actions()
-            self.open_assign_user()
-            self.choose_internal_user(name)
-            self.submit_assign_user()
-            self.confirm_assign_success()
-
-            WebDriverWait(self.driver, 15).until(
-                lambda d: self.assigned_user_value() == name
+        try:
+            dropdown = self.driver.find_element(
+                By.XPATH,
+                "//ul[contains(@class,'dropdown-menu')]"
             )
 
-    def wait_for_table_refresh(self):
-            WebDriverWait(self.driver, 15).until(
-                EC.invisibility_of_element_located(
-                    (By.XPATH, "//table//tbody/tr[1]/td[6]//span")
+            print(dropdown.get_attribute("outerHTML"))
+
+        except Exception as e:
+            print("Dropdown not found:", e)
+    # =====================================================
+
+    def assign_option_visible(self):
+
+        return len(
+            self.driver.find_elements(
+                *self.ASSIGN_INTERNAL_USER
+            )
+        ) > 0
+
+    def unassign_option_visible(self):
+
+        return len(
+            self.driver.find_elements(
+                *self.UNASSIGN_INTERNAL_USER
+            )
+        ) > 0
+
+    # =====================================================
+
+    def assign_first_internal_user(self):
+
+        # Click Assign Internal User
+        self.open_actions()
+
+        time.sleep(1)
+
+        time.sleep(1)
+
+        assign_btn = self.driver.find_element(
+            By.XPATH,
+            "//button[contains(normalize-space(),'Assign Internal User')]"
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            assign_btn
+        )
+
+
+        print("Assign Internal User clicked")
+
+        # Wait modal
+        WebDriverWait(
+            self.driver,
+            15
+        ).until(
+            EC.visibility_of_element_located(
+                (
+                    By.ID,
+                    "assignInternalUserModal"
                 )
             )
-            WebDriverWait(self.driver, 15).until(
-                EC.visibility_of_element_located(
-                    (By.XPATH, "//table//tbody/tr[1]/td[6]//span")
+        )
+
+        print("Assign modal opened")
+
+        # Internal User dropdown
+        dropdown = WebDriverWait(
+            self.driver,
+            20
+        ).until(
+            EC.element_to_be_clickable(
+                (
+                    By.XPATH,
+                    "//div[@id='assignInternalUserModal']//span[contains(@class,'select2-selection--single')]"
                 )
             )
+        )
 
-    def wait_until_assigned_user_is(self, expected, timeout=20):
-        from selenium.webdriver.support.ui import WebDriverWait
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            dropdown
+        )
 
-        def _check(driver):
-            return self.assigned_user_value().strip() == expected
+        time.sleep(1)
 
-        WebDriverWait(self.driver, timeout).until(_check)
+        dropdown.click()
+
+        print("Dropdown clicked")
+
+        time.sleep(2)
+
+        # Search box appears after dropdown opens
+        search_box = WebDriverWait(
+            self.driver,
+            15
+        ).until(
+            EC.visibility_of_element_located(
+                (
+                    By.XPATH,
+                    "//input[@class='select2-search__field']"
+                )
+            )
+        )
+
+        print("Search box visible")
+
+        # Select first user
+        search_box.send_keys(Keys.HOME)
+
+        time.sleep(1)
+
+        search_box.send_keys(Keys.ENTER)
+
+        print("User selected")
+
+        time.sleep(2)
+
+        selected_user = self.get_text(
+            self.SELECTED_USER
+        ).strip()
+
+        print(f"Selected User = {selected_user}")
+
+        self.click(
+            self.SUBMIT_BTN
+        )
+
+        time.sleep(2)
+
+        try:
+            self.click(
+                self.SUCCESS_OK
+            )
+        except:
+            pass
+
+        return selected_user
+    # =====================================================
+
+    def unassign_internal_user(self):
+
+        self.open_actions()
+
+        self.click(
+            self.UNASSIGN_INTERNAL_USER
+        )
+
+        self.click(
+            self.UNASSIGN_YES
+        )
+
+        self.click(
+            self.UNASSIGN_SUCCESS_OK
+        )
+
+        WebDriverWait(
+            self.driver,
+            20
+        ).until(
+            lambda d:
+            self.get_first_row_assigned_user()
+            == "Not Assigned"
+        )
+
+    # =====================================================
+
+    def get_first_row_assigned_user(self):
+
+        return self.get_text(
+            self.ASSIGNED_USER_COLUMN
+        ).strip()
+
+    def is_first_row_assigned(self):
+
+        value = self.get_first_row_assigned_user().strip()
+
+        return value.lower() != "not assigned"
+
+    def ensure_user_assigned(self):
+
+        if self.is_first_row_assigned():
+            print("Already assigned")
+
+            return self.get_first_row_assigned_user()
+
+        return self.assign_first_internal_user()
+
+    def ensure_user_unassigned(self):
+
+        if not self.is_first_row_assigned():
+            print("Already unassigned")
+
+            return
+
+        self.unassign_internal_user()
