@@ -170,6 +170,7 @@ class Test_category_create(BaseTest):
             toast = WebDriverWait(driver, 5).until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, ".toastify"))
             ).text
+            toast = toast.encode("ascii", errors="ignore").decode()
 
             self.logger.info(f"Toast received: {toast}")
             print("Toast Message:", toast)

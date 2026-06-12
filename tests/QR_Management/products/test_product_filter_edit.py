@@ -17,6 +17,7 @@ from utilities.sku_utils import generate_next_sku
 excel_path = r"mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "products")
 
+
 @pytest.mark.order(2)
 @pytest.mark.parametrize("data", test_data)
 class Test_product_filter_edit(BaseTest):
@@ -26,41 +27,66 @@ class Test_product_filter_edit(BaseTest):
 
     def test_QR_management_products_flow(self, driver, data):
 
-        self.logger.info(
-            f"===== QR Management Products Flow ==="
-        )
         search_value = data["search_value"]
         filter_status = data["filter_status"]
         start_date = data["start_date"]
         end_date = data["end_date"]
 
+        self.logger.info(
+            f"===== QR Management Products Edit Flow Started | Product: {search_value} ====="
+        )
+
+        self.logger.info(
+            f"Filter Details | "
+            f"Product: {search_value} | "
+            f"Status: {filter_status} | "
+            f"Date Range: {start_date} to {end_date}"
+        )
+
         wait = WebDriverWait(driver, 5)
 
         # LOGIN
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Login successful (first iteration)")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Login successful (first iteration)")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         # NAVIGATION
-        self.logger.info("Navigating to Products module")
+        self.logger.info("Starting navigation to Products module")
+
         qr_page = QR_Management_Category_Page(driver)
 
         qr_page.Click_Dashboard()
+        self.logger.info("Clicked Dashboard")
+
         driver.refresh()
+        self.logger.info("Page refreshed successfully")
+
         qr_page.Click_QR_management()
+        self.logger.info("Opened QR Management module")
 
         qr_products_page = QR_Management_products_Page(driver)
 
         qr_products_page.Click_products()
-        qr_products_page.Enter_search_value(search_value)
-        qr_products_page.click_filter_calender()
-        qr_products_page.select_date_range(start_date,end_date)
-        qr_products_page.select_filter_status(filter_status)
+        self.logger.info("Opened Products page")
 
-        status = qr_products_page.search_product(search_value)  # True if rows exist
+        qr_products_page.Enter_search_value(search_value)
+        self.logger.info(f"Entered Search Value: {search_value}")
+
+        qr_products_page.click_filter_calender()
+        self.logger.info("Opened Date Filter")
+
+        qr_products_page.select_date_range(start_date, end_date)
+        self.logger.info(
+            f"Selected Date Range | Start Date: {start_date} | End Date: {end_date}"
+        )
+
+        qr_products_page.select_filter_status(filter_status)
+        self.logger.info(f"Selected Status Filter: {filter_status}")
+
+        status = qr_products_page.search_product(search_value)
 
         if not status:
             take_screenshot(
@@ -68,34 +94,66 @@ class Test_product_filter_edit(BaseTest):
                 test_name="product_filter_failed",
                 folder_name="Screenshots\\QRM_products\\product_filters"
             )
-            self.logger.error("FILTER FAILED | No data found ")
+
+            self.logger.error(
+                f"FILTER FAILED | Product: {search_value} | No matching records found"
+            )
+
             assert status, "FILTER FAILED | No data found "
-        self.logger.info("Filter applied successfully, table has records")
+
+        self.logger.info(
+            f"Filter applied successfully | Product: {search_value} | Records found"
+        )
 
         qr_products_page.click_actions_icon()
+        self.logger.info("Clicked Actions icon")
+
         time.sleep(1)
+
         qr_products_page.click_edit_opt()
+        self.logger.info("Clicked Edit option")
+
         time.sleep(1)
 
         qr_products_page.Enter_product_name_or_Id(data["edit_product_name"])
+        self.logger.info(
+            f"Updated Product Name: {data['edit_product_name']}"
+        )
+
         qr_products_page.Enter_brand_name(data["edit_brand_name"])
+        self.logger.info(
+            f"Updated Brand Name: {data['edit_brand_name']}"
+        )
 
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
 
         # IMAGE UPLOAD
         try:
-            qr_products_page.Upload_Product_images(data["edit_upload_product_image"])
-            self.logger.info("Product image uploaded successfully")
+            qr_products_page.Upload_Product_images(
+                data["edit_upload_product_image"]
+            )
+
+            self.logger.info(
+                f"Product image uploaded successfully | "
+                f"File: {data['edit_upload_product_image']}"
+            )
 
         except Exception as e:
             self.logger.error(
-                f"Image upload failed for {data['edit_product_name']} | Error: {e}"
+                f"Image upload failed for "
+                f"{data['edit_product_name']} | Error: {e}"
             )
             return
 
         qr_products_page.Enter_Product_URL(data["edit_product_url"])
+        self.logger.info(
+            f"Entered Product URL: {data['edit_product_url']}"
+        )
 
         qr_products_page.Enter_SKU_ID(data["edit_SKU_ID"])
+        self.logger.info(
+            f"Entered SKU ID: {data['edit_SKU_ID']}"
+        )
 
         # # SKU
         # new_sku = generate_next_sku(self.current_sku)
@@ -106,13 +164,33 @@ class Test_product_filter_edit(BaseTest):
 
         # PRODUCT DETAILS
         qr_products_page.select_category_opt()
-        qr_products_page.Enter_category_name(data["edit_select_category"])
+        self.logger.info("Opened Category dropdown")
+
+        qr_products_page.Enter_category_name(
+            data["edit_select_category"]
+        )
+        self.logger.info(
+            f"Selected Category: {data['edit_select_category']}"
+        )
+
         qr_products_page.select_status_drp(data["edit_status"])
+        self.logger.info(
+            f"Selected Status: {data['edit_status']}"
+        )
+
         qr_products_page.Enter_description(data["edit_description"])
+        self.logger.info("Entered Product Description")
+
         qr_products_page.Country_option()
+        self.logger.info("Opened Country dropdown")
+
         qr_products_page.Country_of_origin(data["edit_country"])
+        self.logger.info(
+            f"Selected Country of Origin: {data['edit_country']}"
+        )
 
         qr_products_page.Click_Proceed_to_child_SKU_button()
+        self.logger.info("Clicked Proceed to Child SKU button")
 
         try:
             WebDriverWait(driver, 5).until(
@@ -120,10 +198,20 @@ class Test_product_filter_edit(BaseTest):
                     qr_products_page.continue_to_video_btn
                 )
             )
+
+            self.logger.info("Continue To Video button displayed")
+
             qr_products_page.ClicK_continue_video_btn()
+            self.logger.info("Clicked Continue To Video button")
 
         except TimeoutException:
+            self.logger.error(
+                "Continue To Video button not displayed. "
+                "Please fill all mandatory fields."
+            )
+
             print("please fill All the fields correctly")
+
             take_screenshot(
                 driver,
                 test_name="test_edit_product",
@@ -131,17 +219,34 @@ class Test_product_filter_edit(BaseTest):
             )
 
         qr_products_page.Enter_video_title(data["edit_video_title"])
+        self.logger.info(
+            f"Entered Video Title: {data['edit_video_title']}"
+        )
+
         qr_products_page.Choose_video_file(data["edit_video_file"])
+        self.logger.info(
+            f"Uploaded Video File: {data['edit_video_file']}"
+        )
 
         qr_products_page.Click_create_product_submit_btn()
+        self.logger.info("Clicked Submit button")
 
         # TOAST
         try:
-            toast_msg = WebDriverWait(driver,10).until(
-                EC.visibility_of_element_located((By.CSS_SELECTOR, ".toastify"))
+            self.logger.info("Waiting for toast message")
+
+            toast_msg = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, ".toastify")
+                )
             ).text.strip()
 
-            self.logger.info(f"Toast message: {toast_msg}")
+            # Remove unsupported Unicode characters from logs
+            toast_msg = toast_msg.encode("ascii", errors="ignore").decode()
+
+            self.logger.info(
+                f"Toast received: {toast_msg}"
+            )
 
         except TimeoutException:
             toast_msg = ""
@@ -151,9 +256,11 @@ class Test_product_filter_edit(BaseTest):
         if "Product updated successfully!" in toast_msg:
 
             self.logger.info(
-                f"Product created successfully | "
-                f"Product: {data['edit_product_name']}"
+                f"Product updated successfully | "
+                f"Product: {data['edit_product_name']} | "
+                f"Toast: {toast_msg}"
             )
+
             assert True
 
         else:
@@ -170,4 +277,3 @@ class Test_product_filter_edit(BaseTest):
             )
 
             assert False, f"Product update failed | Toast: {toast_msg}"
-

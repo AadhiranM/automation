@@ -3,7 +3,6 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
 from pages.QR_Management.QR_management_category import QR_Management_Category_Page
 from utilities.read_excel import get_test_data
 from utilities.customlogger import LogGen
@@ -39,12 +38,12 @@ class Test_category_filter_toggle_edit(BaseTest):
         # self.login_and_access()
 
         # ---------------- LOGIN ----------------
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Login successful (first iteration)")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Login successful (first iteration)")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         # ---------------- NAVIGATION ----------------
         self.logger.info("Navigating to Category module")
@@ -71,8 +70,9 @@ class Test_category_filter_toggle_edit(BaseTest):
         self.logger.info("Clicked calender date range")
         time.sleep(2)
         qr_page.select_date_range(start_date, end_date)
-        # qr_page.select_filter_toggle_status(filter_status)
-        # self.logger.info("Selected status")
+        time.sleep(1)
+        qr_page.select_filter_toggle_status(filter_status)
+        self.logger.info("Selected status")
 
         qr_page.Click_filter_toggle_apply_btn()
         self.logger.info("Clicked apply button")
@@ -104,6 +104,7 @@ class Test_category_filter_toggle_edit(BaseTest):
             toast_text = WebDriverWait(driver, 3).until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, ".toastify"))
             ).text
+            toast_text = toast_text.encode("ascii", errors="ignore").decode()
 
             print("Toast:", toast_text)
 

@@ -282,3 +282,5 @@ class Test_UM_users_change_to_active(BaseTest):
             assert False, (
                 f"User status change to active failed | Toast: {toast_text}"
             )
+
+

@@ -91,7 +91,7 @@ class Test_edit_variants(BaseTest):
             toast_text = WebDriverWait(driver, 3).until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, ".toastify"))
             ).text
-
+            toast_text = toast_text.encode("ascii", errors="ignore").decode()
             print("Toast:", toast_text)
 
         except TimeoutException:

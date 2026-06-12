@@ -186,6 +186,7 @@ class Test_create_variants(BaseTest):
             toast_text = WebDriverWait(driver, 5).until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, ".toastify"))
             ).text
+            toast_text = toast_text.encode("ascii", errors="ignore").decode()
             print("Toast:", toast_text)
             self.logger.info(f"Toast received: {toast_text}")
 
