@@ -115,6 +115,7 @@ class Test_QRM_import(BaseTest):
             toast = WebDriverWait(driver, 10).until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, ".toastify"))
             ).text
+            toast = toast.encode("ascii", errors="ignore").decode()
 
             print("Toast:", toast)
 

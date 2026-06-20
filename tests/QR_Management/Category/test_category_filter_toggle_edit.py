@@ -38,6 +38,7 @@ class Test_category_filter_toggle_edit(BaseTest):
         # self.login_and_access()
 
         # ---------------- LOGIN ----------------
+
         # if data == test_data[0]:
         #     self.driver = driver
         #     self.login_and_access()
@@ -66,17 +67,20 @@ class Test_category_filter_toggle_edit(BaseTest):
         qr_page.Enter_filter_toggle_category_field(category_name)
         self.logger.info("Entered category name in filter")
 
-        qr_page.Click_filter_toggle_date_range()
-        self.logger.info("Clicked calender date range")
-        time.sleep(2)
-        qr_page.select_date_range(start_date, end_date)
-        time.sleep(1)
         qr_page.select_filter_toggle_status(filter_status)
         self.logger.info("Selected status")
+        time.sleep(1)
+
+        qr_page.Click_filter_toggle_date_range()
+        self.logger.info("Clicked calender date range")
+        time.sleep(1)
+
+        qr_page.select_date_range(start_date, end_date)
+        time.sleep(1)
 
         qr_page.Click_filter_toggle_apply_btn()
         self.logger.info("Clicked apply button")
-        time.sleep(2)
+        time.sleep(1)
 
         status = qr_page.search_product(category_name)  # True if rows exist
 
@@ -113,7 +117,7 @@ class Test_category_filter_toggle_edit(BaseTest):
 
             print("Toast:", toast_text)
 
-            self.logger.error("Toast message not displayed after schedule report creation")
+            self.logger.error("Toast message not displayed")
 
         if "Category Updated Successfully!" in toast_text:
 

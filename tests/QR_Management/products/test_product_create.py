@@ -150,7 +150,7 @@ test_data = get_test_data(excel_path, "products")
 
 @pytest.mark.order(1)
 @pytest.mark.parametrize("data", test_data)
-class Test_products(BaseTest):
+class Test_product_create(BaseTest):
     logger = LogGen.loggen()
 
     current_sku = "PRD2025X0015"
@@ -300,7 +300,7 @@ class Test_products(BaseTest):
         try:
             self.logger.info("Waiting for toast message")
 
-            toast_msg = WebDriverWait(driver, 8).until(
+            toast_msg = WebDriverWait(driver,10).until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, ".toastify"))
             ).text.strip()
 
@@ -331,7 +331,7 @@ class Test_products(BaseTest):
             take_screenshot(
                 driver,
                 test_name="test_create_product",
-                folder_name="Screenshots\\QRM_products"
+                folder_name="Screenshots\\QRM_products\\product_create"
             )
 
             self.logger.error(

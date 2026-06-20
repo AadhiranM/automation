@@ -60,6 +60,13 @@ class QR_Management_products_Page:
     click_created_date=(By.XPATH,"//input[@id='sb_date_range']")
     aplly_btn=(By.XPATH,"//button[normalize-space()='Apply']")
 
+    #import_section
+    import_btn=(By.XPATH,"//button[normalize-space()='Import']")
+    download_sample_template_btn=(By.XPATH,"//a[normalize-space()='Download Sample Template']")
+    import_continue_btn=(By.XPATH,"//button[@id='continueToImportBtn']")
+    file_upload=(By.XPATH,"//input[@id='fileInput']")
+    import_upload_btn=(By.XPATH,"//button[@id='uploadButton']")
+
 
     def __init__(self, driver):
         self.driver = driver
@@ -355,5 +362,33 @@ class QR_Management_products_Page:
 
     def click_apply_btn(self):
         self.driver.find_element(*self.aplly_btn).click()
+
+
+    #import_section
+    def click_import_btn(self):
+        self.driver.find_element(*self.import_btn).click()
+
+    def click_dowmnload_sample_file(self):
+        self.driver.find_element(*self.download_sample_template_btn).click()
+
+    def click_import_continue_btn(self):
+        self.driver.find_element(*self.import_continue_btn).click()
+
+    def import_file_upload(self,import_file):
+        file_input = WebDriverWait(self.driver,5).until(
+            EC.presence_of_element_located(self.file_upload)
+        )
+        # Clear existing uploaded file
+        self.driver.execute_script(
+            "arguments[0].value = '';",
+            file_input
+        )
+        # Upload new file
+        file_input.send_keys(import_file)
+
+    def click_import_upload_btn(self):
+        self.driver.find_element(*self.import_upload_btn).click()
+
+
 
 

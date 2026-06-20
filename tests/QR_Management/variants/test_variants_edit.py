@@ -17,7 +17,7 @@ test_data = get_test_data(excel_path, "variants")
 
 @pytest.mark.order(2)
 @pytest.mark.parametrize("data", test_data)
-class Test_edit_variants(BaseTest):
+class Test_variants_edit(BaseTest):
 
     logger = LogGen.loggen()
 
@@ -28,12 +28,13 @@ class Test_edit_variants(BaseTest):
         wait = WebDriverWait(driver, 10)
 
         # ---------------- LOGIN ----------------
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Login successful (first iteration)")
-        else:
-            self.logger.info("Skipping login — already logged in")
+
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Login successful (first iteration)")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         search_category_name = data["search_Category"]
         edit_variants_type = data["edit_variants_type"]

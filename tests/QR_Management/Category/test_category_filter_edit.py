@@ -109,7 +109,7 @@ class Test_category_filter_edit(BaseTest):
 
             print("Toast:", toast_text)
 
-            self.logger.error("Toast message not displayed after schedule report creation")
+            self.logger.error("Toast message not displayed")
 
         if "Category Updated Successfully!" in toast_text:
 

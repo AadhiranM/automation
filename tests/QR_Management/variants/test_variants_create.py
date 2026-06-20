@@ -99,14 +99,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
-
 excel_path = r"mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "variants")
 
-
 @pytest.mark.order(1)
 @pytest.mark.parametrize("data", test_data)
-class Test_create_variants(BaseTest):
+class Test_variants_create(BaseTest):
 
     logger = LogGen.loggen()
 
