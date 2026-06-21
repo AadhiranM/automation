@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from pages.common.base_page import BasePage
 from selenium.webdriver.common.keys import Keys
+from pages.superadmin.Manufacturer.sa_manufacturer_list_page import SAManufacturerListPage
 
 class SACategoryCreatePage(BasePage):
 
@@ -96,13 +97,7 @@ class SACategoryCreatePage(BasePage):
     # ACTIONS
     # =========================================================
 
-    def select_manufacturer(self):
-        """
-        Select first available manufacturer.
-        CI/CD safe.
-        No dependency on manufacturer name.
-        """
-
+    def select_manufacturer(self, manufacturer_email):
         self.click(self.MANUFACTURER_DROPDOWN)
 
         search = WebDriverWait(self.driver, 10).until(
@@ -112,19 +107,13 @@ class SACategoryCreatePage(BasePage):
             ))
         )
 
-        # allow choices.js to load records
-        time.sleep(1)
-
-        # trigger dropdown records
-        search.send_keys(" ")
+        search.clear()
+        search.send_keys(manufacturer_email)
 
         time.sleep(1)
 
-        # select first available option
         search.send_keys(Keys.ARROW_DOWN)
         search.send_keys(Keys.ENTER)
-
-        time.sleep(1)
 
     def enter_category_name(self, name):
         WebDriverWait(self.driver, 10).until(

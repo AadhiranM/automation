@@ -1,3 +1,4 @@
+from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -50,11 +51,81 @@ class SAVariantCreatePage(BasePage):
     # SELECT2 HANDLING
     # ==========================
 
+    from selenium.webdriver.common.keys import Keys
+
     def select_manufacturer(self, name):
-        self.select_from_select2(self.MANUFACTURER_DROPDOWN, name)
+
+        import time
+
+        self.click(self.MANUFACTURER_DROPDOWN)
+
+        search = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(
+                self.SELECT2_SEARCH_INPUT
+            )
+        )
+
+        search.clear()
+
+        search.send_keys(name)
+
+        # wait results load
+        time.sleep(2)
+
+        search.send_keys(Keys.ARROW_DOWN)
+
+        time.sleep(1)
+
+        search.send_keys(Keys.ENTER)
+
+        # verify manufacturer selected
+        WebDriverWait(self.driver, 10).until(
+            lambda d: name.lower() in self.driver.find_element(
+                *self.MANUFACTURER_DROPDOWN
+            ).text.lower()
+        )
+
+        # wait category dropdown enabled
+        WebDriverWait(self.driver, 20).until(
+            lambda d: d.find_element(
+                By.ID,
+                "category_id"
+            ).is_enabled()
+        )
 
     def select_category(self, name):
-        self.select_from_select2(self.CATEGORY_DROPDOWN, name)
+
+        import time
+
+        time.sleep(2)
+
+        self.click(self.CATEGORY_DROPDOWN)
+
+        search = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(
+                self.SELECT2_SEARCH_INPUT
+            )
+        )
+
+        search.clear()
+
+        search.send_keys(name)
+
+        # allow ajax results
+        time.sleep(2)
+
+        search.send_keys(Keys.ARROW_DOWN)
+
+        time.sleep(1)
+
+        search.send_keys(Keys.ENTER)
+
+        # verify category selected
+        WebDriverWait(self.driver, 10).until(
+            lambda d: name.lower() in self.driver.find_element(
+                *self.CATEGORY_DROPDOWN
+            ).text.lower()
+        )
 
     # ==========================
     # INPUT HANDLING

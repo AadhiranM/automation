@@ -197,3 +197,56 @@ class SAProductListPage(BasePage):
 
         self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", btn)
         self.driver.execute_script("arguments[0].click();", btn)
+
+    def is_product_present(self, product_name):
+
+        rows = self.driver.find_elements(
+            By.XPATH,
+            "//table//tbody//tr"
+        )
+
+        for row in rows:
+
+            if product_name.lower() in row.text.lower():
+                return True
+
+        return False
+
+    def is_sku_present(self, sku_id):
+
+        rows = self.driver.find_elements(
+            By.XPATH,
+            "//table//tbody//tr"
+        )
+
+        for row in rows:
+
+            if sku_id.lower() in row.text.lower():
+                return True
+
+        return False
+
+    def get_first_product_data(self):
+
+        manufacturer = self.get_text(
+            (
+                By.XPATH,
+                "//table//tbody//tr[1]/td[3]"
+            )
+        )
+
+        product_name = self.get_text(
+            (
+                By.XPATH,
+                "//table//tbody//tr[1]/td[4]"
+            )
+        )
+
+        sku_id = self.get_text(
+            (
+                By.XPATH,
+                "//table//tbody//tr[1]/td[5]"
+            )
+        )
+
+        return manufacturer, product_name, sku_id

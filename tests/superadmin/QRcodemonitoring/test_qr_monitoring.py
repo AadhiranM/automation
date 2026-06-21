@@ -129,12 +129,9 @@ class TestQRMonitoring:
     # EXPORT
     # ==================================================
     def test_export_id_based(self, setup):
-
         page = SAQRMonitoringPage(setup)
 
         page.goto_page()
-
-        page.click_export()
 
         page.export_id_based()
 

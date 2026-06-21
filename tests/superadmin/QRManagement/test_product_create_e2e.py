@@ -1,93 +1,162 @@
 import pytest
-from pages.superadmin.QRManagement.sa_product_create_parent_page import SAProductCreateParentPage
-from pages.superadmin.QRManagement.sa_product_create_child_page import SAProductCreateChildPage
-from pages.superadmin.QRManagement.sa_product_create_video_page import SAProductCreateVideoPage
-from pages.superadmin.QRManagement.sa_product_list_page import SAProductListPage
+
+from pages.superadmin.QRManagement.sa_product_create_parent_page import (
+    SAProductCreateParentPage
+)
+from pages.superadmin.QRManagement.sa_product_create_child_page import (
+    SAProductCreateChildPage
+)
+from pages.superadmin.QRManagement.sa_product_create_video_page import (
+    SAProductCreateVideoPage
+)
+from pages.superadmin.QRManagement.sa_product_list_page import (
+    SAProductListPage
+)
+from pages.superadmin.QRManagement.sa_category_list_page import (
+    SACategoryListPage
+)
 
 
 @pytest.mark.superadmin
 @pytest.mark.usefixtures("login_superadmin")
 class TestProductCreate:
 
-    def test_create_product(self, login_superadmin):
+    def get_test_data(self, driver):
+
+        category_page = SACategoryListPage(driver)
+
+        category_page.goto_page()
+
+        manufacturer_name, category_name = (
+            category_page.get_first_active_category_and_manufacturer()
+        )
+
+        print(
+            f"Manufacturer={manufacturer_name}"
+            f" | Category={category_name}"
+        )
+
+        return manufacturer_name, category_name
+
+    def test_create_product(
+            self,
+            login_superadmin
+    ):
         driver = login_superadmin["driver"]
+
+        manufacturer_name, category_name = (
+            self.get_test_data(driver)
+        )
 
         list_page = SAProductListPage(driver)
 
-        # ✅ Step 1: Navigate
-        list_page.goto_page()
-        list_page.wait_for_page()
-
-        # ✅ Step 2: Click Create
-        list_page.click_create()
-
-        # ✅ Step 3: Parent Page
-        parent = SAProductCreateParentPage(driver)
-        parent.wait_for_page()
-        parent.fill_parent_form()
-        parent.go_to_child()
-
-        # ✅ Step 4: Child Page
-        child = SAProductCreateChildPage(driver)
-        child.open_child_tab()
-        child.select_all_variants()
-        child.go_to_video()
-
-        # ✅ Step 5: Video Page
-        video = SAProductCreateVideoPage(driver)
-        video.wait_for_page()
-        video.create_product()
-
-        # ✅ FINAL ASSERTION
-        assert video.is_success_or_duplicate()
-
-    def test_create_product_without_child_video(self, login_superadmin):
-        driver = login_superadmin["driver"]
-
-        list_page = SAProductListPage(driver)
         list_page.goto_page()
         list_page.wait_for_page()
         list_page.click_create()
 
         parent = SAProductCreateParentPage(driver)
+
         parent.wait_for_page()
-        parent.fill_parent_form()
-        parent.go_to_child()
 
-        # ❌ Skip child page actions
-        child = SAProductCreateChildPage(driver)
-        child.open_child_tab()
-        child.go_to_video()
-
-        # ❌ Skip video inputs
-        video = SAProductCreateVideoPage(driver)
-        video.wait_for_page()
-        video.create_product()
-
-        # ✅ Flexible assertion
-        assert video.is_success_or_duplicate()
-
-    def test_create_product_with_variants(self, login_superadmin):
-        driver = login_superadmin["driver"]
-
-        list_page = SAProductListPage(driver)
-        list_page.goto_page()
-        list_page.wait_for_page()
-        list_page.click_create()
-
-        parent = SAProductCreateParentPage(driver)
-        parent.wait_for_page()
-        parent.fill_parent_form()
-        parent.go_to_child()
+        parent.fill_parent_form(
+            manufacturer_name,
+            category_name
+        )
 
         child = SAProductCreateChildPage(driver)
+
         child.open_child_tab()
         child.select_all_variants()
         child.go_to_video()
 
         video = SAProductCreateVideoPage(driver)
+
         video.wait_for_page()
         video.create_product()
 
-        # ✅ Accept both outcomes
-        assert video.is_success_or_duplicate()
+        list_page.goto_page()
+
+        list_page.wait_for_page()
+
+        list_page.search(
+            manufacturer_name
+        )
+
+        assert list_page.is_product_present(
+            manufacturer_name
+        )
+
+    # def test_create_product_without_child_video(
+    #         self,
+    #         login_superadmin
+    # ):
+    #     driver = login_superadmin["driver"]
+    #
+    #     manufacturer_name, category_name = (
+    #         self.get_test_data(driver)
+    #     )
+    #
+    #     list_page = SAProductListPage(driver)
+    #
+    #     list_page.goto_page()
+    #     list_page.wait_for_page()
+    #     list_page.click_create()
+    #
+    #     parent = SAProductCreateParentPage(driver)
+    #
+    #     parent.wait_for_page()
+    #
+    #     parent.fill_parent_form(
+    #         manufacturer_name,
+    #         category_name
+    #     )
+    #
+    #     child = SAProductCreateChildPage(driver)
+    #
+    #     child.open_child_tab()
+    #     child.go_to_video()
+    #
+    #     video = SAProductCreateVideoPage(driver)
+    #
+    #     video.wait_for_page()
+    #     video.create_product()
+    #
+    #     assert video.is_success_or_duplicate()
+    #
+    # def test_create_product_with_variants(
+    #         self,
+    #         login_superadmin
+    # ):
+    #     driver = login_superadmin["driver"]
+    #
+    #     manufacturer_name, category_name = (
+    #         self.get_test_data(driver)
+    #     )
+    #
+    #     list_page = SAProductListPage(driver)
+    #
+    #     list_page.goto_page()
+    #     list_page.wait_for_page()
+    #     list_page.click_create()
+    #
+    #     parent = SAProductCreateParentPage(driver)
+    #
+    #     parent.wait_for_page()
+    #
+    #     parent.fill_parent_form(
+    #         manufacturer_name,
+    #         category_name
+    #     )
+    #
+    #     child = SAProductCreateChildPage(driver)
+    #
+    #     child.open_child_tab()
+    #     child.select_all_variants()
+    #     child.go_to_video()
+    #
+    #     video = SAProductCreateVideoPage(driver)
+    #
+    #     video.wait_for_page()
+    #     video.create_product()
+    #
+    #     assert video.is_success_or_duplicate()

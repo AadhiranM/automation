@@ -96,6 +96,13 @@ class SAManufacturerListPage(BasePage):
         "//table/tbody/tr[1]/td[1]"
     )
 
+    FIRST_ROW_EMAIL = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[3]"
+    )
+
+    def get_first_business_email(self):
+        return self.get_text(self.FIRST_ROW_EMAIL).strip()
     def search(self, value):
 
         self.type(
@@ -314,3 +321,27 @@ class SAManufacturerListPage(BasePage):
         self.click(
             self.SEARCH_BTN
         )
+
+    def get_first_approved_business_email(self):
+
+        rows = self.driver.find_elements(
+            By.XPATH,
+            "//table[@id='crudTable']/tbody/tr"
+        )
+
+        for row in rows:
+
+            cells = row.find_elements(By.TAG_NAME, "td")
+
+            if len(cells) < 8:
+                continue
+
+            business_email = cells[2].text.strip()
+            status = cells[6].text.strip()
+
+            print(f"Email={business_email} | Status={status}")
+
+            if status.lower() == "approved":
+                return business_email
+
+        raise Exception("No approved manufacturer found")

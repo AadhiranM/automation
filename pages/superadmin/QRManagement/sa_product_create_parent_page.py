@@ -1,9 +1,17 @@
 import time
 import os
+
+from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from pages.common.base_page import BasePage
+from utilities.data_generator import (
+        generate_product_name,
+        generate_brand_name,
+        unique_id
+    )
+
 
 # ✅ GLOBAL FILE PATH (PIPELINE SAFE)
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../"))
@@ -46,67 +54,151 @@ class SAProductCreateParentPage(BasePage):
             EC.visibility_of_element_located(self.PRODUCT_NAME)
         )
 
-    def fill_parent_form(self):
+
+
+    def fill_parent_form(
+            self,
+            manufacturer_name,
+            category_name
+    ):
+
         self.wait_for_page()
 
-        # ---------- TEXT ----------
-        self.enter_text(self.PRODUCT_NAME, "Test Product Auto")
-        self.enter_text(self.SKU_ID, "AUTO12345")
-        self.enter_text(self.BRAND_NAME, "Test Brand")
+        # ---------------- PRODUCT ----------------
 
-        # ---------- DROPDOWNS ----------
-        self.select_searchable_dropdown(self.MANUFACTURER, "Sydneyyy Tea Shop")
-        self.select_searchable_dropdown(self.CATEGORY, "BerlinAutomateTest")
-
-        # ---------- STATUS ----------
-        WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(self.STATUS)
-        )
-        self.select_status_keyboard(self.STATUS, "Active")
-
-        WebDriverWait(self.driver, 10).until(
-            EC.invisibility_of_element_located((
-                By.XPATH, "//div[contains(@class,'choices__list--dropdown')]"
-            ))
+        self.enter_text(
+            self.PRODUCT_NAME,
+            generate_product_name()
         )
 
-        # ---------- REGULATORY ----------
-        self.select_searchable_dropdown(self.REGULATORY, "PAN")
+        # ---------------- SKU ----------------
 
-        WebDriverWait(self.driver, 10).until(
-            lambda d: d.find_element(*self.REGULATORY_CODE).get_attribute("readonly") is None
+        sku_suffix = unique_id()[-6:]
+
+        sku_box = self.get_element(
+            self.SKU_ID
         )
 
-        self.enter_text(self.REGULATORY_CODE, "ABCDE1234F")
-
-        # ---------- COUNTRY ----------
-        WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(self.COUNTRY)
+        sku_box.send_keys(
+            sku_suffix
         )
-        self.select_searchable_dropdown(self.COUNTRY, "India")
+
+        # ---------------- BRAND ----------------
+
+        self.enter_text(
+            self.BRAND_NAME,
+            generate_brand_name()
+        )
+
+        # ---------------- MANUFACTURER ----------------
+
+        self.select_searchable_dropdown(
+            self.MANUFACTURER,
+            manufacturer_name
+        )
+
+        # ---------------- CATEGORY ----------------
+
+        self.select_searchable_dropdown(
+            self.CATEGORY,
+            category_name
+        )
+
+        # ---------------- STATUS ----------------
+
+        # STATUS
+
+        self.click(self.STATUS)
+
+        WebDriverWait(
+            self.driver,
+            10
+        ).until(
+            EC.visibility_of_element_located(
+                (
+                    By.XPATH,
+                    "//div[contains(text(),'Active')]"
+                )
+            )
+        )
+
+        self.driver.find_element(
+            By.XPATH,
+            "//div[contains(text(),'Active')]"
+        ).click()
+
+
+
+        # ---------------- REGULATORY ----------------
+
+        self.click(self.REGULATORY)
 
         time.sleep(1)
 
-        # ---------- SCROLL ----------
-        desc = self.get_element(self.DESCRIPTION)
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", desc)
-
-        # ---------- OTHER ----------
-        self.enter_text(self.PRODUCT_URL, "https://test.com")
-        self.enter_text(self.DESCRIPTION, "Automation Description")
-
-        # =========================
-        # ✅ PRODUCT IMAGE UPLOAD (FINAL FIX)
-        # =========================
-        upload_el = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located(self.PRODUCT_IMAGE_UPLOAD)
+        self.driver.switch_to.active_element.send_keys(
+            Keys.ARROW_DOWN
         )
 
-        # 🔥 make visible (if hidden)
+        time.sleep(1)
+
+        self.driver.switch_to.active_element.send_keys(
+            Keys.ENTER
+        )
+
+        time.sleep(2)
+
+        self.enter_text(
+            self.REGULATORY_CODE,
+            "ABCDE1234F"
+        )
+
+        # ---------------- COUNTRY ----------------
+
+        self.click(self.COUNTRY)
+
+        time.sleep(1)
+
+        self.driver.switch_to.active_element.send_keys(
+            Keys.ARROW_DOWN
+        )
+
+        time.sleep(1)
+
+        self.driver.switch_to.active_element.send_keys(
+            Keys.ENTER
+        )
+
+        time.sleep(2)
+
+        # ---------------- URL ----------------
+
+        self.enter_text(
+            self.PRODUCT_URL,
+            "https://test.com"
+        )
+
+        # ---------------- DESCRIPTION ----------------
+
+        self.enter_text(
+            self.DESCRIPTION,
+            "Automation Product Description"
+        )
+
+        # ---------------- IMAGE ----------------
+
+        upload_el = WebDriverWait(
+            self.driver,
+            10
+        ).until(
+            EC.presence_of_element_located(
+                self.PRODUCT_IMAGE_UPLOAD
+            )
+        )
+
         self.driver.execute_script("""
-            arguments[0].style.display = 'block';
-            arguments[0].style.visibility = 'visible';
-            arguments[0].style.opacity = 1;
+            arguments[0].style.display='block';
+            arguments[0].style.visibility='visible';
+            arguments[0].style.opacity='1';
         """, upload_el)
 
         upload_el.send_keys(FILE_PATH)

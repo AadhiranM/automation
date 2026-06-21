@@ -28,6 +28,13 @@ class SAVariantListPage(BasePage):
     # ===== DROPDOWN =====
     ENTRIES_DROPDOWN = (By.XPATH, "//select[@name='crudTable_length']")
 
+    CREATE_BTN = (
+        By.XPATH,
+        "//a[normalize-space()='Create Variants']"
+    )
+
+    def click_create(self):
+        self.click(self.CREATE_BTN)
     # =============================
     # BASIC
     # =============================
@@ -135,3 +142,95 @@ class SAVariantListPage(BasePage):
         Select(dropdown).select_by_value(str(value))
 
         self.wait_for_table()
+
+    def is_category_present(self, category_name):
+
+        rows = self.driver.find_elements(*self.TABLE_ROWS)
+
+        for row in rows:
+
+            cells = row.find_elements(By.TAG_NAME, "td")
+
+            if len(cells) >= 2:
+
+                category = cells[1].text.strip()
+
+                if category.lower() == category_name.lower():
+                    return True
+
+        return False
+
+    def is_created_by_present(self, username):
+
+        rows = self.driver.find_elements(*self.TABLE_ROWS)
+
+        for row in rows:
+
+            cells = row.find_elements(By.TAG_NAME, "td")
+
+            if len(cells) >= 4:
+
+                created_by = cells[3].text.strip()
+
+                if username.lower() in created_by.lower():
+                    return True
+
+        return False
+
+    def wait_for_table_refresh(self):
+
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located(
+                self.TABLE_ROWS
+            )
+        )
+
+    def is_variant_value_present(self, value):
+
+        rows = self.driver.find_elements(
+            *self.TABLE_ROWS
+        )
+
+        for row in rows:
+
+            if value.lower() in row.text.lower():
+                return True
+
+        return False
+
+    def get_first_variant_type(self):
+
+        rows = self.driver.find_elements(*self.TABLE_ROWS)
+
+        for row in rows:
+
+            cells = row.find_elements(By.TAG_NAME, "td")
+
+            if len(cells) >= 3:
+
+                variant_type = cells[2].text.strip()
+
+                if (
+                        variant_type
+                        and "No Variants" not in variant_type
+                ):
+                    return variant_type
+
+        raise Exception("No Variant Type found")
+
+    def get_first_manufacturer_name(self):
+
+        rows = self.driver.find_elements(*self.TABLE_ROWS)
+
+        for row in rows:
+
+            cells = row.find_elements(By.TAG_NAME, "td")
+
+            if len(cells) >= 1:
+
+                manufacturer = cells[0].text.strip()
+
+                if manufacturer:
+                    return manufacturer
+
+        raise Exception("No Manufacturer found")

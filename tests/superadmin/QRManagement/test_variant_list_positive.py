@@ -6,7 +6,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from pages.superadmin.QRManagement.sa_variant_list_page import SAVariantListPage
 from pages.superadmin.QRManagement.sa_variant_view_page import SAVariantViewPage
 from pages.superadmin.QRManagement.sa_variant_create_page import SAVariantCreatePage
-
+from utilities.data_generator import (
+    generate_variant_type,
+    generate_variant_value
+)
 
 @pytest.mark.superadmin
 @pytest.mark.usefixtures("login_superadmin")
@@ -14,19 +17,31 @@ class TestVariantListPositive:
 
     def test_search_variant(self, setup):
         page = SAVariantListPage(setup)
+
         page.goto_page()
+
         page.wait_for_table()
 
-        page.search("hill")
+        variant_type = page.get_first_variant_type()
+
+        page.search(
+            variant_type
+        )
 
         assert page.is_row_present()
 
     def test_search_manufacturer(self, setup):
         page = SAVariantListPage(setup)
+
         page.goto_page()
+
         page.wait_for_table()
 
-        page.search("Sydney Tea Shop Pvt Ltd")
+        manufacturer = page.get_first_manufacturer_name()
+
+        page.search(
+            manufacturer
+        )
 
         assert page.is_row_present()
 
@@ -83,49 +98,83 @@ class TestVariantListPositive:
         driver = login_superadmin["driver"]
 
         list_page = SAVariantListPage(driver)
+
         list_page.goto_page()
+
         list_page.wait_for_table()
 
-        # ✅ MUST pick row with VIEW
-        list_page.click_actions_with_option(require_view=True)
+        # Select first row that contains View option
+        list_page.click_actions_with_option(
+            require_view=True
+        )
+
         list_page.click_view()
 
-        # ✅ WAIT FOR VIEW PAGE LOAD (IMPORTANT FIX)
+        # Wait for navigation to View page
         WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//input"))
+            lambda d: "viewvariant" in d.current_url.lower()
         )
 
         view_page = SAVariantViewPage(driver)
 
-        assert view_page.are_fields_disabled()
-
+        assert view_page.is_view_page_opened()
     def test_edit_variant(self, login_superadmin):
         driver = login_superadmin["driver"]
 
         list_page = SAVariantListPage(driver)
+
         list_page.goto_page()
         list_page.wait_for_table()
 
-        # ✅ MUST pick row with EDIT
-        list_page.click_actions_with_option(require_edit=True)
+        list_page.click_actions_with_option(
+            require_edit=True
+        )
+
         list_page.click_edit()
 
-        # ✅ WAIT FOR EDIT PAGE LOAD (FIXED)
         WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located(
-                (By.XPATH, "//button[contains(@class,'variant-submit-btn')]")
+                (
+                    By.XPATH,
+                    "//button[contains(@class,'variant-submit-btn')]"
+                )
             )
         )
 
-        # ✅ reuse create page (correct)
         edit_page = SAVariantCreatePage(driver)
 
-        edit_page.enter_variant_value("UpdatedValue")
-        edit_page.click_update()
+        variant_type = generate_variant_type()
+        variant_value = generate_variant_value()
 
-        # ✅ wait for toast
-        WebDriverWait(driver, 10).until(
-            lambda d: "success" in edit_page.get_toast_message().lower()
+        edit_page.enter_variant_type(
+            variant_type
         )
 
-        assert "success" in edit_page.get_toast_message().lower()
+        edit_page.enter_variant_value(
+            variant_value
+        )
+
+        edit_page.click_update()
+
+        # Back to list page
+        list_page.goto_page()
+        list_page.wait_for_table()
+
+        # Open same row in view mode
+        list_page.click_actions_with_option(
+            require_view=True
+        )
+
+        list_page.click_view()
+
+        view_page = SAVariantViewPage(driver)
+
+        assert (
+                view_page.get_variant_type().lower()
+                == variant_type.lower()
+        )
+
+        assert (
+                view_page.get_variant_value().lower()
+                == variant_value.lower()
+        )

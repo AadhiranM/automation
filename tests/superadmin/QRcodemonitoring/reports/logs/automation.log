@@ -1,1 +1,14 @@
-2026-05-21 11:43:47,793 [INFO] 📘 Logger initialized — fresh run, old logs cleared
+2026-06-20 16:06:29,213 [INFO] 📘 Logger initialized — fresh run, old logs cleared
+2026-06-20 16:06:30,995 [INFO] Clicking: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-06-20 16:06:30,996 [INFO] Waiting for: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-06-20 16:06:31,406 [INFO] Clicked successfully: ('xpath', "//button[@type='submit' and contains(text(),'Submit')]")
+2026-06-20 16:06:32,170 [INFO] Clicking: ('xpath', "//button[contains(text(),'Login')]")
+2026-06-20 16:06:32,170 [INFO] Waiting for: ('xpath', "//button[contains(text(),'Login')]")
+2026-06-20 16:06:35,081 [INFO] Clicked successfully: ('xpath', "//button[contains(text(),'Login')]")
+2026-06-20 16:06:35,081 [INFO] Waiting for: ('xpath', "//p[normalize-space()='Dashboard']")
+2026-06-20 16:06:35,219 [INFO] Waiting for: ('xpath', "//span[contains(@class,'user-name-text')]")
+2026-06-20 16:06:35,301 [INFO] Got text from ('xpath', "//span[contains(@class,'user-name-text')]"): Load testing Superadmin two
+2026-06-20 16:06:39,114 [INFO] Waiting for: ('xpath', '//table/tbody/tr[2]/td[1]')
+2026-06-20 16:06:39,153 [INFO] Got text from ('xpath', '//table/tbody/tr[2]/td[1]'): 8784022
+2026-06-20 16:06:39,153 [INFO] Waiting for: ('xpath', '//table/tbody/tr[1]/td[1]')
+2026-06-20 16:06:39,183 [INFO] Got text from ('xpath', '//table/tbody/tr[1]/td[1]'): 8784023

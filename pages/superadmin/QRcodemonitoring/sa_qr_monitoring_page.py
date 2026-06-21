@@ -286,90 +286,201 @@ class SAQRMonitoringPage(BasePage):
         )
 
     def export_id_based(self):
-        wait = WebDriverWait(self.driver, 25)
 
-        start_id = wait.until(
-            EC.visibility_of_element_located(self.SCAN_ID_SECOND)
-        ).text.strip()
+        wait = WebDriverWait(self.driver, 20)
 
-        end_id = wait.until(
-            EC.visibility_of_element_located(self.SCAN_ID_FIRST)
-        ).text.strip()
+        # ==========================================
+        # GET IDS FROM TABLE
+        # ==========================================
 
-        user_name = wait.until(
-            EC.visibility_of_element_located(self.FIRST_ROW_USER)
-        ).text.strip().split("\n")[0]
+        start_id = self.get_text(self.SCAN_ID_SECOND).strip()
+        end_id = self.get_text(self.SCAN_ID_FIRST).strip()
 
-        self.click(self.ID_BASED_TAB)
+        print("Start ID :", start_id)
+        print("End ID   :", end_id)
+
+        # ==========================================
+        # OPEN EXPORT POPUP
+        # ==========================================
+
+        export_btn = wait.until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//button[contains(.,'Export')]")
+            )
+        )
+
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            export_btn
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            export_btn
+        )
+
+        print("Export button clicked")
+
+        # ==========================================
+        # WAIT FOR POPUP
+        # ==========================================
+
+        wait.until(
+            EC.visibility_of_element_located(
+                (
+                    By.XPATH,
+                    "//h5[contains(.,'Choose Export Criteria')] | //h4[contains(.,'Choose Export Criteria')]"
+                )
+            )
+        )
+
+        print("Export popup opened")
+
+        # ==========================================
+        # CLICK ID TAB
+        # ==========================================
+
+        id_tab = wait.until(
+            EC.element_to_be_clickable(self.ID_BASED_TAB)
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            id_tab
+        )
+
+        print("ID tab clicked")
+
         time.sleep(2)
 
-        # START ID
-        start_box = wait.until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                "//input[@placeholder='Enter Report Start ID']"
-            ))
-        )
-        start_box.click()
-        start_box.send_keys(Keys.CONTROL, "a")
-        start_box.send_keys(Keys.DELETE)
-        start_box.send_keys(start_id)
-
-        # END ID
-        end_box = wait.until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                "//input[@placeholder='Enter Report End ID']"
-            ))
-        )
-        end_box.click()
-        end_box.send_keys(Keys.CONTROL, "a")
-        end_box.send_keys(Keys.DELETE)
-        end_box.send_keys(end_id)
-
+        # ==========================================
         # USER DROPDOWN
+        # ==========================================
+
+        # ==========================================
+        # USER DROPDOWN
+        # ==========================================
+
         dropdown = wait.until(
             EC.element_to_be_clickable((
                 By.XPATH,
-                "//div[contains(@class,'choices__inner')]"
+                "//label[contains(text(),'Select Users')]/following::div[contains(@class,'choices__inner')][1]"
             ))
         )
+
         dropdown.click()
 
-        search_box = wait.until(
-            EC.visibility_of_element_located((
-                By.XPATH,
-                "//input[contains(@class,'choices__input')]"
-            ))
-        )
+        time.sleep(2)
 
-        search_box.click()
-        search_box.clear()
-        search_box.send_keys(user_name)
-
-        # wait exact Raj option
-        exact_option = wait.until(
+        first_option = wait.until(
             EC.element_to_be_clickable((
                 By.XPATH,
-                f"//div[contains(@class,'choices__item--choice') and starts-with(normalize-space(), '{user_name}')]"
+                "(//div[contains(@class,'choices__list--dropdown')]//div[@role='option'])[1]"
             ))
         )
 
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", exact_option)
+        selected_user = first_option.text.strip()
+
+        print(f"Selected User : {selected_user}")
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            first_option
+        )
+
+        time.sleep(2)
+
+        # CLOSE DROPDOWN USING ESC
+        from selenium.webdriver.common.keys import Keys
+
+
+
+        ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
+
         time.sleep(1)
-        exact_option.click()
 
-        # verify selected chip
-        wait.until(
-            EC.visibility_of_element_located((
-                By.XPATH,
-                f"//div[contains(@class,'choices__item')][contains(.,'{user_name}')]"
-            ))
+        self.driver.execute_script("""
+        document.querySelector('.modal-body').click();
+        """)
+
+        time.sleep(1)
+
+        time.sleep(2)
+
+        # ==========================================
+        # START ID
+        # ==========================================
+
+        # ==========================================
+        # START ID
+        # ==========================================
+
+        start_box = wait.until(
+            EC.presence_of_element_located(self.START_ID)
         )
 
-        self.click(self.EXPORT_SUBMIT)
+        self.driver.execute_script(
+            "arguments[0].value = arguments[1];",
+            start_box,
+            start_id
+        )
 
+        self.driver.execute_script("""
+        arguments[0].dispatchEvent(new Event('input',{bubbles:true}));
+        arguments[0].dispatchEvent(new Event('change',{bubbles:true}));
+        """, start_box)
 
+        # ==========================================
+        # END ID
+        # ==========================================
+
+        end_box = wait.until(
+            EC.presence_of_element_located(self.END_ID)
+        )
+
+        self.driver.execute_script(
+            "arguments[0].value = arguments[1];",
+            end_box,
+            end_id
+        )
+
+        self.driver.execute_script("""
+        arguments[0].dispatchEvent(new Event('input',{bubbles:true}));
+        arguments[0].dispatchEvent(new Event('change',{bubbles:true}));
+        """, end_box)
+
+        time.sleep(1)
+
+        actual_start = start_box.get_attribute("value").strip()
+        actual_end = end_box.get_attribute("value").strip()
+
+        print("Actual Start :", actual_start)
+        print("Actual End   :", actual_end)
+
+        assert actual_start != "", "Start ID blank"
+        assert actual_end != "", "End ID blank"
+
+        # ==========================================
+        # SUBMIT
+        # ==========================================
+        buttons = self.driver.find_elements(
+            By.XPATH,
+            "//button"
+        )
+
+        for btn in buttons:
+            print("BUTTON =>", btn.text)
+
+        submit_btn = wait.until(
+            EC.element_to_be_clickable(self.EXPORT_SUBMIT)
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            submit_btn
+        )
+
+        print("Export Submitted")
     # ======================================================
     # USER BASED EXPORT FIXED
     # ======================================================

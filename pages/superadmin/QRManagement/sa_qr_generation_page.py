@@ -4,7 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from pages.common.base_page import BasePage
 from selenium.webdriver.common.keys import Keys
-
+from selenium.webdriver.common.action_chains import ActionChains
 class SAQRGenerationPage(BasePage):
 
     URL = "/admin/generate-qr/create"
@@ -65,49 +65,82 @@ class SAQRGenerationPage(BasePage):
     # =========================
     # SEARCH DROPDOWNS
     # =========================
-    def select_manufacturer(self, value):
-        self.select_searchable_dropdown(self.MANUFACTURER, value)
+    def select_manufacturer_dynamic(
+            self,
+            manufacturer_name
+    ):
+
+        self.select_searchable_dropdown(
+            self.MANUFACTURER,
+            manufacturer_name
+        )
+
         self.close_dropdown()
 
-    def select_product_id(self, value):
-        wait = WebDriverWait(self.driver, 10)
+    def select_product_id_dynamic(self, sku_id):
 
-        self.select_searchable_dropdown(self.PRODUCT_ID, value)
+        for attempt in range(2):
 
-        # 🔥 WAIT UNTIL DROPDOWN DISAPPEARS (REAL FIX)
-        wait.until(EC.invisibility_of_element_located((
-            By.XPATH, "//div[contains(@class,'choices__list--dropdown')]"
-        )))
+            self.select_searchable_dropdown(
+                self.PRODUCT_ID,
+                sku_id
+            )
 
-        # 🔥 EXTRA SAFETY CLICK
-        self.driver.find_element(By.TAG_NAME, "body").click()
+            try:
 
-        time.sleep(1)
+                WebDriverWait(self.driver, 20).until(
+                    lambda d:
+                    d.find_element(
+                        By.XPATH,
+                        "//input[@placeholder='Enter Product Name']"
+                    ).get_attribute("value").strip() != ""
+                )
 
+                return
+
+            except:
+
+                print(
+                    f"Product load failed. Retry {attempt + 1}"
+                )
+
+        raise Exception(
+            "Product details not loaded"
+        )
 
     def select_variant_sku(self):
-        wait = WebDriverWait(self.driver, 10)
 
         self.click(self.VARIANT_SKU)
 
-        options = wait.until(
-            EC.presence_of_all_elements_located((
-                By.XPATH,
-                "//div[contains(@class,'choices__list--dropdown')]//div[@role='option']"
-            ))
+        time.sleep(2)
+
+        options = self.driver.find_elements(
+            By.XPATH,
+            "//div[@data-choice-selectable]"
         )
 
-        valid_options = [opt for opt in options if opt.text.strip()]
-        valid_options[0].click()
+        valid_options = [
+            opt for opt in options
+            if opt.text.strip()
+        ]
 
-        self.close_dropdown()
+        if not valid_options:
+            print("No Variant SKU available. Continuing without variant.")
+            return False
+
+        print(
+            f"Selected Variant SKU: {valid_options[0].text}"
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            valid_options[0]
+        )
+
         time.sleep(1)
 
-    def select_batch_location(self, value):
-        self.select_searchable_dropdown(self.BATCH_LOCATION, value)
-        self.close_dropdown()
+        return True
 
-    # =========================
     # INPUT METHODS
     # =========================
     def enter_batch(self, value):
@@ -158,9 +191,6 @@ class SAQRGenerationPage(BasePage):
         self.select_status_keyboard(self.DIMENSION, value)
         self.close_dropdown()
 
-    def select_qr_type(self, value):
-        self.select_status_keyboard(self.QR_TYPE, value)
-        self.close_dropdown()
 
     def select_image_format(self, value):
         self.select_status_keyboard(self.IMAGE_FORMAT, value)
@@ -201,3 +231,40 @@ class SAQRGenerationPage(BasePage):
 
         except:
             pass
+
+    # def select_batch_location(self, value="Chennai"):
+    #
+    #     self.select_searchable_dropdown(
+    #         self.BATCH_LOCATION,
+    #         value
+    #     )
+    #
+    #     self.close_dropdown()
+    #
+    #     time.sleep(1)
+
+    def select_batch_location(self, value="Chennai"):
+
+        self.select_searchable_dropdown(
+            self.BATCH_LOCATION,
+            value
+        )
+
+        ActionChains(self.driver) \
+            .send_keys(Keys.TAB) \
+            .perform()
+
+        time.sleep(1)
+
+    def select_qr_type(self):
+
+        self.click(self.QR_TYPE)
+
+        time.sleep(1)
+
+        ActionChains(self.driver) \
+            .send_keys(Keys.ARROW_DOWN) \
+            .send_keys(Keys.ENTER) \
+            .perform()
+
+        time.sleep(1)

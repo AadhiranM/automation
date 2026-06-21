@@ -1,25 +1,38 @@
-from datetime import datetime
-import time
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait, Select
-from selenium.webdriver.support import expected_conditions as EC
 
 from pages.common.base_page import BasePage
-from utilities.flatpickr import FlatpickrRangePicker
+
 
 class SAVariantViewPage(BasePage):
 
-    MANUFACTURER = (By.ID, "manufacturer_id")
-    CATEGORY = (By.ID, "category_id")
+    VARIANT_TYPE_TEXT = (
+        By.XPATH,
+        "//table//tbody/tr[1]/td[1]"
+    )
 
-    def are_fields_disabled(self):
-        manufacturer = self.get_element(self.MANUFACTURER)
-        category = self.get_element(self.CATEGORY)
+    VARIANT_VALUE_TEXT = (
+        By.XPATH,
+        "//table//tbody/tr[1]/td[2]"
+    )
+
+    def is_view_page_opened(self):
+
+        current_url = self.driver.current_url.lower()
 
         return (
-                manufacturer.get_attribute("disabled")
-                or manufacturer.get_attribute("readonly")
-        ) and (
-                category.get_attribute("disabled")
-                or category.get_attribute("readonly")
+            "viewvariant" in current_url
+            or "/view/" in current_url
+            or "/show/" in current_url
         )
+
+    def get_variant_type(self):
+
+        return self.driver.find_element(
+            *self.VARIANT_TYPE_TEXT
+        ).text.strip()
+
+    def get_variant_value(self):
+
+        return self.driver.find_element(
+            *self.VARIANT_VALUE_TEXT
+        ).text.strip()

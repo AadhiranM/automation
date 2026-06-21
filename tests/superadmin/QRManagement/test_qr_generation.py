@@ -1,156 +1,238 @@
 import pytest
 import time
+import random
+import string
+
 from selenium.webdriver.common.by import By
-from pages.superadmin.QRManagement.sa_qr_generation_page import SAQRGenerationPage
-from pages.superadmin.QRManagement.sa_qr_list_page import SAQRListPage
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from pages.superadmin.QRManagement.sa_qr_generation_page import (
+    SAQRGenerationPage
+)
+from pages.superadmin.QRManagement.sa_qr_list_page import (
+    SAQRListPage
+)
+from pages.superadmin.QRManagement.sa_product_list_page import (
+    SAProductListPage
+)
+from datetime import date, timedelta
 
 @pytest.mark.superadmin
 @pytest.mark.usefixtures("login_superadmin")
 class TestQRGeneration:
 
-    def test_generate_qr_success(self, login_superadmin):
+    def generate_batch(self):
+
+        return (
+            "BI"
+            + ''.join(
+                random.choices(
+                    string.digits,
+                    k=5
+                )
+            )
+            + "-"
+            + ''.join(
+                random.choices(
+                    string.ascii_lowercase,
+                    k=6
+                )
+            )
+        )
+
+    def test_generate_qr_success(
+            self,
+            login_superadmin
+    ):
 
         driver = login_superadmin["driver"]
 
+        # =====================================================
+        # STEP 1 - GET PRODUCT DATA
+        # =====================================================
+
+        product_page = SAProductListPage(driver)
+
+        product_page.goto_page()
+
+        product_page.wait_for_page()
+
+        manufacturer_name, product_name, sku_id = (
+            product_page.get_first_product_data()
+        )
+
+        print("Manufacturer :", manufacturer_name)
+        print("Product Name :", product_name)
+        print("SKU ID :", sku_id)
+
+        # =====================================================
+        # STEP 2 - OPEN QR PAGE
+        # =====================================================
+
         qr = SAQRGenerationPage(driver)
 
-        # =====================================================
-        # STEP 1 - OPEN PAGE
-        # =====================================================
-
         qr.goto_page()
+
         qr.wait_for_page()
 
         # =====================================================
-        # STEP 2 - MANUFACTURER
+        # STEP 3 - MANUFACTURER
         # =====================================================
 
-        qr.select_manufacturer("Sydneyyy Tea Shop Pvt Ltd")
+        qr.select_manufacturer_dynamic(
+            manufacturer_name
+        )
 
-        # wait dropdown stabilize
-        time.sleep(1)
-
-        # =====================================================
-        # STEP 3 - PRODUCT ID
-        # =====================================================
-
-        qr.select_product_id("M19285")
-
-        # wait dependent dropdown load
         time.sleep(2)
 
         # =====================================================
-        # STEP 4 - BATCH
+        # STEP 4 - PRODUCT ID
         # =====================================================
 
-        unique_id = str(int(time.time()))[-9:]
+        qr.select_product_id_dynamic(
+            sku_id
+        )
 
-        qr.enter_batch(unique_id)
+        time.sleep(3)
 
         # =====================================================
-        # STEP 5 - VARIANT SKU
+        # STEP 5 - BATCH
+        # =====================================================
+
+        batch_no = self.generate_batch()
+
+        print("Generated Batch :", batch_no)
+
+        qr.enter_batch(batch_no)
+
+        # =====================================================
+        # STEP 6 - VARIANT SKU
         # =====================================================
 
         qr.select_variant_sku()
 
-        # wait variant load complete
         time.sleep(1)
 
         # =====================================================
-        # STEP 6 - QUANTITY
+        # STEP 7 - QUANTITY
         # =====================================================
 
         qr.enter_quantity("10")
 
         # =====================================================
-        # STEP 7 - DATES
+        # STEP 8 - DATES
         # =====================================================
 
-        qr.select_mfg_date("2026-05-08")
+        mfg_date = (
+                date.today() + timedelta(days=10)
+        ).strftime("%Y-%m-%d")
+
+        expiry_date = (
+                date.today() + timedelta(days=30)
+        ).strftime("%Y-%m-%d")
+
+        print("Manufacturing Date :", mfg_date)
+        print("Expiry Date :", expiry_date)
+
+        qr.select_mfg_date(mfg_date)
 
         time.sleep(1)
 
-        qr.select_expiry_date("2026-05-12")
+        qr.select_expiry_date(expiry_date)
 
-        # 🔥 IMPORTANT
-        # close flatpickr overlay
         qr.close_calendar_overlay()
 
         time.sleep(1)
-
         # =====================================================
-        # STEP 8 - BATCH LOCATION
-        # =====================================================
-
-        qr.select_batch_location("Chennai")
-
-        time.sleep(1)
-
-        # =====================================================
-        # STEP 9 - DROPDOWNS
+        # STEP 9 - BATCH LOCATION
         # =====================================================
 
-        qr.select_dimension("1 cm")
-
-        time.sleep(1)
-
-        qr.select_qr_type(
-            "QR code with microtext and no invisible text"
+        qr.select_batch_location(
+            "Chennai"
         )
 
         time.sleep(1)
 
-        qr.select_image_format("SVG")
+        # =====================================================
+        # STEP 10 - DIMENSION
+        # =====================================================
+
+        qr.select_dimension(
+            "1 cm"
+        )
 
         time.sleep(1)
 
         # =====================================================
-        # STEP 10 - GENERATE QR
+        # STEP 11 - QR TYPE
+        # =====================================================
+
+        qr.select_qr_type()
+
+        time.sleep(1)
+
+        # =====================================================
+        # STEP 12 - IMAGE FORMAT
+        # =====================================================
+
+        qr.select_image_format(
+            "PDF"
+        )
+
+        time.sleep(1)
+
+        # =====================================================
+        # STEP 13 - GENERATE QR
         # =====================================================
 
         qr.click_generate()
 
         # =====================================================
-        # SUCCESS TOAST WAIT
+        # SUCCESS TOAST
         # =====================================================
 
-        WebDriverWait(driver, 15).until(
+        WebDriverWait(
+            driver,
+            15
+        ).until(
             EC.presence_of_element_located(
-                (By.XPATH, "//div[contains(@class,'toast')]")
+                (
+                    By.XPATH,
+                    "//div[contains(@class,'toast')]"
+                )
             )
         )
 
-        # backend save wait
         time.sleep(5)
 
         # =====================================================
-        # STEP 11 - VALIDATION
+        # STEP 14 - VALIDATION
+        # =====================================================
+
+        # =====================================================
+        # STEP 14 - VALIDATION
         # =====================================================
 
         qr_list = SAQRListPage(driver)
 
         qr_list.goto_page()
 
-        # wait table load
         time.sleep(3)
-
-        # =====================================================
-        # GET LATEST BATCH
-        # =====================================================
 
         latest_batch = qr_list.get_first_batch_text()
 
-        print("Latest Batch:", latest_batch)
+        print("Latest Batch :", latest_batch)
 
-        # backend removes first digit
-        expected_batch = unique_id[1:]
+        # Get only unique random suffix
+        random_part = batch_no.split("-")[1]
 
-        print("Expected Batch:", expected_batch)
+        print("Random Part :", random_part)
 
-        assert expected_batch in latest_batch, \
-            f"Generated batch not found. Expected: {expected_batch}, Actual: {latest_batch}"
+        assert random_part in latest_batch, (
+            f"Generated batch not found. "
+            f"Expected random part={random_part}, "
+            f"Actual={latest_batch}"
+        )
 
         print("QR Batch Validation Passed")

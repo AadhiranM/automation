@@ -66,3 +66,22 @@ def generate_mailinator_email():
         f"technova{unique_id()}"
         "@mailinator.com"
     )
+
+def generate_batch():
+
+    return (
+        "BI"
+        + ''.join(
+            random.choices(
+                string.digits,
+                k=5
+            )
+        )
+        + "-"
+        + ''.join(
+            random.choices(
+                string.ascii_lowercase,
+                k=6
+            )
+        )
+    )

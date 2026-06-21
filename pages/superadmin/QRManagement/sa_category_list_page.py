@@ -55,7 +55,7 @@ class SACategoryListPage(BasePage):
     # =====================================================================
     # 8. DATE FILTER
     # =====================================================================
-    INLINE_CREATED_AT = (By.XPATH, "//input[@placeholder='Filter by : Created At']")
+    INLINE_CREATED_AT = (By.XPATH, "//input[@placeholder='Created At']")
 
     # =====================================================================
     # 9. PAGE LOAD MARKER
@@ -209,3 +209,59 @@ class SACategoryListPage(BasePage):
                 # ⚠️ Adjust column index if needed
 
         return None
+
+    def get_first_active_category_name(self):
+
+        rows = self.driver.find_elements(
+            By.XPATH,
+            "//table[@id='crudTable']/tbody/tr"
+        )
+
+        for row in rows:
+
+            cells = row.find_elements(By.TAG_NAME, "td")
+
+            if len(cells) < 4:
+                continue
+
+            category_name = cells[1].text.strip()
+            status = cells[3].text.strip()
+
+            if status.lower() == "active":
+                return category_name
+
+        raise Exception("No active category found")
+
+    def get_first_active_category_and_manufacturer(self):
+
+        rows = self.driver.find_elements(
+            By.XPATH,
+            "//table[@id='crudTable']/tbody/tr"
+        )
+
+        for row in rows:
+
+            cells = row.find_elements(By.TAG_NAME, "td")
+
+            if len(cells) < 4:
+                continue
+
+            category_name = cells[1].text.strip()
+            manufacturer_name = cells[2].text.strip()
+            status = cells[3].text.strip()
+
+            print(
+                f"Category={category_name} | "
+                f"Manufacturer={manufacturer_name} | "
+                f"Status={status}"
+            )
+
+            if status.lower() == "active":
+                return (
+                    manufacturer_name,
+                    category_name
+                )
+
+        raise Exception(
+            "No Active Category Found"
+        )
