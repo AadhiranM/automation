@@ -92,7 +92,7 @@ def setup(request, get_browser, get_config, base_url):
     if browser == "chrome":
         options = ChromeOptions()
 
-        if get_config.get("headless", False) or is_ci:
+        if get_config["execution"]["headless"] or is_ci:
             options.add_argument("--headless=new")
             options.add_argument("--window-size=1920,1080")
         options.add_argument("--disable-gpu")
@@ -106,7 +106,7 @@ def setup(request, get_browser, get_config, base_url):
     # --------------------------------------
     elif browser == "edge":
         options = EdgeOptions()
-        if get_config.get("headless", False) or is_ci:
+        if get_config["execution"]["headless"] or is_ci:
             options.add_argument("headless")
             options.add_argument("window-size=1920,1080")
         driver = webdriver.Edge(options=options)
@@ -125,14 +125,14 @@ def setup(request, get_browser, get_config, base_url):
     # --------------------------------------
     elif browser == "ulaa":
         options = ChromeOptions()
-        ulaa_path = get_config.get("ulaa_path", "")
+        ulaa_path = get_config["ulaa"]["path"]
         if not os.path.exists(ulaa_path):
             raise FileNotFoundError(
                 f"ULAA browser not found at: {ulaa_path}"
             )
         options.binary_location = ulaa_path
 
-        if get_config.get("headless", False) or is_ci:
+        if get_config["execution"]["headless"] or is_ci:
             options.add_argument("--headless=new")
             options.add_argument("--window-size=1920,1080")
 
@@ -151,7 +151,9 @@ def setup(request, get_browser, get_config, base_url):
     driver.implicitly_wait(
         get_config["timeouts"]["implicit_wait"]
     )
-    driver.set_page_load_timeout(60)
+    driver.set_page_load_timeout(
+        get_config["timeouts"]["page_load_timeout"]
+    )
 
     # --------------------------------------
     # Navigate to base URL

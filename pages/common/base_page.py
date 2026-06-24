@@ -23,13 +23,28 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 
 class BasePage:
-    def __init__(self, driver, timeout=None):   # ✅ UPDATED
-        self.driver = driver
-        # ✅ take from config if not passed
-        self.timeout = timeout if timeout else get_config("explicit_wait", 10)
-        full_url = get_config("url")  # https://beta.digitathya.com/admin/login
-        self.base_url = full_url.split("/admin")[0]  # https://beta.digitathya.com
 
+    def __init__(self, driver, timeout=None):
+
+        self.driver = driver
+
+        self.timeout = timeout if timeout else get_config(
+            "timeouts.explicit_wait",
+            10
+        )
+
+        env = get_config("environment")
+
+        full_url = get_config(
+            f"urls.{env}"
+        )
+
+        if not full_url:
+            raise ValueError(
+                f"URL not configured for environment: {env}"
+            )
+
+        self.base_url = full_url.split("/admin")[0]
     # -------------------------------------------------------------------
     # 📸 Take Screenshot
     # -------------------------------------------------------------------
