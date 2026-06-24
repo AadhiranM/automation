@@ -47,12 +47,15 @@ def get_config():
 
 @pytest.fixture(scope="session")
 def base_url(get_config):
-    return get_config["url"]
+
+    env = get_config["environment"]
+
+    return get_config["urls"][env]
 
 
 @pytest.fixture()
 def wait(setup, get_config):
-    timeout = get_config.get("explicit_wait", 10)
+    timeout = get_config["timeouts"]["explicit_wait"]
     return WebDriverWait(setup, timeout)
 
 
@@ -145,7 +148,9 @@ def setup(request, get_browser, get_config, base_url):
         driver.maximize_window()
     except Exception:
         pass
-    driver.implicitly_wait(get_config.get("implicit_wait", 10))
+    driver.implicitly_wait(
+        get_config["timeouts"]["implicit_wait"]
+    )
     driver.set_page_load_timeout(60)
 
     # --------------------------------------
