@@ -1,8 +1,16 @@
-url: "https://beta.digitathya.com/admin/login"
-browser: "chrome"
-access_code: "2560"   # replace with your real code
+environment: beta
+
+urls:
+  beta: "https://beta.digitathya.com/admin/login"
+  uat: "https://uat.digitathya.com/admin/login"
+  production: "https://digitathya.com/admin/login"
+
+browser: chrome
+
+access_code: "2560"
 
 users:
+
   superadmin:
     username: "loadtesting_superadmin2@mailinator.com"
     password: "Newuser@123"
@@ -11,9 +19,19 @@ users:
     username: "manufacturer@test.com"
     password: "Password123"
 
-implicit_wait: 10
-explicit_wait: 10          # <-- NEW (for WebDriverWait)
-headless: false
+timeouts:
+  implicit_wait: 10
+  explicit_wait: 20
+  page_load_timeout: 60
 
-# Only required for ULAA
-ulaa_path: "C:/Program Files/Zoho/Ulaa/Application/ulaa.exe"
+execution:
+  headless: false
+  maximize_window: true
+
+reports:
+  html: "reports/html"
+  screenshots: "reports/screenshots"
+  logs: "reports/logs"
+
+ulaa:
+  path: "C:/Program Files/Zoho/Ulaa/Application/ulaa.exe"

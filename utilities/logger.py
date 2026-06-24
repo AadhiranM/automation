@@ -1,10 +1,19 @@
 import logging
 import os
+import os
 
+PROJECT_ROOT = os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))
+)
+
+LOG_DIR = os.path.join(
+    PROJECT_ROOT,
+    "reports",
+    "logs"
+)
 # -------------------------
 # LOG PATH SETUP
 # -------------------------
-LOG_DIR = "reports/logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 
 LOG_FILE = f"{LOG_DIR}/automation.log"
@@ -14,6 +23,7 @@ LOG_FILE = f"{LOG_DIR}/automation.log"
 # -------------------------
 logger = logging.getLogger("automation")
 logger.setLevel(logging.INFO)
+logger.propagate = False
 
 # 🔥 IMPORTANT: Remove existing handlers (pytest reuse issue)
 if logger.hasHandlers():

@@ -61,12 +61,19 @@ def wait(setup, get_config):
 # =========================================================
 @pytest.fixture(scope="session", autouse=True)
 def clean_old_reports():
-    screenshots_dir = "reports/screenshots"
 
-    if os.path.exists(screenshots_dir):
-        shutil.rmtree(screenshots_dir)
+    folders = [
+        "reports/screenshots",
+        "reports/logs",
+        "reports/html"
+    ]
 
-    os.makedirs(screenshots_dir, exist_ok=True)
+    for folder in folders:
+
+        if os.path.exists(folder):
+            shutil.rmtree(folder)
+
+        os.makedirs(folder, exist_ok=True)
 
 # =========================================================
 # MAIN DRIVER SETUP (Chrome / Edge / Firefox / Ulaa)
@@ -135,8 +142,12 @@ def setup(request, get_browser, get_config, base_url):
     # --------------------------------------
     # Browser common settings
     # --------------------------------------
-    driver.maximize_window()
+    try:
+        driver.maximize_window()
+    except Exception:
+        pass
     driver.implicitly_wait(get_config.get("implicit_wait", 10))
+    driver.set_page_load_timeout(60)
 
     # --------------------------------------
     # Navigate to base URL
@@ -186,8 +197,15 @@ def pytest_runtest_makereport(item):
             folder = os.path.join(project_root, "reports", "screenshots")
             os.makedirs(folder, exist_ok=True)
 
+            safe_name = (
+                report.nodeid
+                .replace("::", "_")
+                .replace("/", "_")
+                .replace("\\", "_")
+            )
+
             file_name = (
-                f"{report.nodeid.replace('::','_')}_"
+                f"{safe_name}_"
                 f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
             )
 
