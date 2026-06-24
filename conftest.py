@@ -64,7 +64,6 @@ def clean_old_reports():
 
     folders = [
         "reports/screenshots",
-        "reports/logs",
         "reports/html"
     ]
 
