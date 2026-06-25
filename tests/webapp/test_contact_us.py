@@ -12,7 +12,8 @@ class TestContactUs:
     # -------------------------------------------------------
     def test_submit_valid_enquiry(self, setup):
         page = ContactUsPage(setup)
-        page.open()   # CORRECT
+
+        page.open()
 
         page.fill_form(
             name="Manikandan A",
@@ -24,67 +25,88 @@ class TestContactUs:
 
         page.submit()
 
-        # Validate success message
         msg = page.get_success_message()
-        assert ("success" in msg.lower() or "thank" in msg.lower()), \
-            "Success message not found after valid form submission"
+
+        assert (
+                "success" in msg.lower()
+                or
+                "thank" in msg.lower()
+        )
 
     # -------------------------------------------------------
     # NEGATIVE TEST – INVALID EMAIL
     # -------------------------------------------------------
-    @pytest.mark.parametrize("email", [
-        "test", "abc@", "abc@gmail", "@gmail.com", "mani@.com"
-    ])
+    @pytest.mark.parametrize(
+        "email",
+        [
+            "test",
+            "abc@",
+            "abc@gmail",
+            "@gmail.com",
+            "mani@.com"
+        ]
+    )
     def test_invalid_email(self, setup, email):
         page = ContactUsPage(setup)
-        page.open()   # CORRECT
+
+        page.open()
 
         page.fill_form(
             name="Test User",
             phone="9876543210",
             email=email,
             company="Dummy",
-            message="Test"
+            message="Testing"
         )
 
         page.submit()
 
-        # Expect success message NOT to appear
-        with pytest.raises(Exception):
-            page.get_success_message()
+        assert not page.is_success_message_displayed(), \
+            "Success message displayed for invalid email"
 
     # -------------------------------------------------------
     # NEGATIVE TEST – INVALID PHONE NUMBER
     # -------------------------------------------------------
-    @pytest.mark.parametrize("phone", [
-        "9876543"
-    ])
+    @pytest.mark.parametrize(
+        "phone",
+        [
+            "9876543"
+        ]
+    )
     def test_invalid_phone(self, setup, phone):
         page = ContactUsPage(setup)
-        page.open()   # CORRECT
+
+        page.open()
 
         page.fill_form(
-            name="Test User",
-            phone=phone,
-            email="valid@test.com",
-            company="Dummy",
-            message="Test message"
+            "Test User",
+            phone,
+            "valid@test.com",
+            "Dummy",
+            "Testing"
         )
 
         page.submit()
 
-        # Expect success message NOT to appear
-        with pytest.raises(Exception):
-            page.get_success_message()
+        assert not page.is_success_message_displayed(), \
+            "Success message displayed for invalid phone"
 
     # -------------------------------------------------------
     # NEGATIVE TEST – REQUIRED FIELD BLANK
     # -------------------------------------------------------
-    @pytest.mark.parametrize("field", ["name", "phone", "email", "message"])
+    @pytest.mark.parametrize(
+        "field",
+        [
+            "name",
+            "phone",
+            "email",
+            "message"
+        ]
+    )
     def test_blank_required_fields(self, setup, field):
-
         page = ContactUsPage(setup)
-        page.open()   # CORRECT
+
+        page.open()
 
         data = {
             "name": "Test",
@@ -94,7 +116,6 @@ class TestContactUs:
             "message": "Hello"
         }
 
-        # make one field blank
         data[field] = ""
 
         page.fill_form(
@@ -107,6 +128,5 @@ class TestContactUs:
 
         page.submit()
 
-        # Expect success message NOT to appear
-        with pytest.raises(Exception):
-            page.get_success_message()
+        assert not page.is_success_message_displayed(), \
+            f"Success message displayed when {field} is blank"

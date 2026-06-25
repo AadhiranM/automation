@@ -1,7 +1,8 @@
-# File: pages/webapp/contact_us_page.py
-
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
+
 from pages.common.base_page import BasePage
+
 
 class ContactUsPage(BasePage):
 
@@ -11,13 +12,14 @@ class ContactUsPage(BasePage):
     COMPANY = (By.ID, "company")
     MESSAGE = (By.ID, "message")
     SUBMIT = (By.ID, "contactSubmit")
-    FORM = (By.ID, "contactForm")
 
-    SUCCESS_MSG = (By.XPATH, "//*[contains(text(),'success') or contains(text(),'Thank')]")
+    SUCCESS_MSG = (
+        By.XPATH,
+        "//*[contains(text(),'success') or contains(text(),'Thank')]"
+    )
 
-    # FINAL CORRECT OPEN METHOD
-    def open(self, url="https://digitathya.com/contact-us"):
-        super().open(url)
+    def open(self):
+        super().open("https://digitathya.com/contact-us")
 
     def fill_form(self, name, phone, email, company, message):
         self.type(self.NAME, name)
@@ -31,3 +33,22 @@ class ContactUsPage(BasePage):
 
     def get_success_message(self):
         return self.get_text(self.SUCCESS_MSG)
+
+    # ---------------------------------------------------
+    # Safe helper for negative scenarios
+    # ---------------------------------------------------
+
+    def is_success_message_displayed(self, timeout=3):
+        try:
+            self.wait(
+                self.SUCCESS_MSG,
+                timeout=timeout
+            )
+            return True
+        except TimeoutException:
+            return False
+
+    def has_success_message(self):
+        if self.is_success_message_displayed():
+            return self.get_success_message()
+        return ""
