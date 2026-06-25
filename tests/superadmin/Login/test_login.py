@@ -54,7 +54,10 @@ class TestSuperAdminLogin:
 
         creds = get_config["users"]["superadmin"]
 
-        page.login(creds["username"], creds["password"])
+        page.login_successfully(
+            creds["username"],
+            creds["password"]
+        )
 
         assert page.is_dashboard_loaded(), \
             "Dashboard did NOT load after valid login"
@@ -70,8 +73,7 @@ class TestSuperAdminLogin:
 
         page.login(creds["username"], "WrongPassword123")
 
-        assert "invalid" in page.get_error_message().lower(), \
-            "Error message for invalid password not shown"
+        assert "invalid credentials" in page.get_error_message().lower()
 
     # ============================================================
     # 🔵 NEGATIVE LOGIN — Wrong Email + Wrong Password
@@ -82,5 +84,4 @@ class TestSuperAdminLogin:
 
         page.login("unknown@mail.com", "InvalidPass")
 
-        assert "invalid" in page.get_error_message().lower(), \
-            "Invalid credentials error NOT shown"
+        assert "invalid credentials" in page.get_error_message().lower()

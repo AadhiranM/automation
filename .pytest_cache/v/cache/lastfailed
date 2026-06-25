@@ -94,7 +94,5 @@
   "tests/superadmin/Manufacturer/test_manufacturer_create_negative.py::TestManufacturerCreateNegative::test_create_manufacturer_with_invalid_email_format": true,
   "tests/superadmin/Manufacturer/test_manufacturer_filters_positive.py::TestManufacturerFilters::test_filter_by_clear_filter": true,
   "tests/superadmin/QRManagement/test_category_create_negative.py::TestCategoryCreateNegative::test_all_fields_blank": true,
-  "tests/superadmin/QRcodemonitoring/test_not_scannable_feedback.py::TestnotscannableFeedback::test_edit_feedback": true,
-  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_invalid_password": true,
-  "tests/superadmin/Login/test_login.py::TestSuperAdminLogin::test_invalid_email_and_password": true
+  "tests/superadmin/QRcodemonitoring/test_not_scannable_feedback.py::TestnotscannableFeedback::test_edit_feedback": true
 }
