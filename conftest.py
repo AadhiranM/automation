@@ -5,6 +5,7 @@ from datetime import datetime
 import shutil
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.common.by import By
 from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
@@ -13,7 +14,7 @@ from pages.superadmin.Login.sa_login_page import SuperAdminLoginPage
 from utilities.read_yaml import read_config
 import pytest
 from utilities.data_generator import generate_category_name
-
+from selenium.webdriver.support import expected_conditions as EC
 # =========================================================
 # Load config.yaml only once
 # =========================================================
