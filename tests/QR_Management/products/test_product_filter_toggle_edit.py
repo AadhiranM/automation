@@ -17,7 +17,7 @@ from utilities.sku_utils import generate_next_sku
 excel_path = r"mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "products")
 
-@pytest.mark.order(2)
+@pytest.mark.order(3)
 @pytest.mark.parametrize("data", test_data)
 class Test_product_filter_toggle_edit(BaseTest):
     logger = LogGen.loggen()

@@ -67,6 +67,12 @@ class QR_Management_products_Page:
     file_upload=(By.XPATH,"//input[@id='fileInput']")
     import_upload_btn=(By.XPATH,"//button[@id='uploadButton']")
 
+    #import_logs_section
+    import_logs_btn=(By.XPATH,"//a[normalize-space()='Import Logs']")
+    import_log_search_value=(By.XPATH,"//input[@id='search-vale']")
+    import_log_select_date=(By.XPATH,"//input[@id='datepicker-range']")
+    import_log_status=(By.XPATH,"//select[@id='idStatus']")
+
 
     def __init__(self, driver):
         self.driver = driver
@@ -139,7 +145,6 @@ class QR_Management_products_Page:
             EC.element_to_be_clickable((By.XPATH, option_xpath))
         )
         option.click()
-
 
     def Enter_description(self,description):
         self.driver.find_element(*self.description).clear()
@@ -329,7 +334,6 @@ class QR_Management_products_Page:
     def Enter_filter_product_name(self,product_name):
         self.driver.find_element(*self.product_name).send_keys(product_name)
 
-
     def select_filter_toggle_status(self,filter_status):
         # Click the dropdown container
         dropdown = self.driver.find_element(*self.select_status_opt)
@@ -342,8 +346,6 @@ class QR_Management_products_Page:
             EC.element_to_be_clickable((By.XPATH, option_xpath))
         )
         option.click()
-
-
 
     def Enter_filter_category(self,filter_category):
         self.driver.find_element(*self.click_filter_category).click()
@@ -363,19 +365,18 @@ class QR_Management_products_Page:
     def click_apply_btn(self):
         self.driver.find_element(*self.aplly_btn).click()
 
-
     #import_section
     def click_import_btn(self):
         self.driver.find_element(*self.import_btn).click()
 
-    def click_dowmnload_sample_file(self):
+    def click_download_sample_file(self):
         self.driver.find_element(*self.download_sample_template_btn).click()
 
     def click_import_continue_btn(self):
         self.driver.find_element(*self.import_continue_btn).click()
 
     def import_file_upload(self,import_file):
-        file_input = WebDriverWait(self.driver,5).until(
+        file_input = WebDriverWait(self.driver,10).until(
             EC.presence_of_element_located(self.file_upload)
         )
         # Clear existing uploaded file
@@ -387,7 +388,9 @@ class QR_Management_products_Page:
         file_input.send_keys(import_file)
 
     def click_import_upload_btn(self):
-        self.driver.find_element(*self.import_upload_btn).click()
+        WebDriverWait(self.driver,15).until(
+            EC.element_to_be_clickable(self.import_upload_btn)
+        ).click()
 
 
 

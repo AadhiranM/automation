@@ -13,12 +13,11 @@ from utilities.read_excel import get_test_data
 from utilities.screenshot_util import take_screenshot
 from utilities.sku_utils import generate_next_sku
 
-@pytest.mark.order(1)
+@pytest.mark.order(4)
 class Test_product_import(BaseTest):
     logger = LogGen.loggen()
     # import_file =r"C:\Users\Suresh V\Downloads\qr-import-sample (8).xlsx"
     import_file= r"C:\Users\Suresh V\Downloads\Product_Import (3).xlsx"
-
 
     def test_QR_management_products_flow(self, driver):
 
@@ -27,7 +26,6 @@ class Test_product_import(BaseTest):
         )
 
         wait = WebDriverWait(driver, 5)
-
 
         self.driver = driver
         self.login_and_access()
@@ -55,16 +53,15 @@ class Test_product_import(BaseTest):
         qr_products_page.click_import_btn()
         self.logger.info("Clicked Import button")
 
-        # qr_products_page.click_dowmnload_sample_file()
+        # qr_products_page.click_download_sample_file()
         # self.logger.info("Clicked Download Sample File button")
 
         qr_products_page.click_import_continue_btn()
         self.logger.info("Clicked Continue button")
+        time.sleep(1)
 
         qr_products_page.import_file_upload(self.import_file)
         self.logger.info("Uploaded import file")
-        time.sleep(15)
-
 
         qr_products_page.click_import_upload_btn()
         self.logger.info("Clicked Upload button")
@@ -84,7 +81,7 @@ class Test_product_import(BaseTest):
             self.logger.error("Toast message not displayed after upload")
 
         # VALIDATION
-        if toast and "QR import initiated successfully" in toast:
+        if toast and "Product import initiated successfully" in toast:
 
             self.logger.info(
                 f"QR file import initiated successfully | Toast: {toast}"
@@ -103,3 +100,7 @@ class Test_product_import(BaseTest):
             )
 
             assert False, f"Import failed | Toast: {toast}"
+
+
+
+
