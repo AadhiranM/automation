@@ -81,15 +81,33 @@ class BasePage:
     # -------------------------------------------------------------------
     # 🔥 WAIT helper
     # -------------------------------------------------------------------
-    def wait(self, locator, condition=EC.visibility_of_element_located, timeout=None):
+
+
+    def wait(
+            self,
+            locator,
+            condition=EC.visibility_of_element_located,
+            timeout=None,
+            raise_exception=True
+    ):
         t = timeout if timeout is not None else self.timeout
+
         try:
             logger.info(f"Waiting for: {locator}")
-            return WebDriverWait(self.driver, t).until(condition(locator))
-        except Exception as e:
-            logger.error(f"[WAIT FAILED] {locator} → {e}")
-            self._screenshot("wait_failed")
-            raise
+
+            return WebDriverWait(
+                self.driver,
+                t
+            ).until(condition(locator))
+
+        except TimeoutException:
+
+            if raise_exception:
+                logger.error(f"[WAIT FAILED] {locator}")
+                self._screenshot("wait_failed")
+                raise
+
+            return None
 
 
     def click(self, locator):

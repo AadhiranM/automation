@@ -39,14 +39,13 @@ class ContactUsPage(BasePage):
     # ---------------------------------------------------
 
     def is_success_message_displayed(self, timeout=3):
-        try:
-            self.wait(
-                self.SUCCESS_MSG,
-                timeout=timeout
-            )
-            return True
-        except TimeoutException:
-            return False
+        element = self.wait(
+            self.SUCCESS_MSG,
+            timeout=timeout,
+            raise_exception=False
+        )
+
+        return element is not None
 
     def has_success_message(self):
         if self.is_success_message_displayed():

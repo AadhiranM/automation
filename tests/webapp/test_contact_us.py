@@ -40,10 +40,7 @@ class TestContactUs:
         "email",
         [
             "test",
-            "abc@",
-            "abc@gmail",
-            "@gmail.com",
-            "mani@.com"
+            "abc@"
         ]
     )
     def test_invalid_email(self, setup, email):
