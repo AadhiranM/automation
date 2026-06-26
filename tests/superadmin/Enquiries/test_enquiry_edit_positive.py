@@ -31,7 +31,6 @@ class TestEnquiryEditPositive:
             list_page.get_first_row_status()
         )
 
-        list_page.open_first_row_actions()
 
         list_page.click_edit()
 

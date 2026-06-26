@@ -119,17 +119,17 @@ class SAEnquiryListPage(BasePage):
 
     EDIT_OPTION = (
         By.XPATH,
-        "//a[contains(.,'Edit')]"
+        "//table/tbody/tr[1]//a[contains(normalize-space(),'Edit')]"
     )
 
     SEND_EMAIL_OPTION = (
         By.XPATH,
-        "//a[contains(.,'Send Email')]"
+        "//a[@class='dropdown-item' and normalize-space()='Send Email']"
     )
 
     FOLLOW_UP_OPTION = (
         By.XPATH,
-        "//a[contains(.,'Follow Up')]"
+        "//a[@class='dropdown-item' and normalize-space()='Follow Up']"
     )
 
     # =====================================================
@@ -201,10 +201,6 @@ class SAEnquiryListPage(BasePage):
         "//li[contains(text(),'{}')]"
     )
 
-    PANEL_DATE = (
-        By.ID,
-        "date_range"
-    )
 
     def get_first_row_id(self):
         return self.get_text(self.FIRST_ROW_ID).strip()
@@ -350,32 +346,7 @@ class SAEnquiryListPage(BasePage):
         self.wait_for_results()
         return selected_status
 
-    def panel_filter_by_date(
-            self,
-            start,
-            end
-    ):
 
-        self.open_filter_panel()
-
-        self.click(
-            self.PANEL_DATE
-        )
-
-        picker = FlatpickrRangePicker(
-            self.driver
-        )
-
-        picker.select_range(
-            start,
-            end
-        )
-
-        self.click(
-            self.APPLY_BTN
-        )
-
-        self.wait_for_results()
     def wait_for_results(self):
 
         WebDriverWait(self.driver, 15).until(
@@ -448,53 +419,42 @@ class SAEnquiryListPage(BasePage):
     # DATE FILTER
     # =====================================================
 
-    def filter_by_date(
-            self,
-            start_date,
-            end_date,
-            from_panel=False
-    ):
+    def filter_inline_created_at(self, start, end):
 
-        if from_panel:
-
-            self.click(
-                self.FILTER_PANEL_BTN
-            )
-
-            time.sleep(1)
-
-            self.click(
-                self.PANEL_DATE_FILTER
-            )
-
-        else:
-
-            self.click(
-                self.INLINE_DATE_FILTER
-            )
-
-        picker = FlatpickrRangePicker(
-            self.driver
+        date_input = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(self.INLINE_DATE_FILTER)
         )
 
-        picker.select_range(
-            start_date,
-            end_date
+        date_input.click()
+
+        picker = FlatpickrRangePicker(self.driver)
+        picker.select_range(start, end)
+
+        self.click(self.SEARCH_BTN)
+
+        self.wait_for_results()
+    def filter_panel_select_range(self, start, end):
+
+        self.open_filter_panel()
+
+        date_input = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(self.PANEL_DATE_FILTER)
         )
 
-        if from_panel:
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            date_input
+        )
 
-            self.click(
-                self.APPLY_BTN
-            )
+        self.driver.execute_script(
+            "arguments[0].click();",
+            date_input
+        )
 
-            self.close_filter_panel()
+        picker = FlatpickrRangePicker(self.driver)
+        picker.select_range(start, end)
 
-        else:
-
-            self.click(
-                self.SEARCH_BTN
-            )
+        self.click(self.APPLY_BTN)
 
         self.wait_for_results()
 
@@ -565,11 +525,24 @@ class SAEnquiryListPage(BasePage):
 
     def open_first_row_actions(self):
 
-        self.click(
-            self.FIRST_ROW_THREE_DOTS
-        )
+        self.click(self.FIRST_ROW_THREE_DOTS)
 
-        time.sleep(1)
+        WebDriverWait(self.driver, 15).until(
+            EC.visibility_of_element_located(
+                self.EDIT_OPTION
+            )
+        )
+    def click_edit(self):
+
+        print("Inside click_edit")
+
+        self.open_first_row_actions()
+
+        print("Menu opened")
+
+        self.click(self.EDIT_OPTION)
+
+        print("Edit clicked")
 
     def click_view(self):
 
@@ -579,13 +552,6 @@ class SAEnquiryListPage(BasePage):
             self.VIEW_OPTION
         )
 
-    def click_edit(self):
-
-        self.open_first_row_actions()
-
-        self.click(
-            self.EDIT_OPTION
-        )
 
     def click_send_email(self):
 
@@ -595,12 +561,23 @@ class SAEnquiryListPage(BasePage):
             self.SEND_EMAIL_OPTION
         )
 
+
     def click_follow_up(self):
 
         self.open_first_row_actions()
 
-        self.click(
-            self.FOLLOW_UP_OPTION
+        followup = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located(self.FOLLOW_UP_OPTION)
+        )
+
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            followup
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            followup
         )
 
     # =====================================================
@@ -655,13 +632,3 @@ class SAEnquiryListPage(BasePage):
 
         return expected_text.lower() in row_text.lower()
 
-    def open_actions(self):
-
-        self.click(
-            (
-                By.XPATH,
-                "//table/tbody/tr[1]/td[last()]//button"
-            )
-        )
-
-        time.sleep(1)

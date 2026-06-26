@@ -35,8 +35,6 @@ class TestSendEmailPositive:
 
         list_page.wait_for_results()
 
-        list_page.open_first_row_actions()
-
         list_page.click_send_email()
 
         assert (

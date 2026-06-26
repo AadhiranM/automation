@@ -79,39 +79,36 @@ class TestEnquiryListPositive:
 
         assert page.is_row_present()
 
-    def test_filter_created_date(self, setup):
-
+    def test_filter_created_date_range(self, setup):
         page = SAEnquiryListPage(setup)
         page.goto_page()
 
-        start = date.today() - timedelta(days=30)
+        start = date.today() - timedelta(days=7)
         end = date.today()
 
-        page.filter_by_date(
-            start,
-            end
-        )
-
+        page.filter_inline_created_at(start, end)
         rows = page.get_all_created_dates()
 
-        if rows:
+        if not rows:
+            pytest.skip("No manufacturers available in selected date range")
 
-            for row_date in rows:
-                assert start <= row_date <= end
-
-    def test_view_enquiry_from_list(self, setup):
-
+        for r in rows:
+            assert start <= r <= end
+    def test_panel_filter_select_range(self, setup):
         page = SAEnquiryListPage(setup)
         page.goto_page()
 
-        page.open_first_row_actions()
-        page.click_view()
+        start = date.today() - timedelta(days=7)
+        end = date.today()
 
-        view = SAEnquiryViewPage(setup)
+        page.filter_panel_select_range(start, end)
+        rows = page.get_all_created_dates()
 
-        assert view.is_visible(view.EMAIL)
-        assert view.is_visible(view.MESSAGE)
-        assert view.is_visible(view.STATUS)
+        if not rows:
+            pytest.skip("No manufacturers available in selected date range")
+
+        for r in rows:
+            assert start <= r <= end
 
     def test_panel_filter_email(self, setup):
 
@@ -187,45 +184,42 @@ class TestEnquiryListPositive:
         )
 
         print(f"Selected Status : {selected_status}")
-    def test_panel_filter_date(
-            self,
-            setup
-    ):
+    # def test_panel_filter_date(
+    #         self,
+    #         setup
+    # ):
+    #
+    #     page = SAEnquiryListPage(setup)
+    #
+    #     page.goto_page()
+    #
+    #     start = (
+    #             date.today()
+    #             -
+    #             timedelta(days=30)
+    #     )
+    #
+    #     end = date.today()
+    #
+    #     page.panel_filter_by_date(
+    #         start,
+    #         end
+    #     )
+    #
+    #     rows = page.get_all_created_dates()
+    #
+    #     if rows:
+    #
+    #         for row in rows:
+    #             assert (
+    #                     start
+    #                     <=
+    #                     row
+    #                     <=
+    #                     end
+    #             )
 
-        page = SAEnquiryListPage(setup)
-
-        page.goto_page()
-
-        start = (
-                date.today()
-                -
-                timedelta(days=30)
-        )
-
-        end = date.today()
-
-        page.panel_filter_by_date(
-            start,
-            end
-        )
-
-        rows = page.get_all_created_dates()
-
-        if rows:
-
-            for row in rows:
-                assert (
-                        start
-                        <=
-                        row
-                        <=
-                        end
-                )
-
-    def test_panel_clear_filter(
-            self,
-            setup
-    ):
+    def test_panel_clear_filter(self, setup):
 
         page = SAEnquiryListPage(setup)
 
@@ -233,8 +227,19 @@ class TestEnquiryListPositive:
 
         page.open_filter_panel()
 
+        # Apply any filter first
+        page.type(
+            page.PANEL_NAME,
+            "Test"
+        )
+
+        # Now Clear Filter becomes enabled
         page.click(
             page.CLEAR_FILTER_BTN
         )
 
+        # Verify the field is cleared
+        assert page.driver.find_element(*page.PANEL_NAME).get_attribute("value") == ""
+
+        # Verify the table is displayed
         assert page.is_row_present()

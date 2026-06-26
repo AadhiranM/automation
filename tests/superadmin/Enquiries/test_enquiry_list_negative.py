@@ -28,17 +28,3 @@ class TestEnquiryListNegative:
 
         assert page.is_row_present()
 
-
-    def test_clear_filter(self, setup):
-
-        page = SAEnquiryListPage(setup)
-        page.goto_page()
-
-        page.click(page.FILTER_PANEL_BTN)
-
-        page.click(page.CLEAR_FILTER_BTN)
-
-        page.close_filter_panel()
-
-        assert page.is_row_present()
-

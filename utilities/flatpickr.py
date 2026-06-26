@@ -74,6 +74,7 @@ class FlatpickrRangePicker:
     # =============================
     # NAVIGATE TO MONTH
     # =============================
+    #
     def goto_month(self, target_date):
         target_month = target_date.month
         target_year = target_date.year
@@ -109,16 +110,25 @@ class FlatpickrRangePicker:
             if el.is_displayed():
                 try:
                     # scroll + JS click (VERY IMPORTANT)
-                    self.driver.execute_script("arguments[0].scrollIntoView(true);", el)
-                    time.sleep(0.2)
-                    self.driver.execute_script("arguments[0].click();", el)
+                    print(
+                        "CLICKING :",
+                        el.get_attribute("aria-label"),
+                        el.get_attribute("class")
+                    )
+
+                    self.driver.execute_script(
+                        "arguments[0].click();",
+                        el
+                    )
                     return True
                 except:
                     continue
 
         return False
 
-    # =============================
+
+
+    # #
     # SELECT RANGE
     # =============================
     def select_range(self, start_date, end_date):
@@ -139,4 +149,6 @@ class FlatpickrRangePicker:
         if not self.select_day(end_date.day):
             return False
 
-        return True
+        # return True
+
+
