@@ -61,5 +61,5 @@ class TestFollowUpPositive:
         )
 
         print(
-            "✔ Follow-up submitted and displayed in Previous Follow-ups"
+            "Follow-up submitted and displayed in Previous Follow-ups"
         )

@@ -80,5 +80,5 @@ class TestSendEmailPositive:
         )
 
         print(
-            "✔ Email sent successfully and displayed in Previous Email history"
+            "Email sent successfully and displayed in Previous Email history"
         )
