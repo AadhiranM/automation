@@ -10,7 +10,10 @@ from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
 from selenium.webdriver.common.keys import Keys
-
+from selenium.common.exceptions import (
+        ElementClickInterceptedException,
+        ElementNotInteractableException
+    )
 # -----------------------------------------------------------
 # LOGGER
 # -----------------------------------------------------------
@@ -440,6 +443,8 @@ class BasePage:
         except:
             pass
 
+
+
     def safe_click(self, locator):
 
         wait = WebDriverWait(self.driver, 15)
@@ -456,59 +461,15 @@ class BasePage:
         try:
             element.click()
 
-        except Exception:
-
+        except (
+                ElementClickInterceptedException,
+                ElementNotInteractableException
+        ):
             self.driver.execute_script(
                 "arguments[0].click();",
                 element
             )
 
-    # def select_searchable_dropdown_js(self, locator, value):
-    #     wait = WebDriverWait(self.driver, 15)
-    #
-    #     # open dropdown
-    #     self.click(locator)
-    #
-    #     # search box
-    #     search = wait.until(
-    #         EC.visibility_of_element_located((
-    #             By.XPATH,
-    #             "//div[contains(@class,'choices') and contains(@class,'is-open')]//input"
-    #         ))
-    #     )
-    #
-    #     search.clear()
-    #     search.send_keys(value)
-    #
-    #     # wait option
-    #     option = wait.until(
-    #         lambda d: next(
-    #             (
-    #                 el for el in d.find_elements(
-    #                 By.XPATH,
-    #                 "//div[contains(@class,'choices__list--dropdown')]//div[@role='option']"
-    #             )
-    #                 if value.lower() in el.text.lower()
-    #             ),
-    #             None
-    #         )
-    #     )
-    #
-    #     if not option:
-    #         raise Exception(f"{value} not found in dropdown")
-    #
-    #     self.driver.execute_script(
-    #         "arguments[0].scrollIntoView({block:'center'});",
-    #         option
-    #     )
-    #
-    #     time.sleep(0.5)
-    #
-    #     # JS click instead of normal click
-    #     self.driver.execute_script(
-    #         "arguments[0].click();",
-    #         option
-    #     )
 
     def select_select2(self, dropdown_locator, option_text):
         wait = WebDriverWait(self.driver, 20)

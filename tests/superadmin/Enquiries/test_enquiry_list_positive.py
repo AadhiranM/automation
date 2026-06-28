@@ -184,40 +184,7 @@ class TestEnquiryListPositive:
         )
 
         print(f"Selected Status : {selected_status}")
-    # def test_panel_filter_date(
-    #         self,
-    #         setup
-    # ):
-    #
-    #     page = SAEnquiryListPage(setup)
-    #
-    #     page.goto_page()
-    #
-    #     start = (
-    #             date.today()
-    #             -
-    #             timedelta(days=30)
-    #     )
-    #
-    #     end = date.today()
-    #
-    #     page.panel_filter_by_date(
-    #         start,
-    #         end
-    #     )
-    #
-    #     rows = page.get_all_created_dates()
-    #
-    #     if rows:
-    #
-    #         for row in rows:
-    #             assert (
-    #                     start
-    #                     <=
-    #                     row
-    #                     <=
-    #                     end
-    #             )
+
 
     def test_panel_clear_filter(self, setup):
 

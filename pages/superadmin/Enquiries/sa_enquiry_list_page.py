@@ -421,11 +421,8 @@ class SAEnquiryListPage(BasePage):
 
     def filter_inline_created_at(self, start, end):
 
-        date_input = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(self.INLINE_DATE_FILTER)
-        )
 
-        date_input.click()
+        self.safe_click(self.INLINE_DATE_FILTER)
 
         picker = FlatpickrRangePicker(self.driver)
         picker.select_range(start, end)
