@@ -430,22 +430,17 @@ class SAEnquiryListPage(BasePage):
         self.click(self.SEARCH_BTN)
 
         self.wait_for_results()
+
     def filter_panel_select_range(self, start, end):
 
         self.open_filter_panel()
 
-        date_input = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(self.PANEL_DATE_FILTER)
-        )
+        self.safe_click(self.PANEL_DATE_FILTER)
 
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block:'center'});",
-            date_input
-        )
-
-        self.driver.execute_script(
-            "arguments[0].click();",
-            date_input
+        WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(
+                FlatpickrRangePicker.CALENDAR
+            )
         )
 
         picker = FlatpickrRangePicker(self.driver)
