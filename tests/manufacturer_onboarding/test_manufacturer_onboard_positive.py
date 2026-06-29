@@ -130,5 +130,5 @@ class TestManufacturerOnboardPositive:
             f"Expected manufacturer '{company_name}' not found in Manufacturer List"
 
         print(
-            f"✅ Manufacturer created successfully: {company_name}"
+            f" Manufacturer created successfully: {company_name}"
         )
