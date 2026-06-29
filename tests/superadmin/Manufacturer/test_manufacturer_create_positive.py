@@ -52,4 +52,4 @@ class TestManufacturerCreatePositive:
         assert list_page.is_company_present(company_name), \
             f"Manufacturer not found in grid: {company_name}"
 
-        print(f"✔ Manufacturer created successfully: {company_name}")
+        print(f"Manufacturer created successfully: {company_name}")

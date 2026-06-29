@@ -345,3 +345,13 @@ class SAManufacturerListPage(BasePage):
                 return business_email
 
         raise Exception("No approved manufacturer found")
+
+    def get_first_row_company(self):
+        return self.get_text(self.FIRST_ROW_COMPANY).strip()
+
+    def get_first_row_email(self):
+        return self.get_text(self.FIRST_ROW_EMAIL).strip()
+
+    def verify_search_result(self, expected_text):
+        row_text = self.get_text(self.FIRST_ROW)
+        return expected_text.lower() in row_text.lower()

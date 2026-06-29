@@ -8,3 +8,13 @@ class SAManufacturerViewPage(BasePage):
     EMAIL = (By.XPATH, "//label[text()='Business Email']/following-sibling::div")
     STATUS = (By.XPATH, "//label[text()='Status']/following-sibling::div")
 
+def get_company_name(self):
+    return self.get_text(self.COMPANY_NAME).strip()
+
+
+def get_email(self):
+    return self.get_text(self.EMAIL).strip()
+
+
+def get_status(self):
+    return self.get_text(self.STATUS).strip()

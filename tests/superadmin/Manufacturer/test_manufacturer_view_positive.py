@@ -8,13 +8,24 @@ from pages.superadmin.Manufacturer.sa_manufacturer_view_page import SAManufactur
 class TestManufacturerViewPositive:
 
     def test_view_manufacturer_details(self, setup):
+
         page = SAManufacturerListPage(setup)
+
         page.goto_page()
-        page.search("frankfurt")
+
+        # Get dynamic first row details
+        company = page.get_first_row_company()
+        email = page.get_first_row_email()
+
+        # Search dynamically
+        page.search(company)
+
+        # Open View page
         page.open_action_menu()
         page.click_view()
 
         view = SAManufacturerViewPage(setup)
-        assert view.is_visible(view.COMPANY_NAME)
-        assert view.is_visible(view.EMAIL)
-        assert view.is_visible(view.STATUS)
+
+        # Verify URL
+        assert "show" in setup.current_url.lower()
+

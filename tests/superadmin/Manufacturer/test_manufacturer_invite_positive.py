@@ -40,6 +40,6 @@ class TestManufacturerInvitePositive:
         invite_page.invite_manufacturer()
 
         print(
-            f"✔ Invite sent successfully for: "
+            f" Invite sent successfully for: "
             f"{manufacturer_name}"
         )
