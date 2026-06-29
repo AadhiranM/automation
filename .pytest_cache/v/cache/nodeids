@@ -11,6 +11,7 @@
   "tests/Applicationusers/test_application_user.py::TestApplicationUsers::test_search_user",
   "tests/Applicationusers/test_application_user.py::TestApplicationUsers::test_user_status_toggle",
   "tests/Applicationusers/test_application_user.py::TestApplicationUsers::test_view_user",
+  "tests/manufacturer_onboarding/test_manufacturer_onboard_positive.py::TestManufacturerOnboardPositive::TestManufacturerOnboardPositive::test_business_info_positive",
   "tests/manufacturer_onboarding/test_manufacturer_onboard_positive.py::TestManufacturerOnboardPositive::test_business_info_positive",
   "tests/manufacturer_onboarding/test_manufacturer_onboard_positive.py::TestManufacturerOnboardPositive::test_full_onboarding_positive_flow",
   "tests/superadmin/Enquiries/test_enquiry_assign_positive.py::TestEnquiryAssignUnassignPositive::test_assign_internal_user",

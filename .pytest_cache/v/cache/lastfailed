@@ -101,5 +101,6 @@
   "tests/superadmin/Enquiries/test_enquiry_list_positive.py::TestEnquiryListPositive::test_view_enquiry_from_list": true,
   "tests/superadmin/Enquiries/test_enquiry_list_positive.py::TestEnquiryListPositive::test_panel_filter_date": true,
   "tests/superadmin/Enquiries/test_enquiry_list_positive.py::TestEnquiryListPositive::test_filter_created_date": true,
-  "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_clear_filter": true
+  "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_clear_filter": true,
+  "tests/manufacturer_onboarding/test_manufacturer_onboard_positive.py::TestManufacturerOnboardPositive::TestManufacturerOnboardPositive::test_business_info_positive": true
 }

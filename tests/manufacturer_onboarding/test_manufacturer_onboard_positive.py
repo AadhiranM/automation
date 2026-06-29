@@ -9,7 +9,9 @@ from utilities.data_generator import (
     generate_manufacturer_name,
     generate_mailinator_email
 )
-
+from pages.superadmin.Manufacturer.sa_manufacturer_service_page import (
+    SAManufacturerServicePage
+)
 
 @pytest.mark.onboarding
 @pytest.mark.usefixtures("login_superadmin")
@@ -117,18 +119,32 @@ class TestManufacturerOnboardPositive:
 
         upload.submit()
 
-
-        # ================= VERIFY IN MANUFACTURER LIST =================
-
         list_page = SAManufacturerListPage(setup)
 
         list_page.goto_page()
 
         list_page.search(company_name)
 
-        assert list_page.is_company_present(company_name), \
-            f"Expected manufacturer '{company_name}' not found in Manufacturer List"
+        assert list_page.is_company_present(company_name)
 
-        print(
-            f" Manufacturer created successfully: {company_name}"
-        )
+        list_page.wait_until_status(company_name, "Approved")
+
+        list_page.open_service_management()
+
+        service = SAManufacturerServicePage(setup)
+
+        assert "/manage_services" in setup.current_url
+
+        service.check_all_services()
+
+        assert service.all_services_checked()
+
+        service.submit_services()
+
+        service.click_back()
+
+        list_page.search(company_name)
+
+        list_page.open_service_management()
+
+        assert service.all_services_checked()

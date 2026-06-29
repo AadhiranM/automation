@@ -90,6 +90,10 @@ class SAManufacturerListPage(BasePage):
     # =====================================================================
     PAGE_LOADED_MARKER = (By.XPATH, "//table[contains(@class,'dataTable')]")
 
+    SERVICE_MANAGEMENT = (
+        By.XPATH,
+        "//a[contains(.,'Service Management')]"
+    )
 
     FIRST_COMPANY_NAME = (
         By.XPATH,
@@ -99,6 +103,10 @@ class SAManufacturerListPage(BasePage):
     FIRST_ROW_EMAIL = (
         By.XPATH,
         "//table/tbody/tr[1]/td[3]"
+    )
+    FIRST_ROW_STATUS = (
+        By.XPATH,
+        "//tbody/tr[1]/td[7]"
     )
 
     def get_first_business_email(self):
@@ -204,6 +212,10 @@ class SAManufacturerListPage(BasePage):
     # =====================================================================
     def open_action_menu(self):
         self.click(self.ACTION_BTN)
+
+    def open_service_management(self):
+        self.open_action_menu()
+        self.click(self.SERVICE_MANAGEMENT)
 
     def click_view(self):
         self.click(self.ACTION_VIEW)
@@ -355,3 +367,31 @@ class SAManufacturerListPage(BasePage):
     def verify_search_result(self, expected_text):
         row_text = self.get_text(self.FIRST_ROW)
         return expected_text.lower() in row_text.lower()
+
+    def get_status(self):
+        return self.get_text(self.FIRST_ROW_STATUS).strip()
+
+    from selenium.webdriver.support.ui import WebDriverWait
+
+    def wait_until_status(self, company_name, expected_status="Approved", timeout=60):
+
+        wait = WebDriverWait(
+            self.driver,
+            timeout,
+            poll_frequency=3
+        )
+
+        def check_status(driver):
+            driver.refresh()
+
+            self.goto_page()
+
+            self.search(company_name)
+
+            status = self.get_status()
+
+            print(f"Current Status : {status}")
+
+            return status == expected_status
+
+        return wait.until(check_status)
