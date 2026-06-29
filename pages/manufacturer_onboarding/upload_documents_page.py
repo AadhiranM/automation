@@ -85,7 +85,7 @@ class UploadDocumentsPage(BasePage):
         )
 
         print(
-            f"✅ Uploaded: "
+            f"Uploaded: "
             f"{path.split('/')[-1]}"
         )
 
@@ -146,7 +146,7 @@ class UploadDocumentsPage(BasePage):
                 f"File not selected: {field}"
 
         print(
-            "✅ All 4 files selected"
+            "All 4 files selected"
         )
 
     # =====================================================
