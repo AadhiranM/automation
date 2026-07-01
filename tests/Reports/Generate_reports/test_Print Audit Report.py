@@ -122,7 +122,7 @@ excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "Reports")
 
 
-@pytest.mark.order(14)
+@pytest.mark.order(5)
 @pytest.mark.parametrize("data", test_data)
 class Test_R_print_audit_report(BaseTest):
 

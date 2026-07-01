@@ -11,7 +11,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
-
 excel_path = r"mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "variants")
 
@@ -29,12 +28,12 @@ class Test_variants_edit(BaseTest):
 
         # ---------------- LOGIN ----------------
 
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Login successful (first iteration)")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Login successful (first iteration)")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         search_category_name = data["search_Category"]
         edit_variants_type = data["edit_variants_type"]
@@ -123,8 +122,4 @@ class Test_variants_edit(BaseTest):
             assert False, (
                 f"variants updation failed | Toast: {toast_text}"
             )
-
-
-
-
 

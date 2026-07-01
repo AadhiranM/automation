@@ -103,7 +103,7 @@ from utilities.screenshot_util import take_screenshot
 excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "Reports")
 
-@pytest.mark.order(10)
+@pytest.mark.order(1)
 @pytest.mark.parametrize("data", test_data)
 class Test_R_Batch_status_report(BaseTest):
     logger = LogGen.loggen()
@@ -121,12 +121,12 @@ class Test_R_Batch_status_report(BaseTest):
         # ---------------------------
         # LOGIN (ONLY ONCE)
         # ---------------------------
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Login successful (first iteration)")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Login successful (first iteration)")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         # ---------------------------
         # NAVIGATION START

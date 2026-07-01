@@ -27,9 +27,9 @@ class Test_product_import(BaseTest):
 
         wait = WebDriverWait(driver, 5)
 
-        self.driver = driver
-        self.login_and_access()
-        self.logger.info("Login successful (first iteration)")
+        # self.driver = driver
+        # self.login_and_access()
+        # self.logger.info("Login successful (first iteration)")
 
         # NAVIGATION
         self.logger.info("Starting navigation to Products module")
@@ -100,7 +100,3 @@ class Test_product_import(BaseTest):
             )
 
             assert False, f"Import failed | Toast: {toast}"
-
-
-
-

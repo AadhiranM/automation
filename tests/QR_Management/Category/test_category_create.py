@@ -129,12 +129,12 @@ class Test_category_create(BaseTest):
         wait = WebDriverWait(driver, 4)
 
         # ---------------- LOGIN ----------------
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Login successful (first iteration)")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Login successful (first iteration)")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         # ---------------- NAVIGATION ----------------
         self.logger.info("Navigating to Category module")

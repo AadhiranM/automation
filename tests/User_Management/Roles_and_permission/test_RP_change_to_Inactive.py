@@ -282,17 +282,17 @@ class Test_UM_RP_change_to_Inactive(BaseTest):
         # ---------------------------
         # LOGIN
         # ---------------------------
-        if data == test_data[0]:
-
-            self.logger.info("Executing login flow for first iteration")
-
-            self.driver = driver
-            self.login_and_access()
-
-            self.logger.info("Login successful (first iteration)")
-
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #
+        #     self.logger.info("Executing login flow for first iteration")
+        #
+        #     self.driver = driver
+        #     self.login_and_access()
+        #
+        #     self.logger.info("Login successful (first iteration)")
+        #
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         # =========================
         # NAVIGATION LOGS

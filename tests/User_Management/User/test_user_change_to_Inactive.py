@@ -156,13 +156,13 @@ class Test_UM_users_change_to_Inactive(BaseTest):
         # ---------------------------
         # LOGIN (ONLY ONCE)
         # ---------------------------
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-
-            self.logger.info("Login successful (first iteration)")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #
+        #     self.logger.info("Login successful (first iteration)")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         # =========================
         # NAVIGATION LOGS
@@ -189,6 +189,7 @@ class Test_UM_users_change_to_Inactive(BaseTest):
 
         self.logger.info("Opening calendar filter")
         UM_user_filters.Click_filter_calender()
+
 
         self.logger.info(
             f"Selecting date range | From: {start_date} | To: {end_date}"
@@ -253,7 +254,7 @@ class Test_UM_users_change_to_Inactive(BaseTest):
                     (By.CSS_SELECTOR, ".toastify")
                 )
             ).text.strip()
-
+            toast_text = toast_text.encode("ascii", errors="ignore").decode()
             print("Toast:", toast_text)
 
             self.logger.info(f"Toast received | {toast_text}")

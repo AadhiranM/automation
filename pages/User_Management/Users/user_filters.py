@@ -14,7 +14,7 @@ class user_filters:
     refresh_btn=(By.XPATH,"//button[contains(@class,'btn btn-outline-primary btn-icon waves-effect waves-light reload_btn uicust-active-color uicust-active-border refresh_Btn')]")
     filters_btn=(By.XPATH,"//button[@id='filterToggleBtn']")
     search_field=(By.XPATH,"//input[@id='search-vale']")
-    filter_calender=(By.XPATH,"//input[@id='datepicker-range']")
+    filter_calender=(By.XPATH,"//input[@class='form-control dash-filter-picker active form-control input']")
     select_status=(By.XPATH,"//select[@id='idStatus']")
     actions_icon=(By.XPATH,"(//button[@type='button'])[13]")
     suspend_opt=(By.XPATH,"//a[normalize-space()='Suspend']")

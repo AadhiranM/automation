@@ -23,14 +23,14 @@ class Test_product_import_logs(BaseTest):
 
     import_file= r"C:\Users\Suresh V\Downloads\Product_Import (3).xlsx"
 
-    def test_QR_management_products_flow(self, driver):
+    def test_QR_management_products_flow(self, driver, data):
         self.logger.info(
             f"===== QR Management Product import Flow Started ====="
         )
         wait = WebDriverWait(driver, 5)
 
-        self.driver = driver
-        self.login_and_access()
+        # self.driver = driver
+        # self.login_and_access()
         self.logger.info("Login successful (first iteration)")
 
         # NAVIGATION

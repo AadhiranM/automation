@@ -121,7 +121,7 @@ excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "Reports")
 
 
-@pytest.mark.order(11)
+@pytest.mark.order(2)
 @pytest.mark.parametrize("data", test_data)
 class Test_R_Scan_analytics_report(BaseTest):
 

@@ -149,17 +149,17 @@ class Test_UM_users_change_to_active(BaseTest):
         # ---------------------------
         # LOGIN (ONLY ONCE)
         # ---------------------------
-        if data == test_data[0]:
-
-            self.logger.info("Executing login flow for first iteration")
-
-            self.driver = driver
-            self.login_and_access()
-
-            self.logger.info("Login successful (first iteration)")
-
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #
+        #     self.logger.info("Executing login flow for first iteration")
+        #
+        #     self.driver = driver
+        #     self.login_and_access()
+        #
+        #     self.logger.info("Login successful (first iteration)")
+        #
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         # =========================
         # NAVIGATION LOGS
@@ -243,7 +243,7 @@ class Test_UM_users_change_to_active(BaseTest):
                     (By.CSS_SELECTOR, ".toastify")
                 )
             ).text.strip()
-
+            toast_text = toast_text.encode("ascii", errors="ignore").decode()
             print("Toast:", toast_text)
 
             self.logger.info(f"Toast received | {toast_text}")

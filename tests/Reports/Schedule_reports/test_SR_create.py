@@ -154,13 +154,13 @@ class Test_SR_create(BaseTest):
         # ---------------------------
         # LOGIN (ONLY ONCE)
         # ---------------------------
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-
-            self.logger.info("Login successful (first iteration)")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #
+        #     self.logger.info("Login successful (first iteration)")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         # =========================
         # NAVIGATION LOGS
@@ -224,8 +224,9 @@ class Test_SR_create(BaseTest):
             toast_text = WebDriverWait(driver, 3).until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, ".toastify"))
             ).text
-
+            toast_text= toast_text.encode("ascii", errors="ignore").decode()
             print("Toast:", toast_text)
+
 
             self.logger.info(f"Toast received: {toast_text}")
 

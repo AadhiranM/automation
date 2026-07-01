@@ -10,7 +10,7 @@ from pages.QR_Management.login_page import Loginpage
 from utilities.customlogger import LogGen
 from utilities.readproperties import Readconfig
 @pytest.mark.order(1)
-class Test_001_QR_management_login:
+class Test_login:
     logger = LogGen.loggen()
 
     def test_homepageTitle(self, driver):
