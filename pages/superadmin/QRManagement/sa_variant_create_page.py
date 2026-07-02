@@ -32,10 +32,6 @@ class SAVariantCreatePage(BasePage):
     REMOVE_VARIANT_SECTION_BTN = (By.XPATH, "//button[contains(@class,'remove-card-btn')]")
     SAVE_BTN = (By.XPATH, "//button[contains(text(),'Save Variants')]")
 
-    # ==========================
-    # TOAST
-    # ==========================
-    TOAST_MESSAGE = (By.XPATH, "//div[contains(@class,'toastify')]")
 
     ERROR_MESSAGES = (By.XPATH, "//div[contains(@class,'invalid-feedback')]")
 
@@ -181,7 +177,7 @@ class SAVariantCreatePage(BasePage):
                 lambda d: len(d.find_elements(*self.VARIANT_VALUE)) < old_count
             )
         else:
-            print("⚠️ No variant value to delete")
+            print(" No variant value to delete")
 
     def click_remove_variant_section(self, index=0):
         buttons = self.driver.find_elements(*self.REMOVE_VARIANT_SECTION_BTN)
@@ -195,17 +191,17 @@ class SAVariantCreatePage(BasePage):
                 lambda d: len(d.find_elements(*self.VARIANT_TYPE)) < old_count
             )
         else:
-            print("⚠️ No variant section available to remove")
+            print(" No variant section available to remove")
 
     def click_save(self):
         save_btn = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located(self.SAVE_BTN)
         )
 
-        # 🔥 Scroll into view
+        # Scroll into view
         self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", save_btn)
 
-        # 🔥 Wait until clickable
+        # Wait until clickable
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable(self.SAVE_BTN)
         )
@@ -226,23 +222,9 @@ class SAVariantCreatePage(BasePage):
     def is_error_present(self, text):
         return any(text.lower() in e.lower() for e in self.get_all_errors())
 
-    # ==========================
-    # TOAST HANDLING (BEST)
-    # ==========================
-    def get_toast_message(self):
-        try:
-            element = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located(self.TOAST_MESSAGE)
-            )
-            print("Toast:", element.text)  # debug
-            return element.text.strip()
-        except:
-            return ""
+    # =================
 
-    def is_variant_saved_successfully(self):
-        return "success" in self.get_toast_message().lower()
-
-    def is_save_button_disabled(self):
+    def is_save_button_disabled(self    ):
         btn = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located(self.SAVE_BTN)
         )
@@ -254,16 +236,6 @@ class SAVariantCreatePage(BasePage):
         )
         return btn.is_enabled()
 
-    def is_toast_message_displayed(self, text):
-        try:
-            toast = WebDriverWait(self.driver, 5).until(
-                EC.visibility_of_element_located(
-                    (By.XPATH, f"//*[contains(text(),'{text}')]")
-                )
-            )
-            return toast.is_displayed()
-        except:
-            return False
 
     def click_category_dropdown(self):
         self.click(self.CATEGORY_DROPDOWN)
@@ -285,12 +257,26 @@ class SAVariantCreatePage(BasePage):
             EC.element_to_be_clickable((By.XPATH, "//button[contains(@class,'variant-submit-btn')]"))
         )
 
-        # ✅ scroll into view
+        #  scroll into view
         self.driver.execute_script("arguments[0].scrollIntoView(true);", btn)
 
         # small wait (UI animation fix)
         import time
         time.sleep(1)
 
-        # ✅ JS click (strong fix)
+        #  JS click (strong fix)
         self.driver.execute_script("arguments[0].click();", btn)
+
+    VARIANT_LIST_PAGE = (
+        By.XPATH,
+        "//input[@placeholder='Search: Category, Manufacturer']"
+    )
+
+    def wait_until_redirected_to_variant_list(self):
+        WebDriverWait(self.driver, 20).until(
+            EC.url_contains("/admin/variant")
+        )
+
+        WebDriverWait(self.driver, 20).until(
+            EC.visibility_of_element_located(self.VARIANT_LIST_PAGE)
+        )

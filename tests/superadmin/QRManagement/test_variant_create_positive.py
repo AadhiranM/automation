@@ -108,21 +108,15 @@ class TestVariantCreatePositive:
 
         create_page.click_save()
 
-        assert create_page.is_variant_saved_successfully()
-
-        list_page.goto_page()
+        create_page.wait_until_redirected_to_variant_list()
 
         list_page.search(category_name)
 
         list_page.wait_for_table_refresh()
 
-        assert list_page.is_category_present(
-            category_name
-        )
+        assert list_page.is_category_present(category_name)
 
-        assert list_page.is_created_by_present(
-            username
-        )
+        assert list_page.is_created_by_present(username)
 
     # ======================================================
     # MULTIPLE VARIANT SECTIONS
@@ -166,7 +160,14 @@ class TestVariantCreatePositive:
 
         create_page.click_save()
 
-        assert create_page.is_variant_saved_successfully()
+        create_page.wait_until_redirected_to_variant_list()
+
+        list_page.search(category_name)
+
+        list_page.wait_for_table_refresh()
+
+        assert list_page.is_category_present(category_name)
+
 
     # ======================================================
     # MULTIPLE VALUES
@@ -212,7 +213,15 @@ class TestVariantCreatePositive:
 
         create_page.click_save()
 
-        assert create_page.is_variant_saved_successfully()
+        create_page.wait_until_redirected_to_variant_list()
+
+        list_page.search(category_name)
+
+        list_page.wait_for_table_refresh()
+
+        assert list_page.is_category_present(category_name)
+
+
 
     # ======================================================
     # MULTIPLE SECTIONS + MULTIPLE VALUES
@@ -263,4 +272,10 @@ class TestVariantCreatePositive:
 
         create_page.click_save()
 
-        assert create_page.is_variant_saved_successfully()
+        create_page.wait_until_redirected_to_variant_list()
+
+        list_page.search(category_name)
+
+        list_page.wait_for_table_refresh()
+
+        assert list_page.is_category_present(category_name)

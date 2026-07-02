@@ -27,7 +27,7 @@ class SAProductCreateVideoPage(BasePage):
             EC.element_to_be_clickable(self.CREATE_BTN)
         ).click()
 
-    # ✅ GET ACTUAL MESSAGE
+    #  GET ACTUAL MESSAGE
     def get_toast_message(self):
         wait = WebDriverWait(self.driver, 10)
 
@@ -40,7 +40,7 @@ class SAProductCreateVideoPage(BasePage):
 
         return message
 
-    # ✅ FLEXIBLE VALIDATION (MAIN FIX)
+    #  FLEXIBLE VALIDATION (MAIN FIX)
     def is_success_or_duplicate(self):
         try:
             msg = self.get_toast_message().lower()

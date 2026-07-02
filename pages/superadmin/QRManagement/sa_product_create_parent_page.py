@@ -40,7 +40,7 @@ class SAProductCreateParentPage(BasePage):
     COUNTRY = (By.XPATH, "//select[@id='country_id']/following-sibling::div")
 
     # =========================
-    # ✅ PRODUCT IMAGE UPLOAD (FIXED)
+    #  PRODUCT IMAGE UPLOAD (FIXED)
     # =========================
     PRODUCT_IMAGE_UPLOAD = (By.ID, "imageUpload")
 

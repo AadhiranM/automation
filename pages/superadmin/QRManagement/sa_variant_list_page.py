@@ -70,11 +70,11 @@ class SAVariantListPage(BasePage):
     # =============================
     def click_next(self):
         self.click(self.NEXT_BTN)
-        self.wait_for_table()   # ✅ avoid stale
+        self.wait_for_table()   #  avoid stale
 
     def click_previous(self):
         self.click(self.PREV_BTN)
-        self.wait_for_table()   # ✅ avoid stale
+        self.wait_for_table()   #  avoid stale
 
     # =============================
     # ACTIONS (GENERIC + FINAL)
@@ -94,7 +94,7 @@ class SAVariantListPage(BasePage):
             view_present = len(self.driver.find_elements(*self.VIEW_BTN)) > 0
             edit_present = len(self.driver.find_elements(*self.EDIT_BTN)) > 0
 
-            # ✅ LOGIC
+            # LOGIC
             if require_view and require_edit:
                 if view_present and edit_present:
                     return

@@ -45,7 +45,7 @@ class SAProductCreateChildPage(BasePage):
     def select_all_variants(self):
         wait = WebDriverWait(self.driver, 15)
 
-        # 👉 Get ALL dropdown containers
+        # Get ALL dropdown containers
         dropdowns = self.driver.find_elements(
             By.XPATH,
             "//div[contains(@class,'tab-pane') and contains(@class,'active')]//div[contains(@class,'choices__inner')]"
@@ -53,7 +53,7 @@ class SAProductCreateChildPage(BasePage):
 
         print(f"Total dropdown elements: {len(dropdowns)}")
 
-        # 👉 Each column has 2 dropdowns (Type + Value)
+        # Each column has 2 dropdowns (Type + Value)
         # So process in pairs
         i = 0
         while i < len(dropdowns):
@@ -85,13 +85,13 @@ class SAProductCreateChildPage(BasePage):
             ]
 
             if not valid_type:
-                print(f"⚠️ No TYPE options at index {i}")
+                print(f"No TYPE options at index {i}")
                 break
 
             selected_type = valid_type[0].text
             valid_type[0].click()
 
-            print(f"✅ Type Selected: {selected_type}")
+            print(f"Type Selected: {selected_type}")
             time.sleep(2)
 
             # =========================
@@ -125,16 +125,16 @@ class SAProductCreateChildPage(BasePage):
             ]
 
             if not valid_value:
-                print(f"⚠️ No VALUE options at index {i + 1}")
+                print(f" No VALUE options at index {i + 1}")
                 break
 
             selected_value = valid_value[0].text
             valid_value[0].click()
 
-            print(f"✅ Value Selected: {selected_value}")
+            print(f" Value Selected: {selected_value}")
             time.sleep(2)
 
-            # 👉 move to next column (skip 2)
+            # move to next column (skip 2)
             i += 2
 
     # -------------------------
