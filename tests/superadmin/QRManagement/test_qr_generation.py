@@ -148,9 +148,9 @@ class TestQRGeneration:
         # STEP 9 - BATCH LOCATION
         # =====================================================
 
-        qr.select_batch_location(
-            "Chennai"
-        )
+        batch_location = "Chennai"
+
+        qr.select_batch_location(batch_location)
 
         time.sleep(1)
 
@@ -158,27 +158,16 @@ class TestQRGeneration:
         # STEP 10 - DIMENSION
         # =====================================================
 
-        qr.select_dimension(
-            "1 cm"
-        )
+        qr.select_dimension()
 
         time.sleep(1)
 
-        # =====================================================
-        # STEP 11 - QR TYPE
-        # =====================================================
-
-        qr.select_qr_type()
-
-        time.sleep(1)
 
         # =====================================================
         # STEP 12 - IMAGE FORMAT
         # =====================================================
 
-        qr.select_image_format(
-            "PDF"
-        )
+        qr.select_image_format()
 
         time.sleep(1)
 

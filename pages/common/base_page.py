@@ -14,6 +14,7 @@ from selenium.common.exceptions import (
         ElementClickInterceptedException,
         ElementNotInteractableException
     )
+
 # -----------------------------------------------------------
 # LOGGER
 # -----------------------------------------------------------
@@ -24,7 +25,15 @@ from utilities.read_yaml import get_config
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
+FIRST_DROPDOWN_OPTION = (
+    By.XPATH,
+    "(//div[@role='option'])[1]"
+)
 
+BATCH_LOCATION = (
+    By.XPATH,
+    "//label[contains(text(),'Batch location')]/following::div[contains(@class,'choices__inner')][1]"
+)
 class BasePage:
 
     def __init__(self, driver, timeout=None):
@@ -304,47 +313,6 @@ class BasePage:
 
 
 
-    # def select_status_keyboard(self, locator, value):
-    #     wait = WebDriverWait(self.driver, 10)
-    #
-    #     # Step 1: Click dropdown
-    #     dropdown = wait.until(EC.element_to_be_clickable(locator))
-    #     dropdown.click()
-    #
-    #     # Step 2: Wait for dropdown options to appear
-    #     options = wait.until(EC.presence_of_all_elements_located((
-    #         By.XPATH,
-    #         "//div[contains(@class,'choices__list--dropdown') and not(contains(@class,'is-hidden'))]//div[@role='option']"
-    #     )))
-    #
-    #     # Step 3: Find correct option
-    #     for opt in options:
-    #         if value.lower() in opt.text.lower():
-    #             opt.click()
-    #             break
-    #     else:
-    #         raise Exception(f"Option '{value}' not found in dropdown")
-    #
-    #     # # Step 4: Wait dropdown close
-    #     # wait.until(EC.invisibility_of_element_located((
-    #     #     By.XPATH, "//div[contains(@class,'choices__list--dropdown')]"
-    #     # )))
-    #
-    #     # Step 4: Force close dropdown properly
-    #
-    #     from selenium.webdriver.common.keys import Keys
-    #
-    #     # remove focus
-    #     self.driver.switch_to.active_element.send_keys(Keys.ESCAPE)
-    #
-    #     time.sleep(1)
-    #
-    #     # wait dropdown close
-    #     wait.until(EC.invisibility_of_element_located((
-    #         By.XPATH,
-    #         "//div[contains(@class,'choices__list--dropdown') and not(contains(@class,'is-hidden'))]"
-    #     )))
-
 
     def select_dropdown(self, locator, value):
 
@@ -479,3 +447,57 @@ class BasePage:
         (wait.until(
             EC.element_to_be_clickable((By.XPATH, f"//li[normalize-space()='{option_text}']")))
          .click())
+
+
+    def select_batch_location_dropdown(self, locator, location):
+        # Open dropdown using JS
+        el = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located(locator)
+        )
+
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            el
+        )
+        self.driver.execute_script(
+            "arguments[0].click();",
+            el
+        )
+
+        # Search textbox
+        search = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((
+                By.XPATH,
+                "//div[contains(@class,'choices__list--dropdown') and contains(@class,'is-active')]//input"
+            ))
+        )
+
+        search.clear()
+        search.send_keys(location)
+
+
+
+        # Wait for matching option
+        option = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                f"//div[contains(@class,'choices__list--dropdown') and contains(@class,'is-active')]//div[@role='option'][contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'{location.lower()}')]"
+            ))
+        )
+
+        self.driver.execute_script("arguments[0].click();", option)
+        search.send_keys(Keys.ARROW_DOWN)
+        time.sleep(0.3)
+        search.send_keys(Keys.ENTER)
+
+
+    def select_using_keyboard(self, locator):
+        self.click(locator)
+
+        time.sleep(0.5)  # wait for dropdown to open
+
+        active = self.driver.switch_to.active_element
+        active.send_keys(Keys.ARROW_DOWN)
+        active.send_keys(Keys.ENTER)
+
+        time.sleep(0.5)

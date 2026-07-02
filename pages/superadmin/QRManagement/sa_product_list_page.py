@@ -23,7 +23,7 @@ class SAProductListPage(BasePage):
     STATUS_OPTIONS = (By.XPATH, "//ul[contains(@class,'select2-results__options')]")
     STATUS_OPTION = "//li[contains(@class,'select2-results__option') and normalize-space()='{}']"
 
-    CREATED_AT_FILTER = (By.XPATH, "//input[contains(@placeholder,'Created At')]")
+    INLINE_CREATED_AT = (By.XPATH, "//input[@placeholder='Created At']")
 
     # =============================
     # ENTRIES
@@ -45,6 +45,12 @@ class SAProductListPage(BasePage):
     CREATED_AT_COL = (By.XPATH, "//table//tbody/tr/td[last()-1]")
     CREATE_BTN = (By.XPATH, "//a[normalize-space()='Create']")
 
+    FIRST_PRODUCT_NAME = (
+        By.XPATH,
+        "//tbody/tr[1]/td[2]"
+    )
+
+
     # =============================
     # NAVIGATION
     # =============================
@@ -58,6 +64,9 @@ class SAProductListPage(BasePage):
                 (By.XPATH, "//h5[contains(text(),'List')]")
             )
         )
+
+    def get_first_product_name(self):
+        return self.get_text(self.FIRST_PRODUCT_NAME).strip()
 
     def wait_for_results(self):
         WebDriverWait(self.driver, 15).until(
@@ -94,7 +103,7 @@ class SAProductListPage(BasePage):
         Select(dropdown).select_by_value(str(value))
         self.wait_for_results()
 
-    # 🔥 PAGINATION FIX
+    # PAGINATION FIX
     def click_next(self):
         self.close_calendar()  # ✅ FIX
 
@@ -122,7 +131,7 @@ class SAProductListPage(BasePage):
             )
         )
 
-        # 🔥 RE-FIND element (avoid stale)
+        # RE-FIND element (avoid stale)
         prev_btn = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable(self.PREV_BTN)
         )
@@ -150,17 +159,28 @@ class SAProductListPage(BasePage):
     # DATE FILTER (FLATPICKR FIX)
     # =============================
     def filter_created_date(self, start, end):
-        self.click(self.CREATED_AT_FILTER)
+        date_input = self.driver.find_element(*self.INLINE_CREATED_AT)
+        date_input.click()
 
-        time.sleep(1)  # allow calendar render
+        WebDriverWait(self.driver, 5).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "flatpickr-calendar"))
+        )
 
         picker = FlatpickrRangePicker(self.driver)
-        success = picker.select_range(start, end)
+        picker.select_range(start, end)
 
-        if not success:
-            raise Exception("Date selection failed")
+        date_value = f"{start.strftime('%Y-%m-%d')} to {end.strftime('%Y-%m-%d')}"
+        self.driver.execute_script(
+            """
+            arguments[0].value = arguments[1];
+            arguments[0].dispatchEvent(new Event('change'));
+            arguments[0].dispatchEvent(new Event('blur'));
+            """,
+            date_input,
+            date_value
+        )
 
-        time.sleep(2)  # allow table reload
+        self.click(self.SEARCH_BTN)
         self.wait_for_results()
 
     def get_created_dates(self):

@@ -162,6 +162,8 @@ class SAVariantListPage(BasePage):
 
     def is_created_by_present(self, username):
 
+        print(f"Expected Username : {username}")
+
         rows = self.driver.find_elements(*self.TABLE_ROWS)
 
         for row in rows:
@@ -172,7 +174,9 @@ class SAVariantListPage(BasePage):
 
                 created_by = cells[3].text.strip()
 
-                if username.lower() in created_by.lower():
+                print(f"Created By : {created_by}")
+
+                if username is not None and username.lower() in created_by.lower():
                     return True
 
         return False

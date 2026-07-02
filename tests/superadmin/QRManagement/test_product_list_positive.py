@@ -11,8 +11,12 @@ class TestProductListPositive:
     def test_search_product(self, setup):
         page = SAProductListPage(setup)
         page.goto_page()
-        page.search("chair")
-        assert page.is_row_present()
+
+        product = page.get_first_product_name()
+
+        page.search(product)
+
+        assert page.get_first_product_name() == product
 
     def test_filter_status_active(self, setup):
         page = SAProductListPage(setup)

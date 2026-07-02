@@ -89,6 +89,7 @@ class TestVariantCreatePositive:
 
         driver = login_superadmin["driver"]
         username = login_superadmin["username"]
+        print("Username from fixture:", username)
 
         (
             list_page,

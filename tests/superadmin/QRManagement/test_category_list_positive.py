@@ -9,15 +9,25 @@ class TestCategoryListPositive:
 
     def test_search_category(self, setup):
         page = SACategoryListPage(setup)
+
         page.goto_page()
-        page.search("Heist")
-        assert page.is_row_present()
+
+        category = page.get_first_category_name()
+
+        page.search(category)
+
+        assert page.get_first_category_name() == category
 
     def test_search_manufacturer(self, setup):
         page = SACategoryListPage(setup)
+
         page.goto_page()
-        page.search("Sydney Tea Shop Pvt Ltd")
-        assert page.is_row_present()
+
+        manufacturer = page.get_first_manufacturer_name()
+
+        page.search(manufacturer)
+
+        assert page.get_first_manufacturer_name() == manufacturer
     def test_filter_status_active(self, setup):
         page = SACategoryListPage(setup)
         page.goto_page()

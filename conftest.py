@@ -249,8 +249,14 @@ def category_name():
 @pytest.fixture()
 def login_superadmin(setup, get_config):
     user = get_config["users"]["superadmin"]
+
     login_page = SuperAdminLoginPage(setup)
-    username = login_page.login(user["username"], user["password"])
+
+    username = login_page.login_successfully(
+        user["username"],
+        user["password"]
+    )
+
     return {
         "driver": setup,
         "username": username

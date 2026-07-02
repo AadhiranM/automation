@@ -15,7 +15,10 @@ class SAQRGenerationPage(BasePage):
     MANUFACTURER = (By.XPATH, "//label[contains(text(),'Manufacturer')]/following::div[contains(@class,'choices__inner')][1]")
     PRODUCT_ID = (By.XPATH, "//label[contains(text(),'Product ID')]/following::div[contains(@class,'choices__inner')][1]")
     VARIANT_SKU = (By.XPATH, "//label[contains(text(),'Variant SKU')]/following::div[contains(@class,'choices__inner')][1]")
-    BATCH_LOCATION = (By.XPATH, "//label[contains(text(),'Batch Location')]/following::div[contains(@class,'choices__inner')][1]")
+    BATCH_LOCATION = (
+        By.XPATH,
+        "//label[contains(text(),'Batch location')]/following::div[contains(@class,'choices__inner')][1]"
+    )
 
     # =========================
     # INPUT FIELDS
@@ -32,10 +35,18 @@ class SAQRGenerationPage(BasePage):
     # =========================
     # DROPDOWNS (CHOICES.JS)
     # =========================
-    DIMENSION = (By.XPATH, "//label[contains(text(),'Dimension')]/following::div[contains(@class,'choices__inner')][1]")
-    QR_TYPE = (By.XPATH, "//label[contains(text(),'QR Type')]/following::div[contains(@class,'choices__inner')][1]")
-    IMAGE_FORMAT = (By.XPATH, "//label[contains(text(),'QR Image Format')]/following::div[contains(@class,'choices__inner')][1]")
 
+
+
+    DIMENSION = (
+        By.XPATH,
+        "//label[contains(text(),'Dimension')]/following::div[contains(@class,'choices__inner')][1]"
+    )
+
+    QR_IMAGE_FORMAT = (
+        By.XPATH,
+        "//label[contains(.,'QR Image Format')]/following::div[contains(@class,'choices__inner')][1]"
+    )
     # =========================
     # BUTTON
     # =========================
@@ -112,34 +123,16 @@ class SAQRGenerationPage(BasePage):
 
         self.click(self.VARIANT_SKU)
 
-        time.sleep(2)
-
-        options = self.driver.find_elements(
-            By.XPATH,
-            "//div[@data-choice-selectable]"
+        search = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((
+                By.XPATH,
+                "//div[contains(@class,'choices') and contains(@class,'is-open')]//input"
+            ))
         )
 
-        valid_options = [
-            opt for opt in options
-            if opt.text.strip()
-        ]
-
-        if not valid_options:
-            print("No Variant SKU available. Continuing without variant.")
-            return False
-
-        print(
-            f"Selected Variant SKU: {valid_options[0].text}"
-        )
-
-        self.driver.execute_script(
-            "arguments[0].click();",
-            valid_options[0]
-        )
-
-        time.sleep(1)
-
-        return True
+        search.send_keys(Keys.ARROW_DOWN)
+        time.sleep(0.3)
+        search.send_keys(Keys.ENTER)
 
     # INPUT METHODS
     # =========================
@@ -151,23 +144,23 @@ class SAQRGenerationPage(BasePage):
 
         el = wait.until(EC.element_to_be_clickable(self.QUANTITY))
 
-        # 🔥 force focus
+        # force focus
         self.driver.execute_script("arguments[0].focus();", el)
 
-        # 🔥 HARD CLEAR
+        # HARD CLEAR
         el.send_keys(Keys.CONTROL + "a")
         el.send_keys(Keys.DELETE)
 
-        # 🔥 JS SET VALUE (THIS IS THE REAL FIX)
+        # JS SET VALUE (THIS IS THE REAL FIX)
         self.driver.execute_script("arguments[0].value = arguments[1];", el, value)
 
-        # 🔥 TRIGGER INPUT EVENT (CRITICAL)
+        # TRIGGER INPUT EVENT (CRITICAL)
         self.driver.execute_script("""
             arguments[0].dispatchEvent(new Event('input', {bubbles: true}));
             arguments[0].dispatchEvent(new Event('change', {bubbles: true}));
         """, el)
 
-        # 🔥 blur to register validation
+        # blur to register validation
         el.send_keys(Keys.TAB)
 
         time.sleep(1)
@@ -187,14 +180,16 @@ class SAQRGenerationPage(BasePage):
     # =========================
     # CHOICES.JS DROPDOWNS
     # =========================
-    def select_dimension(self, value):
-        self.select_status_keyboard(self.DIMENSION, value)
-        self.close_dropdown()
 
+    def select_dimension(self):
+        self.select_using_keyboard(
+            self.DIMENSION
+        )
 
-    def select_image_format(self, value):
-        self.select_status_keyboard(self.IMAGE_FORMAT, value)
-        self.close_dropdown()
+    def select_image_format(self):
+        self.select_using_keyboard(
+            self.QR_IMAGE_FORMAT
+        )
 
     # =========================
     # ACTION
@@ -232,39 +227,10 @@ class SAQRGenerationPage(BasePage):
         except:
             pass
 
-    # def select_batch_location(self, value="Chennai"):
-    #
-    #     self.select_searchable_dropdown(
-    #         self.BATCH_LOCATION,
-    #         value
-    #     )
-    #
-    #     self.close_dropdown()
-    #
-    #     time.sleep(1)
 
-    def select_batch_location(self, value="Chennai"):
 
-        self.select_searchable_dropdown(
+    def select_batch_location(self, location):
+        self.select_batch_location_dropdown(
             self.BATCH_LOCATION,
-            value
+            location
         )
-
-        ActionChains(self.driver) \
-            .send_keys(Keys.TAB) \
-            .perform()
-
-        time.sleep(1)
-
-    def select_qr_type(self):
-
-        self.click(self.QR_TYPE)
-
-        time.sleep(1)
-
-        ActionChains(self.driver) \
-            .send_keys(Keys.ARROW_DOWN) \
-            .send_keys(Keys.ENTER) \
-            .perform()
-
-        time.sleep(1)

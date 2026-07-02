@@ -36,7 +36,7 @@ class SAProductCreateVideoPage(BasePage):
         )
 
         message = toast.text.strip()
-        print(f"📢 Toast Message: {message}")
+        print(f" Toast Message: {message}")
 
         return message
 
@@ -46,17 +46,17 @@ class SAProductCreateVideoPage(BasePage):
             msg = self.get_toast_message().lower()
 
             if "success" in msg:
-                print("✅ Product created successfully")
+                print(" Product created successfully")
                 return True
 
             elif "unique" in msg or "already exists" in msg:
-                print("⚠️ SKU already exists (expected scenario)")
+                print(" SKU already exists (expected scenario)")
                 return True
 
             else:
-                print(f"❌ Unexpected message: {msg}")
+                print(f" Unexpected message: {msg}")
                 return False
 
         except Exception as e:
-            print(f"❌ No toast found: {e}")
+            print(f" No toast found: {e}")
             return False

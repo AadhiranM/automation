@@ -65,6 +65,24 @@ class SACategoryListPage(BasePage):
     # =====================================================================
     # 10. NAVIGATION
     # =====================================================================
+
+    FIRST_ROW_CATEGORY = (
+        By.XPATH,
+        "//tbody/tr[1]/td[2]"
+    )
+
+    FIRST_ROW_STATUS = (
+        By.XPATH,
+        "//tbody/tr[1]/td[4]"
+    )
+    FIRST_MANUFACTURER_NAME = (
+        By.XPATH,
+        "//tbody/tr[1]/td[3]"
+    )
+
+    def get_first_manufacturer_name(self):
+        return self.get_text(self.FIRST_MANUFACTURER_NAME).strip()
+
     def goto_page(self):
         self.driver.get(
             "https://beta.digitathya.com/admin/category?reset_filters=1"
@@ -206,7 +224,7 @@ class SACategoryListPage(BasePage):
         for row in rows:
             if name.lower() in row.text.lower():
                 return row.find_element(By.XPATH, "./td[4]").text.strip()
-                # ⚠️ Adjust column index if needed
+                # Adjust column index if needed
 
         return None
 
@@ -265,3 +283,9 @@ class SACategoryListPage(BasePage):
         raise Exception(
             "No Active Category Found"
         )
+
+    def get_first_category_name(self):
+        return self.get_text(self.FIRST_ROW_CATEGORY).strip()
+
+    def get_first_status(self):
+        return self.get_text(self.FIRST_ROW_STATUS).strip()

@@ -9,7 +9,10 @@ from selenium.webdriver.common.action_chains import ActionChains
 class SAProductCreateChildPage(BasePage):
 
     CHILD_TAB = (By.XPATH, "//a[normalize-space()='Child SKU']")
-    CONTINUE_BTN = (By.ID, "nextButton")
+    CONTINUE_BTN = (
+        By.XPATH,
+        "//div[@id='pill-justified-variant-1' and contains(@class,'active')]//button[contains(.,'Continue to Video Details')]"
+    )
 
     # 🔥 ALL DROPDOWNS (DYNAMIC)
     ALL_DROPDOWNS = (
@@ -136,4 +139,15 @@ class SAProductCreateChildPage(BasePage):
 
     # -------------------------
     def go_to_video(self):
-        self.click(self.CONTINUE_BTN)
+
+        btn = self.driver.find_element(*self.CONTINUE_BTN)
+
+        print("Displayed :", btn.is_displayed())
+        print("Enabled   :", btn.is_enabled())
+
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            btn
+        )
+
+        btn.click()
