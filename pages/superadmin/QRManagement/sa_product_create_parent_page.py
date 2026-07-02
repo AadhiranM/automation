@@ -219,5 +219,5 @@ class SAProductCreateParentPage(BasePage):
         try:
             btn.click()
         except:
-            print("Normal click failed → using JS click")
+            print("Normal click failed using JS click")
             self.driver.execute_script("arguments[0].click();", btn)
