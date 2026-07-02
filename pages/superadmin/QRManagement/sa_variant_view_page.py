@@ -20,7 +20,7 @@ class SAVariantViewPage(BasePage):
         current_url = self.driver.current_url.lower()
 
         return (
-            "show" in current_url
+            "viewvariant" in current_url
             or "/view/" in current_url
             or "/show/" in current_url
         )
