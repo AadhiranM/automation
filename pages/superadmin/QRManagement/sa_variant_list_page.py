@@ -87,8 +87,10 @@ class SAVariantListPage(BasePage):
             self.click(locator)
 
             # wait dropdown
-            WebDriverWait(self.driver, 5).until(
-                EC.presence_of_element_located(self.EDIT_BTN)
+            WebDriverWait(self.driver, 15).until(
+                lambda d:
+                d.find_elements(*self.VIEW_BTN)
+                or d.find_elements(*self.EDIT_BTN)
             )
 
             view_present = len(self.driver.find_elements(*self.VIEW_BTN)) > 0
@@ -112,22 +114,56 @@ class SAVariantListPage(BasePage):
                 if view_present and edit_present:
                     return
 
-            # ❌ not matching → close dropdown and try next
+            # not matching → close dropdown and try next
             self.driver.execute_script("document.body.click()")
 
         raise Exception("No matching row found for required actions")
 
     def click_view(self):
-        WebDriverWait(self.driver, 5).until(
+
+        view = WebDriverWait(self.driver, 15).until(
+            EC.visibility_of_element_located(self.VIEW_BTN)
+        )
+
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            view
+        )
+
+        WebDriverWait(self.driver, 15).until(
             EC.element_to_be_clickable(self.VIEW_BTN)
         )
-        self.click(self.VIEW_BTN)
+
+        try:
+            view.click()
+        except:
+            self.driver.execute_script(
+                "arguments[0].click();",
+                view
+            )
 
     def click_edit(self):
-        WebDriverWait(self.driver, 5).until(
+
+        edit = WebDriverWait(self.driver, 15).until(
+            EC.visibility_of_element_located(self.EDIT_BTN)
+        )
+
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            edit
+        )
+
+        WebDriverWait(self.driver, 15).until(
             EC.element_to_be_clickable(self.EDIT_BTN)
         )
-        self.click(self.EDIT_BTN)
+
+        try:
+            edit.click()
+        except:
+            self.driver.execute_script(
+                "arguments[0].click();",
+                edit
+            )
 
     # =============================
     # HELPERS

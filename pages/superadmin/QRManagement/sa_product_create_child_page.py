@@ -14,7 +14,7 @@ class SAProductCreateChildPage(BasePage):
         "//div[@id='pill-justified-variant-1' and contains(@class,'active')]//button[contains(.,'Continue to Video Details')]"
     )
 
-    # 🔥 ALL DROPDOWNS (DYNAMIC)
+    # ALL DROPDOWNS (DYNAMIC)
     ALL_DROPDOWNS = (
         By.XPATH,
         "//div[contains(@class,'tab-pane') and contains(@class,'active')]//div[contains(@class,'choices__inner')]"

@@ -11,7 +11,7 @@ class SAProductCreateVideoPage(BasePage):
         "//button[.//span[contains(text(),'Create Product')]]"
     )
 
-    # 🔥 COMMON TOAST (handles both success & error)
+    # COMMON TOAST (handles both success & error)
     TOAST_MSG = (
         By.XPATH,
         "//div[contains(@class,'toastify')]"

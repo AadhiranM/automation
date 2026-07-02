@@ -13,7 +13,7 @@ from utilities.data_generator import (
     )
 
 
-# ✅ GLOBAL FILE PATH (PIPELINE SAFE)
+# GLOBAL FILE PATH (PIPELINE SAFE)
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../"))
 FILE_PATH = os.path.join(BASE_DIR, "test_data", "images", "selenium_image.jpg")
 
