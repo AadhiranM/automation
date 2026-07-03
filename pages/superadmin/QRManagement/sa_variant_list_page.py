@@ -77,47 +77,50 @@ class SAVariantListPage(BasePage):
         self.wait_for_table()   #  avoid stale
 
     # =============================
-    # ACTIONS (GENERIC + FINAL)
+        # ACTIONS (GENERIC + FINAL)
     # =============================
     def click_actions_with_option(self, require_view=False, require_edit=False):
+
         rows = self.driver.find_elements(*self.TABLE_ROWS)
 
         for i in range(len(rows)):
-            locator = (By.XPATH, self.ACTION_BTN.format(i + 1))
-            self.click(locator)
 
-            # wait dropdown
-            WebDriverWait(self.driver, 15).until(
-                lambda d:
-                d.find_elements(*self.VIEW_BTN)
-                or d.find_elements(*self.EDIT_BTN)
+            action_btn = (By.XPATH, self.ACTION_BTN.format(i + 1))
+
+            self.click(action_btn)
+
+            try:
+                WebDriverWait(self.driver, 15).until(
+                    EC.visibility_of_any_elements_located(
+                        self.VIEW_BTN if require_view else self.EDIT_BTN
+                    )
+                )
+            except:
+                # dropdown didn't open, try next row
+                continue
+
+            view_present = any(
+                e.is_displayed()
+                for e in self.driver.find_elements(*self.VIEW_BTN)
             )
 
-            view_present = len(self.driver.find_elements(*self.VIEW_BTN)) > 0
-            edit_present = len(self.driver.find_elements(*self.EDIT_BTN)) > 0
+            edit_present = any(
+                e.is_displayed()
+                for e in self.driver.find_elements(*self.EDIT_BTN)
+            )
 
-            # LOGIC
-            if require_view and require_edit:
-                if view_present and edit_present:
-                    return
+            if require_view and view_present:
+                return
 
-            elif require_view:
-                if view_present:
-                    return
+            if require_edit and edit_present:
+                return
 
-            elif require_edit:
-                if edit_present:
-                    return
+            if not require_view and not require_edit and view_present and edit_present:
+                return
 
-            else:
-                # default → both required
-                if view_present and edit_present:
-                    return
+            self.driver.find_element(By.TAG_NAME, "body").click()
 
-            # not matching → close dropdown and try next
-            self.driver.execute_script("document.body.click()")
-
-        raise Exception("No matching row found for required actions")
+        raise Exception("No matching row found")
 
     def click_view(self):
 

@@ -134,6 +134,7 @@ class SACategoryListPage(BasePage):
     def open_action_menu(self):
         self.click(self.ACTION_BTN)
 
+
     def click_view(self):
         self.click(self.ACTION_VIEW)
 
