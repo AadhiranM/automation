@@ -68,10 +68,29 @@ class SAProductCreateChildPage(BasePage):
 
             type_dropdown = dropdowns[i]
 
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", type_dropdown)
-            time.sleep(1)
+            # self.driver.execute_script("arguments[0].scrollIntoView(true);", type_dropdown)
+            # time.sleep(1)
+            #
+            # type_dropdown.click()
 
-            type_dropdown.click()
+            self.driver.execute_script(
+                "arguments[0].scrollIntoView({block:'center'});",
+                type_dropdown
+            )
+
+            wait.until(
+                lambda d: type_dropdown.is_displayed() and type_dropdown.is_enabled()
+            )
+
+            time.sleep(0.5)
+
+            try:
+                type_dropdown.click()
+            except:
+                self.driver.execute_script(
+                    "arguments[0].click();",
+                    type_dropdown
+                )
             time.sleep(1)
 
             type_options = self.driver.find_elements(
@@ -108,10 +127,28 @@ class SAProductCreateChildPage(BasePage):
 
             value_dropdown = dropdowns[i + 1]
 
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", value_dropdown)
-            time.sleep(1)
+            # self.driver.execute_script("arguments[0].scrollIntoView(true);", value_dropdown)
+            # time.sleep(1)
+            #
+            # value_dropdown.click()
+            self.driver.execute_script(
+                "arguments[0].scrollIntoView({block:'center'});",
+                value_dropdown
+            )
 
-            value_dropdown.click()
+            wait.until(
+                lambda d: value_dropdown.is_displayed() and value_dropdown.is_enabled()
+            )
+
+            time.sleep(0.5)
+
+            try:
+                value_dropdown.click()
+            except:
+                self.driver.execute_script(
+                    "arguments[0].click();",
+                    value_dropdown
+                )
             time.sleep(1)
 
             value_options = self.driver.find_elements(
