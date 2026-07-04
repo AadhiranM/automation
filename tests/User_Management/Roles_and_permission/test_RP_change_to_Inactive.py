@@ -254,7 +254,7 @@ excel_path = r"C:\Users\Suresh V\Desktop\automation\mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "Roles_and_permission_filters")
 
 
-@pytest.mark.order(2)
+@pytest.mark.order(3)
 @pytest.mark.parametrize("data", test_data)
 class Test_UM_RP_change_to_Inactive(BaseTest):
 
@@ -374,6 +374,7 @@ class Test_UM_RP_change_to_Inactive(BaseTest):
                     (By.CSS_SELECTOR, ".toastify")
                 )
             ).text.strip()
+            toast_text = toast_text.encode("ascii", errors="ignore").decode()
 
             print("Toast:", toast_text)
 

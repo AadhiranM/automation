@@ -13,7 +13,7 @@ class Roles_and_permission_filters:
     roles_and_permission=(By.XPATH,"//ul[@class='collapse-menu show']//span[@class='nav-sub-name'][normalize-space()='Roles & Permissions']")
     refresh_btn=(By.XPATH,"//button[contains(@class,'btn btn-outline-primary btn-icon waves-effect waves-light reload_btn uicust-active-color uicust-active-border refresh_Btn')]")
     search_name_field=(By.XPATH,"(//input[@id='search-vale'])[1]")
-    filter_calender=(By.XPATH,"//input[@id='datepicker-range']")
+    filter_calender=(By.XPATH,"//input[@class='form-control dash-filter-picker active form-control input']")
     select_status=(By.XPATH,"//select[@id='idStatus']")
     actions_icon=(By.XPATH,"(//button[@type='button'])[13]")
     inactive_opt=(By.XPATH,"//ul[@class='dropdown-menu dropdown-menu-end dd_action show']//a[@class='dropdown-item status-item-btn icons-designed'][normalize-space()='Inactive']")
@@ -265,5 +265,8 @@ class Roles_and_permission_filters:
     #         EC.element_to_be_clickable(self.suspend_btn)
     #     ).click()
     #
+
+
+
 
 
