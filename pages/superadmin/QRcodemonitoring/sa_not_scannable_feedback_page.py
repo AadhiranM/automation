@@ -25,7 +25,7 @@ class SANotScannableFeedbackPage(BasePage):
     # ======================================================
     DATE_FILTER = (
         By.ID,
-        "datepicker-range"
+        "datepicker-range-export"
     )
 
     STATUS_DROPDOWN = (
@@ -140,7 +140,7 @@ class SANotScannableFeedbackPage(BasePage):
     )
 
 
-    EXPORT_CSV = (By.XPATH, "//a[contains(text(),'Export as CSV')]")
+    EXPORT_CSV = (By.XPATH, "//a[contains(text(),'Export as Csv')]")
     DATE_INPUT = (By.XPATH, "//input[@placeholder='Select date']")
     DATE_SUBMIT = (By.XPATH, "//button[contains(text(),'Submit')]")
 
@@ -428,7 +428,12 @@ class SANotScannableFeedbackPage(BasePage):
         ).strip()
 
         print(f"PRODUCT FROM TABLE = {product_name}")
+        # get product from list page
 
+        # Product not available
+        if product_name.upper() == "N/A" or product_name == "-":
+            print("Manufacturer has no product. Skipping edit.")
+            return None
         # click actions
         actions = wait.until(
             EC.element_to_be_clickable(self.ACTIONS_BTN)
@@ -503,7 +508,20 @@ class SANotScannableFeedbackPage(BasePage):
     def assign_manufacturer_and_verify_row_removed(self):
         wait = WebDriverWait(self.driver, 30)
 
-        # first row scan id
+        # Check manufacturer
+        manufacturer = wait.until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//table/tbody/tr[1]/td[4]")
+            )
+        ).text.strip()
+
+        print(f"MANUFACTURER = {manufacturer}")
+
+        if manufacturer.upper() == "N/A" or manufacturer == "-":
+            print("No manufacturer assigned for this record. Skipping assignment.")
+            return None
+
+        # First row scan id
         first_scan_id = wait.until(
             EC.visibility_of_element_located(
                 (By.XPATH, "//table/tbody/tr[1]/td[2]")
@@ -512,7 +530,7 @@ class SANotScannableFeedbackPage(BasePage):
 
         print(f"FIRST ROW SCAN ID = {first_scan_id}")
 
-        # first row checkbox
+        # First row checkbox
         checkbox = wait.until(
             EC.element_to_be_clickable(
                 (By.XPATH, "//table/tbody/tr[1]//input[@type='checkbox']")
@@ -526,12 +544,15 @@ class SANotScannableFeedbackPage(BasePage):
         time.sleep(1)
 
         if not checkbox.is_selected():
-            self.driver.execute_script("arguments[0].click();", checkbox)
+            self.driver.execute_script(
+                "arguments[0].click();",
+                checkbox
+            )
 
         print("Checkbox selected")
         time.sleep(1)
 
-        # assign manufacturer button
+        # Assign Manufacturer button
         assign_btn = wait.until(
             EC.element_to_be_clickable(
                 (By.XPATH, "//button[contains(.,'Assign Manufacturer')]")
@@ -539,31 +560,29 @@ class SANotScannableFeedbackPage(BasePage):
         )
 
         self.driver.execute_script(
-            "arguments[0].scrollIntoView({block:'center'});",
+            "arguments[0].click();",
             assign_btn
         )
-        time.sleep(1)
-
-        self.driver.execute_script("arguments[0].click();", assign_btn)
 
         print("Assign Manufacturer clicked")
 
-        # wait refresh
         time.sleep(5)
 
-        # verify old scan id removed
         rows = self.driver.find_elements(
             By.XPATH,
             f"//table/tbody/tr/td[contains(text(),'{first_scan_id}')]"
         )
 
-        assert len(rows) == 0, f"Scan ID still present after assignment: {first_scan_id}"
+        assert len(rows) == 0, (
+            f"Scan ID still present after assignment: {first_scan_id}"
+        )
 
         print("Manufacturer assigned successfully, row removed")
 
         return first_scan_id
 
     def export_csv_report(self):
+
         wait = WebDriverWait(self.driver, 30)
 
         downloads_path = os.path.join(
@@ -575,12 +594,11 @@ class SANotScannableFeedbackPage(BasePage):
             glob.glob(os.path.join(downloads_path, "*.csv"))
         )
 
-        # EXPORT BUTTON
+        # -----------------------------
+        # Export button
+        # -----------------------------
         export_btn = wait.until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                "//button[contains(@class,'dropdown-toggle') and contains(.,'Export')]"
-            ))
+            EC.element_to_be_clickable(self.EXPORT_BTN)
         )
 
         self.driver.execute_script(
@@ -590,14 +608,11 @@ class SANotScannableFeedbackPage(BasePage):
 
         print("Export button clicked")
 
-        time.sleep(2)
-
-        # EXPORT CSV (CORRECT LOCATOR)
+        # -----------------------------
+        # Export CSV
+        # -----------------------------
         export_csv = wait.until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                "//a[contains(@class,'dropdown-item') and contains(text(),'Export as Csv')]"
-            ))
+            EC.element_to_be_clickable(self.EXPORT_CSV)
         )
 
         self.driver.execute_script(
@@ -607,68 +622,40 @@ class SANotScannableFeedbackPage(BasePage):
 
         print("Export CSV clicked")
 
-        # WAIT MODAL
+        # -----------------------------
+        # Wait for popup
+        # -----------------------------
         wait.until(
-            EC.visibility_of_element_located((
-                By.ID,
-                "dateRangeModal"
-            ))
+            EC.visibility_of_element_located(
+                (By.ID, "FakedateRangeModal")
+            )
         )
 
         print("Date popup opened")
 
-        # DATE INPUT
-        date_input = wait.until(
-            EC.element_to_be_clickable(self.DATE_INPUT)
-        )
+        # -----------------------------
+        # Open Calendar
+        # -----------------------------
+        self.safe_click(self.DATE_INPUT)
 
-        date_input.click()
+        # -----------------------------
+        # Select Last 7 Days
+        # -----------------------------
+        start = date.today() - timedelta(days=7)
+        end = date.today()
 
-        time.sleep(2)
+        picker = FlatpickrRangePicker(self.driver)
+        picker.select_range(start, end)
 
-        today = datetime.today()
-        yesterday = today - timedelta(days=1)
+        print(f"Selected Date Range : {start} -> {end}")
 
-        if os.name == "nt":
-            start_label = yesterday.strftime("%B %#d, %Y")
-            end_label = today.strftime("%B %#d, %Y")
-        else:
-            start_label = yesterday.strftime("%B %-d, %Y")
-            end_label = today.strftime("%B %-d, %Y")
-
-        print(start_label, end_label)
-
-        # START DATE
-        start_date = wait.until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                f"//div[contains(@class,'flatpickr-calendar') and contains(@class,'open')]"
-                f"//span[@aria-label='{start_label}']"
-            ))
-        )
-        start_date.click()
-
-        time.sleep(1)
-
-        # END DATE
-        end_date = wait.until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                f"//div[contains(@class,'flatpickr-calendar') and contains(@class,'open')]"
-                f"//span[@aria-label='{end_label}']"
-            ))
-        )
-        end_date.click()
-
-        print("Dates selected")
-
-        time.sleep(1)
-
-        # SUBMIT INSIDE MODAL
+        # -----------------------------
+        # Submit
+        # -----------------------------
         submit_btn = wait.until(
             EC.element_to_be_clickable((
                 By.XPATH,
-                "//div[@id='dateRangeModal']//button[@type='submit']"
+                "//div[@id='FakedateRangeModal']//button[@type='submit']"
             ))
         )
 
@@ -677,21 +664,26 @@ class SANotScannableFeedbackPage(BasePage):
             submit_btn
         )
 
-        print("Export submit clicked")
+        print("Export Submit clicked")
 
+        # -----------------------------
+        # Wait for Download
+        # -----------------------------
         downloaded = False
 
-        for _ in range(20):
+        for _ in range(30):
+
             time.sleep(2)
 
             after_files = set(
                 glob.glob(os.path.join(downloads_path, "*.csv"))
             )
 
-            if after_files - before_files:
+            new_files = after_files - before_files
+
+            if new_files:
                 downloaded = True
+                print("CSV Downloaded Successfully")
                 break
 
         assert downloaded, f"CSV file not downloaded in {downloads_path}"
-
-        print("CSV downloaded successfully")

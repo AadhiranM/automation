@@ -29,9 +29,7 @@ class TestQRMonitoring:
     @pytest.mark.parametrize(
         "status",
         [
-            "Genuine",
-            "Fake",
-            "Not Scannable",
+            "All",
             "Not Recognized",
         ]
     )

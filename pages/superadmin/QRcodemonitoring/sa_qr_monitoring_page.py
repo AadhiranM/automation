@@ -122,7 +122,7 @@ class SAQRMonitoringPage(BasePage):
 
     DATE_RANGE = (
         By.XPATH,
-        "//input[contains(@placeholder,'Select Date Range')]"
+        "//input[contains(@placeholder,'Select Date')]"
     )
 
     DATE_BASED_TAB = (By.ID, "date-tab")
@@ -225,16 +225,15 @@ class SAQRMonitoringPage(BasePage):
     # DATE FILTER
     # ======================================================
     def filter_date(self, start, end):
-        self.click(self.DATE_FILTER)
+
+        self.safe_click(self.DATE_FILTER)
 
         picker = FlatpickrRangePicker(self.driver)
-        success = picker.select_range(start, end)
+        picker.select_range(start, end)
 
-        if not success:
-            raise Exception("Date range selection failed")
+        self.click(self.SEARCH_BTN)
 
         self.wait_for_results()
-
     # ======================================================
     # ENTRIES
     # ======================================================

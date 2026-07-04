@@ -442,6 +442,7 @@ class SAQrNotRecognizedFeedbackPage(BasePage):
         return first_scan_id
 
     def export_csv_report(self):
+
         wait = WebDriverWait(self.driver, 30)
 
         downloads_path = os.path.join(
@@ -453,31 +454,37 @@ class SAQrNotRecognizedFeedbackPage(BasePage):
             glob.glob(os.path.join(downloads_path, "*.csv"))
         )
 
-        # dynamic dates
-        today = datetime.today()
-        yesterday = today - timedelta(days=1)
-
-        start_label = today.strftime("%B %d, %Y")
-        end_label = yesterday.strftime("%B %d, %Y")
-
-        print("Yesterday =", end_label)
-        print("Today =", start_label)
-
-        # export button
+        # -----------------------------
+        # Export button
+        # -----------------------------
         export_btn = wait.until(
             EC.element_to_be_clickable(self.EXPORT_BTN)
         )
-        export_btn.click()
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            export_btn
+        )
+
         print("Export button clicked")
 
-        # export csv
+        # -----------------------------
+        # Export CSV
+        # -----------------------------
         export_csv = wait.until(
             EC.element_to_be_clickable(self.EXPORT_CSV)
         )
-        export_csv.click()
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            export_csv
+        )
+
         print("Export CSV clicked")
 
-        # modal open
+        # -----------------------------
+        # Wait for popup
+        # -----------------------------
         wait.until(
             EC.visibility_of_element_located(
                 (By.ID, "FakedateRangeModal")
@@ -486,51 +493,25 @@ class SAQrNotRecognizedFeedbackPage(BasePage):
 
         print("Date popup opened")
 
-        # open calendar
-        date_input = wait.until(
-            EC.element_to_be_clickable(self.DATE_INPUT)
-        )
-        date_input.click()
+        # -----------------------------
+        # Open Calendar
+        # -----------------------------
+        self.safe_click(self.DATE_INPUT)
 
-        time.sleep(2)
+        # -----------------------------
+        # Select Last 7 Days
+        # -----------------------------
+        start = date.today() - timedelta(days=7)
+        end = date.today()
 
-        # yesterday
-        start_date = wait.until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                f"//div[contains(@class,'flatpickr-calendar') and contains(@class,'open')]"
-                f"//span[@aria-label='{end_label}']"
-            ))
-        )
+        picker = FlatpickrRangePicker(self.driver)
+        picker.select_range(start, end)
 
-        self.driver.execute_script(
-            "arguments[0].click();",
-            start_date
-        )
+        print(f"Selected Date Range : {start} -> {end}")
 
-        print("Yesterday selected")
-
-        time.sleep(1)
-
-        # today
-        end_date = wait.until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                f"//div[contains(@class,'flatpickr-calendar') and contains(@class,'open')]"
-                f"//span[@aria-label='{start_label}']"
-            ))
-        )
-
-        self.driver.execute_script(
-            "arguments[0].click();",
-            end_date
-        )
-
-        print("Today selected")
-
-        time.sleep(2)
-
-        # modal submit
+        # -----------------------------
+        # Submit
+        # -----------------------------
         submit_btn = wait.until(
             EC.element_to_be_clickable((
                 By.XPATH,
@@ -543,11 +524,15 @@ class SAQrNotRecognizedFeedbackPage(BasePage):
             submit_btn
         )
 
-        print("Export submit clicked")
+        print("Export Submit clicked")
 
+        # -----------------------------
+        # Wait for Download
+        # -----------------------------
         downloaded = False
 
-        for _ in range(20):
+        for _ in range(30):
+
             time.sleep(2)
 
             after_files = set(
@@ -558,8 +543,7 @@ class SAQrNotRecognizedFeedbackPage(BasePage):
 
             if new_files:
                 downloaded = True
+                print("CSV Downloaded Successfully")
                 break
 
         assert downloaded, f"CSV file not downloaded in {downloads_path}"
-
-        print("CSV downloaded successfully")

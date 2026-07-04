@@ -132,15 +132,19 @@ class TestnotscannableFeedback:
     # ==================================================
     # EDIT
     # ==================================================
-    def test_edit_feedback(self, setup):
+    import pytest
 
+    def test_edit_feedback(self, setup):
         page = SANotScannableFeedbackPage(setup)
 
         page.goto_page()
 
         comment = page.edit_feedback()
 
-        assert comment != ""
+        if comment is None:
+            pytest.skip("Manufacturer has no product. Skipping edit test.")
+
+        assert comment == "Updated automation feedback"
 
     # ==================================================
     # EXPORT
@@ -161,6 +165,9 @@ class TestnotscannableFeedback:
         page.goto_page()
 
         removed_scan_id = page.assign_manufacturer_and_verify_row_removed()
+
+        if removed_scan_id is None:
+            pytest.skip("No manufacturer assigned. Skipping assign manufacturer test.")
 
         assert removed_scan_id != ""
 

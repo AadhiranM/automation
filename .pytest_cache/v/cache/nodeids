@@ -170,6 +170,7 @@
   "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_export_id_based",
   "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_export_user_based",
   "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_filter_date_range",
+  "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_filter_status[All]",
   "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_filter_status[Fake]",
   "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_filter_status[Genuine]",
   "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_filter_status[Not Recognized]",

@@ -93,7 +93,6 @@
   "tests/superadmin/Manufacturer/test_manufacturer_create_negative.py::TestManufacturerCreateNegative::test_create_manufacturer_with_invalid_email_format": true,
   "tests/superadmin/Manufacturer/test_manufacturer_filters_positive.py::TestManufacturerFilters::test_filter_by_clear_filter": true,
   "tests/superadmin/QRManagement/test_category_create_negative.py::TestCategoryCreateNegative::test_all_fields_blank": true,
-  "tests/superadmin/QRcodemonitoring/test_not_scannable_feedback.py::TestnotscannableFeedback::test_edit_feedback": true,
   "tests/superadmin/Enquiries/test_enquiry_edit_negative.py::TestEnquiryEditNegative::test_submit_disabled_without_change": true,
   "tests/superadmin/Enquiries/test_enquiry_view_positive.py::TestEnquiryViewPositive::test_view_enquiry_details": true,
   "tests/superadmin/Enquiries/test_enquiry_view_positive.py::TestEnquiryViewPositive::test_edit_button_visible": true,
@@ -101,5 +100,8 @@
   "tests/superadmin/Enquiries/test_enquiry_list_positive.py::TestEnquiryListPositive::test_panel_filter_date": true,
   "tests/superadmin/Enquiries/test_enquiry_list_positive.py::TestEnquiryListPositive::test_filter_created_date": true,
   "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_clear_filter": true,
-  "tests/manufacturer_onboarding/test_manufacturer_onboard_positive.py::TestManufacturerOnboardPositive::TestManufacturerOnboardPositive::test_business_info_positive": true
+  "tests/manufacturer_onboarding/test_manufacturer_onboard_positive.py::TestManufacturerOnboardPositive::TestManufacturerOnboardPositive::test_business_info_positive": true,
+  "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_filter_status[Genuine]": true,
+  "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_filter_status[Fake]": true,
+  "tests/superadmin/QRcodemonitoring/test_not_scannable_feedback.py::TestnotscannableFeedback::test_export_csv_report": true
 }
