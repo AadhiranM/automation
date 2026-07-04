@@ -102,6 +102,5 @@
   "tests/superadmin/Enquiries/test_enquiry_list_negative.py::TestEnquiryListNegative::test_clear_filter": true,
   "tests/manufacturer_onboarding/test_manufacturer_onboard_positive.py::TestManufacturerOnboardPositive::TestManufacturerOnboardPositive::test_business_info_positive": true,
   "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_filter_status[Genuine]": true,
-  "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_filter_status[Fake]": true,
-  "tests/superadmin/QRcodemonitoring/test_not_scannable_feedback.py::TestnotscannableFeedback::test_export_csv_report": true
+  "tests/superadmin/QRcodemonitoring/test_qr_monitoring.py::TestQRMonitoring::test_filter_status[Fake]": true
 }

@@ -757,7 +757,12 @@ class SAQRMonitoringPage(BasePage):
         search_box.clear()
         search_box.send_keys(username)
 
-        time.sleep(2)
+        wait.until(
+            EC.visibility_of_element_located((
+                By.XPATH,
+                f"//div[@id='userTabPane']//*[contains(text(),'{username}')]"
+            ))
+        )
 
         search_box.send_keys(Keys.ENTER)
 

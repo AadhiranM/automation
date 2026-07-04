@@ -25,8 +25,9 @@ class SANotScannableFeedbackPage(BasePage):
     # ======================================================
     DATE_FILTER = (
         By.ID,
-        "datepicker-range-export"
+        "datepicker-range"
     )
+
 
     STATUS_DROPDOWN = (
         By.ID,
@@ -625,9 +626,15 @@ class SANotScannableFeedbackPage(BasePage):
         # -----------------------------
         # Wait for popup
         # -----------------------------
+
+        time.sleep(2)
+
+        print(self.driver.page_source.find("dateRangeModal"))
+        print(self.driver.page_source.find("FakedateRangeModal"))
+
         wait.until(
             EC.visibility_of_element_located(
-                (By.ID, "FakedateRangeModal")
+                (By.ID, "dateRangeModal")
             )
         )
 
@@ -655,7 +662,7 @@ class SANotScannableFeedbackPage(BasePage):
         submit_btn = wait.until(
             EC.element_to_be_clickable((
                 By.XPATH,
-                "//div[@id='FakedateRangeModal']//button[@type='submit']"
+                "//div[@id='dateRangeModal']//button[@type='submit']"
             ))
         )
 
