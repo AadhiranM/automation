@@ -531,11 +531,24 @@ class SAQRMonitoringPage(BasePage):
         # GET FIRST USER FROM GRID
         # ======================================
         # Wait until at least one row is loaded
+        print("Waiting for table...")
+
         WebDriverWait(self.driver, 30).until(
-            lambda d: len(
-                d.find_elements(By.XPATH, "//table/tbody/tr")
-            ) > 0
+            lambda d: len(d.find_elements(By.XPATH, "//table/tbody/tr")) > 0
         )
+
+        rows = self.driver.find_elements(By.XPATH, "//table/tbody/tr")
+
+        print(f"ROWS FOUND = {len(rows)}")
+
+        if rows:
+            print("FIRST ROW HTML")
+            print(rows[0].get_attribute("outerHTML"))
+
+        cells = self.driver.find_elements(By.XPATH, "//table/tbody/tr[1]/td")
+
+        print(f"CELLS FOUND = {len(cells)}")
+
         first_user_text = wait.until(
             EC.visibility_of_element_located((
                 By.XPATH,
