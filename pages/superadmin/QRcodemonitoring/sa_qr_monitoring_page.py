@@ -210,31 +210,25 @@ class SAQRMonitoringPage(BasePage):
 
         wait = WebDriverWait(self.driver, 30)
 
+        print("Before click")
+
         self.click(self.STATUS_DROPDOWN)
 
-        # Give Select2 time to render the options
-        wait.until(
-            EC.visibility_of_element_located((
-                By.XPATH,
-                "//ul[contains(@class,'select2-results__options')]"
-            ))
-        )
+        print("Dropdown clicked")
 
-        option = (
+        time.sleep(5)
+
+        print("Current URL:", self.driver.current_url)
+
+        options = self.driver.find_elements(
             By.XPATH,
-            f"//li[@role='option']//span[normalize-space()='{status}']"
+            "//li[@role='option']"
         )
 
-        option_element = wait.until(
-            EC.visibility_of_element_located(option)
-        )
+        print("OPTION COUNT =", len(options))
 
-        self.driver.execute_script(
-            "arguments[0].click();",
-            option_element
-        )
-
-        self.wait_for_results()
+        for o in options:
+            print("OPTION =", o.text)
     # ======================================================
     # DATE FILTER
     # ======================================================
