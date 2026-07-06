@@ -379,7 +379,7 @@ class SANotScannableFeedbackPage(BasePage):
 
         # get product from list page
         product_name = self.get_text(
-            (By.XPATH, "//table/tbody/tr[1]/td[4]")
+            (By.XPATH, "//table/tbody/tr[1]/td[5]")
         ).strip()
 
         print(f"PRODUCT FROM TABLE = {product_name}")
