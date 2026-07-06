@@ -212,7 +212,23 @@ class SAQRMonitoringPage(BasePage):
 
         print("Before click")
 
-        self.click(self.STATUS_DROPDOWN)
+        dropdown = wait.until(
+            EC.element_to_be_clickable(self.STATUS_DROPDOWN)
+        )
+
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            dropdown
+        )
+
+        time.sleep(1)
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            dropdown
+        )
+
+        time.sleep(2)
 
         print("Dropdown clicked")
 
