@@ -185,66 +185,15 @@ class SANotScannableFeedbackPage(BasePage):
     # STATUS FILTER
     # ======================================================
     def filter_by_status(self, status):
-        wait = WebDriverWait(self.driver, 30)
 
-        print(f"Selecting status = {status}")
-
-        # exact visible status dropdown
-        dropdown = wait.until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                "//span[@id='select2-idStatus-container']"
-            ))
+        dropdown = WebDriverWait(self.driver, 20).until(
+            EC.presence_of_element_located((By.ID, "idStatus"))
         )
 
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block:'center'});",
-            dropdown
-        )
-        wait.until(
-            EC.visibility_of_element_located((
-                By.XPATH,
-                "//ul[contains(@class,'select2-results__options')]"
-            ))
-        )
+        Select(dropdown).select_by_visible_text(status)
 
-        # ActionChains click (stronger than normal click)
-        ActionChains(self.driver).move_to_element(dropdown).click().perform()
-
-        print("Status dropdown clicked")
-        time.sleep(2)
-
-        # select option from opened dropdown
-        option = wait.until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                f"//li[@role='option' and normalize-space()='{status}']"
-            ))
-        )
-
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block:'nearest'});",
-            option
-        )
-        time.sleep(1)
-
-        ActionChains(self.driver).move_to_element(option).click().perform()
-
-        print(f"Selected status = {status}")
-
-        time.sleep(3)
-
-        rows = self.driver.find_elements(
-            By.XPATH,
-            "//table/tbody/tr"
-        )
-
-        no_data = self.driver.find_elements(
-            By.XPATH,
-            "//*[contains(text(),'No data available')]"
-        )
-
-        assert len(rows) > 0 or len(no_data) > 0
+        self.click(self.SEARCH_BTN)  # or SEARCH_BTN, whichever your page uses
+        self.wait_for_results()
 
     # ======================================================
     # DATE FILTER
