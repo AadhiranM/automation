@@ -702,14 +702,21 @@ class SAQRMonitoringPage(BasePage):
 
         print(f"Searching User : {username}")
 
-        time.sleep(2)
+        # Wait until suggestions are loaded
+        wait.until(
+            lambda d: len(
+                d.find_elements(
+                    By.XPATH,
+                    "//div[contains(@class,'choices__list--dropdown')]//div[contains(@class,'choices__item--selectable')]"
+                )
+            ) > 0
+        )
+
+        time.sleep(1)
 
         search_box.send_keys(Keys.ENTER)
 
         print(f"Selected User : {username}")
-
-        time.sleep(2)
-
         # CLOSE ONLY DROPDOWN
 
         end_box = wait.until(
