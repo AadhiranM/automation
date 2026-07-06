@@ -19,7 +19,7 @@ class SADownloadReportsPage(BasePage):
 
     DATE_FILTER = (
         By.XPATH,
-        "//input[@type='text' and @placeholder='Select Date']"
+        "//input[@type='text' and @placeholder='Created At']"
     )
 
     FORMAT_DROPDOWN = (
@@ -205,29 +205,12 @@ class SADownloadReportsPage(BasePage):
         time.sleep(3)
         self.wait_for_results()
 
-    def filter_by_date(self, start, end):
-        wait = WebDriverWait(self.driver, 15)
-
-        date_input = wait.until(
-            EC.presence_of_element_located(self.DATE_FILTER)
-        )
-
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block:'center'});",
-            date_input
-        )
-
-        self.driver.execute_script(
-            "arguments[0].click();",
-            date_input
-        )
-
-        time.sleep(1)
+    def filter_date(self, start, end):
+        self.click(self.DATE_FILTER)
 
         picker = FlatpickrRangePicker(self.driver)
-        picker.select_range(start, end)
 
-        self.click(self.FILTER_BTN)
+        picker.select_range(start, end)
 
         self.wait_for_results()
 

@@ -33,7 +33,7 @@ class TestDownloadReports:
         start = date.today() - timedelta(days=7)
         end = date.today()
 
-        page.filter_by_date(start, end)
+        page.filter_date(start, end)
 
         assert (
                 page.is_row_present()
