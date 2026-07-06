@@ -429,14 +429,16 @@ class SANotScannableFeedbackPage(BasePage):
 
         comment_box.clear()
         comment_box.send_keys(comment)
-
         self.click(self.SUBMIT_BTN)
 
         wait.until(
-            EC.visibility_of_element_located(self.SUCCESS_MSG)
+            EC.url_contains("qr-notscannable-product-feedback")
         )
 
+        self.wait_for_results()
+
         return comment
+
     def export_records(self):
 
         self.click(self.EXPORT_BTN)
