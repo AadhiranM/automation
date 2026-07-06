@@ -191,7 +191,7 @@ class SANotScannableFeedbackPage(BasePage):
 
         # exact visible status dropdown
         dropdown = wait.until(
-            EC.presence_of_element_located((
+            EC.element_to_be_clickable((
                 By.XPATH,
                 "//span[@id='select2-idStatus-container']"
             ))
@@ -201,7 +201,12 @@ class SANotScannableFeedbackPage(BasePage):
             "arguments[0].scrollIntoView({block:'center'});",
             dropdown
         )
-        time.sleep(2)
+        wait.until(
+            EC.visibility_of_element_located((
+                By.XPATH,
+                "//ul[contains(@class,'select2-results__options')]"
+            ))
+        )
 
         # ActionChains click (stronger than normal click)
         ActionChains(self.driver).move_to_element(dropdown).click().perform()

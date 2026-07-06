@@ -208,14 +208,16 @@ class SAQRMonitoringPage(BasePage):
     # ======================================================
     def filter_by_status(self, status):
 
+        wait = WebDriverWait(self.driver, 20)
+
         self.click(self.STATUS_DROPDOWN)
 
         option = (
             By.XPATH,
-            f"//li[contains(@class,'select2-results__option')]//span[normalize-space()='{status}']"
+            f"//li[@role='option'][.//span[normalize-space()='{status}']]"
         )
 
-        option_element = WebDriverWait(self.driver, 20).until(
+        option_element = wait.until(
             EC.element_to_be_clickable(option)
         )
 
