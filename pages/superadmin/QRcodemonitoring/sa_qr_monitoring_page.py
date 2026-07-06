@@ -549,12 +549,12 @@ class SAQRMonitoringPage(BasePage):
 
         print(f"CELLS FOUND = {len(cells)}")
 
-        first_user_text = wait.until(
-            EC.visibility_of_element_located((
-                By.XPATH,
-                "//table/tbody/tr[1]/td[2]"
-            ))
-        ).text.strip()
+        first_user = self.driver.find_element(
+            By.XPATH,
+            "//table/tbody/tr[1]/td[2]"
+        )
+
+        first_user_text = first_user.text.strip()
 
         username = first_user_text.split("\n")[0].strip()
 
