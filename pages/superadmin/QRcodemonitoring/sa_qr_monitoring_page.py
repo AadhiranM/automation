@@ -206,45 +206,18 @@ class SAQRMonitoringPage(BasePage):
     # ======================================================
     # STATUS FILTER
     # ======================================================
+    from selenium.webdriver.support.ui import Select
+
     def filter_by_status(self, status):
 
-        wait = WebDriverWait(self.driver, 30)
-
-        print("Before click")
-
-        dropdown = wait.until(
-            EC.element_to_be_clickable(self.STATUS_DROPDOWN)
+        dropdown = WebDriverWait(self.driver, 20).until(
+            EC.presence_of_element_located((By.ID, "idStatus"))
         )
 
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block:'center'});",
-            dropdown
-        )
+        Select(dropdown).select_by_visible_text(status)
 
-        time.sleep(1)
-
-        self.driver.execute_script(
-            "arguments[0].click();",
-            dropdown
-        )
-
-        time.sleep(2)
-
-        print("Dropdown clicked")
-
-        time.sleep(5)
-
-        print("Current URL:", self.driver.current_url)
-
-        options = self.driver.find_elements(
-            By.XPATH,
-            "//li[@role='option']"
-        )
-
-        print("OPTION COUNT =", len(options))
-
-        for o in options:
-            print("OPTION =", o.text)
+        self.click(self.SEARCH_BTN)  # or SEARCH_BTN, whichever your page uses
+        self.wait_for_results()
     # ======================================================
     # DATE FILTER
     # ======================================================
