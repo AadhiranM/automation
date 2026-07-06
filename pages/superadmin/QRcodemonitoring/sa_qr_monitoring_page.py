@@ -207,6 +207,7 @@ class SAQRMonitoringPage(BasePage):
     # STATUS FILTER
     # ======================================================
     def filter_by_status(self, status):
+
         self.click(self.STATUS_DROPDOWN)
 
         option = (
@@ -214,11 +215,15 @@ class SAQRMonitoringPage(BasePage):
             f"//li[contains(@class,'select2-results__option')]//span[normalize-space()='{status}']"
         )
 
-        WebDriverWait(self.driver, 20).until(
-            EC.visibility_of_element_located(option)
+        option_element = WebDriverWait(self.driver, 20).until(
+            EC.element_to_be_clickable(option)
         )
 
-        self.click(option)
+        self.driver.execute_script(
+            "arguments[0].click();",
+            option_element
+        )
+
         self.wait_for_results()
 
     # ======================================================
@@ -533,7 +538,12 @@ class SAQRMonitoringPage(BasePage):
         # ======================================
         # GET FIRST USER FROM GRID
         # ======================================
-
+        # Wait until at least one row is loaded
+        WebDriverWait(self.driver, 30).until(
+            lambda d: len(
+                d.find_elements(By.XPATH, "//table/tbody/tr")
+            ) > 0
+        )
         first_user_text = wait.until(
             EC.visibility_of_element_located((
                 By.XPATH,

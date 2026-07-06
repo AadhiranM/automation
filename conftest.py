@@ -116,6 +116,7 @@ def setup(request, get_browser, get_config, base_url):
 
         options.add_experimental_option("prefs", prefs)
 
+
         driver = webdriver.Chrome(options=options)
 
     # --------------------------------------

@@ -445,10 +445,7 @@ class SAQrNotRecognizedFeedbackPage(BasePage):
 
         wait = WebDriverWait(self.driver, 30)
 
-        downloads_path = os.path.join(
-            os.getcwd(),
-            "downloads"
-        )
+        downloads_path = os.path.join(os.getcwd(), "downloads")
 
         before_files = set(
             glob.glob(os.path.join(downloads_path, "*.csv"))
