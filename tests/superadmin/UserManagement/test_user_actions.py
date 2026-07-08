@@ -8,7 +8,7 @@ from utilities.data_generator import generate_user_name
 @pytest.mark.superadmin
 @pytest.mark.usefixtures("login_superadmin")
 class TestUserActions:
-
+#test
     def test_user_actions(self, setup):
 
         page = SAUserListPage(setup)
