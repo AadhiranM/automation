@@ -43,6 +43,16 @@ class SAUserListPage(BasePage):
         "//table/tbody/tr[1]/td[2]"
     )
 
+    FIRST_MANUFACTURER = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[3]"
+    )
+
+    FIRST_USERS = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[4]"
+    )
+
 
     # =====================================================
     # ENTRIES
@@ -73,10 +83,9 @@ class SAUserListPage(BasePage):
     # PAGE LOAD
     # =====================================================
 
-
     VIEW_OPTION = (
         By.XPATH,
-        "//a[contains(.,'View')]"
+        "//ul[contains(@class,'show')]//a[contains(@href,'/show')]"
     )
 
 
@@ -146,12 +155,29 @@ class SAUserListPage(BasePage):
 
         self.wait_for_results()
 
+    def get_first_manufacturer(self):
+        return self.get_text(
+            self.FIRST_MANUFACTURER
+        ).strip()
+
+    def get_first_users_count(self):
+        return self.get_text(
+            self.FIRST_USERS
+        ).strip()
+
     # =====================================================
     # WAIT
     # =====================================================
     def open_first_row_actions(self):
+
         self.safe_click(self.FIRST_ROW_THREE_DOTS)
-        time.sleep(2)
+
+        WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((
+                By.XPATH,
+                "//ul[contains(@class,'dd_action') and contains(@class,'show')]"
+            ))
+        )
 
     def click_three_dots(self):
 
@@ -226,10 +252,27 @@ class SAUserListPage(BasePage):
         )
 
         time.sleep(2)
+
     def click_view(self):
+
         self.open_first_row_actions()
-        self.safe_click(self.VIEW_OPTION)
-        time.sleep(3)
+
+        wait = WebDriverWait(self.driver, 10)
+
+        view = wait.until(
+            EC.visibility_of_element_located(self.VIEW_OPTION)
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            view
+        )
+
+        wait.until(
+            lambda d: "/show" in d.current_url
+        )
+
+        print(self.driver.current_url)
 
     def click_edit(self):
         # Open 3 dots menu

@@ -14,7 +14,15 @@ class SARolesPermissionsPage(BasePage):
         By.XPATH,
         "//button[contains(.,'+ Create')]"
     )
+    FIRST_MANUFACTURER = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[3]"
+    )
 
+    FIRST_USERS = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[4]"
+    )
     ROLE_NAME = (
         By.XPATH,
         "//input[@placeholder='Enter Role Name']"
@@ -22,7 +30,7 @@ class SARolesPermissionsPage(BasePage):
 
     USER_TYPE_DROPDOWN = (
         By.XPATH,
-        "//label[contains(text(),'User Type')]/following::span[1]"
+        "//span[@role='combobox' and @aria-labelledby='select2-idSelectuser-container']"
     )
 
     STATUS_DROPDOWN = (
@@ -45,36 +53,74 @@ class SARolesPermissionsPage(BasePage):
         "//table/tbody/tr[1]/td[2]"
     )
 
+    MANUFACTURER_CHECKBOX = (
+        By.XPATH,
+        "//input[@type='checkbox' and @name='role_create_under_manufacturer']"
+    )
+
+    MANUFACTURER_DROPDOWN = (
+        By.XPATH,
+        "//select[@id='role_selected_manufacturer_id']/following-sibling::div[contains(@class,'choices')]"
+    )
+
+    MANUFACTURER_SEARCH = (
+        By.XPATH,
+        "//span[contains(@class,'select2-container')]//input[@type='search']"
+    )
+    ROLE_NAME_COL = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[2]"
+    )
+
+    MANUFACTURER_COL = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[3]"
+    )
+
+    USERS_COL = (
+        By.XPATH,
+        "//table/tbody/tr[1]/td[4]"
+    )
+
+    def get_first_manufacturer(self):
+        return self.get_text(self.MANUFACTURER_COL).strip()
+
+    def get_first_users_count(self):
+        return self.get_text(self.USERS_COL).strip()
+
     def goto_page(self):
         self.driver.get(
             "https://beta.digitathya.com/admin/role/create"
         )
 
+    def goto_list_page(self):
+        # Roles list page
+        self.driver.get(
+            "https://beta.digitathya.com/admin/role?reset_filters=1"
+        )
     def click_create(self):
         self.safe_click(self.CREATE_BTN)
 
     def enter_role_name(self, role_name):
         self.enter_text(self.ROLE_NAME, role_name)
 
-    def select_user_type(self, user_type):
-
+    def select_user_type(self):
         self.safe_click(self.USER_TYPE_DROPDOWN)
 
-        time.sleep(2)
-
-        search_box = WebDriverWait(self.driver, 10).until(
+        search = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located(
-                (By.XPATH, "//input[@type='search']")
+                (
+                    By.XPATH,
+                    "//input[@class='select2-search__field']"
+                )
             )
         )
 
-        search_box.send_keys(user_type)
-
         time.sleep(1)
 
-        search_box.send_keys(Keys.ENTER)
+        search.send_keys(Keys.ENTER)
 
-        time.sleep(3)
+        time.sleep(2)
 
     def select_status(self, status):
 
@@ -102,13 +148,33 @@ class SARolesPermissionsPage(BasePage):
             self.FIRST_ROW_ROLE_NAME
         ).strip()
 
-    def create_role(self, role_name, user_type, status):
+    def create_role(self, role_name, status):
         self.enter_role_name(role_name)
 
-        self.select_user_type(user_type)
+        self.select_manufacturer()  # selects first manufacturer
+
+        self.select_user_type()  # selects first user type
 
         self.select_status(status)
 
         self.click_check_all()
 
         self.click_submit()
+
+    def select_manufacturer(self):
+        self.safe_click(self.MANUFACTURER_CHECKBOX)
+
+        self.safe_click(self.MANUFACTURER_DROPDOWN)
+
+        search = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//input[@type='search']")
+            )
+        )
+
+        search.send_keys(Keys.ENTER)
+
+        # WAIT HERE
+        WebDriverWait(self.driver, 20).until(
+            lambda d: d.find_element(*self.USER_TYPE_DROPDOWN).is_enabled()
+        )

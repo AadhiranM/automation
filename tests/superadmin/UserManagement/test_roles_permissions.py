@@ -19,7 +19,6 @@ class TestCreateRole:
 
         page.create_role(
             role_name=role_name,
-            user_type="Internal User - Super Admin",
             status="Active"
         )
 

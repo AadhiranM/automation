@@ -65,6 +65,26 @@ class SAUserCreatePage(BasePage):
     # PAGE
     # =====================================================
 
+    MANUFACTURER_CHECKBOX = (
+        By.XPATH,
+        "//input[@type='checkbox' and @name='create_under_manufacturer']"
+    )
+
+    MANUFACTURER_DROPDOWN = (
+        By.XPATH,
+        "//select[@id='selected_manufacturer_id']/following-sibling::div[contains(@class,'choices')]"
+    )
+
+    MANUFACTURER_SEARCH = (
+        By.XPATH,
+        "//span[contains(@class,'select2-container')]//input[@type='search']"
+    )
+
+    FIRST_MANUFACTURER = (
+        By.XPATH,
+        "(//div[@class='choices__list' and @role='listbox']//div[@role='option'])[1]"
+    )
+
     def goto_page(self):
 
         self.driver.get(
@@ -201,6 +221,7 @@ class SAUserCreatePage(BasePage):
             self,
             name,
             email,
+            manufacturer,
             mobile,
             password,
             status="Active"
@@ -209,6 +230,8 @@ class SAUserCreatePage(BasePage):
         self.enter_name(name)
 
         self.enter_email(email)
+
+        self.select_manufacturer(manufacturer)
 
         self.select_role()
 
@@ -219,3 +242,41 @@ class SAUserCreatePage(BasePage):
         self.enter_password(password)
 
         self.click_submit()
+
+    def select_manufacturer(self, manufacturer):
+        wait = WebDriverWait(self.driver, 20)
+
+        # Enable Manufacturer
+        self.safe_click(self.MANUFACTURER_CHECKBOX)
+        time.sleep(1)
+
+        # Open dropdown
+        self.safe_click(self.MANUFACTURER_DROPDOWN)
+        time.sleep(1)
+
+        # Click search box
+        search = wait.until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                "//input[@type='search' and contains(@class,'choices__input')]"
+            ))
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            search
+        )
+
+        time.sleep(1)
+
+        # Type into the active element
+        active = self.driver.switch_to.active_element
+        active.send_keys(manufacturer)
+
+        print("Typed manufacturer :", manufacturer)
+
+        time.sleep(2)
+
+        active.send_keys(Keys.ENTER)
+
+        time.sleep(2)
