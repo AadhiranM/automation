@@ -1,3 +1,5 @@
+import time
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -26,20 +28,74 @@ class SuperAdminLoginPage(BasePage):
 
     def enter_email(self, email):
         self.type(self.EMAIL, email)
+        print("Email after typing:",
+              self.driver.execute_script(
+                  "return document.querySelector(\"input[name='email']\").value;"
+              ))
+
+        print("Password length:",
+              self.driver.execute_script(
+                  "return document.querySelector(\"input[name='password']\").value.length;"
+              ))
 
     def enter_password(self, password):
         self.type(self.PASSWORD, password)
 
+        print(
+            self.driver.execute_script("""
+                return document.activeElement.outerHTML;
+            """)
+        )
+
     def is_login_button_enabled(self):
         return self.driver.find_element(*self.LOGIN_BTN).is_enabled()
 
+    # def click_login(self):
+    #     self.click(self.LOGIN_BTN)
     def click_login(self):
-        self.click(self.LOGIN_BTN)
+        # Wait until the Login button is clickable
+        button = self.wait(self.LOGIN_BTN)
+
+        # Scroll the Login button to the center of the page
+        self.driver.execute_script("""
+            arguments[0].scrollIntoView({
+                behavior: 'instant',
+                block: 'center',
+                inline: 'center'
+            });
+        """, button)
+
+        time.sleep(0.5)
+
+        # Ensure the button is really in the viewport
+        rect = self.driver.execute_script("""
+            const r = arguments[0].getBoundingClientRect();
+            return {
+                top: r.top,
+                bottom: r.bottom,
+                left: r.left,
+                right: r.right,
+                height: r.height,
+                width: r.width,
+                windowHeight: window.innerHeight
+            };
+        """, button)
+
+        print("Button Position:", rect)
+
+        # Click the button
+        try:
+            button.click()
+        except Exception:
+            self.driver.execute_script("arguments[0].click();", button)
 
     # Only performs login
     def login(self, email, password):
         self.enter_email(email)
         self.enter_password(password)
+        btn = self.driver.find_element(*self.LOGIN_BTN)
+        print("Enabled:", btn.is_enabled())
+        print("Disabled:", btn.get_attribute("disabled"))
         self.click_login()
 
     # Used only for positive login

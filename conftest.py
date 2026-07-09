@@ -101,6 +101,10 @@ def setup(request, get_browser, get_config, base_url):
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
 
+        # Chrome 150 compatibility
+        options.add_argument("--remote-allow-origins=*")
+        options.add_argument("--disable-blink-features=AutomationControlled")
+
         # --------------------------------------
         # Download Folder
         # --------------------------------------
@@ -154,6 +158,9 @@ def setup(request, get_browser, get_config, base_url):
     # --------------------------------------
     try:
         driver.maximize_window()
+        print(driver.get_window_size())
+        driver.set_window_size(1920, 1080)
+        print("After set:", driver.get_window_size())
     except Exception:
         pass
     driver.implicitly_wait(
@@ -179,13 +186,35 @@ def setup(request, get_browser, get_config, base_url):
 
         access_page = AccessCodePage(driver)
         access_page.enter_and_submit(access_code)
+        print("Current URL after submit:", driver.current_url)
+        print("Page Title:", driver.title)
         WebDriverWait(driver, 20).until(
             lambda d: "accessCheck" not in d.current_url
         )
+        print(driver.execute_script("""
+        return document.querySelector("input[name='email']").value;
+        """))
 
         WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located((By.NAME, "email"))
         )
+
+        WebDriverWait(driver, 20).until(
+            lambda d: d.execute_script(
+                "return document.readyState==='complete'"
+            )
+        )
+
+        WebDriverWait(driver, 20).until(
+            lambda d: d.execute_script(
+                "return document.querySelector(\"button[type='submit']\").offsetParent!==null"
+            )
+        )
+
+        print("Email before typing:",
+              driver.execute_script(
+                  "return document.querySelector(\"input[name='email']\").value;"
+              ))
 
     # Attach driver to test classes
     request.cls.driver = driver

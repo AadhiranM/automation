@@ -1,37 +1,37 @@
-environment: beta
+  environment: beta
 
-urls:
-  beta: "https://beta.digitathya.com/admin/login"
-  uat: "https://uat.digitathya.com/admin/login"
-  production: "https://digitathya.com/admin/login"
+  urls:
+    beta: "https://beta.digitathya.com/admin/login"
+    uat: "https://uat.digitathya.com/admin/login"
+    production: "https://digitathya.com/admin/login"
 
-browser: chrome
+  browser: chrome
 
-access_code: "2560"
+  access_code: "2560"
 
-users:
+  users:
 
-  superadmin:
-    username: "loadtesting_superadmin2@mailinator.com"
-    password: "Newuser@123"
+    superadmin:
+      username: "loadtesting_superadmin2@mailinator.com"
+      password: "Newuser@123"
 
-  manufacturer:
-    username: "manufacturer@test.com"
-    password: "Password123"
+    manufacturer:
+      username: "manufacturer@test.com"
+      password: "Password123"
 
-timeouts:
-  implicit_wait: 10
-  explicit_wait: 20
-  page_load_timeout: 60
+  timeouts:
+    implicit_wait: 10
+    explicit_wait: 20
+    page_load_timeout: 60
 
-execution:
-  headless: true
-  maximize_window: true
+  execution:
+    headless: false
+    maximize_window: true
 
-reports:
-  html: "reports/html"
-  screenshots: "reports/screenshots"
-  logs: "reports/logs"
+  reports:
+    html: "reports/html"
+    screenshots: "reports/screenshots"
+    logs: "reports/logs"
 
-ulaa:
-  path: "C:/Program Files/Zoho/Ulaa/Application/ulaa.exe"
+  ulaa:
+    path: "C:/Program Files/Zoho/Ulaa/Application/ulaa.exe"

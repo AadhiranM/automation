@@ -439,6 +439,7 @@ class BasePage:
             )
 
 
+
     def select_select2(self, dropdown_locator, option_text):
         wait = WebDriverWait(self.driver, 20)
 
