@@ -86,6 +86,12 @@ def setup(request, get_browser, get_config, base_url):
 
     browser = get_browser
     is_ci = os.getenv("CI", "false").lower() == "true"
+    # DEBUG
+    print("=" * 60)
+    print("CI Environment :", os.getenv("CI"))
+    print("is_ci          :", is_ci)
+    print("Headless YAML  :", get_config["execution"]["headless"])
+    print("=" * 60)
 
     # --------------------------------------
     # Browser → Chrome
@@ -93,9 +99,12 @@ def setup(request, get_browser, get_config, base_url):
     if browser == "chrome":
         options = ChromeOptions()
 
-        if get_config["execution"]["headless"]:
+        if is_ci or get_config["execution"]["headless"]:
+            print("Running in Headless Mode")
             options.add_argument("--headless=new")
             options.add_argument("--window-size=1920,1080")
+        else:
+            print("Running in Headed Mode")
 
         options.add_argument("--disable-gpu")
         options.add_argument("--no-sandbox")
@@ -128,7 +137,7 @@ def setup(request, get_browser, get_config, base_url):
     # --------------------------------------
     elif browser == "firefox":
         options = FirefoxOptions()
-        if get_config.get("headless", False):
+        if is_ci or get_config["execution"]["headless"]:
             options.add_argument("--headless")
         driver = webdriver.Firefox(options=options)
 
@@ -144,9 +153,12 @@ def setup(request, get_browser, get_config, base_url):
             )
         options.binary_location = ulaa_path
 
-        if get_config["execution"]["headless"]:
+        if is_ci or get_config["execution"]["headless"]:
+            print("Running ULAA in Headless Mode")
             options.add_argument("--headless=new")
             options.add_argument("--window-size=1920,1080")
+        else:
+            print("Running ULAA in Headed Mode")
 
         driver = webdriver.Chrome(options=options)
 

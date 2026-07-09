@@ -28,15 +28,6 @@ class SuperAdminLoginPage(BasePage):
 
     def enter_email(self, email):
         self.type(self.EMAIL, email)
-        print("Email after typing:",
-              self.driver.execute_script(
-                  "return document.querySelector(\"input[name='email']\").value;"
-              ))
-
-        print("Password length:",
-              self.driver.execute_script(
-                  "return document.querySelector(\"input[name='password']\").value.length;"
-              ))
 
     def enter_password(self, password):
         self.type(self.PASSWORD, password)
