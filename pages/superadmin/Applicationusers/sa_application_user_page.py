@@ -479,27 +479,11 @@ class SAApplicationUserPage(BasePage):
         ).strip()
 
     def filter_by_date(self, start, end):
-        wait = WebDriverWait(self.driver, 15)
 
-        date_input = wait.until(
-            EC.presence_of_element_located(self.DATE_FILTER)
-        )
-
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block:'center'});",
-            date_input
-        )
-
-        self.driver.execute_script(
-            "arguments[0].click();",
-            date_input
-        )
-
-        time.sleep(1)
+        self.click(self.DATE_FILTER)
 
         picker = FlatpickrRangePicker(self.driver)
-        picker.select_range(start, end)
 
-        self.click(self.FILTER_BTN)
+        picker.select_range(start, end)
 
         self.wait_for_results()

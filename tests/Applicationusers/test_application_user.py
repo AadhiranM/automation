@@ -119,7 +119,7 @@ class TestApplicationUsers:
 
         page.goto_page()
 
-        start = date.today() - timedelta(days=15)
+        start = date.today() - timedelta(days=7)
         end = date.today()
 
         page.filter_by_date(start, end)
