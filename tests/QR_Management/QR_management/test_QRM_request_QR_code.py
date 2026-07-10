@@ -16,10 +16,10 @@ test_data = get_test_data(excel_path, "Generate_QR")  # Sheet name: Generate_QR
 
 @pytest.mark.order(5)
 @pytest.mark.parametrize("data", test_data)
-class Test_QRM_Generate_QR(BaseTest):
+class Test_QRM_request_QR_code(BaseTest):
     logger = LogGen.loggen()
 
-    def test_QR_management_generate(self, driver, data):
+    def test_QRM_request_QR_code(self, driver, data):
 
         sku_id = data["sku_id"]
         batch_no = data["batch_no"]
@@ -35,14 +35,14 @@ class Test_QRM_Generate_QR(BaseTest):
         self.logger.info(f"===== Running QR Generation for SKU: {sku_id}, Batch: {batch_no} =====")
 
         # Login only once
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Logged in successfully for first iteration")
-
-        else:
-            self.logger.info("Skipping login — already logged in")
-
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Logged in successfully for first iteration")
+        #
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
+        #
 
         # Check if login succeeded
         if "dashboard" not in driver.current_url.lower():  # or use some element only visible on dashboard
@@ -57,7 +57,7 @@ class Test_QRM_Generate_QR(BaseTest):
         qr_QR_page = QR_Management_QR_m_Page(driver)
         qr_QR_page.Click_QR_management()
         qr_QR_page.Click_Qr_management()
-        qr_QR_page.Click_generate_QR_button()
+        qr_QR_page.Click_request_QR_button()
         time.sleep(2)
 
         # Fill Product Details
@@ -87,7 +87,7 @@ class Test_QRM_Generate_QR(BaseTest):
             self.logger.info(f"Existing Batch detected → Auto-fill mode for Batch: {batch_no}")
             qr_QR_page.Enter_Quantity(quantity)
             time.sleep(1)
-            qr_QR_page.click_genarate_QR_button()
+            qr_QR_page.click_request_QR_code_button()
 
             try:
                 WebDriverWait(driver,10).until(
@@ -123,8 +123,8 @@ class Test_QRM_Generate_QR(BaseTest):
         time.sleep(1)
 
         # Dimension + Delivery location
-        # qr_QR_page.select_dimension(dimension)
-        # time.sleep(1)
+        qr_QR_page.select_dimension(dimension)
+        time.sleep(1)
         qr_QR_page.click_batch_delivery_opt()
         qr_QR_page.Enter_batch_delivery_field(delivery_location)
         time.sleep(1)
@@ -132,7 +132,7 @@ class Test_QRM_Generate_QR(BaseTest):
         qr_QR_page.select_QR_Image_format(image_format)
         time.sleep(1)
         # Generate QR
-        qr_QR_page.click_genarate_QR_button()
+        qr_QR_page.Click_request_QR_button()
 
         try:
             WebDriverWait(driver,10).until(

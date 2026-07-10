@@ -170,6 +170,7 @@ class Test_UM_users_change_to_Inactive(BaseTest):
         self.logger.info("Navigating to Dashboard")
 
         UM_user_filters = user_filters(driver)
+        driver.refresh()
 
         UM_user_filters.Click_Dashboard()
 

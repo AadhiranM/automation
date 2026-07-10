@@ -1,14 +1,14 @@
-
 import time
 import pytest
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from utilities.screenshot_util import take_screenshot
-
 from pages.common.AccessCodePage import AccessCodePage
 from pages.QR_Management.login_page import Loginpage
 from utilities.customlogger import LogGen
 from utilities.readproperties import Readconfig
+from utilities.screenshot_util import take_screenshot
+
 @pytest.mark.order(1)
 class Test_login:
     logger = LogGen.loggen()
@@ -28,7 +28,11 @@ class Test_login:
             assert True
             self.logger.info("Homepage title verified successfully")
         else:
-            driver.save_screenshot(".\\screenshots\\test_homepageTitle.png")
+            take_screenshot(
+                driver,
+                test_name="test_homepage_title_failed",
+                folder_name=".\\screenshots\\login"
+            )
             self.logger.error("Homepage title verification failed")
             assert False
 
@@ -45,6 +49,9 @@ class Test_login:
             self.logger.info("Login successful")
             assert True
         else:
-            driver.save_screenshot(".\\screenshots\\test_login.png")
-            self.logger.error("Login failed")
+            take_screenshot(
+                driver,
+                test_name="test_login_failed",
+                folder_name=".\\screenshots\\login"
+            )
             assert False

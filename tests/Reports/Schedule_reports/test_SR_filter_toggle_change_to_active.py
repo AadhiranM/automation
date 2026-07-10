@@ -208,6 +208,7 @@ class Test_SR_filter_toggle_change_to_active(BaseTest):
         reports.set_filters_nxt_schedule(date_string)
         self.logger.info(f"Selected Next Schedule date: {date_string}")
 
+
         # reports.Choose_filters_status(select_status)
 
         reports.Click_filters_apply_btn()

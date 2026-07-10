@@ -174,6 +174,7 @@ class Generate_reports_page:
     def select_date(self, date_string):
         day, month, year = date_string.split("-")
         month_name = calendar.month_name[int(month)]
+        day = str(int(day))
 
         calendar_popup = "//div[contains(@class,'flatpickr-calendar') and contains(@class,'open')]"
 

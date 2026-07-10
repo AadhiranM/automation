@@ -300,6 +300,7 @@ class Test_UM_RP_change_to_Inactive(BaseTest):
         self.logger.info("Navigating to Dashboard")
 
         UM_roles_and_per_filters = Roles_and_permission_filters(driver)
+        driver.refresh()
         UM_roles_and_per_filters.Click_Dashboard()
 
         self.logger.info("Opening User Management module")

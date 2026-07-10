@@ -22,7 +22,7 @@ class QR_Management_products_Page:
     SKU_ID=(By.XPATH,"//input[@id='product_ref_id']")
     drp_category=(By.XPATH,"//div[@class='choices__item choices__item--selectable']")
     select_category=(By.XPATH,"//input[@aria-label='Select Category']")
-    drp_status=(By.XPATH,"//div[@aria-label='Status *']//div[@class='choices__inner']")
+    drp_status=(By.XPATH,"//div[@role='listbox']//div[@class='choices__list choices__list--single']")
     description=(By.XPATH,"//textarea[@id='product_description']")
     country_opt=(By.XPATH,"//div[@class='ui_product-createCoo']//div[@class='choices__inner']")
     country_of_origin=(By.XPATH,"//input[@aria-label='Select Country Of origin']")

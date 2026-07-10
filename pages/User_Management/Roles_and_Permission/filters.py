@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from utilities.customlogger import LogGen
 
 class Roles_and_permission_filters:
-    Dashboard = (By.XPATH, "//span[@class='nav-name'][normalize-space()='Dashboard']")
+    Dashboard = (By.XPATH, "//body/div[@id='layout-wrapper']/div[@class='dashboard-main']/aside[@id='sidebaropen']/div[@id='navbar']/nav[@class='nav']/div/div[@class='nav-list sidebar-sec-middle px-2']/a[1]")
     user_management_opt=(By.XPATH,"//span[normalize-space()='User Management']")
     roles_and_permission=(By.XPATH,"//ul[@class='collapse-menu show']//span[@class='nav-sub-name'][normalize-space()='Roles & Permissions']")
     refresh_btn=(By.XPATH,"//button[contains(@class,'btn btn-outline-primary btn-icon waves-effect waves-light reload_btn uicust-active-color uicust-active-border refresh_Btn')]")

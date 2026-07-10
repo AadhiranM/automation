@@ -10,7 +10,7 @@ class QR_Management_QR_m_Page:
     ## Xpath for all the elements
     QR_Management= (By.XPATH, "//span[@class='nav-name'][normalize-space()='QR Management']")
     Qr_management = (By.XPATH, "//ul[@class='collapse-menu show']//span[@class='nav-sub-name'][normalize-space()='QR Management']")
-    generate_QR_code = (By.XPATH, "//a[normalize-space()='Generate QR Code']")
+    request_QR_code = (By.XPATH, "//a[normalize-space()='Request QR Code']")
     import_btn=(By.XPATH,"//button[normalize-space()='Import']")
     import_continue=(By.XPATH,"//button[@id='continueToImportBtn']")
     upload_QR_file=(By.XPATH,"//input[@id='fileInput']")
@@ -22,7 +22,7 @@ class QR_Management_QR_m_Page:
     variant_sku_field = (By.XPATH, "//div[@bp-field-name='variant_sku_id']//input[@name='search_terms']")
     Quantity=(By.XPATH, "//input[@placeholder='Enter Quantity']")
     Mftr_date = (By.XPATH, "//input[@id='manufacturing_date']")
-    QR_image_format=(By.XPATH,"//select[@id='qrImageFormatDropdown']")
+    QR_image_format=(By.XPATH,"//div[@class='choices__item choices__placeholder choices__item--selectable'][normalize-space()='Select QR Image Format']")
     product_name=(By.XPATH,"//input[@placeholder='Enter Product Name']")
 
     # Fixed calendar XPaths
@@ -30,11 +30,11 @@ class QR_Management_QR_m_Page:
     date_month = (By.XPATH, "//div[contains(@class,'flatpickr-calendar')]//select[@aria-label='Month']")
     date_days = (By.XPATH, "//div[contains(@class,'flatpickr-calendar')]//span[contains(@class,'flatpickr-day')]")
     Exp_date = (By.XPATH, "//input[@id='expiry_date']")
-    Dimension=(By.XPATH,"//select[@id='dimensionDropdown']")
+    Dimension=(By.XPATH,"//div[@bp-field-name='image_size']//div[@class='choices__inner']")
     batch_delivery_location_opt = (By.XPATH, "//div[@bp-field-name='batch_location']//div[@class='choices__inner']")
     batch_delivery_location_field = (By.XPATH, "//div[@bp-field-name='batch_location']//input[@name='search_terms']")
     QR_Type_drpdwn=(By.XPATH,"//select[@id='serviceDropdown']")
-    genarate_QR = (By.XPATH, "//button[@type='submit']")
+    request_qr_code_btn = (By.XPATH, "//button[@type='submit']")
 
     def __init__(self, driver):
         self.driver = driver
@@ -60,8 +60,8 @@ class QR_Management_QR_m_Page:
     def Enter_upload_QR_file(self,upload_file):
         self.driver.find_element(*self.upload_QR_file).send_keys(upload_file)
 
-    def Click_generate_QR_button(self):
-        self.driver.find_element(*self.generate_QR_code).click()
+    def Click_request_QR_button(self):
+        self.driver.find_element(*self.request_QR_code).click()
 
     def click_product_skuID_opt(self):
         self.driver.find_element(*self.product_sku_id_opt).click()
@@ -178,8 +178,15 @@ class QR_Management_QR_m_Page:
         self.select_date(date_string)
 
     def select_dimension(self, dimension):
-        drpdwn_dimension=Select(self.driver.find_element(*self.Dimension))
-        drpdwn_dimension.select_by_visible_text(dimension)
+        self.driver.find_element(*self.Dimension).click()
+        time.sleep(1)
+        dimension_xpath = (
+            f"//div[@bp-field-name='image_size']"
+            f"//div[contains(@class,'choices__list--dropdown')]"
+            f"//div[normalize-space()='{dimension}']"
+        )
+
+        self.driver.find_element(By.XPATH, dimension_xpath).click()
 
     def select_QR_Type_drpdwn(self,QR_Type):
         drpdwn_qr_type = Select(self.driver.find_element(*self.QR_Type_drpdwn))
@@ -196,11 +203,15 @@ class QR_Management_QR_m_Page:
         add.send_keys(Keys.ENTER)
 
     def select_QR_Image_format(self,image_format):
-        drpdwn_dimension=Select(self.driver.find_element(*self.QR_image_format))
-        drpdwn_dimension.select_by_visible_text(image_format)
-
-    def click_genarate_QR_button(self):
-        btn=self.driver.find_element(*self.genarate_QR)
+        self.driver.find_element(*self.QR_image_format).click()
+        time.sleep(1)
+        image_format_xpath = f"//div[@bp-field-name='qr_image_format']//div[@role='listbox']//div[@role='listbox']//div[normalize-space()='{image_format}']"
+        option = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, image_format_xpath))
+        )
+        option.click()
+    def click_request_QR_code_button(self):
+        btn=self.driver.find_element(*self.request_qr_code_btn)
         self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", btn)
         self.driver.execute_script("arguments[0].click();", btn)
 
