@@ -28,7 +28,7 @@ def pytest_addoption(parser):
     parser.addoption(
         "--browser",
         action="store",
-        default="chrome",
+        default="None",
         help="Browser: chrome, edge, firefox, ulaa"
     )
 
@@ -38,7 +38,23 @@ def pytest_addoption(parser):
 # =========================================================
 @pytest.fixture(scope="session")
 def get_browser(request):
-    return request.config.getoption("--browser").lower()
+
+    # 1. Jenkins Parameter
+    browser = os.getenv("BROWSER")
+
+    # 2. Pytest CLI
+    if not browser:
+        browser = request.config.getoption("--browser")
+
+    # 3. config.yaml
+    if not browser:
+        browser = config["browser"]
+
+    print("=" * 60)
+    print("Browser Selected :", browser)
+    print("=" * 60)
+
+    return browser.lower()
 
 
 @pytest.fixture(scope="session")
@@ -141,6 +157,17 @@ def setup(request, get_browser, get_config, base_url):
             options.add_argument("--headless")
         driver = webdriver.Firefox(options=options)
 
+    elif browser == "edge":
+        options = EdgeOptions()
+
+        if is_ci or get_config["execution"]["headless"]:
+            print("Running Edge in Headless Mode")
+            options.add_argument("--headless=new")
+            options.add_argument("--window-size=1920,1080")
+        else:
+            print("Running Edge in Headed Mode")
+
+        driver = webdriver.Edge(options=options)
     # --------------------------------------
     # Browser → ULAA
     # --------------------------------------
