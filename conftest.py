@@ -11,7 +11,7 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 from selenium.webdriver.support.ui import WebDriverWait
 from pages.superadmin.Login.sa_login_page import SuperAdminLoginPage
-from utilities.read_yaml import read_config
+from utilities.read_yaml import read_config, get_config
 import pytest
 from utilities.data_generator import generate_category_name
 from selenium.webdriver.support import expected_conditions as EC
@@ -47,8 +47,9 @@ def get_browser(request):
         browser = request.config.getoption("--browser")
 
     # 3. config.yaml
+    # 3. config.yaml
     if not browser:
-        browser = config["browser"]
+        browser = get_config("browser")
 
     print("=" * 60)
     print("Browser Selected :", browser)
@@ -58,21 +59,21 @@ def get_browser(request):
 
 
 @pytest.fixture(scope="session")
-def get_config():
+def config_data():
     return config
 
 
 @pytest.fixture(scope="session")
-def base_url(get_config):
+def base_url(config_data):
 
-    env = get_config["environment"]
+    env = config_data["environment"]
 
-    return get_config["urls"][env]
+    return config_data["urls"][env]
 
 
 @pytest.fixture()
-def wait(setup, get_config):
-    timeout = get_config["timeouts"]["explicit_wait"]
+def wait(setup, config_data):
+    timeout = config_data["timeouts"]["explicit_wait"]
     return WebDriverWait(setup, timeout)
 
 
@@ -98,7 +99,7 @@ def clean_old_reports():
 # MAIN DRIVER SETUP (Chrome / Edge / Firefox / Ulaa)
 # =========================================================
 @pytest.fixture()
-def setup(request, get_browser, get_config, base_url):
+def setup(request, get_browser, config_data, base_url):
 
     browser = get_browser
     is_ci = os.getenv("CI", "false").lower() == "true"
@@ -106,7 +107,7 @@ def setup(request, get_browser, get_config, base_url):
     print("=" * 60)
     print("CI Environment :", os.getenv("CI"))
     print("is_ci          :", is_ci)
-    print("Headless YAML  :", get_config["execution"]["headless"])
+    print("Headless :", get_config("execution.headless"))
     print("=" * 60)
 
     # --------------------------------------
@@ -115,7 +116,7 @@ def setup(request, get_browser, get_config, base_url):
     if browser == "chrome":
         options = ChromeOptions()
 
-        if is_ci or get_config["execution"]["headless"]:
+        if is_ci or get_config("execution.headless"):
             print("Running in Headless Mode")
             options.add_argument("--headless=new")
             options.add_argument("--window-size=1920,1080")
@@ -153,14 +154,14 @@ def setup(request, get_browser, get_config, base_url):
     # --------------------------------------
     elif browser == "firefox":
         options = FirefoxOptions()
-        if is_ci or get_config["execution"]["headless"]:
+        if is_ci or config_data["execution"]["headless"]:
             options.add_argument("--headless")
         driver = webdriver.Firefox(options=options)
 
     elif browser == "edge":
         options = EdgeOptions()
 
-        if is_ci or get_config["execution"]["headless"]:
+        if is_ci or get_config("execution.headless"):
             print("Running Edge in Headless Mode")
             options.add_argument("--headless=new")
             options.add_argument("--window-size=1920,1080")
@@ -173,14 +174,14 @@ def setup(request, get_browser, get_config, base_url):
     # --------------------------------------
     elif browser == "ulaa":
         options = ChromeOptions()
-        ulaa_path = get_config["ulaa"]["path"]
+        ulaa_path = config_data["ulaa"]["path"]
         if not os.path.exists(ulaa_path):
             raise FileNotFoundError(
                 f"ULAA browser not found at: {ulaa_path}"
             )
         options.binary_location = ulaa_path
 
-        if is_ci or get_config["execution"]["headless"]:
+        if is_ci or get_config("execution.headless"):
             print("Running ULAA in Headless Mode")
             options.add_argument("--headless=new")
             options.add_argument("--window-size=1920,1080")
@@ -203,10 +204,10 @@ def setup(request, get_browser, get_config, base_url):
     except Exception:
         pass
     driver.implicitly_wait(
-        get_config["timeouts"]["implicit_wait"]
+        config_data["timeouts"]["implicit_wait"]
     )
     driver.set_page_load_timeout(
-        get_config["timeouts"]["page_load_timeout"]
+        config_data["timeouts"]["page_load_timeout"]
     )
 
     # --------------------------------------
@@ -220,7 +221,7 @@ def setup(request, get_browser, get_config, base_url):
     if "accessCheck" in driver.current_url:
         from pages.common.access_code_page import AccessCodePage
 
-        access_code = get_config.get("access_code")
+        access_code = config_data.get("access_code")
         assert access_code, "Access code missing in config.yaml"
 
         access_page = AccessCodePage(driver)
@@ -322,8 +323,8 @@ def category_name():
     return generate_category_name()
 
 @pytest.fixture()
-def login_superadmin(setup, get_config):
-    user = get_config["users"]["superadmin"]
+def login_superadmin(setup, config_data):
+    user = config_data["users"]["superadmin"]
 
     login_page = SuperAdminLoginPage(setup)
 
