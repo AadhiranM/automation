@@ -21,7 +21,7 @@ from selenium.common.exceptions import (
 from utilities.logger import logger
 
 # ✅ NEW: config integration
-from utilities.read_yaml import get_config
+from utilities.read_yaml import get_config_value
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
@@ -40,14 +40,14 @@ class BasePage:
 
         self.driver = driver
 
-        self.timeout = timeout if timeout else get_config(
+        self.timeout = timeout if timeout else get_config_value(
             "timeouts.explicit_wait",
             10
         )
 
-        env = get_config("environment")
+        env = get_config_value("environment")
 
-        full_url = get_config(
+        full_url = get_config_value(
             f"urls.{env}"
         )
 

@@ -17,7 +17,10 @@ def read_config():
     return _config
 
 
-def get_config(key=None, default=None):
+# =========================================================
+# Read value (Jenkins -> YAML)
+# =========================================================
+def get_config_value(key=None, default=None):
 
     config = read_config()
 
@@ -48,7 +51,6 @@ def get_config(key=None, default=None):
     value = config
 
     for k in keys:
-
         if isinstance(value, dict) and k in value:
             value = value[k]
         else:
