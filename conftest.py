@@ -113,10 +113,9 @@ def setup(request, get_browser, get_config, base_url):
     if browser == "chrome":
         options = ChromeOptions()
 
-        if is_ci or get_config_value("execution.headless"):
+        if get_config_value("execution.headless"):
             print("Running in Headless Mode")
             options.add_argument("--headless=new")
-            options.add_argument("--window-size=1920,1080")
         else:
             print("Running in Headed Mode")
 
@@ -152,8 +151,7 @@ def setup(request, get_browser, get_config, base_url):
     elif browser == "firefox":
         options = FirefoxOptions()
 
-        if is_ci or get_config_value("execution.headless"):
-            print("Running Firefox in Headless Mode")
+        if get_config_value("execution.headless"):
             options.add_argument("--headless")
         else:
             print("Running Firefox in Headed Mode")
@@ -163,10 +161,8 @@ def setup(request, get_browser, get_config, base_url):
     elif browser == "edge":
         options = EdgeOptions()
 
-        if is_ci or get_config_value("execution.headless"):
-            print("Running Edge in Headless Mode")
+        if get_config_value("execution.headless"):
             options.add_argument("--headless=new")
-            options.add_argument("--window-size=1920,1080")
         else:
             print("Running Edge in Headed Mode")
 
@@ -183,10 +179,8 @@ def setup(request, get_browser, get_config, base_url):
             )
         options.binary_location = ulaa_path
 
-        if is_ci or get_config_value("execution.headless"):
-            print("Running ULAA in Headless Mode")
+        if get_config_value("execution.headless"):
             options.add_argument("--headless=new")
-            options.add_argument("--window-size=1920,1080")
         else:
             print("Running ULAA in Headed Mode")
 
