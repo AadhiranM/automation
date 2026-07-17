@@ -111,41 +111,30 @@ class SAUserCreatePage(BasePage):
     # ROLE DROPDOWN
     # =====================================================
 
-    def select_role(self):
+    def select_role(self, role_name):
+        wait = WebDriverWait(self.driver, 20)
 
-        wait = WebDriverWait(self.driver, 30)
-
-        dropdown = wait.until(
-            EC.element_to_be_clickable(
-                self.ROLE_DROPDOWN
-            )
-        )
-
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block:'center'});",
-            dropdown
-        )
+        # Open Role dropdown
+        self.safe_click(self.ROLE_DROPDOWN)
 
         time.sleep(1)
 
-        ActionChains(self.driver)\
-            .move_to_element(dropdown)\
-            .click()\
-            .perform()
+        # Find the search input inside the OPEN role dropdown
+        search = wait.until(
+            EC.visibility_of_element_located((
+                By.XPATH,
+                "(//input[contains(@class,'choices__input') and not(@hidden)])[2]"
+            ))
+        )
 
-        print("Role dropdown opened")
+        search.clear()
+        search.send_keys(role_name)
+
+        print("Typed Role :", role_name)
 
         time.sleep(2)
 
-        active = self.driver.switch_to.active_element
-
-        # active.send_keys(Keys.ARROW_DOWN)
-        #
-        # time.sleep(1)
-        #
-        # active.send_keys(Keys.ENTER)
-        active.send_keys(Keys.ENTER)
-        time.sleep(2)
+        search.send_keys(Keys.ENTER)
 
         print("Role selected")
 
@@ -222,6 +211,7 @@ class SAUserCreatePage(BasePage):
             name,
             email,
             manufacturer,
+            role,
             mobile,
             password,
             status="Active"
@@ -233,7 +223,7 @@ class SAUserCreatePage(BasePage):
 
         self.select_manufacturer(manufacturer)
 
-        self.select_role()
+        self.select_role(role)
 
         self.select_status(status)
 

@@ -41,6 +41,10 @@ class TestUserActions:
 
         page.goto_page()
 
+        page.search_user(updated_name)
+
+        page.wait_for_results()
+
         first_row_name = page.get_first_row_name()
 
         assert updated_name == first_row_name

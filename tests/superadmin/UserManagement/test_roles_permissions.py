@@ -24,9 +24,16 @@ class TestCreateRole:
 
         time.sleep(5)
 
-        page.driver.get(
-            "https://beta.digitathya.com/admin/role?reset_filters=1"
-        )
+        # page.driver.get(
+        #     "https://beta.digitathya.com/admin/role?reset_filters=1"
+        # )
+        #
+        # first_role = page.get_first_row_role_name()
+        #
+        # assert role_name == first_role
+        page.goto_list_page()
+
+        page.search_role(role_name)
 
         first_role = page.get_first_row_role_name()
 

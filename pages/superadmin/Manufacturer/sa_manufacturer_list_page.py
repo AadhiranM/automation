@@ -111,14 +111,14 @@ class SAManufacturerListPage(BasePage):
 
     def get_first_business_email(self):
         return self.get_text(self.FIRST_ROW_EMAIL).strip()
-    def search(self, value):
-
-        self.type(
-            self.SEARCH_BOX,
-            value
-        )
-
-        time.sleep(2)
+    # # def search(self, value):
+    # #
+    # #     self.type(
+    # #         self.SEARCH_BOX,
+    # #         value
+    # #     )
+    #
+    #     time.sleep(2)
 
     def get_first_company_name(self):
 
@@ -325,13 +325,13 @@ class SAManufacturerListPage(BasePage):
 
         self.clear(self.SEARCH_BOX)
 
-        self.type(
-            self.SEARCH_BOX,
-            company_name
-        )
+        self.type(self.SEARCH_BOX, company_name)
 
-        self.click(
-            self.SEARCH_BTN
+        self.click(self.SEARCH_BTN)
+
+        WebDriverWait(self.driver, 20).until(
+            lambda d:
+            self.get_first_row_company_name() == company_name
         )
 
     def get_first_approved_business_email(self):

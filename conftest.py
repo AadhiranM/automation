@@ -28,7 +28,7 @@ def pytest_addoption(parser):
     parser.addoption(
         "--browser",
         action="store",
-        default="None",
+        default=None,
         help="Browser: chrome, edge, firefox, ulaa"
     )
 
@@ -62,6 +62,39 @@ def get_browser(request):
 def get_config():
     return config
 
+@pytest.fixture(scope="session")
+def get_login_user(get_config):
+
+    worker = os.getenv("PYTEST_XDIST_WORKER", "master")
+
+    worker_map = {
+        "master": 0,
+        "gw0": 0,
+        "gw1": 1,
+        "gw2": 2,
+        "gw3": 3,
+        "gw4": 4,
+        "gw5": 5,
+    }
+
+    index = worker_map.get(worker, 0)
+
+    users = get_config["automation_users"]
+
+    if index >= len(users):
+        raise Exception(
+            f"No automation account configured for {worker}"
+        )
+
+    user = users[index]
+
+    print("=" * 60)
+    print("Worker :", worker)
+    print("Username :", user["username"])
+    print("=" * 60)
+
+    return user
+
 
 @pytest.fixture(scope="session")
 def base_url(get_config):
@@ -78,7 +111,11 @@ def wait(setup, get_config):
 # CLEAN OLD ARTIFACTS (Screenshots)
 # =========================================================
 @pytest.fixture(scope="session", autouse=True)
-def clean_old_reports():
+def clean_old_reports(request):
+
+    # Only run in the master process
+    if hasattr(request.config, "workerinput"):
+        return
 
     folders = [
         "reports/screenshots",
@@ -130,7 +167,14 @@ def setup(request, get_browser, get_config, base_url):
         # --------------------------------------
         # Download Folder
         # --------------------------------------
-        download_path = os.path.join(os.getcwd(), "downloads")
+        worker = os.getenv("PYTEST_XDIST_WORKER", "master")
+
+        download_path = os.path.join(
+            os.getcwd(),
+            "downloads",
+            worker
+        )
+
         os.makedirs(download_path, exist_ok=True)
 
         prefs = {
@@ -280,8 +324,17 @@ def pytest_runtest_makereport(item):
         if driver:
             # ALWAYS resolve path from project root
             project_root = os.getcwd()
-            folder = os.path.join(project_root, "reports", "screenshots")
+            worker = os.getenv("PYTEST_XDIST_WORKER", "master")
+
+            folder = os.path.join(
+                project_root,
+                "reports",
+                "screenshots",
+                worker
+            )
+
             os.makedirs(folder, exist_ok=True)
+
 
             safe_name = (
                 report.nodeid
@@ -319,14 +372,13 @@ def category_name():
     return generate_category_name()
 
 @pytest.fixture()
-def login_superadmin(setup, get_config):
-    user = get_config["users"]["superadmin"]
+def login_superadmin(setup, get_login_user):
 
     login_page = SuperAdminLoginPage(setup)
 
     username = login_page.login_successfully(
-        user["username"],
-        user["password"]
+        get_login_user["username"],
+        get_login_user["password"]
     )
 
     return {

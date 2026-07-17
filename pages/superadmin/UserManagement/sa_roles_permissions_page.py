@@ -82,6 +82,16 @@ class SARolesPermissionsPage(BasePage):
         "//table/tbody/tr[1]/td[4]"
     )
 
+    ROLE_SEARCH = (
+        By.XPATH,
+        "//input[contains(@placeholder,'Role Name')]"
+    )
+
+    SEARCH_BTN = (
+        By.XPATH,
+        "//button[@id='search-btn'] | //button[contains(@class,'search')]"
+    )
+
     def get_first_manufacturer(self):
         return self.get_text(self.MANUFACTURER_COL).strip()
 
@@ -177,4 +187,15 @@ class SARolesPermissionsPage(BasePage):
         # WAIT HERE
         WebDriverWait(self.driver, 20).until(
             lambda d: d.find_element(*self.USER_TYPE_DROPDOWN).is_enabled()
+        )
+
+    def search_role(self, role_name):
+        self.enter_text(self.ROLE_SEARCH, role_name)
+
+        time.sleep(1)
+
+        self.driver.find_element(*self.ROLE_SEARCH).send_keys(Keys.ENTER)
+
+        WebDriverWait(self.driver, 20).until(
+            lambda d: self.get_first_row_role_name() == role_name
         )

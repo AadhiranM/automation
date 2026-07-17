@@ -1,5 +1,6 @@
 import time
 import pytest
+from selenium.webdriver.support.wait import WebDriverWait
 
 from pages.superadmin.UserManagement.sa_user_create_page import SAUserCreatePage
 from pages.superadmin.UserManagement.sa_user_list_page import SAUserListPage
@@ -22,16 +23,22 @@ class TestCreateUser:
     def test_create_user(self, setup):
 
         # ------------------------------------
-        # Get Manufacturer from Roles page
+        # Get Role details
         # ------------------------------------
 
         role_page = SARolesPermissionsPage(setup)
 
         role_page.goto_list_page()
 
+        role_name = role_page.get_first_row_role_name()
+
+        role_page.search_role(role_name)
+
         manufacturer = role_page.get_first_manufacturer()
 
         users_before = role_page.get_first_users_count()
+
+        print(f"Users Before : {users_before}")
 
         # ------------------------------------
         # Create User
@@ -47,12 +54,11 @@ class TestCreateUser:
             name=user_name,
             email=generate_user_email(),
             manufacturer=manufacturer,
+            role=role_name,
             mobile=generate_mobile_number(),
             password=generate_password(),
             status="Active"
         )
-
-        time.sleep(5)
 
         # ------------------------------------
         # Verify User created
@@ -62,9 +68,9 @@ class TestCreateUser:
 
         list_page.goto_page()
 
-        first_row_name = list_page.get_first_row_name()
+        list_page.search_user(user_name)
 
-        assert user_name == first_row_name
+        assert list_page.get_first_row_name() == user_name
 
         # ------------------------------------
         # Verify Users count increased
@@ -76,8 +82,12 @@ class TestCreateUser:
 
         role_page.goto_list_page()
 
-        # wait for page refresh
-        time.sleep(2)
+        role_page.search_role(role_name)
+
+        # Wait until the Users count is updated
+        WebDriverWait(setup, 30).until(
+            lambda d: role_page.get_first_users_count() != users_before
+        )
 
         users_after = role_page.get_first_users_count()
 

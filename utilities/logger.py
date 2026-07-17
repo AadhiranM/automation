@@ -16,12 +16,22 @@ LOG_DIR = os.path.join(
 # -------------------------
 os.makedirs(LOG_DIR, exist_ok=True)
 
-LOG_FILE = f"{LOG_DIR}/automation.log"
+worker = os.getenv("PYTEST_XDIST_WORKER", "master")
+
+LOG_FILE = os.path.join(
+    LOG_DIR,
+    f"automation_{worker}.log"
+)
+print("=" * 70)
+print("PROJECT_ROOT :", PROJECT_ROOT)
+print("LOG_DIR      :", LOG_DIR)
+print("LOG_FILE     :", LOG_FILE)
+print("=" * 70)
 
 # -------------------------
 # CREATE LOGGER
 # -------------------------
-logger = logging.getLogger("automation")
+logger = logging.getLogger(f"automation_{worker}")
 logger.setLevel(logging.INFO)
 logger.propagate = False
 
@@ -53,4 +63,4 @@ console_format = logging.Formatter(
 console_handler.setFormatter(console_format)
 logger.addHandler(console_handler)
 
-logger.info("📘 Logger initialized — fresh run, old logs cleared")
+logger.info(f"Logger initialized - Worker: {worker}")

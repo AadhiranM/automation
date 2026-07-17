@@ -72,7 +72,7 @@ class BasePage:
         )
         os.makedirs(folder, exist_ok=True)
 
-        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
         file = f"{folder}/{name}_{ts}.png"
 
         try:
@@ -171,42 +171,86 @@ class BasePage:
     # -------------------------------------------------------------------
     # 🔥 TYPE (ENHANCED)
     # -------------------------------------------------------------------
-    def type(self, locator, text, timeout=None):   # ✅ UPDATED
+    from selenium.common.exceptions import StaleElementReferenceException
+
+    def type(self, locator, text, timeout=None):
+
         t = timeout if timeout else self.timeout
 
-        element = WebDriverWait(self.driver, t).until(
-            EC.element_to_be_clickable(locator)   # ✅ UPDATED
-        )
+        for attempt in range(3):
 
-        try:
-            element.clear()
-            element.send_keys(text)
-        except Exception:
-            # React fallback
-            self.driver.execute_script(
-                """
-                arguments[0].value = arguments[1];
-                arguments[0].dispatchEvent(new Event('input', { bubbles: true }));
-                arguments[0].dispatchEvent(new Event('change', { bubbles: true }));
-                """,
-                element,
-                text
-            )
+            try:
+
+                element = WebDriverWait(self.driver, t).until(
+                    EC.element_to_be_clickable(locator)
+                )
+
+                element.clear()
+                element.send_keys(text)
+
+                return
+
+            except StaleElementReferenceException:
+
+                if attempt == 2:
+                    raise
+
+                time.sleep(0.5)
+
+            except Exception:
+
+                try:
+
+                    element = WebDriverWait(self.driver, t).until(
+                        EC.element_to_be_clickable(locator)
+                    )
+
+                    self.driver.execute_script(
+                        """
+                        arguments[0].value='';
+                        arguments[0].value=arguments[1];
+                        arguments[0].dispatchEvent(new Event('input',{bubbles:true}));
+                        arguments[0].dispatchEvent(new Event('change',{bubbles:true}));
+                        """,
+                        element,
+                        text
+                    )
+
+                    return
+
+                except StaleElementReferenceException:
+
+                    if attempt == 2:
+                        raise
+
+                    time.sleep(0.5)
 
     # -------------------------------------------------------------------
-    # 🔥 GET TEXT
+    #  GET TEXT
     # -------------------------------------------------------------------
+
     def get_text(self, locator):
-        try:
-            el = self.wait(locator)
-            text = el.text
-            logger.info(f"Got text from {locator}: {text}")
-            return text
-        except Exception as e:
-            logger.error(f"[GET TEXT FAILED] {locator} → {e}")
-            self._screenshot("gettext_failed")
-            raise
+        for attempt in range(3):
+            try:
+                el = self.wait(locator)
+                text = el.text.strip()
+                logger.info(f"Got text from {locator}: {text}")
+                return text
 
+            except StaleElementReferenceException:
+                logger.warning(
+                    f"Stale element while reading {locator}. Retry {attempt + 1}/3"
+                )
+                time.sleep(1)
+
+            except Exception as e:
+                logger.error(f"[GET TEXT FAILED] {locator} → {e}")
+                self._screenshot("gettext_failed")
+                raise
+
+        raise StaleElementReferenceException(
+            f"Unable to read text from {locator} after 3 retries."
+        )
     # -------------------------------------------------------------------
     def is_visible(self, locator):
         try:

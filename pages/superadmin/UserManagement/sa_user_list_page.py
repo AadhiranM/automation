@@ -521,9 +521,19 @@ class SAUserListPage(BasePage):
         ) > 0
 
     def search_user(self, user_name):
+
+        wait = WebDriverWait(self.driver, 30)
+
+        # Enter updated user name
         self.type(self.SEARCH_BOX, user_name)
 
-        time.sleep(3)
+        # Click Search
+        self.safe_click(self.SEARCH_BTN)
+
+        # Wait until the searched user appears in the result
+        wait.until(
+            lambda d: self.get_first_row_name() == user_name
+        )
 
     def get_first_row_name(self):
         return self.get_text(

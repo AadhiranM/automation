@@ -44,9 +44,11 @@ class SAManufacturerInvitePage(BasePage):
 
     def cancel_send(self):
 
-        self.click(
-            self.CANCEL_BTN
+        WebDriverWait(self.driver, 15).until(
+            EC.element_to_be_clickable(self.CANCEL_BTN)
         )
+
+        self.click(self.CANCEL_BTN)
 
     # =====================================================
     # VALIDATIONS

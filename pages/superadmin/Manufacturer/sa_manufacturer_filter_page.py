@@ -147,7 +147,6 @@ class SAManufacturerFilterPage(BasePage):
         self.click_apply()
 
     def filter_by_approval_status(self):
-
         self.open_filter_panel()
 
         dropdown = WebDriverWait(
@@ -159,29 +158,22 @@ class SAManufacturerFilterPage(BasePage):
             )
         )
 
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block:'center'});",
-            dropdown
+        dropdown.click()
+
+        approved_option = WebDriverWait(
+            self.driver,
+            20
+        ).until(
+            EC.element_to_be_clickable(
+                (
+                    By.XPATH,
+                    "//li[contains(@class,'select2-results__option') "
+                    "and normalize-space()='Approved']"
+                )
+            )
         )
 
-        time.sleep(1)
-
-        ActionChains(
-            self.driver
-        ).move_to_element(
-            dropdown
-        ).click().perform()
-
-        time.sleep(1)
-
-        active = self.driver.switch_to.active_element
-        time.sleep(1)
-
-        active.send_keys(
-            Keys.ENTER
-        )
-
-        time.sleep(1)
+        approved_option.click()
 
         self.click_apply()
 
