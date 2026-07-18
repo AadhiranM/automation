@@ -102,7 +102,7 @@ class QR_Management_QR_m_Page:
         try:
             element = self.driver.find_element(
                 By.XPATH,
-                "//div[@class='form-group col-sm-12 required']//div[contains(@class,'choices__list--single')]"
+                "//div[@class='choices__item choices__placeholder choices__item--selectable'][normalize-space()='Select Variant SKU ID']"
             )
 
             # Check aria-disabled attribute

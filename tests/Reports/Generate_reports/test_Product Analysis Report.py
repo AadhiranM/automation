@@ -127,11 +127,11 @@ test_data = get_test_data(excel_path, "Reports")
 
 @pytest.mark.order(3)
 @pytest.mark.parametrize("data", test_data)
-class Test_R_product_analysis_report(BaseTest):
+class Test_R_Product_analysis_report(BaseTest):
 
     logger = LogGen.loggen()
 
-    def test_product_analysis_report(self, driver, data):
+    def test_R_product_analysis_report(self, driver, data):
 
         report_name = data["report_name"]
         select_format = data["select_format"]

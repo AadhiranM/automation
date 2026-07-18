@@ -9,6 +9,8 @@ from utilities.customlogger import LogGen
 from pages.common.base_page import BaseTest
 from utilities.read_excel import get_test_data
 from utilities.screenshot_util import take_screenshot
+from selenium.common.exceptions import TimeoutException
+
 
 # Load Excel test data
 excel_path = r"mf_products_data.xlsx"
@@ -64,8 +66,10 @@ class Test_QRM_request_QR_code(BaseTest):
         qr_QR_page.click_product_skuID_opt()
         qr_QR_page.Enter_product_sku_field(sku_id)
         qr_QR_page.Enter_add_batch(batch_no)
-        time.sleep(2)
+        time.sleep(1)
         qr_QR_page.Click_product_name()
+        time.sleep(1)
+
         # qr_QR_page.Click_variant_skuID_opt()
         # time.sleep(1)
         # qr_QR_page.Enter_varinat_sku_field(variant_sku)
@@ -78,29 +82,43 @@ class Test_QRM_request_QR_code(BaseTest):
                 folder_name="Screenshots\\Generate_QR"
             )
 
-            self.logger.error(f"Batch ID already exists! Skipping this row → Batch: {batch_no}")
-            assert False, f"Batch number already exists → {batch_no}"
+            self.logger.error(f"Batch ID already exists!  Batch: {batch_no}")
+            assert False, f"Batch ID already exists  {batch_no}"
             return
 
         # Check if fields are disabled (= existing batch)
         if not qr_QR_page.is_variant_field_editable():
-            self.logger.info(f"Existing Batch detected → Auto-fill mode for Batch: {batch_no}")
+            self.logger.info(f"Existing Batch detected  Auto-fill mode for Batch: {batch_no}")
             qr_QR_page.Enter_Quantity(quantity)
-            time.sleep(1)
             qr_QR_page.click_request_QR_code_button()
+            time.sleep(1)
 
             try:
-                WebDriverWait(driver,10).until(
-                    EC.text_to_be_present_in_element(
-                        (By.TAG_NAME, "body"),
-                        "QR Generation successfully initiated!"
-                    )
+                self.logger.info("Waiting for toast message")
+
+                toast_msg = WebDriverWait(driver, 10).until(
+                    EC.visibility_of_element_located((By.CSS_SELECTOR, ".toastify"))
+                ).text.strip()
+
+                # Remove unsupported Unicode symbols before logging
+                toast_msg = toast_msg.encode("ascii", errors="ignore").decode()
+
+                self.logger.info(
+                    f"Toast received: {toast_msg}"
                 )
-                self.logger.info("QR Generated Successfully (Existing Batch Mode)")
-            except:
+
+            except TimeoutException:
+                toast_msg = ""
+                self.logger.error("Toast message not displayed")
+
+            if "QR Generation successfully initiated!" in toast_msg:
+                self.logger.info("QR Generated Successfully initiated for  (Existing Batch Mode)")
+
+
+            else:
                 take_screenshot(
                     driver,
-                    test_name=f"QR_fail_existing_batch",
+                    test_name=f"QR_fail_for_existing_batch",
                     folder_name="Screenshots\\Generate_QR"
                 )
                 self.logger.error("QR generation failed for existing batch")
@@ -124,21 +142,21 @@ class Test_QRM_request_QR_code(BaseTest):
 
         # Dimension + Delivery location
         qr_QR_page.select_dimension(dimension)
-        time.sleep(1)
+
         qr_QR_page.click_batch_delivery_opt()
         qr_QR_page.Enter_batch_delivery_field(delivery_location)
-        time.sleep(1)
+
         # qr_QR_page.select_QR_Type_drpdwn(QR_Type)
         qr_QR_page.select_QR_Image_format(image_format)
-        time.sleep(1)
+
         # Generate QR
-        qr_QR_page.Click_request_QR_button()
+        qr_QR_page.click_request_QR_code_button()
 
         try:
             WebDriverWait(driver,10).until(
                 EC.text_to_be_present_in_element(
                     (By.TAG_NAME, "body"),
-                    "QR Generation successfully initiated!"
+                    "Batch created successfully"
                 )
             )
             self.logger.info(f"QR Generated Successfully for: SKU={sku_id}, Batch={batch_no}")
