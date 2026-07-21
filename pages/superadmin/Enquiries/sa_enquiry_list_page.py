@@ -5,12 +5,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from selenium.common.exceptions import TimeoutException
 from pages.common.base_page import BasePage
 from utilities.flatpickr import FlatpickrRangePicker
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-
+from selenium.common.exceptions import StaleElementReferenceException
 class SAEnquiryListPage(BasePage):
 
     # =====================================================
@@ -36,7 +36,7 @@ class SAEnquiryListPage(BasePage):
 
     PANEL_DATE_FILTER = (
         By.ID,
-        "date_range"
+        "created_at_range"
     )
 
     APPLY_BTN = (
@@ -106,7 +106,10 @@ class SAEnquiryListPage(BasePage):
     # =====================================================
     # ACTIONS
     # =====================================================
-
+    ACTION_MENU = (
+        By.CSS_SELECTOR,
+        "ul.dropdown-menu.dd_action.show"
+    )
     FIRST_ROW_THREE_DOTS = (
         By.XPATH,
         "//table/tbody/tr[1]/td[last()]//button"
@@ -114,22 +117,22 @@ class SAEnquiryListPage(BasePage):
 
     VIEW_OPTION = (
         By.XPATH,
-        "//a[contains(.,'View')]"
+        "//ul[contains(@class,'dd_action') and contains(@class,'show')]//a[normalize-space()='View']"
     )
 
     EDIT_OPTION = (
         By.XPATH,
-        "//table/tbody/tr[1]//a[contains(normalize-space(),'Edit')]"
+        "//ul[contains(@class,'dd_action') and contains(@class,'show')]//a[normalize-space()='Edit']"
     )
 
     SEND_EMAIL_OPTION = (
         By.XPATH,
-        "//a[@class='dropdown-item' and normalize-space()='Send Email']"
+        "//ul[contains(@class,'dd_action') and contains(@class,'show')]//a[normalize-space()='Send Email']"
     )
 
-    FOLLOW_UP_OPTION = (
+    FOLLOWUP_OPTION = (
         By.XPATH,
-        "//a[@class='dropdown-item' and normalize-space()='Follow Up']"
+        "//ul[contains(@class,'dd_action') and contains(@class,'show')]//a[normalize-space()='Follow Up']"
     )
 
     # =====================================================
@@ -346,15 +349,16 @@ class SAEnquiryListPage(BasePage):
         self.wait_for_results()
         return selected_status
 
-
     def wait_for_results(self):
 
-        WebDriverWait(self.driver, 15).until(
-            lambda d:
-            d.find_elements(*self.FIRST_ROW)
-            or
-            d.find_elements(*self.NO_DATA)
-        )
+        try:
+            WebDriverWait(self.driver, 15).until(
+                EC.visibility_of_element_located(self.FIRST_ROW)
+            )
+        except TimeoutException:
+            WebDriverWait(self.driver, 5).until(
+                EC.visibility_of_element_located(self.NO_DATA)
+            )
 
     def wait_for_page_loaded(self):
 
@@ -515,14 +519,22 @@ class SAEnquiryListPage(BasePage):
     # ACTIONS
     # =====================================================
 
+
+
     def open_first_row_actions(self):
+
+        WebDriverWait(self.driver, 15).until(
+            EC.element_to_be_clickable(self.FIRST_ROW_THREE_DOTS)
+        )
 
         self.click(self.FIRST_ROW_THREE_DOTS)
 
-        WebDriverWait(self.driver, 15).until(
-            EC.visibility_of_element_located(
-                self.EDIT_OPTION
-            )
+        WebDriverWait(
+            self.driver,
+            15,
+            ignored_exceptions=(StaleElementReferenceException,)
+        ).until(
+            EC.visibility_of_element_located(self.ACTION_MENU)
         )
     def click_edit(self):
 
@@ -532,7 +544,7 @@ class SAEnquiryListPage(BasePage):
 
         print("Menu opened")
 
-        self.click(self.EDIT_OPTION)
+        self.click(self .EDIT_OPTION)
 
         print("Edit clicked")
 
@@ -559,7 +571,7 @@ class SAEnquiryListPage(BasePage):
         self.open_first_row_actions()
 
         followup = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located(self.FOLLOW_UP_OPTION)
+            EC.presence_of_element_located(self.FOLLOWUP_OPTION)
         )
 
         self.driver.execute_script(

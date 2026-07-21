@@ -88,6 +88,10 @@ class SAUserListPage(BasePage):
         "//ul[contains(@class,'show')]//a[contains(@href,'/show')]"
     )
 
+    EDIT_MOBILE_INPUT = (
+        By.XPATH,
+        "//input[@name='mobile']"
+    )
 
     FIRST_ROW_THREE_DOTS = (
         By.XPATH,
@@ -278,6 +282,13 @@ class SAUserListPage(BasePage):
         # Open 3 dots menu
         self.safe_click(self.FIRST_ROW_THREE_DOTS)
 
+        WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((
+                By.XPATH,
+                "//a[contains(.,'Edit')]"
+            ))
+        )
+
         time.sleep(2)
 
         # Click Edit using direct xpath
@@ -342,22 +353,35 @@ class SAUserListPage(BasePage):
 
     def click_role_permissions(self):
 
-        # Re-open 3 dots menu
+        wait = WebDriverWait(self.driver, 20)
+
+        # Open 3 dots menu for current searched row
         self.click_three_dots()
 
-        role_btn = WebDriverWait(self.driver, 20).until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                "//a[contains(.,'Role & Permissions')]"
-            ))
+        # Wait for Role & Permissions option
+        role_btn = wait.until(
+            EC.visibility_of_element_located(
+                self.ROLE_PERMISSION_OPTION
+            )
         )
 
+        # Scroll option into view
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            role_btn
+        )
+
+        # JS click because dropdown menu can have
+        # overlay/interception issues in parallel execution
         self.driver.execute_script(
             "arguments[0].click();",
             role_btn
         )
 
-        time.sleep(3)
+        # Wait until navigation actually happens
+        wait.until(
+            EC.url_contains("permission")
+        )
     def wait_for_results(self):
 
         WebDriverWait(self.driver, 15).until(
@@ -540,21 +564,37 @@ class SAUserListPage(BasePage):
             self.FIRST_ROW_NAME
         ).strip()
 
-    def update_user_name(self, new_name):
-        WebDriverWait(self.driver, 20).until(
-            EC.visibility_of_element_located(self.EDIT_NAME_INPUT)
+    def update_user_details(self, new_name, new_mobile):
+
+        wait = WebDriverWait(self.driver, 20)
+
+        # Update Name
+        name_field = wait.until(
+            EC.visibility_of_element_located(
+                self.EDIT_NAME_INPUT
+            )
         )
 
-        name_field = self.driver.find_element(*self.EDIT_NAME_INPUT)
-
         name_field.clear()
-
-        time.sleep(1)
-
         name_field.send_keys(new_name)
 
-        time.sleep(1)
+        # Update Mobile
+        mobile_field = wait.until(
+            EC.visibility_of_element_located(
+                self.EDIT_MOBILE_INPUT
+            )
+        )
 
+        mobile_field.clear()
+        mobile_field.send_keys(new_mobile)
+
+        # Click Update / Submit
         self.safe_click(self.UPDATE_BTN)
 
-        time.sleep(4)
+        # Wait until redirected from Edit page
+        wait.until(
+            lambda d: "edit" not in d.current_url.lower()
+        )
+
+        print(f"User name updated: {new_name}")
+        print(f"User mobile updated: {new_mobile}")

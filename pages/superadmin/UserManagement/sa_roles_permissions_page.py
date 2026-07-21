@@ -142,10 +142,17 @@ class SARolesPermissionsPage(BasePage):
         )
 
         self.safe_click(option)
+        WebDriverWait(self.driver, 15).until(
+            EC.element_to_be_clickable(self.CHECK_ALL_BTN)
+        )
 
         time.sleep(2)
 
     def click_check_all(self):
+        WebDriverWait(self.driver, 15).until(
+            EC.element_to_be_clickable(self.CHECK_ALL_BTN)
+        )
+
         self.safe_click(self.CHECK_ALL_BTN)
 
         time.sleep(2)

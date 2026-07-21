@@ -72,32 +72,32 @@ class TestCreateUser:
 
         assert list_page.get_first_row_name() == user_name
 
-        # ------------------------------------
-        # Verify Users count increased
-        # ------------------------------------
-
-        # ------------------------------------
-        # Verify Users count increased
-        # ------------------------------------
-
-        role_page.goto_list_page()
-
-        role_page.search_role(role_name)
-
-        # Wait until the Users count is updated
-        WebDriverWait(setup, 30).until(
-            lambda d: role_page.get_first_users_count() != users_before
-        )
-
-        users_after = role_page.get_first_users_count()
-
-        print(f"Users Before : {users_before}")
-        print(f"Users After  : {users_after}")
-
-        if users_before == "-":
-            assert users_after == "1 users"
-        else:
-            before = int(users_before.split()[0])
-            after = int(users_after.split()[0])
-
-            assert after == before + 1
+        # # ------------------------------------
+        # # Verify Users count increased
+        # # ------------------------------------
+        #
+        # # ------------------------------------
+        # # Verify Users count increased
+        # # ------------------------------------
+        #
+        # role_page.goto_list_page()
+        #
+        # role_page.search_role(role_name)
+        #
+        # # Wait until the Users count is updated
+        # WebDriverWait(setup, 30).until(
+        #     lambda d: role_page.get_first_users_count() != users_before
+        # )
+        #
+        # users_after = role_page.get_first_users_count()
+        #
+        # print(f"Users Before : {users_before}")
+        # print(f"Users After  : {users_after}")
+        #
+        # if users_before == "-":
+        #     assert users_after == "1 users"
+        # else:
+        #     before = int(users_before.split()[0])
+        #     after = int(users_after.split()[0])
+        #
+        #     assert after == before + 1

@@ -234,21 +234,36 @@ class SAUserCreatePage(BasePage):
         self.click_submit()
 
     def select_manufacturer(self, manufacturer):
-        wait = WebDriverWait(self.driver, 20)
+        wait = WebDriverWait(self.driver, 40)
 
         # Enable Manufacturer
         self.safe_click(self.MANUFACTURER_CHECKBOX)
-        time.sleep(1)
+
+        # Wait until manufacturer dropdown is actually clickable
+        wait.until(
+            EC.element_to_be_clickable(
+                self.MANUFACTURER_DROPDOWN
+            )
+        )
 
         # Open dropdown
         self.safe_click(self.MANUFACTURER_DROPDOWN)
-        time.sleep(1)
 
-        # Click search box
+        # Wait until Choices dropdown is actually open
+        wait.until(
+            EC.presence_of_element_located((
+                By.XPATH,
+                "//div[contains(@class,'choices') "
+                "and contains(@class,'is-open')]"
+            ))
+        )
+
+        # Your SAME search input logic
         search = wait.until(
             EC.element_to_be_clickable((
                 By.XPATH,
-                "//input[@type='search' and contains(@class,'choices__input')]"
+                "//input[@type='search' "
+                "and contains(@class,'choices__input')]"
             ))
         )
 
@@ -257,10 +272,9 @@ class SAUserCreatePage(BasePage):
             search
         )
 
-        time.sleep(1)
-
-        # Type into the active element
+        # Your SAME active element logic
         active = self.driver.switch_to.active_element
+
         active.send_keys(manufacturer)
 
         print("Typed manufacturer :", manufacturer)

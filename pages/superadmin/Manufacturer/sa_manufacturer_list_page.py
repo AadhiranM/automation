@@ -221,6 +221,9 @@ class SAManufacturerListPage(BasePage):
         self.click(self.ACTION_VIEW)
 
     def click_edit(self):
+        WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(self.ACTION_EDIT)
+        )
         self.click(self.ACTION_EDIT)
 
     def click_send_invite(self):
@@ -260,7 +263,15 @@ class SAManufacturerListPage(BasePage):
         )
 
         self.click(self.SEARCH_BTN)
+
+        # Existing wait
         self.wait_for_results()
+
+        # NEW: wait until the table settles
+        WebDriverWait(self.driver, 5).until(
+            lambda d: len(d.find_elements(*self.CREATED_AT_COL)) > 0
+                      or len(d.find_elements(*self.NO_DATA_ROW)) > 0
+        )
 
     def get_all_created_dates(self):
         rows = self.driver.find_elements(*self.CREATED_AT_COL)

@@ -283,9 +283,10 @@ class SAEnquiryAssignPage(BasePage):
             self.driver,
             20
         ).until(
-            lambda d:
-            self.get_first_row_assigned_user()
-            == "Not Assigned"
+            EC.text_to_be_present_in_element(
+                self.ASSIGNED_USER_COLUMN,
+                "Not Assigned"
+            )
         )
 
     # =====================================================

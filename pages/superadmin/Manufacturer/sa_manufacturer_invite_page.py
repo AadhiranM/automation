@@ -36,11 +36,14 @@ class SAManufacturerInvitePage(BasePage):
     # ACTIONS
     # =====================================================
 
+
     def confirm_send(self):
 
-        self.click(
-            self.CONFIRM_BTN
+        WebDriverWait(self.driver, 20).until(
+            EC.element_to_be_clickable(self.CONFIRM_BTN)
         )
+
+        self.click(self.CONFIRM_BTN)
 
     def cancel_send(self):
 

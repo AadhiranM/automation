@@ -11,7 +11,7 @@ from selenium.webdriver.support.ui import (
 from selenium.webdriver.support import expected_conditions as EC
 
 from pages.common.base_page import BasePage
-
+from selenium.webdriver.support.ui import Select
 
 class SAManufacturerFilterPage(BasePage):
 
@@ -59,7 +59,7 @@ class SAManufacturerFilterPage(BasePage):
 
     APPLY_BTN = (
         By.XPATH,
-        "//button[normalize-space()='Apply']"
+        "//form[@id='filterForm']//button[@type='submit' and normalize-space()='Apply']"
     )
 
     CLEAR_BTN = (
@@ -85,19 +85,18 @@ class SAManufacturerFilterPage(BasePage):
     # OPEN FILTER
     # =====================================================
 
-    def open_filter_panel(self):
 
-        self.click(
-            self.FILTER_BTN
+    def open_filter_panel(self):
+        # Wait until filter button is clickable
+        WebDriverWait(self.driver, 20).until(
+            EC.element_to_be_clickable(self.FILTER_BTN)
         )
 
-        WebDriverWait(
-            self.driver,
-            10
-        ).until(
-            EC.visibility_of_element_located(
-                self.COMPANY_NAME
-            )
+        self.click(self.FILTER_BTN)
+
+        # Wait until filter panel is displayed
+        WebDriverWait(self.driver, 20).until(
+            EC.visibility_of_element_located(self.COMPANY_NAME)
         )
 
     # =====================================================
@@ -147,44 +146,82 @@ class SAManufacturerFilterPage(BasePage):
         self.click_apply()
 
     def filter_by_approval_status(self):
+        wait = WebDriverWait(self.driver, 20)
+
+        # Open right-side Filter panel
         self.open_filter_panel()
 
-        dropdown = WebDriverWait(
-            self.driver,
-            20
-        ).until(
-            EC.element_to_be_clickable(
-                self.APPROVAL_STATUS_DROPDOWN
-            )
+        # Open Approval Status dropdown INSIDE filter panel
+        approval_dropdown = wait.until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                "//label[normalize-space()='Approval Status']"
+                "/following::div[contains(@class,'choices')][1]"
+            ))
         )
 
-        dropdown.click()
-
-        approved_option = WebDriverWait(
-            self.driver,
-            20
-        ).until(
-            EC.element_to_be_clickable(
-                (
-                    By.XPATH,
-                    "//li[contains(@class,'select2-results__option') "
-                    "and normalize-space()='Approved']"
-                )
-            )
+        self.driver.execute_script(
+            "arguments[0].click();",
+            approval_dropdown
         )
 
-        approved_option.click()
+        # Select Pending explicitly
+        pending_option = wait.until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                "//div[@role='option' and normalize-space()='Pending']"
+            ))
+        )
 
-        self.click_apply()
+        self.driver.execute_script(
+            "arguments[0].click();",
+            pending_option
+        )
+
+        # Find Apply specifically inside filterForm
+        apply_btn = wait.until(
+            EC.presence_of_element_located((
+                By.XPATH,
+                "//form[@id='filterForm']//button[@type='submit' and normalize-space()='Apply']"
+            ))
+        )
+
+        # Scroll to Apply button
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            apply_btn
+        )
+
+        # Click using JavaScript
+        self.driver.execute_script(
+            "arguments[0].click();",
+            apply_btn
+        )
+
+        self.wait_for_results()
 
     # =====================================================
     # BUTTON ACTIONS
     # =====================================================
 
     def click_apply(self):
+        apply_btn = WebDriverWait(
+            self.driver,
+            20
+        ).until(
+            EC.element_to_be_clickable(
+                self.APPLY_BTN
+            )
+        )
 
-        self.click(
-            self.APPLY_BTN
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            apply_btn
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            apply_btn
         )
 
         self.wait_for_results()
