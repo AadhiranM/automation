@@ -349,17 +349,44 @@ class SAEnquiryListPage(BasePage):
         self.wait_for_results()
         return selected_status
 
+
+    # def wait_for_results(self):
+    #
+    #     wait = WebDriverWait(self.driver, 20)
+    #
+    #     try:
+    #         previous = None
+    #
+    #         def table_stable(driver):
+    #             nonlocal previous
+    #
+    #             rows = driver.find_elements(*self.FIRST_ROW)
+    #
+    #             if not rows:
+    #                 return False
+    #
+    #             current = rows[0].text.strip()
+    #
+    #             if current == previous:
+    #                 return True
+    #
+    #             previous = current
+    #             return False
+    #
+    #         wait.until(table_stable)
+    #
+    #     except TimeoutException:
+    #         wait.until(
+    #             lambda d: d.find_elements(*self.NO_DATA)
+    #         )
     def wait_for_results(self):
 
-        try:
-            WebDriverWait(self.driver, 15).until(
-                EC.visibility_of_element_located(self.FIRST_ROW)
-            )
-        except TimeoutException:
-            WebDriverWait(self.driver, 5).until(
-                EC.visibility_of_element_located(self.NO_DATA)
-            )
-
+        WebDriverWait(self.driver, 20).until(
+            lambda d:
+            d.find_elements(*self.FIRST_ROW)
+            or
+            d.find_elements(*self.NO_DATA)
+        )
     def wait_for_page_loaded(self):
 
         WebDriverWait(self.driver, 15).until(
@@ -367,6 +394,10 @@ class SAEnquiryListPage(BasePage):
                 self.PAGE_LOADED_MARKER
             )
         )
+
+    # =====================================================
+    # SEARCH
+    # =====================================================
 
     # =====================================================
     # SEARCH
@@ -519,23 +550,28 @@ class SAEnquiryListPage(BasePage):
     # ACTIONS
     # =====================================================
 
-
-
     def open_first_row_actions(self):
 
-        WebDriverWait(self.driver, 15).until(
-            EC.element_to_be_clickable(self.FIRST_ROW_THREE_DOTS)
-        )
+        for _ in range(2):
 
-        self.click(self.FIRST_ROW_THREE_DOTS)
+            try:
+                WebDriverWait(self.driver, 15).until(
+                    EC.element_to_be_clickable(self.FIRST_ROW_THREE_DOTS)
+                )
 
-        WebDriverWait(
-            self.driver,
-            15,
-            ignored_exceptions=(StaleElementReferenceException,)
-        ).until(
-            EC.visibility_of_element_located(self.ACTION_MENU)
-        )
+                self.click(self.FIRST_ROW_THREE_DOTS)
+
+                WebDriverWait(self.driver, 15).until(
+                    EC.visibility_of_element_located(self.ACTION_MENU)
+                )
+
+                return
+
+            except StaleElementReferenceException:
+                continue
+
+        raise
+
     def click_edit(self):
 
         print("Inside click_edit")
