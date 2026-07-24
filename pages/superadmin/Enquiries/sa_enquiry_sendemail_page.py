@@ -3,7 +3,8 @@ from datetime import datetime
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
-
+from selenium.common.exceptions import StaleElementReferenceException
+from selenium.webdriver.support.ui import WebDriverWait
 from pages.common.base_page import BasePage
 
 class SAEnquirySendEmailPage(BasePage):
@@ -189,25 +190,41 @@ class SAEnquirySendEmailPage(BasePage):
 
         self.click_send()
 
-        return self.get_toast_text()
+        toast = self.get_toast_text()
+
+        self.wait_for_email_history_refresh(subject)
+
+        return toast
 
     # =====================================================
     # EMAIL HISTORY
     # =====================================================
 
-    def wait_for_email_history_refresh(self):
+
+
+    def wait_for_email_history_refresh(
+            self,
+            expected_subject,
+            timeout=20
+    ):
+        def history_updated(driver):
+            try:
+                subject = driver.find_element(
+                    *self.PREV_EMAIL_SUBJECT
+                ).text.strip()
+
+                return expected_subject in subject
+
+            except StaleElementReferenceException:
+                return False
+
+            except Exception:
+                return False
 
         WebDriverWait(
             self.driver,
-            20
-        ).until(
-            lambda d:
-            len(
-                d.find_elements(
-                    *self.PREV_EMAIL_SUBJECT
-                )
-            ) > 0
-        )
+            timeout
+        ).until(history_updated)
 
     def get_previous_email_details(self):
 

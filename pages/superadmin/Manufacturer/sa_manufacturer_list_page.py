@@ -126,6 +126,7 @@ class SAManufacturerListPage(BasePage):
             self.FIRST_COMPANY_NAME
         )
 
+
     def is_company_present(self, company_name):
 
         try:
@@ -345,7 +346,7 @@ class SAManufacturerListPage(BasePage):
             self.get_first_row_company_name() == company_name
         )
 
-    def get_first_approved_business_email(self):
+    def get_first_approved_manufacturer(self):
 
         rows = self.driver.find_elements(
             By.XPATH,
@@ -359,13 +360,18 @@ class SAManufacturerListPage(BasePage):
             if len(cells) < 8:
                 continue
 
+            manufacturer_name = cells[0].text.strip()
             business_email = cells[2].text.strip()
             status = cells[6].text.strip()
 
-            print(f"Email={business_email} | Status={status}")
+            print(
+                f"Name={manufacturer_name} | "
+                f"Email={business_email} | "
+                f"Status={status}"
+            )
 
             if status.lower() == "approved":
-                return business_email
+                return business_email, manufacturer_name
 
         raise Exception("No approved manufacturer found")
 

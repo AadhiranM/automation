@@ -15,7 +15,7 @@ from pages.superadmin.QRManagement.sa_product_list_page import (
 from pages.superadmin.QRManagement.sa_category_list_page import (
     SACategoryListPage
 )
-
+from flows.qr_management_flow import QRManagementFlow
 
 @pytest.mark.superadmin
 @pytest.mark.usefixtures("login_superadmin")
@@ -44,8 +44,12 @@ class TestProductCreate:
     ):
         driver = login_superadmin["driver"]
 
-        manufacturer_name, category_name = (
-            self.get_test_data(driver)
+
+
+        flow = QRManagementFlow(driver)
+
+        manufacturer_email, manufacturer_name, category_name = (
+            flow.create_category_with_variant()
         )
 
         list_page = SAProductListPage(driver)
@@ -59,7 +63,7 @@ class TestProductCreate:
         parent.wait_for_page()
 
         parent.fill_parent_form(
-            manufacturer_name,
+            manufacturer_email,
             category_name
         )
 

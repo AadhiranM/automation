@@ -209,7 +209,7 @@ class SAEnquiryListPage(BasePage):
         return self.get_text(self.FIRST_ROW_ID).strip()
 
     def get_first_row_name(self):
-        return self.get_text(self.FIRST_ROW_NAME).strip()
+            return self.get_text(self.FIRST_ROW_NAME).strip()
 
     def get_first_row_email(self):
         return self.get_text(self.FIRST_ROW_EMAIL).strip()
@@ -226,17 +226,22 @@ class SAEnquiryListPage(BasePage):
 
     def open_filter_panel(self):
 
-        self.click(
-            self.FILTER_PANEL_BTN
-        )
+        self.click(self.FILTER_PANEL_BTN)
 
-        WebDriverWait(
+        panel = WebDriverWait(
             self.driver,
-            10
+            15
         ).until(
             EC.visibility_of_element_located(
                 self.PANEL_NAME
             )
+        )
+
+        WebDriverWait(
+            self.driver,
+            15
+        ).until(
+            lambda d: panel.is_displayed() and panel.is_enabled()
         )
 
     def panel_filter_by_name(
@@ -466,11 +471,54 @@ class SAEnquiryListPage(BasePage):
 
         self.wait_for_results()
 
+    # def filter_panel_select_range(self, start, end):
+    #
+    #     self.open_filter_panel()
+    #
+    #     self.safe_click(self.PANEL_DATE_FILTER)
+    #
+    #     WebDriverWait(self.driver, 10).until(
+    #         EC.visibility_of_element_located(
+    #             FlatpickrRangePicker.CALENDAR
+    #         )
+    #     )
+    #
+    #     picker = FlatpickrRangePicker(self.driver)
+    #     picker.select_range(start, end)
+    #
+    #     self.click(self.APPLY_BTN)
+    #
+    #     self.wait_for_results()
+
     def filter_panel_select_range(self, start, end):
 
         self.open_filter_panel()
 
-        self.safe_click(self.PANEL_DATE_FILTER)
+        self.click(self.PANEL_DATE_FILTER)
+
+        import logging
+
+        logging.info("===== DATE INPUT CLICKED =====")
+
+        calendars = self.driver.find_elements(
+            By.CSS_SELECTOR,
+            ".flatpickr-calendar"
+        )
+
+        logging.info(f"Calendar Count: {len(calendars)}")
+
+        for i, cal in enumerate(calendars, 1):
+            logging.info(f"Calendar {i}: {cal.get_attribute('class')}")
+
+        calendars = self.driver.find_elements(
+            By.CSS_SELECTOR,
+            ".flatpickr-calendar"
+        )
+
+        print("Calendar Count:", len(calendars))
+
+        for i, cal in enumerate(calendars, start=1):
+            print(f"Calendar {i} Class:", cal.get_attribute("class"))
 
         WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located(
@@ -478,9 +526,16 @@ class SAEnquiryListPage(BasePage):
             )
         )
 
+        print("===== CALENDAR OPENED =====")
+
         picker = FlatpickrRangePicker(self.driver)
         picker.select_range(start, end)
-
+        logging.info(
+            "Date Input Value: %s",
+            self.driver.find_element(
+                *self.PANEL_DATE_FILTER
+            ).get_attribute("value")
+        )
         self.click(self.APPLY_BTN)
 
         self.wait_for_results()
