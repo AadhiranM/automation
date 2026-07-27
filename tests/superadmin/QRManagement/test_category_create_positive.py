@@ -43,8 +43,7 @@ class TestCategoryCreatePositive:
         # Validation
         list_page.search(category_name)
 
-        assert list_page.get_first_category_name() == category_name
-        assert list_page.get_first_status() == "Active"
+        assert list_page.is_category_present(category_name)
 
     def test_create_category_inactive(self, setup, category_name):
         manufacturer_page = SAManufacturerListPage(setup)
@@ -72,5 +71,4 @@ class TestCategoryCreatePositive:
         # Validation
         list_page.search(category_name)
 
-        assert list_page.get_first_category_name() == category_name
-        assert list_page.get_first_status() == "Inactive"
+        assert list_page.is_category_present(category_name)

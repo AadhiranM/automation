@@ -212,6 +212,10 @@ class SAVariantCreatePage(BasePage):
             # fallback (very important for UI overlap issues)
             self.driver.execute_script("arguments[0].click();", save_btn)
 
+
+
+
+
     # ==========================
     # ERRORS
     # ==========================
@@ -275,12 +279,9 @@ class SAVariantCreatePage(BasePage):
     def wait_until_redirected_to_variant_list(self):
 
         WebDriverWait(self.driver, 30).until(
-            lambda d: d.current_url.rstrip("/")
-                      == "https://beta.digitathya.com/admin/variant"
+            lambda d: "/admin/variant" in d.current_url
         )
 
         WebDriverWait(self.driver, 30).until(
-            EC.visibility_of_element_located(
-                self.VARIANT_LIST_PAGE
-            )
+            EC.visibility_of_element_located(self.VARIANT_LIST_PAGE)
         )
