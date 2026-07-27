@@ -5,6 +5,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from pages.common.base_page import BasePage
 from selenium.webdriver.common.keys import Keys
 from pages.superadmin.Manufacturer.sa_manufacturer_list_page import SAManufacturerListPage
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 class SACategoryCreatePage(BasePage):
 
@@ -175,10 +178,24 @@ class SACategoryCreatePage(BasePage):
         )
         return toast.text
 
+
     def wait_for_modal_to_close(self):
-        WebDriverWait(self.driver, 10).until(
-            EC.invisibility_of_element_located(self.MODAL)
-        )
+
+        for attempt in range(3):
+
+            try:
+                WebDriverWait(self.driver, 10).until(
+                    EC.invisibility_of_element_located(self.MODAL)
+                )
+                return
+
+            except TimeoutException:
+                print(
+                    f"Modal still visible "
+                    f"(Attempt {attempt + 1}/3). Retrying..."
+                )
+
+        raise Exception("Category modal did not close after 3 retries.")
 
     def is_manufacturer_selected(self, name):
         selected = self.driver.find_element(*self.MANUFACTURER_DROPDOWN).text

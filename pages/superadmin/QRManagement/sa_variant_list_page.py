@@ -271,3 +271,39 @@ class SAVariantListPage(BasePage):
                     return manufacturer
 
         raise Exception("No Manufacturer found")
+
+    from selenium.common.exceptions import StaleElementReferenceException
+
+    from selenium.common.exceptions import StaleElementReferenceException
+
+    def is_created_by_present(self, username):
+
+        for attempt in range(3):
+
+            try:
+
+                rows = self.driver.find_elements(*self.TABLE_ROWS)
+
+                for row in rows:
+
+                    cells = row.find_elements(By.TAG_NAME, "td")
+
+                    if len(cells) >= 4:
+
+                        created_by = cells[3].text.strip()
+
+                        if username.lower() in created_by.lower():
+                            return True
+
+                return False
+
+            except StaleElementReferenceException:
+
+                print(
+                    f"Table refreshed while checking Created By "
+                    f"(Attempt {attempt + 1}/3). Retrying..."
+                )
+
+        raise Exception(
+            "Unable to verify Created By after 3 retries."
+        )
