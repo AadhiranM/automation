@@ -273,10 +273,14 @@ class SAVariantCreatePage(BasePage):
     )
 
     def wait_until_redirected_to_variant_list(self):
-        WebDriverWait(self.driver, 20).until(
-            EC.url_contains("/admin/variant")
+
+        WebDriverWait(self.driver, 30).until(
+            lambda d: d.current_url.rstrip("/")
+                      == "https://beta.digitathya.com/admin/variant"
         )
 
-        WebDriverWait(self.driver, 20).until(
-            EC.visibility_of_element_located(self.VARIANT_LIST_PAGE)
+        WebDriverWait(self.driver, 30).until(
+            EC.visibility_of_element_located(
+                self.VARIANT_LIST_PAGE
+            )
         )

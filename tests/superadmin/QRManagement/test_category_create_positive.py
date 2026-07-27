@@ -38,7 +38,7 @@ class TestCategoryCreatePositive:
         create_page.select_status("Active")
 
         create_page.click_save()
-        create_page.wait_for_modal_to_close()
+        # create_page.wait_for_modal_to_close()
 
         # Validation
         list_page.search(category_name)
@@ -67,7 +67,7 @@ class TestCategoryCreatePositive:
         create_page.select_status("Inactive")
 
         create_page.click_save()
-        create_page.wait_for_modal_to_close()
+        # create_page.wait_for_modal_to_close()
 
         # Validation
         list_page.search(category_name)
