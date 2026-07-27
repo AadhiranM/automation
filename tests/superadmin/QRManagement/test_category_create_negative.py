@@ -53,7 +53,7 @@ class TestCategoryCreateNegative:
         manufacturer_page.goto_page()
 
         manufacturer_email = (
-            manufacturer_page.get_first_approved_business_email()
+            manufacturer_page.get_first_approved_manufacturer()
         )
 
         list_page = SACategoryListPage(setup)
@@ -86,7 +86,7 @@ class TestCategoryCreateNegative:
         manufacturer_page.goto_page()
 
         manufacturer_email = (
-            manufacturer_page.get_first_approved_business_email()
+            manufacturer_page.get_first_approved_manufacturer()
         )
 
         list_page = SACategoryListPage(setup)

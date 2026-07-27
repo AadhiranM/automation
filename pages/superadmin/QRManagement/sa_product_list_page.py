@@ -6,7 +6,8 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from pages.common.base_page import BasePage
 from utilities.flatpickr import FlatpickrRangePicker
-
+from datetime import datetime
+from selenium.common.exceptions import StaleElementReferenceException
 
 class SAProductListPage(BasePage):
 
@@ -183,20 +184,71 @@ class SAProductListPage(BasePage):
         self.click(self.SEARCH_BTN)
         self.wait_for_results()
 
+    # def get_created_dates(self):
+    #     rows = self.driver.find_elements(*self.CREATED_AT_COL)
+    #     dates = []
+    #
+    #     for r in rows:
+    #         text = r.text.strip()
+    #         try:
+    #             parsed = datetime.strptime(text, "%d %b %Y %I:%M %p").date()
+    #             dates.append(parsed)
+    #         except:
+    #             print(f"Skipping invalid date: {text}")
+    #
+    #     return dates
+
+    # def get_created_dates(self):
+    #     rows = self.driver.find_elements(*self.CREATED_AT_COL)
+    #     result = []
+    #     for r in rows:
+    #         try:
+    #             result.append(
+    #                 datetime.strptime(
+    #                     r.text.strip(), "%d %b %Y %I:%M %p"
+    #                 ).date()
+    #             )
+    #         except:
+    #             pass
+    #     return result
+    from datetime import datetime
+    from selenium.common.exceptions import StaleElementReferenceException
+
     def get_created_dates(self):
-        rows = self.driver.find_elements(*self.CREATED_AT_COL)
-        dates = []
+        result = []
 
-        for r in rows:
-            text = r.text.strip()
+        # Retry a few times in case DataTable refreshes
+        for attempt in range(3):
             try:
-                parsed = datetime.strptime(text, "%d %b %Y %I:%M %p").date()
-                dates.append(parsed)
-            except:
-                print(f"Skipping invalid date: {text}")
+                rows = self.driver.find_elements(*self.CREATED_AT_COL)
+                result.clear()
 
-        return dates
+                for row in rows:
+                    try:
+                        text = row.text.strip()
 
+                        if text:
+                            result.append(
+                                datetime.strptime(
+                                    text,
+                                    "%d %b %Y %I:%M %p"
+                                ).date()
+                            )
+
+                    except ValueError:
+                        print(f"Skipping invalid date: {text}")
+
+                return result
+
+            except StaleElementReferenceException:
+                print(
+                    f"Stale table detected while reading dates "
+                    f"(Attempt {attempt + 1}/3). Retrying..."
+                )
+
+        raise Exception(
+            "Unable to read Created Date column after 3 retries."
+        )
     # =============================
     # VALIDATIONS
     # =============================

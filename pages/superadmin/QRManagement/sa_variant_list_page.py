@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
-
+from selenium.common.exceptions import StaleElementReferenceException
 from pages.common.base_page import BasePage
 
 
@@ -182,43 +182,37 @@ class SAVariantListPage(BasePage):
 
         self.wait_for_table()
 
+
+
     def is_category_present(self, category_name):
 
-        rows = self.driver.find_elements(*self.TABLE_ROWS)
+        for attempt in range(3):
 
-        for row in rows:
+            try:
+                rows = self.driver.find_elements(*self.TABLE_ROWS)
 
-            cells = row.find_elements(By.TAG_NAME, "td")
+                for row in rows:
 
-            if len(cells) >= 2:
+                    cells = row.find_elements(By.TAG_NAME, "td")
 
-                category = cells[1].text.strip()
+                    if len(cells) >= 2:
 
-                if category.lower() == category_name.lower():
-                    return True
+                        category = cells[1].text.strip()
 
-        return False
+                        if category.lower() == category_name.lower():
+                            return True
 
-    def is_created_by_present(self, username):
+                return False
 
-        print(f"Expected Username : {username}")
+            except StaleElementReferenceException:
+                print(
+                    f"Table refreshed while checking category "
+                    f"(Attempt {attempt + 1}/3). Retrying..."
+                )
 
-        rows = self.driver.find_elements(*self.TABLE_ROWS)
-
-        for row in rows:
-
-            cells = row.find_elements(By.TAG_NAME, "td")
-
-            if len(cells) >= 4:
-
-                created_by = cells[3].text.strip()
-
-                print(f"Created By : {created_by}")
-
-                if username is not None and username.lower() in created_by.lower():
-                    return True
-
-        return False
+        raise Exception(
+            "Unable to verify category after 3 retries."
+        )
 
     def wait_for_table_refresh(self):
 
