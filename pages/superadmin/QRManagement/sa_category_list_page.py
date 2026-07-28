@@ -145,27 +145,14 @@ class SACategoryListPage(BasePage):
     # 13. DATE FILTER
     # =====================================================================
     def filter_inline_created_at(self, start, end):
-        date_input = self.driver.find_element(*self.INLINE_CREATED_AT)
-        date_input.click()
 
-        WebDriverWait(self.driver, 5).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "flatpickr-calendar"))
-        )
+        self.safe_click(self.INLINE_CREATED_AT)
 
         picker = FlatpickrRangePicker(self.driver)
         picker.select_range(start, end)
 
-        date_value = f"{start:%Y-%m-%d} to {end:%Y-%m-%d}"
-        self.driver.execute_script(
-            """
-            arguments[0].value = arguments[1];
-            arguments[0].dispatchEvent(new Event('change'));
-            """,
-            date_input,
-            date_value
-        )
-
         self.click(self.SEARCH_BTN)
+
         self.wait_for_results()
 
     def get_all_created_dates(self):

@@ -58,9 +58,15 @@ class TestCategoryListPositive:
         page.filter_inline_created_at(start, end)
         rows = page.get_all_created_dates()
 
+
+
+        print("Start:", start)
+        print("End  :", end)
+        print("Rows :", rows)
+
         if not rows:
             pytest.skip("No categories in selected range")
 
         for r in rows:
+            print("Checking:", r)
             assert start <= r <= end
-

@@ -107,22 +107,28 @@ class FlatpickrRangePicker:
         )
 
         for el in elements:
-            if el.is_displayed():
-                try:
-                    # scroll + JS click (VERY IMPORTANT)
-                    print(
-                        "CLICKING :",
-                        el.get_attribute("aria-label"),
-                        el.get_attribute("class")
-                    )
 
-                    self.driver.execute_script(
-                        "arguments[0].click();",
-                        el
-                    )
-                    return True
-                except:
-                    continue
+            if not el.is_displayed():
+                continue
+
+            classes = el.get_attribute("class")
+
+            # Ignore previous/next month dates
+            if "prevMonthDay" in classes or "nextMonthDay" in classes:
+                continue
+
+            print(
+                "CLICKING :",
+                el.get_attribute("aria-label"),
+                classes
+            )
+
+            self.driver.execute_script(
+                "arguments[0].click();",
+                el
+            )
+
+            return True
 
         return False
 
