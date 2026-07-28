@@ -206,19 +206,34 @@ class SAEnquiryListPage(BasePage):
 
 
     def get_first_row_id(self):
-        return self.get_text(self.FIRST_ROW_ID).strip()
+        WebDriverWait(self.driver, 10).until(
+            lambda d: d.find_element(*self.FIRST_ROW_ID).text.strip() != ""
+        )
+        return self.driver.find_element(*self.FIRST_ROW_ID).text.strip()
 
     def get_first_row_name(self):
-            return self.get_text(self.FIRST_ROW_NAME).strip()
+        WebDriverWait(self.driver, 10).until(
+            lambda d: d.find_element(*self.FIRST_ROW_NAME).text.strip() != ""
+        )
+        return self.driver.find_element(*self.FIRST_ROW_NAME).text.strip()
 
     def get_first_row_email(self):
-        return self.get_text(self.FIRST_ROW_EMAIL).strip()
+        WebDriverWait(self.driver, 10).until(
+            lambda d: d.find_element(*self.FIRST_ROW_EMAIL).text.strip() != ""
+        )
+        return self.driver.find_element(*self.FIRST_ROW_EMAIL).text.strip()
 
     def get_first_row_company(self):
-        return self.get_text(self.FIRST_ROW_COMPANY).strip()
+        WebDriverWait(self.driver, 10).until(
+            lambda d: d.find_element(*self.FIRST_ROW_COMPANY).text.strip() != ""
+        )
+        return self.driver.find_element(*self.FIRST_ROW_COMPANY).text.strip()
 
     def get_first_row_status(self):
-        return self.get_text(self.FIRST_ROW_STATUS).strip()
+        WebDriverWait(self.driver, 10).until(
+            lambda d: d.find_element(*self.FIRST_ROW_STATUS).text.strip() != ""
+        )
+        return self.driver.find_element(*self.FIRST_ROW_STATUS).text.strip()
 
     # =====================================================
     # NAVIGATION
