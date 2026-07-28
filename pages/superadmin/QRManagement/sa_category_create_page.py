@@ -111,6 +111,7 @@ class SACategoryCreatePage(BasePage):
         )
 
         search.clear()
+        print(f"Manufacturer received: '{manufacturer_email}'")
         search.send_keys(manufacturer_email)
 
         time.sleep(1)

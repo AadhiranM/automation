@@ -21,7 +21,7 @@ class TestCategoryCreatePositive:
         manufacturer_page = SAManufacturerListPage(setup)
         manufacturer_page.goto_page()
 
-        manufacturer_email = (
+        manufacturer_email, manufacturer_name = (
             manufacturer_page.get_first_approved_manufacturer()
         )
 
@@ -49,7 +49,7 @@ class TestCategoryCreatePositive:
         manufacturer_page = SAManufacturerListPage(setup)
         manufacturer_page.goto_page()
 
-        manufacturer_email = (
+        manufacturer_email, manufacturer_name = (
             manufacturer_page.get_first_approved_manufacturer()
         )
 
