@@ -30,7 +30,7 @@ class TestQRMonitoring:
         "status",
         [
             "All",
-            "Not Recognized",
+            "Processing",
         ]
     )
     def test_filter_status(self, setup, status):
