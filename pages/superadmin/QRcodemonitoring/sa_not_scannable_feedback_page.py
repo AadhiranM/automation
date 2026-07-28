@@ -543,9 +543,16 @@ class SANotScannableFeedbackPage(BasePage):
         wait = WebDriverWait(self.driver, 30)
         downloads_path = os.path.join(os.getcwd(), "downloads")
 
-        before_files = set(
-            glob.glob(os.path.join(downloads_path, "*.csv"))
+        csv_pattern = os.path.join(
+            downloads_path,
+            "**",
+            "qr_not_scannable_product_feedback*.csv"
         )
+
+        before = {
+            f: os.path.getmtime(f)
+            for f in glob.glob(csv_pattern, recursive=True)
+        }
 
         # -----------------------------
         # Export button
@@ -631,18 +638,17 @@ class SANotScannableFeedbackPage(BasePage):
         downloaded = False
 
         for _ in range(30):
-
             time.sleep(2)
 
-            after_files = set(
-                glob.glob(os.path.join(downloads_path, "*.csv"))
-            )
+            files = glob.glob(csv_pattern, recursive=True)
 
-            new_files = after_files - before_files
+            for f in files:
+                if f not in before or os.path.getmtime(f) > before.get(f, 0):
+                    downloaded = True
+                    print(f"CSV Downloaded Successfully: {f}")
+                    break
 
-            if new_files:
-                downloaded = True
-                print("CSV Downloaded Successfully")
+            if downloaded:
                 break
 
-        assert downloaded, f"CSV file not downloaded in {downloads_path}"
+        assert downloaded, "CSV file was not updated/downloaded."
