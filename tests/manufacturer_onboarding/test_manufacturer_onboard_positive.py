@@ -12,6 +12,14 @@ from utilities.data_generator import (
 from pages.superadmin.Manufacturer.sa_manufacturer_service_page import (
     SAManufacturerServicePage
 )
+from pathlib import Path
+# Project root -> automation/
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+TEST_DATA = PROJECT_ROOT / "test_data" / "images"
+print(f"Project Root : {PROJECT_ROOT}")
+print(f"Test Data    : {TEST_DATA}")
+assert TEST_DATA.exists(), f"Folder not found: {TEST_DATA}"
 
 @pytest.mark.onboarding
 @pytest.mark.usefixtures("login_superadmin")
@@ -96,22 +104,32 @@ class TestManufacturerOnboardPositive:
 
         upload.wait_for_page()
 
-        upload.upload_business_pan(
-            r"C:/Users/Manikandan A/Downloads/Digitathya/Business PAN.pdf"
-        )
+        # File Paths
+        business_pan = TEST_DATA / "Business PAN.pdf"
+        certificate = TEST_DATA / "Certificate of Incorporation.pdf"
+        moa = TEST_DATA / "Memorandum of Association.pdf"
+        board_resolution = TEST_DATA / "Board Resolution.pdf"
 
-        upload.upload_certificate(
-            r"C:/Users/Manikandan A/Downloads/Digitathya/Certificate of Incorporation.pdf"
-        )
+        # Debug Prints
+        print(f"Business PAN           : {business_pan}")
+        print(f"Certificate            : {certificate}")
+        print(f"MOA                    : {moa}")
+        print(f"Board Resolution       : {board_resolution}")
 
-        upload.upload_moa(
-            r"C:/Users/Manikandan A/Downloads/Digitathya/Memorandum of Association.pdf"
-        )
+        # Verify files exist
+        assert business_pan.exists(), f"Missing file: {business_pan}"
+        assert certificate.exists(), f"Missing file: {certificate}"
+        assert moa.exists(), f"Missing file: {moa}"
+        assert board_resolution.exists(), f"Missing file: {board_resolution}"
 
-        upload.upload_board_resolution(
-            r"C:/Users/Manikandan A/Downloads/Digitathya/Board Resolution.pdf"
-        )
+        # Upload files
+        upload.upload_business_pan(str(business_pan))
 
+        upload.upload_certificate(str(certificate))
+
+        upload.upload_moa(str(moa))
+
+        upload.upload_board_resolution(str(board_resolution))
 
         upload.verify_all_files_selected()
 

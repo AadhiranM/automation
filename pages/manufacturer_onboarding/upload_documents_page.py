@@ -177,6 +177,26 @@ class UploadDocumentsPage(BasePage):
             btn
         )
 
+        # Wait until onboarding page redirects to manufacturer list
+        WebDriverWait(
+            self.driver,
+            60
+        ).until(
+            lambda d: "/admin/manufacturer" in d.current_url
+        )
+
+        WebDriverWait(
+            self.driver,
+            60
+        ).until(
+            EC.visibility_of_element_located(
+                (
+                    By.XPATH,
+                    "//input[contains(@placeholder,'Search')]"
+                )
+            )
+        )
+
     # =====================================================
     # RESULT
     # =====================================================
