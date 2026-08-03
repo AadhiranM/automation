@@ -184,6 +184,11 @@ class SAProductListPage(BasePage):
         self.click(self.SEARCH_BTN)
         self.wait_for_results()
 
+        # NEW: wait until the table settles
+        WebDriverWait(self.driver, 5).until(
+            lambda d: len(d.find_elements(*self.CREATED_AT_COL)) > 0
+                      or len(d.find_elements(*self.NO_DATA)) > 0
+        )
     # def get_created_dates(self):
     #     rows = self.driver.find_elements(*self.CREATED_AT_COL)
     #     dates = []
