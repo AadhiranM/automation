@@ -311,11 +311,19 @@ class SAUserListPage(BasePage):
 
         self.safe_click(self.SUSPEND_OPTION)
 
-        time.sleep(2)
+        # Wait until confirmation dialog is visible
+        WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(self.CONFIRM_SUSPEND_BTN)
+        )
 
         self.safe_click(self.CONFIRM_SUSPEND_BTN)
 
-        time.sleep(4)
+        # Wait until popup disappears
+        WebDriverWait(self.driver, 10).until_not(
+            EC.presence_of_element_located(self.CONFIRM_SUSPEND_BTN)
+        )
+
+        self.wait_for_results()
 
     def activate_user(self):
         self.open_first_row_actions()
