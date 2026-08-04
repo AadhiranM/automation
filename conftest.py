@@ -98,8 +98,27 @@ def get_login_user(get_config):
 
 @pytest.fixture(scope="session")
 def base_url(get_config):
-    env = get_config_value("environment")
+
+    # 1. Jenkins parameter
+    env = os.getenv("ENVIRONMENT")
+
+    # 2. config.yaml
+    if not env:
+        env = get_config_value("environment")
+
+    print("=" * 60)
+    print("Environment :", env)
+    print("=" * 60)
+
     return get_config["urls"][env]
+
+def get_headless():
+    headless = os.getenv("HEADLESS")
+
+    if headless is None:
+        return get_config_value("execution.headless")
+
+    return headless.lower() == "true"
 
 @pytest.fixture()
 def wait(setup, get_config):
@@ -141,7 +160,7 @@ def setup(request, get_browser, get_config, base_url):
     print("=" * 60)
     print("CI Environment :", os.getenv("CI"))
     print("is_ci          :", is_ci)
-    print("Headless :", get_config_value("execution.headless"))
+    print("Headless :", get_headless())
     print("=" * 60)
 
     # --------------------------------------
@@ -150,7 +169,7 @@ def setup(request, get_browser, get_config, base_url):
     if browser == "chrome":
         options = ChromeOptions()
 
-        if get_config_value("execution.headless"):
+        if get_headless():
             print("Running in Headless Mode")
             options.add_argument("--headless=new")
         else:
@@ -195,7 +214,7 @@ def setup(request, get_browser, get_config, base_url):
     elif browser == "firefox":
         options = FirefoxOptions()
 
-        if get_config_value("execution.headless"):
+        if get_headless():
             options.add_argument("--headless")
         else:
             print("Running Firefox in Headed Mode")
@@ -205,7 +224,7 @@ def setup(request, get_browser, get_config, base_url):
     elif browser == "edge":
         options = EdgeOptions()
 
-        if get_config_value("execution.headless"):
+        if get_headless():
             options.add_argument("--headless=new")
         else:
             print("Running Edge in Headed Mode")
@@ -223,7 +242,7 @@ def setup(request, get_browser, get_config, base_url):
             )
         options.binary_location = ulaa_path
 
-        if get_config_value("execution.headless"):
+        if get_headless():
             options.add_argument("--headless=new")
         else:
             print("Running ULAA in Headed Mode")
