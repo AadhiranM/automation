@@ -4,6 +4,7 @@ from pages.superadmin.QRManagement.sa_product_list_page import SAProductListPage
 
 
 @pytest.mark.superadmin
+@pytest.mark.sanity
 @pytest.mark.usefixtures("login_superadmin")
 class TestProductListNegative:
 

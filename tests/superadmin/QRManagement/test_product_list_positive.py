@@ -8,6 +8,7 @@ from utilities.flatpickr import FlatpickrRangePicker
 @pytest.mark.usefixtures("login_superadmin")
 class TestProductListPositive:
 
+    @pytest.mark.sanity
     def test_search_product(self, setup):
         page = SAProductListPage(setup)
         page.goto_page()
@@ -18,6 +19,7 @@ class TestProductListPositive:
 
         assert page.get_first_product_name() == product
 
+    @pytest.mark.sanity
     def test_filter_status_active(self, setup):
         page = SAProductListPage(setup)
         page.goto_page()

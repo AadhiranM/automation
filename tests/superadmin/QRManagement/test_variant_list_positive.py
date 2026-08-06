@@ -14,7 +14,7 @@ from utilities.data_generator import (
 @pytest.mark.superadmin
 @pytest.mark.usefixtures("login_superadmin")
 class TestVariantListPositive:
-
+    @pytest.mark.sanity
     def test_search_variant(self, setup):
         page = SAVariantListPage(setup)
 
@@ -30,6 +30,7 @@ class TestVariantListPositive:
 
         assert page.is_row_present()
 
+    @pytest.mark.sanity
     def test_search_manufacturer(self, setup):
         page = SAVariantListPage(setup)
 
@@ -67,6 +68,7 @@ class TestVariantListPositive:
         page.wait_for_table()
         assert page.is_row_present()
 
+    @pytest.mark.sanity
     def test_search_and_refresh(self, login_superadmin):
         driver = login_superadmin["driver"]
 
@@ -94,6 +96,8 @@ class TestVariantListPositive:
 
         assert not list_page.is_no_result_displayed()
 
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_view_variant(self, login_superadmin):
         driver = login_superadmin["driver"]
 
@@ -118,6 +122,9 @@ class TestVariantListPositive:
         view_page = SAVariantViewPage(driver)
 
         assert view_page.is_view_page_opened()
+
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_edit_variant(self, login_superadmin):
         driver = login_superadmin["driver"]
 

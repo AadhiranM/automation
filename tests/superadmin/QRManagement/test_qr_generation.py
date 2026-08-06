@@ -41,6 +41,8 @@ class TestQRGeneration:
             )
         )
 
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_generate_qr_success(
             self,
             login_superadmin

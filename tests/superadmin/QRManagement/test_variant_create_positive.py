@@ -82,6 +82,8 @@ class TestVariantCreatePositive:
     # SINGLE VARIANT
     # ======================================================
 
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_create_variant_single(
             self,
             login_superadmin
@@ -122,6 +124,7 @@ class TestVariantCreatePositive:
     # MULTIPLE VARIANT SECTIONS
     # ======================================================
 
+    @pytest.mark.sanity
     def test_create_multiple_variant_sections(
             self,
             login_superadmin
@@ -172,7 +175,7 @@ class TestVariantCreatePositive:
     # ======================================================
     # MULTIPLE VALUES
     # ======================================================
-
+    @pytest.mark.sanity
     def test_create_multiple_variant_values(
             self,
             login_superadmin
@@ -226,7 +229,7 @@ class TestVariantCreatePositive:
     # ======================================================
     # MULTIPLE SECTIONS + MULTIPLE VALUES
     # ======================================================
-
+    @pytest.mark.sanity
     def test_create_variant_multiple_sections_and_values(
             self,
             login_superadmin

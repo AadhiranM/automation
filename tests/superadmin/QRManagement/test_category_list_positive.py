@@ -4,6 +4,8 @@ from pages.superadmin.QRManagement.sa_category_list_page import SACategoryListPa
 
 
 @pytest.mark.superadmin
+@pytest.mark.smoke
+@pytest.mark.sanity
 @pytest.mark.usefixtures("login_superadmin")
 class TestCategoryListPositive:
 

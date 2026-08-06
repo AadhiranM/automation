@@ -18,6 +18,8 @@ from pages.superadmin.QRManagement.sa_category_list_page import (
 from flows.qr_management_flow import QRManagementFlow
 
 @pytest.mark.superadmin
+@pytest.mark.smoke
+@pytest.mark.sanity
 @pytest.mark.usefixtures("login_superadmin")
 class TestProductCreate:
 
