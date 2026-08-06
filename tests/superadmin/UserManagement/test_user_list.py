@@ -12,7 +12,7 @@ class TestUserList:
     # =====================================================
     # SEARCH
     # =====================================================
-
+    @pytest.mark.sanity
     def test_search_user(self, setup):
 
         page = SAUserListPage(setup)
@@ -34,6 +34,8 @@ class TestUserList:
             "Suspended"
         ]
     )
+
+    @pytest.mark.sanity
     def test_filter_by_status(
             self,
             setup,

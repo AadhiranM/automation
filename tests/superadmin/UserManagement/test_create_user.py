@@ -19,7 +19,8 @@ from utilities.data_generator import (
 @pytest.mark.superadmin
 @pytest.mark.usefixtures("login_superadmin")
 class TestCreateUser:
-
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_create_user(self, setup):
 
         # ------------------------------------

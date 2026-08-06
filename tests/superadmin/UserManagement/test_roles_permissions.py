@@ -9,7 +9,8 @@ from utilities.data_generator import generate_user_name
 @pytest.mark.superadmin
 @pytest.mark.usefixtures("login_superadmin")
 class TestCreateRole:
-
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_create_role(self, setup):
         page = SARolesPermissionsPage(setup)
 

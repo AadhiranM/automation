@@ -13,6 +13,8 @@ from utilities.data_generator import (
 @pytest.mark.usefixtures("login_superadmin")
 class TestUserActions:
 
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_user_actions(self, setup):
 
         page = SAUserListPage(setup)
