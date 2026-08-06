@@ -11,6 +11,7 @@ class TestScheduledReports:
     # ==========================
     # SEARCH
     # ==========================
+    @pytest.mark.sanity
     def test_search(self, setup):
         page = SAScheduledReportsPage(setup)
 
@@ -31,6 +32,7 @@ class TestScheduledReports:
             "Inactive"
         ]
     )
+    @pytest.mark.sanity
     def test_filter_status(self, setup, status):
         page = SAScheduledReportsPage(setup)
 
@@ -128,6 +130,8 @@ class TestScheduledReports:
     # ==========================
     # EDIT REPORT
     # ==========================
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_edit_schedule_report(self, setup):
         page = SAScheduledReportsPage(setup)
 
@@ -141,6 +145,8 @@ class TestScheduledReports:
         # TOGGLE STATUS
         # ==========================
 
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_toggle_schedule_report_status(self, setup):
         page = SAScheduledReportsPage(setup)
 

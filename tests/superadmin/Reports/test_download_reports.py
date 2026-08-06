@@ -13,6 +13,7 @@ class TestDownloadReports:
     # ==========================================
     # SEARCH
     # ==========================================
+    @pytest.mark.sanity
     def test_search_report(self, setup):
         page = SADownloadReportsPage(setup)
 
@@ -51,6 +52,7 @@ class TestDownloadReports:
             "XLSX"
         ]
     )
+    @pytest.mark.sanity
     def test_filter_by_format(
         self,
         setup,
@@ -78,6 +80,7 @@ class TestDownloadReports:
             "Pending"
         ]
     )
+    @pytest.mark.sanity
     def test_filter_by_status(
         self,
         setup,
@@ -151,6 +154,8 @@ class TestDownloadReports:
     # ==========================================
     # DOWNLOAD
     # ==========================================
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_download_first_report(self, setup):
         page = SADownloadReportsPage(setup)
 

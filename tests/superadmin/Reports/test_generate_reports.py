@@ -7,6 +7,8 @@ from pages.superadmin.Reports.sa_generate_reports_page import (
 
 
 @pytest.mark.superadmin
+@pytest.mark.smoke
+@pytest.mark.sanity
 @pytest.mark.usefixtures("login_superadmin")
 class TestGenerateReports:
 

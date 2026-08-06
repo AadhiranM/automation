@@ -10,6 +10,8 @@ from pages.superadmin.Reports.sa_scheduled_reports_create_page import (
 
 
 @pytest.mark.superadmin
+@pytest.mark.smoke
+@pytest.mark.sanity
 @pytest.mark.usefixtures("login_superadmin")
 class TestScheduledReportsCreate:
 
