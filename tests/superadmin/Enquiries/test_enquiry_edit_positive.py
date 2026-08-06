@@ -13,7 +13,8 @@ from pages.superadmin.Enquiries.sa_enquiry_edit_page import (
 @pytest.mark.usefixtures("login_superadmin")
 class TestEnquiryEditPositive:
 
-
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_edit_status_success(
             self,
             setup

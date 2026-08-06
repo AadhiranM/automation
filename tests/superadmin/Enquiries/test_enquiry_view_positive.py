@@ -13,6 +13,8 @@ from pages.superadmin.Enquiries.sa_enquiry_view_page import (
 @pytest.mark.usefixtures("login_superadmin")
 class TestEnquiryViewPositive:
 
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_view_enquiry(self, setup):
 
         list_page = SAEnquiryListPage(setup)

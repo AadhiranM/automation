@@ -13,7 +13,8 @@ from pages.superadmin.Enquiries.sa_enquiry_followup_page import (
 @pytest.mark.superadmin
 @pytest.mark.usefixtures("login_superadmin")
 class TestFollowUpPositive:
-
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_add_followup_success(
             self,
             setup

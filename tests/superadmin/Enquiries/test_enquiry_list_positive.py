@@ -13,6 +13,7 @@ from pages.superadmin.Enquiries.sa_enquiry_view_page import (
 @pytest.mark.usefixtures("login_superadmin")
 class TestEnquiryListPositive:
 
+    @pytest.mark.sanity
     def test_search_by_valid_name(self, setup):
 
         page = SAEnquiryListPage(setup)
@@ -23,6 +24,7 @@ class TestEnquiryListPositive:
         assert page.is_row_present()
         assert expected_name.lower() in page.get_first_row_name().lower()
 
+    @pytest.mark.sanity
     def test_search_by_valid_email(self, setup):
 
         page = SAEnquiryListPage(setup)
@@ -35,6 +37,7 @@ class TestEnquiryListPositive:
 
         assert page.verify_search_result(email)
 
+    @pytest.mark.sanity
     def test_filter_status_rejected(self, setup):
 
         page = SAEnquiryListPage(setup)
@@ -110,6 +113,7 @@ class TestEnquiryListPositive:
         for r in rows:
             assert start <= r <= end
 
+    @pytest.mark.sanity
     def test_panel_filter_email(self, setup):
 
         page = SAEnquiryListPage(setup)
@@ -128,6 +132,7 @@ class TestEnquiryListPositive:
                 page.get_first_row_email().lower()
         )
 
+    @pytest.mark.sanity
     def test_panel_filter_company(
             self,
             setup
@@ -149,6 +154,7 @@ class TestEnquiryListPositive:
                 page.get_first_row_company().lower()
         )
 
+    @pytest.mark.sanity
     def test_panel_filter_name(
             self,
             setup
@@ -170,6 +176,7 @@ class TestEnquiryListPositive:
                 page.get_first_row_name().lower()
         )
 
+    @pytest.mark.sanity
     def test_panel_filter_status(self, setup):
 
         page = SAEnquiryListPage(setup)

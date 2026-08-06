@@ -9,7 +9,7 @@ from pages.superadmin.Enquiries.sa_enquiry_list_page import (
 @pytest.mark.superadmin
 @pytest.mark.usefixtures("login_superadmin")
 class TestEnquiryListNegative:
-
+    @pytest.mark.sanity
     def test_search_invalid_special_characters(self, setup):
 
         page = SAEnquiryListPage(setup)
@@ -19,6 +19,7 @@ class TestEnquiryListNegative:
 
         assert page.has_no_data()
 
+    @pytest.mark.sanity
     def test_search_only_spaces(self, setup):
 
         page = SAEnquiryListPage(setup)

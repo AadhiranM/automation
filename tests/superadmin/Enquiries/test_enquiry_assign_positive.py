@@ -13,6 +13,8 @@ from pages.superadmin.Enquiries.sa_enquiry_assign_page import (
 @pytest.mark.usefixtures("login_superadmin")
 class TestEnquiryAssignUnassignPositive:
 
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_assign_internal_user(self, setup):
 
         list_page = SAEnquiryListPage(setup)
@@ -46,6 +48,7 @@ class TestEnquiryAssignUnassignPositive:
 
     # =====================================================
 
+    @pytest.mark.sanity
     def test_unassign_internal_user(self, setup):
 
         list_page = SAEnquiryListPage(setup)
