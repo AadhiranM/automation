@@ -35,6 +35,7 @@ class TestSuperAdminLogin:
         assert not page.is_login_button_enabled(), \
             "Login button must remain disabled with only password entered"
 
+    @pytest.mark.sanity
     def test_login_button_enabled_when_both_fields_entered(self, setup):
         page = SuperAdminLoginPage(setup)
         page.open(self.LOGIN_URL)
@@ -48,6 +49,8 @@ class TestSuperAdminLogin:
     # ============================================================
     # 🔵 POSITIVE LOGIN
     # ============================================================
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_valid_login(self, setup, get_config):
         page = SuperAdminLoginPage(setup)
         page.open(self.LOGIN_URL)
@@ -65,6 +68,7 @@ class TestSuperAdminLogin:
     # ============================================================
     # 🔵 NEGATIVE LOGIN — Wrong Password
     # ============================================================
+    @pytest.mark.sanity
     def test_invalid_password(self, setup, get_config):
         page = SuperAdminLoginPage(setup)
         page.open(self.LOGIN_URL)
@@ -78,6 +82,7 @@ class TestSuperAdminLogin:
     # ============================================================
     # 🔵 NEGATIVE LOGIN — Wrong Email + Wrong Password
     # ============================================================
+    @pytest.mark.sanity
     def test_invalid_email_and_password(self, setup):
         page = SuperAdminLoginPage(setup)
         page.open(self.LOGIN_URL)
