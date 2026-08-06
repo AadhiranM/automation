@@ -13,6 +13,7 @@ class TestQRMonitoring:
     # ==================================================
     # SEARCH
     # ==================================================
+    @pytest.mark.sanity
     def test_search_scan_id(self, setup):
 
         page = SAQRMonitoringPage(setup)
@@ -33,6 +34,7 @@ class TestQRMonitoring:
             "Processing",
         ]
     )
+    @pytest.mark.sanity
     def test_filter_status(self, setup, status):
 
         page = SAQRMonitoringPage(setup)
@@ -126,6 +128,8 @@ class TestQRMonitoring:
     # ==================================================
     # EXPORT
     # ==================================================
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_export_id_based(self, setup):
         page = SAQRMonitoringPage(setup)
 
@@ -137,6 +141,8 @@ class TestQRMonitoring:
 
         assert "reports" in page.driver.current_url.lower()
 
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_export_user_based(self, setup):
         page = SAQRMonitoringPage(setup)
 
@@ -150,6 +156,7 @@ class TestQRMonitoring:
             *page.EXPORT_SUCCESS
         ).is_displayed()
 
+    @pytest.mark.sanity
     def test_export_bulk_id_based(self, setup):
         page = SAQRMonitoringPage(setup)
 
@@ -159,6 +166,7 @@ class TestQRMonitoring:
 
         assert "reports" in page.driver.current_url.lower()
 
+    @pytest.mark.sanity
     def test_export_date_based(self, setup):
         page = SAQRMonitoringPage(setup)
 

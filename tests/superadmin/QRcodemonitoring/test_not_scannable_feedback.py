@@ -13,6 +13,7 @@ class TestnotscannableFeedback:
     # ==================================================
     # SEARCH
     # ==================================================
+    @pytest.mark.sanity
     def test_search(self, setup):
         page = SANotScannableFeedbackPage(setup)
 
@@ -33,6 +34,7 @@ class TestnotscannableFeedback:
             "Manufacturer Not Assigned"
         ]
     )
+    @pytest.mark.sanity
     def test_filter_status(self, setup, status):
         page = SANotScannableFeedbackPage(setup)
 
@@ -119,6 +121,8 @@ class TestnotscannableFeedback:
     # ==================================================
     # VIEW
     # ==================================================
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_view_feedback(self, setup):
 
         page = SANotScannableFeedbackPage(setup)
@@ -133,7 +137,8 @@ class TestnotscannableFeedback:
     # EDIT
     # ==================================================
     import pytest
-
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_edit_feedback(self, setup):
         page = SANotScannableFeedbackPage(setup)
 
@@ -149,6 +154,8 @@ class TestnotscannableFeedback:
     # ==================================================
     # EXPORT
     # ==================================================
+
+    @pytest.mark.sanity
     def test_export(self, setup):
 
         page = SANotScannableFeedbackPage(setup)
@@ -159,6 +166,8 @@ class TestnotscannableFeedback:
 
         assert True
 
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_assign_manufacturer(self, setup):
         page = SANotScannableFeedbackPage(setup)
 
@@ -171,6 +180,7 @@ class TestnotscannableFeedback:
 
         assert removed_scan_id != ""
 
+    @pytest.mark.sanity
     def test_export_csv_report(self, setup):
         page = SANotScannableFeedbackPage(setup)
 
