@@ -7,6 +7,8 @@ from pages.superadmin.Manufacturer.sa_manufacturer_view_page import SAManufactur
 @pytest.mark.usefixtures("login_superadmin")
 class TestManufacturerViewPositive:
 
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_view_manufacturer_details(self, setup):
 
         page = SAManufacturerListPage(setup)

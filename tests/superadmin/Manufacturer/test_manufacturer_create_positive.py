@@ -19,6 +19,12 @@ from utilities.data_generator import (
 @pytest.mark.usefixtures("login_superadmin")
 class TestManufacturerCreatePositive:
 
+    # ============================================================
+    # CREATE MANUFACTURER
+    # Smoke + Sanity + Regression
+    # ============================================================
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_create_manufacturer_success(self, setup):
 
         list_page = SAManufacturerListPage(setup)

@@ -13,6 +13,7 @@ from pages.superadmin.Manufacturer.sa_manufacturer_invite_page import (
 @pytest.mark.usefixtures("login_superadmin")
 class TestManufacturerInvitePositive:
 
+    @pytest.mark.sanity
     def test_send_invite_success(self, setup):
 
         list_page = SAManufacturerListPage(setup)

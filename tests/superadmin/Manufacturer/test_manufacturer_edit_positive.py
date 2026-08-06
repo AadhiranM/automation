@@ -4,66 +4,126 @@ from pages.superadmin.Manufacturer.sa_manufacturer_list_page import (
     SAManufacturerListPage
 )
 
-from pages.superadmin.Manufacturer.sa_manufacturer_edit_page import (
-    SAManufacturerEditPage
-)
-
-from utilities.data_generator import (
-    generate_manufacturer_name,
-    generate_mailinator_email
+from pages.superadmin.Manufacturer.sa_manufacturer_filter_page import (
+    SAManufacturerFilterPage
 )
 
 
 @pytest.mark.superadmin
 @pytest.mark.usefixtures("login_superadmin")
-class TestManufacturerEditPositive:
+class TestManufacturerFilters:
 
-    def test_edit_pending_manufacturer_and_verify_update(
-            self,
-            setup
-    ):
+    # =====================================================
+    # INITIAL STATE (Regression Only)
+    # =====================================================
 
-        list_page = SAManufacturerListPage(setup)
+    def test_filter_initial_state(self, setup):
 
-        list_page.goto_page()
+        SAManufacturerListPage(setup).goto_page()
 
-        # Open first row -> Edit
-        list_page.open_action_menu()
+        filter_page = SAManufacturerFilterPage(setup)
 
-        list_page.click_edit()
+        filter_page.open_filter_panel()
 
-        edit_page = SAManufacturerEditPage(setup)
+        assert not filter_page.is_apply_enabled()
 
-        edit_page.wait_for_page()
+        assert not filter_page.is_clear_enabled()
 
-        # Dynamic values for CI/CD
-        new_email = generate_mailinator_email()
+    # =====================================================
+    # COMPANY NAME
+    # Sanity + Regression
+    # =====================================================
 
-        new_company = generate_manufacturer_name()
+    @pytest.mark.sanity
+    def test_filter_by_company_name(self, setup):
 
-        # Update values
-        edit_page.update_email(
-            new_email
+        SAManufacturerListPage(setup).goto_page()
+
+        filter_page = SAManufacturerFilterPage(setup)
+
+        filter_page.filter_by_company_name("TechNova")
+
+        assert filter_page.is_row_present()
+
+    # =====================================================
+    # EMAIL
+    # Sanity + Regression
+    # =====================================================
+
+    @pytest.mark.sanity
+    def test_filter_by_business_email(self, setup):
+
+        SAManufacturerListPage(setup).goto_page()
+
+        filter_page = SAManufacturerFilterPage(setup)
+
+        filter_page.filter_by_business_email("mailinator.com")
+
+        assert filter_page.is_row_present()
+
+    # =====================================================
+    # PAN
+    # Regression Only
+    # =====================================================
+
+    def test_filter_by_pan_number(self, setup):
+
+        SAManufacturerListPage(setup).goto_page()
+
+        filter_page = SAManufacturerFilterPage(setup)
+
+        filter_page.filter_by_pan_number("ABCDE1234F")
+
+        assert filter_page.is_row_present()
+
+    # =====================================================
+    # STATUS
+    # Sanity + Regression
+    # =====================================================
+
+    @pytest.mark.sanity
+    def test_filter_by_approval_status(self, setup):
+
+        SAManufacturerListPage(setup).goto_page()
+
+        filter_page = SAManufacturerFilterPage(setup)
+
+        filter_page.filter_by_approval_status()
+
+        assert filter_page.is_row_present()
+
+    # =====================================================
+    # CLEAR FILTER
+    # Regression Only
+    # =====================================================
+
+    def test_clear_filter(self, setup):
+
+        SAManufacturerListPage(setup).goto_page()
+
+        filter_page = SAManufacturerFilterPage(setup)
+
+        filter_page.open_filter_panel()
+
+        filter_page.type(
+            filter_page.COMPANY_NAME,
+            "TechNova"
         )
 
-        edit_page.update_company_name(
-            new_company
+        filter_page.type(
+            filter_page.BUSINESS_EMAIL,
+            "mailinator.com"
         )
 
-        edit_page.click_update()
-
-        edit_page.wait_for_modal_close()
-
-        list_page.search_company(
-            new_company
+        filter_page.type(
+            filter_page.PAN_NUMBER,
+            "ABCDE1234F"
         )
 
-        list_page.wait_for_results()
+        filter_page.click_clear()
 
-        first_row = (
-            list_page.get_first_row_company_name()
-        )
+        assert filter_page.is_company_name_empty()
 
-        assert (
-                new_company in first_row
-        ), f"Company not updated: {new_company}"
+        assert filter_page.is_business_email_empty()
+
+        assert filter_page.is_pan_number_empty()

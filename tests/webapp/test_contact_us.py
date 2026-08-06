@@ -9,7 +9,10 @@ class TestContactUs:
 
     # -------------------------------------------------------
     # POSITIVE TEST - VALID FORM SUBMISSION
+    # Smoke + Sanity + Regression
     # -------------------------------------------------------
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_submit_valid_enquiry(self, setup):
         page = ContactUsPage(setup)
 
@@ -28,14 +31,16 @@ class TestContactUs:
         msg = page.get_success_message()
 
         assert (
-                "success" in msg.lower()
-                or
-                "thank" in msg.lower()
+            "success" in msg.lower()
+            or
+            "thank" in msg.lower()
         )
 
     # -------------------------------------------------------
     # NEGATIVE TEST – INVALID EMAIL
+    # Sanity + Regression
     # -------------------------------------------------------
+    @pytest.mark.sanity
     @pytest.mark.parametrize(
         "email",
         [
@@ -63,7 +68,9 @@ class TestContactUs:
 
     # -------------------------------------------------------
     # NEGATIVE TEST – INVALID PHONE NUMBER
+    # Sanity + Regression
     # -------------------------------------------------------
+    @pytest.mark.sanity
     @pytest.mark.parametrize(
         "phone",
         [
@@ -90,6 +97,7 @@ class TestContactUs:
 
     # -------------------------------------------------------
     # NEGATIVE TEST – REQUIRED FIELD BLANK
+    # Regression Only
     # -------------------------------------------------------
     @pytest.mark.parametrize(
         "field",

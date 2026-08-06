@@ -9,6 +9,8 @@ from pages.superadmin.Manufacturer.sa_manufacturer_list_page import (
 @pytest.mark.usefixtures("login_superadmin")
 class TestManufacturerListPositive:
 
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_search_by_company_name(self, setup):
         page = SAManufacturerListPage(setup)
 
@@ -20,6 +22,8 @@ class TestManufacturerListPositive:
 
         assert page.verify_search_result(company)
 
+
+    @pytest.mark.sanity
     def test_search_by_email(self, setup):
         page = SAManufacturerListPage(setup)
 
@@ -40,6 +44,7 @@ class TestManufacturerListPositive:
 
         assert page.is_row_present()
 
+    @pytest.mark.sanity
     def test_filter_status_approved(self, setup):
         page = SAManufacturerListPage(setup)
 
