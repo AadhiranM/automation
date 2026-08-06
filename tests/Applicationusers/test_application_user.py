@@ -10,6 +10,7 @@ from pages.superadmin.Applicationusers.sa_application_user_page import (
 @pytest.mark.usefixtures("login_superadmin")
 class TestApplicationUsers:
 
+    @pytest.mark.sanity
     def test_search_user(self, setup):
         page = SAApplicationUserPage(setup)
 
@@ -30,6 +31,7 @@ class TestApplicationUsers:
             "Suspended"
         ]
     )
+    @pytest.mark.sanity
     def test_filter_by_status(
             self,
             setup,
@@ -130,6 +132,8 @@ class TestApplicationUsers:
                 page.has_no_data()
         )
 
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_view_user(self, setup):
         page = SAApplicationUserPage(setup)
 
@@ -143,6 +147,8 @@ class TestApplicationUsers:
                 "view" in setup.current_url.lower()
         )
 
+    @pytest.mark.smoke
+    @pytest.mark.sanity
     def test_user_status_toggle(self, setup):
 
         page = SAApplicationUserPage(setup)

@@ -22,6 +22,8 @@ print(f"Test Data    : {TEST_DATA}")
 assert TEST_DATA.exists(), f"Folder not found: {TEST_DATA}"
 
 @pytest.mark.onboarding
+@pytest.mark.smoke
+@pytest.mark.sanity
 @pytest.mark.usefixtures("login_superadmin")
 class TestManufacturerOnboardPositive:
 
