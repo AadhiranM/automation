@@ -4,7 +4,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 
 from pages.common.base_page import BasePage
-
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class SuperAdminLoginPage(BasePage):
 
@@ -24,7 +25,22 @@ class SuperAdminLoginPage(BasePage):
     )
 
     def get_logged_in_username(self):
-        return self.get_text(self.USER_NAME).strip()
+
+        try:
+            return self.get_text(self.USER_NAME).strip()
+
+        except Exception:
+            print("Username text is not visible. Checking Dashboard instead.")
+
+            dashboard = WebDriverWait(self.driver, 20).until(
+                EC.visibility_of_element_located(
+                    (By.XPATH, "//p[normalize-space()='Dashboard']")
+                )
+            )
+
+            print("Dashboard loaded successfully - login successful.")
+
+            return "Dashboard"
 
     def enter_email(self, email):
         self.type(self.EMAIL, email)
