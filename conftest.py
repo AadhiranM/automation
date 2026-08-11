@@ -231,23 +231,65 @@ def setup(request, get_browser, get_config, base_url):
 
         driver = webdriver.Edge(options=options)
     # --------------------------------------
+    # --------------------------------------
     # Browser → ULAA
     # --------------------------------------
     elif browser == "ulaa":
+
+        print("=" * 60)
+        print("Launching ULAA Browser")
+        print("=" * 60)
+
         options = ChromeOptions()
+
         ulaa_path = get_config["ulaa"]["path"]
+
         if not os.path.exists(ulaa_path):
             raise FileNotFoundError(
                 f"ULAA browser not found at: {ulaa_path}"
             )
+
         options.binary_location = ulaa_path
 
+        # Force a desktop-size viewport
+        options.add_argument("--window-size=1920,1080")
+        options.add_argument("--start-maximized")
+        options.add_argument("--force-device-scale-factor=1")
+
+        # Same compatibility options
+        options.add_argument("--disable-gpu")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--remote-allow-origins=*")
+        options.add_argument(
+            "--disable-blink-features=AutomationControlled"
+        )
+
         if get_headless():
+            print("Running ULAA in Headless Mode")
             options.add_argument("--headless=new")
         else:
             print("Running ULAA in Headed Mode")
 
         driver = webdriver.Chrome(options=options)
+
+        # Explicitly force window size after driver creation
+        try:
+            driver.set_window_size(1920, 1080)
+
+            print("ULAA Window Size:",
+                  driver.get_window_size())
+
+            print("ULAA Viewport:",
+                  driver.execute_script("""
+                      return {
+                          width: window.innerWidth,
+                          height: window.innerHeight
+                      };
+                  """))
+
+        except Exception as e:
+            print("Could not set ULAA window size:", e)
 
     else:
         raise ValueError("Invalid browser. Use: chrome / edge / firefox / ulaa")
@@ -272,6 +314,16 @@ def setup(request, get_browser, get_config, base_url):
     # --------------------------------------
     # Navigate to base URL
     # --------------------------------------
+    print("=" * 60)
+    print("FINAL BROWSER SIZE :", driver.get_window_size())
+    print("FINAL VIEWPORT     :", driver.execute_script("""
+        return {
+            width: window.innerWidth,
+            height: window.innerHeight
+        };
+    """))
+    print("=" * 60)
+
     driver.get(base_url)
 
     # ---------------------------------------------------------
