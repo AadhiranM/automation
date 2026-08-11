@@ -236,10 +236,6 @@ def setup(request, get_browser, get_config, base_url):
     # --------------------------------------
     elif browser == "ulaa":
 
-        print("=" * 60)
-        print("Launching ULAA Browser")
-        print("=" * 60)
-
         options = ChromeOptions()
 
         ulaa_path = get_config["ulaa"]["path"]
@@ -251,25 +247,11 @@ def setup(request, get_browser, get_config, base_url):
 
         options.binary_location = ulaa_path
 
-        # Force a desktop-size viewport
-        options.add_argument("--window-size=1920,1080")
-        options.add_argument("--start-maximized")
-        options.add_argument("--force-device-scale-factor=1")
-
-        # Same compatibility options
-        options.add_argument("--disable-gpu")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--remote-allow-origins=*")
-        options.add_argument(
-            "--disable-blink-features=AutomationControlled"
-        )
-
         if get_headless():
-            print("Running ULAA in Headless Mode")
+            print("Running Ulaa in Headless Mode")
             options.add_argument("--headless=new")
         else:
-            print("Running ULAA in Headed Mode")
+            print("Running Ulaa in Headed Mode")
 
         driver = webdriver.Chrome(options=options)
 
@@ -315,7 +297,6 @@ def setup(request, get_browser, get_config, base_url):
     # Navigate to base URL
     # --------------------------------------
     print("=" * 60)
-    print("FINAL BROWSER SIZE :", driver.get_window_size())
     print("FINAL VIEWPORT     :", driver.execute_script("""
         return {
             width: window.innerWidth,
