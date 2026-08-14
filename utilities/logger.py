@@ -35,7 +35,7 @@ logger = logging.getLogger(f"automation_{worker}")
 logger.setLevel(logging.INFO)
 logger.propagate = False
 
-# 🔥 IMPORTANT: Remove existing handlers (pytest reuse issue)
+#  IMPORTANT: Remove existing handlers (pytest reuse issue)
 if logger.hasHandlers():
     logger.handlers.clear()
 
