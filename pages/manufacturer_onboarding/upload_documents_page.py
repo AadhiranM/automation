@@ -52,6 +52,11 @@ class UploadDocumentsPage(BasePage):
     # =====================================================
     # PAGE LOAD
     # =====================================================
+    FIELD_ERRORS = (By.CSS_SELECTOR, "div.invalid-feedback")
+
+    def get_all_field_errors(self):
+        elements = self.driver.find_elements(*self.FIELD_ERRORS)
+        return [e.text.strip() for e in elements if e.text.strip()]
 
     def wait_for_page(self):
 
@@ -247,3 +252,13 @@ class UploadDocumentsPage(BasePage):
             "UNKNOWN",
             "No toast appeared"
         )
+    def goto_upload_tab(self):
+        self.click((By.XPATH, "//a[normalize-space()='Upload Document']"))
+
+    def click_submit_only(self):
+        """
+        Use this for NEGATIVE tests where submission is expected to fail.
+        Unlike submit(), this does NOT wait for a success redirect —
+        it just clicks and returns immediately.
+        """
+        self.click(self.SUBMIT_BTN)

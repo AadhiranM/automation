@@ -39,6 +39,11 @@ class BusinessInfoPage(BasePage):
         By.XPATH,
         "//span[@id='select2-annual_turnover-container']"
     )
+    FIELD_ERRORS = (By.CSS_SELECTOR, "div.invalid-feedback")
+
+    def get_all_field_errors(self):
+        elements = self.driver.find_elements(*self.FIELD_ERRORS)
+        return [e.text.strip() for e in elements if e.text.strip()]
 
     # =====================================================
     # PAGE LOAD

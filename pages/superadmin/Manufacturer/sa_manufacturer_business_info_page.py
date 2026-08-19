@@ -12,6 +12,7 @@ class BusinessInfoPage(BasePage):
 
     NEXT_BTN = (By.XPATH, "//button[normalize-space()='Next']")
 
+
     def fill_basic_details(self, company):
         self.type(self.COMPANY_NAME, company)
 

@@ -11,3 +11,4 @@ class UploadDocumentsPage(BasePage):
 
     def submit(self):
         self.click(self.SUBMIT_BTN)
+

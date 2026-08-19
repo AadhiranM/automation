@@ -1,0 +1,2 @@
+﻿FROM hhao/qwen2.5-coder-tools
+PARAMETER num_ctx 32768

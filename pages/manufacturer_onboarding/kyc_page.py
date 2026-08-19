@@ -21,12 +21,18 @@ class KYCPage(BasePage):
         "//button[normalize-space()='Continue to Upload Documents']"
     )
 
+    FIELD_ERRORS = (By.CSS_SELECTOR, "div.invalid-feedback")
+
+    def get_all_field_errors(self):
+        elements = self.driver.find_elements(*self.FIELD_ERRORS)
+        return [e.text.strip() for e in elements if e.text.strip()]
     # -------- PAGE LOAD --------
     def wait_for_page(self):
         WebDriverWait(self.driver, 20).until(
             EC.presence_of_element_located(self.DOB)
         )
-
+    def goto_kyc_tab(self):
+        self.click((By.XPATH, "//a[normalize-space()='KYC Verification']"))
     # -------- DOB --------
     def fill_dob(self, date_str):
         target_date = datetime.strptime(date_str, "%d-%m-%Y").date()

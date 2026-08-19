@@ -12,6 +12,7 @@ class KYCPage(BasePage):
 
     NEXT_BTN = (By.XPATH, "//button[normalize-space()='Next']")
 
+
     def fill_kyc(self, name, mobile):
         self.type(self.FULL_NAME, name)
         self.type(self.MOBILE, mobile)
@@ -23,3 +24,4 @@ class KYCPage(BasePage):
 
     def go_next(self):
         self.click(self.NEXT_BTN)
+

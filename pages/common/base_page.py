@@ -546,3 +546,21 @@ class BasePage:
         active.send_keys(Keys.ENTER)
 
         time.sleep(0.5)
+
+    TOAST_MESSAGE = (By.CSS_SELECTOR, "div.toast-body")
+
+    def get_toast_message(self, retries=3, delay=1):
+        """
+        Catches the toast the moment it appears. Retries a few times
+        to absorb headless-mode animation timing differences in CI.
+        """
+        for attempt in range(retries):
+            try:
+                toast = WebDriverWait(self.driver, 3).until(
+                    EC.visibility_of_element_located(self.TOAST_MESSAGE)
+                )
+                return toast.text.strip()
+            except TimeoutException:
+                if attempt == retries - 1:
+                    raise
+                time.sleep(delay)
