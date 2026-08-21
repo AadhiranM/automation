@@ -39,12 +39,12 @@ class Test_category_filter_edit(BaseTest):
         # self.login_and_access()
 
         # ---------------- LOGIN ----------------
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Login successful (first iteration)")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Login successful (first iteration)")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         # ---------------- NAVIGATION ----------------
         self.logger.info("Navigating to Category module")
@@ -80,7 +80,7 @@ class Test_category_filter_edit(BaseTest):
             take_screenshot(
                 driver,
                 test_name="category_filter_failed",
-                folder_name="Screenshots\\QRM_category\\category_filters"
+                folder_name="Screenshots\\QR_Management\\QRM_category\\category_filters"
             )
             self.logger.error("FILTER FAILED | No data found ")
             assert status, "FILTER FAILED | No data found "
@@ -126,7 +126,7 @@ class Test_category_filter_edit(BaseTest):
             take_screenshot(
                 driver,
                 test_name="category_update_fail",
-                folder_name="Screenshots\\QRM_category\\update_category_fail"
+                folder_name="Screenshots\\QR_Management\\QRM_category\\update_category_fail"
             )
 
             assert False, (

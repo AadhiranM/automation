@@ -331,7 +331,7 @@ class Test_product_create(BaseTest):
             take_screenshot(
                 driver,
                 test_name="test_create_product",
-                folder_name="Screenshots\\QRM_products\\product_create"
+                folder_name="Screenshots\\QR_Management\\QRM_products\\product_create"
             )
 
             self.logger.error(

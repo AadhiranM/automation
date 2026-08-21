@@ -105,7 +105,7 @@ class Test_product_filter_toggle_edit(BaseTest):
             take_screenshot(
                 driver,
                 test_name="product_filter_failed",
-                folder_name="Screenshots\\QRM_products\\product_filters"
+                folder_name="Screenshots\\QR_Management\\QRM_products\\product_filters"
             )
 
             self.logger.error(
@@ -215,7 +215,7 @@ class Test_product_filter_toggle_edit(BaseTest):
             take_screenshot(
                 driver,
                 test_name="test_edit_product",
-                folder_name="Screenshots\\QRM_products\\product_edit_failed"
+                folder_name="Screenshots\\QR_Management\\QRM_products\\product_edit_failed"
             )
 
             self.logger.error(
@@ -267,7 +267,7 @@ class Test_product_filter_toggle_edit(BaseTest):
             take_screenshot(
                 driver,
                 test_name="test_edit_product",
-                folder_name="Screenshots\\QRM_products\\product_edit_failed"
+                folder_name="Screenshots\\QR_Management\\QRM_products\\product_edit_failed"
             )
 
             self.logger.error(

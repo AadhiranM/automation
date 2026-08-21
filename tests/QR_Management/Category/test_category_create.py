@@ -129,12 +129,12 @@ class Test_category_create(BaseTest):
         wait = WebDriverWait(driver, 4)
 
         # ---------------- LOGIN ----------------
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Login successful (first iteration)")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Login successful (first iteration)")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         # ---------------- NAVIGATION ----------------
         self.logger.info("Navigating to Category module")
@@ -195,7 +195,7 @@ class Test_category_create(BaseTest):
             take_screenshot(
                 driver,
                 test_name="test_create_category_failed",
-                folder_name="Screenshots\\QRM_category\\create_category"
+                folder_name="Screenshots\\QR_Management\\QRM_category\\create_category"
             )
 
             self.logger.error("===== TEST FAILED =====")

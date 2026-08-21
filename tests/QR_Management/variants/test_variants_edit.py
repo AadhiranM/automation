@@ -28,12 +28,12 @@ class Test_variants_edit(BaseTest):
 
         # ---------------- LOGIN ----------------
 
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Login successful (first iteration)")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Login successful (first iteration)")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         search_category_name = data["search_Category"]
         edit_variants_type = data["edit_variants_type"]
@@ -116,7 +116,7 @@ class Test_variants_edit(BaseTest):
             take_screenshot(
                 driver,
                 test_name="variants_update_fail",
-                folder_name="Screenshots\\QRM_variant\\update_variants_fail"
+                folder_name="Screenshots\\QR_Management\\QRM_variant\\update_variants_fail"
             )
 
             assert False, (

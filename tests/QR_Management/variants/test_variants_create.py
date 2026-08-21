@@ -114,13 +114,13 @@ class Test_variants_create(BaseTest):
 
         wait = WebDriverWait(driver, 10)
 
-        ---------------- LOGIN ----------------
-        if data == test_data[0]:
-            self.driver = driver
-            self.login_and_access()
-            self.logger.info("Login successful (first iteration)")
-        else:
-            self.logger.info("Skipping login — already logged in")
+        # ---------------- LOGIN ----------------
+        # if data == test_data[0]:
+        #     self.driver = driver
+        #     self.login_and_access()
+        #     self.logger.info("Login successful (first iteration)")
+        # else:
+        #     self.logger.info("Skipping login — already logged in")
 
         category_name = data["Category"]
         variants_type = data["variants_type"]
@@ -201,7 +201,7 @@ class Test_variants_create(BaseTest):
             take_screenshot(
                 driver,
                 test_name="test_create_variant_failed",
-                folder_name="Screenshots\\QRM_variant\\create_variant_failed"
+                folder_name="Screenshots\\QR_Management\\QRM_variant\\create_variant_failed"
             )
             self.logger.error(
                 f"Variant creation failed | Value: {variants_value} | Toast: {toast_text}"

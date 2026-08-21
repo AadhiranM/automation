@@ -92,7 +92,7 @@ class Test_product_import(BaseTest):
             take_screenshot(
                 driver,
                 test_name="test_QR_file_import_failed",
-                folder_name="Screenshots\\QRM_import"
+                folder_name="Screenshots\\QR_Management\\QRM_products\\QRM_import"
             )
 
             self.logger.error(
