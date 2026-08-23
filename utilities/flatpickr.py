@@ -79,7 +79,7 @@ class FlatpickrRangePicker:
         target_month = target_date.month
         target_year = target_date.year
 
-        for _ in range(15):  # increased safety loop
+        for _ in range(300):  # increased safety loop
             cur_month, cur_year = self.get_current_month_year()
 
             if cur_month == target_month and cur_year == target_year:
