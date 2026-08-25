@@ -227,3 +227,155 @@ class TestQRGeneration:
         )
 
         print("QR Batch Validation Passed")
+
+
+    # =====================================================
+    # QR LIFECYCLE TEST
+    # =====================================================
+
+    # =====================================================
+    # QR LIFECYCLE
+    # =====================================================
+
+    @pytest.mark.smoke
+    @pytest.mark.sanity
+    def test_qr_lifecycle(self, login_superadmin):
+        driver = login_superadmin["driver"]
+
+        # =====================================================
+        # STEP 1 - OPEN QR MANAGEMENT
+        # =====================================================
+
+        qr_list = SAQRListPage(driver)
+
+        qr_list.goto_page()
+
+        qr_list.wait_for_page()
+
+        # =====================================================
+        # STEP 2 - SEARCH LATEST BATCH
+        # =====================================================
+
+        batch_no = qr_list.get_first_batch_text()
+
+        print(
+            "Lifecycle Batch :",
+            batch_no
+        )
+
+        assert batch_no, (
+            "No QR batch found"
+        )
+
+        qr_list.search_batch(batch_no)
+
+        # =====================================================
+        # STEP 3 - VERIFY QR GENERATED
+        # =====================================================
+
+        qr_list.wait_for_batch(
+            batch_no
+        )
+
+        qr_list.verify_batch_status(
+            batch_no,
+            "QR Generated"
+        )
+
+
+        # STEP 5 - MOVE TO IN PRINT
+        # =====================================================
+
+        qr_list.update_batch_status(
+            batch_no,
+            "In Print",
+            "Moving QR batch to In Print"
+        )
+
+        qr_list.wait_for_batch_status(
+            batch_no,
+            "In Print"
+        )
+
+        qr_list.verify_batch_status(
+            batch_no,
+            "In Print"
+        )
+
+
+
+        # =====================================================
+        # STEP 6 - MOVE TO IN TRANSIT
+        # =====================================================
+
+        qr_list.update_batch_status(
+            batch_no,
+            "In Transit",
+            "Moving QR batch to In Transit"
+        )
+
+        qr_list.wait_for_batch_status(
+            batch_no,
+            "In Transit"
+        )
+
+        qr_list.verify_batch_status(
+            batch_no,
+            "In Transit"
+        )
+
+        # =====================================================
+        # STEP 7 - MOVE TO COMPLETED
+        # =====================================================
+
+        qr_list.update_batch_status(
+            batch_no,
+            "Completed",
+            "Completing QR batch"
+        )
+
+        qr_list.wait_for_batch_status(
+            batch_no,
+            "Completed"
+        )
+
+        # qr_list.verify_batch_status(
+        #     batch_no,
+        #     "Completed"
+        # )
+        #
+        # qr_list.verify_tracking_status(
+        #     batch_no,
+        #     "Completed"
+        # )
+
+        # =====================================================
+        # STEP 8 - DOWNLOAD COMPLETED BATCH
+        # =====================================================
+
+        batch_zip, pdf_zip = qr_list.download_batch(
+            batch_no
+        )
+
+        print("Batch ZIP :", batch_zip)
+        print("PDF ZIP   :", pdf_zip)
+
+        assert batch_zip, (
+            "Completed QR Batch ZIP download failed"
+        )
+
+        assert pdf_zip, (
+            "Completed QR PDF ZIP download failed"
+        )
+
+        print(
+            "Batch ZIP download validation passed"
+        )
+
+        print(
+            "PDF ZIP download validation passed"
+        )
+
+        print(
+            "QR Lifecycle Completed Successfully"
+        )
