@@ -1,6 +1,6 @@
 import os
 import time
-
+import glob
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -23,6 +23,29 @@ PRODUCT_IMPORT_FILE = os.path.join(
     "1784091129_product_import_beta_jul15.xlsx"
 )
 
+INVALID_IMAGE_FILE = os.path.join(
+    BASE_DIR,
+    "test_data",
+    "images",
+    "importimg.jpeg"
+)
+
+INVALID_PDF_FILE = os.path.join(
+    BASE_DIR,
+    "test_data",
+    "images",
+    "importpdf.pdf"
+)
+
+# =========================================================
+# IMPORT LOG ACTIONS
+# =========================================================
+
+# =========================================================
+# IMPORT LOG ACTIONS
+# =========================================================
+
+
 
 class SAProductImportPage(BasePage):
 
@@ -33,6 +56,17 @@ class SAProductImportPage(BasePage):
     IMPORT_BTN = (
         By.XPATH,
         "//button[normalize-space()='Import']"
+    )
+
+    FIRST_LOG_ACTION_BTN = (
+        By.XPATH,
+        "//table[@id='crudTable']/tbody/tr[1]/td[last()]//button"
+    )
+
+    UPLOADED_FILE_OPTION = (
+        By.XPATH,
+        "//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]"
+        "//a[normalize-space()='Uploaded File']"
     )
 
     FILE_STATUS = (
@@ -81,6 +115,16 @@ class SAProductImportPage(BasePage):
         "fileInput"
     )
 
+    # =========================================================
+    # INVALID FILE VALIDATION
+    # =========================================================
+
+    INVALID_FILE_MESSAGE = (
+        By.XPATH,
+        "//*[contains(normalize-space(.),"
+        "'Invalid file format. Please upload an Excel (.xlsx) file only.')]"
+    )
+
     MANUFACTURER_DROPDOWN = (
         By.XPATH,
         "//select[@id='import-manufacturer-select']"
@@ -91,7 +135,7 @@ class SAProductImportPage(BasePage):
     IMPORT_SUBMIT_BTN = (
         By.XPATH,
         "//div[contains(@class,'modal')]"
-        "//button[normalize-space()='Import']"
+        "//button[normalize-space()='import']"
     )
 
     # =========================================================
@@ -261,10 +305,10 @@ class SAProductImportPage(BasePage):
             )
         )
 
+        # Upload the Excel file
         file_input.send_keys(PRODUCT_IMPORT_FILE)
 
-        # IMPORTANT:
-        # Do NOT proceed until application itself says Upload Completed.
+        # Wait until application shows upload completed
         WebDriverWait(
             self.driver,
             60
@@ -277,25 +321,118 @@ class SAProductImportPage(BasePage):
 
         print("Product Excel upload completed.")
 
+        # IMPORTANT:
+        # The application clears the native file input after processing.
+        # Re-attach the file so the application's form state sees the file.
+        WebDriverWait(
+            self.driver,
+            10
+        ).until(
+            lambda d: d.find_element(
+                By.ID,
+                "fileInput"
+            ).is_enabled()
+        )
+
+        file_input = self.driver.find_element(
+            By.ID,
+            "fileInput"
+        )
+
+        file_input.send_keys(PRODUCT_IMPORT_FILE)
+
+        print("Product Excel file re-attached to file input.")
+
     # =========================================================
     # MANUFACTURER
     # =========================================================
 
+    # =========================================================
+    # INVALID FILE UPLOAD
+    # =========================================================
+
+    def upload_invalid_product_file(self, file_path):
+
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(
+                f"Invalid test file not found: {file_path}"
+            )
+
+        file_input = WebDriverWait(
+            self.driver,
+            15
+        ).until(
+            EC.presence_of_element_located(
+                self.FILE_INPUT
+            )
+        )
+
+        file_input.send_keys(file_path)
+
+        print(
+            f"Invalid file uploaded: {file_path}"
+        )
+
+        WebDriverWait(
+            self.driver,
+            60
+        ).until(
+            EC.text_to_be_present_in_element(
+                self.FILE_STATUS,
+                "Upload Completed"
+            )
+        )
+
+        print("Invalid file upload completed.")
+
+        # Re-attach, same as positive Excel flow
+        file_input = WebDriverWait(
+            self.driver,
+            10
+        ).until(
+            EC.presence_of_element_located(
+                self.FILE_INPUT
+            )
+        )
+
+        file_input.send_keys(file_path)
+
+        print(
+            "Invalid file re-attached to file input."
+        )
+
+    def get_invalid_file_message(self):
+
+        message = WebDriverWait(
+            self.driver,
+            15
+        ).until(
+            EC.visibility_of_element_located(
+                self.INVALID_FILE_MESSAGE
+            )
+        )
+
+        text = message.text.strip()
+
+        print(
+            f"Invalid File Message: {text}"
+        )
+
+        return text
+
     def select_manufacturer(self, manufacturer_name):
 
-        # Open the visible Choices.js dropdown
+        # 1. Open Choices.js dropdown
         dropdown = WebDriverWait(
             self.driver,
             20
         ).until(
-            EC.element_to_be_clickable(
-                self.MANUFACTURER_DROPDOWN
-            )
+            EC.element_to_be_clickable(self.MANUFACTURER_DROPDOWN)
         )
 
         dropdown.click()
 
-        # Select the visible manufacturer option
+        # 2. Click the actual Choices.js option
         option = WebDriverWait(
             self.driver,
             20
@@ -305,24 +442,14 @@ class SAProductImportPage(BasePage):
                     By.XPATH,
                     "//div[contains(@class,'choices__list--dropdown')]"
                     "//div[contains(@class,'choices__item--selectable')]"
-                    "[normalize-space()='{}']".format(
-                        manufacturer_name
-                    )
+                    "[normalize-space()=" + repr(manufacturer_name) + "]"
                 )
             )
         )
 
         option.click()
 
-        print(
-            f"Manufacturer selected: {manufacturer_name}"
-        )
-
-        # ============================================================
-        # IMPORTANT:
-        # Wait until Choices.js updates the REAL <select>
-        # ============================================================
-
+        # 3. Verify that the underlying select really contains TATA
         WebDriverWait(
             self.driver,
             10
@@ -330,70 +457,43 @@ class SAProductImportPage(BasePage):
             lambda d: d.find_element(
                 By.ID,
                 "import-manufacturer-select"
-            ).get_attribute("value") not in (None, "")
+            ).get_attribute("value") != ""
         )
 
-        manufacturer_select = self.driver.find_element(
+        selected_value = self.driver.find_element(
             By.ID,
             "import-manufacturer-select"
-        )
+        ).get_attribute("value")
 
         print(
-            "Actual select value:",
-            manufacturer_select.get_attribute("value")
+            f"Manufacturer selected: {manufacturer_name}"
+        )
+        print(
+            f"Manufacturer value: {selected_value}"
         )
 
-        # ============================================================
-        # FORCE THE SAME CHANGE EVENT USED BY THE APPLICATION
-        # ============================================================
-
-        self.driver.execute_script(
-            """
-            const select = arguments[0];
-
-            select.dispatchEvent(
-                new Event('change', {
-                    bubbles: true
-                })
-            );
-
-            select.dispatchEvent(
-                new Event('input', {
-                    bubbles: true
-                })
-            );
-            """,
-            manufacturer_select
-        )
-
-        # ============================================================
-        # IMPORTANT:
-        # Give the application time to process the change event
-        # ============================================================
-
+        # 4. IMPORTANT:
+        # Give the application's change/upload state time to update.
         import_button = WebDriverWait(
             self.driver,
-            20
+            30
         ).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
-                    "//div[contains(@class,'modal')]"
+                    "//div[contains(@class,'modal')"
+                    " and .//*[contains(text(),'Upload Completed')]]"
                     "//button[normalize-space()='import']"
                 )
             )
         )
 
-        # Wait for the application's button state
+        # 5. Wait for the APPLICATION to enable the button
         WebDriverWait(
             self.driver,
-            20
+            30
         ).until(
-            lambda d: (
-                    import_button.is_enabled()
-                    and
-                    import_button.get_attribute("disabled") is None
-            )
+            lambda d: import_button.get_attribute("disabled") is None
         )
 
         print("Modal Import button is enabled.")
@@ -409,7 +509,7 @@ class SAProductImportPage(BasePage):
             30
         ).until(
             EC.element_to_be_clickable(
-                self.IMPORT_BTN
+                self.IMPORT_SUBMIT_BTN
             )
         )
 
@@ -516,3 +616,98 @@ class SAProductImportPage(BasePage):
             return False
 
         return False
+
+    def download_uploaded_file(self):
+
+        worker = os.getenv(
+            "PYTEST_XDIST_WORKER",
+            "master"
+        )
+
+        download_path = os.path.join(
+            os.getcwd(),
+            "downloads",
+            worker
+        )
+
+        os.makedirs(
+            download_path,
+            exist_ok=True
+        )
+
+        before_files = set(
+            glob.glob(
+                os.path.join(
+                    download_path,
+                    "*"
+                )
+            )
+        )
+
+        # =====================================================
+        # STEP 1 - CLICK THREE DOTS
+        # =====================================================
+
+        action_button = WebDriverWait(
+            self.driver,
+            15
+        ).until(
+            EC.element_to_be_clickable(
+                self.FIRST_LOG_ACTION_BTN
+            )
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            action_button
+        )
+
+        print("Import log action menu opened.")
+
+        # =====================================================
+        # STEP 2 - CLICK UPLOADED FILE
+        # =====================================================
+
+        uploaded_file = WebDriverWait(
+            self.driver,
+            15
+        ).until(
+            EC.element_to_be_clickable(
+                self.UPLOADED_FILE_OPTION
+            )
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            uploaded_file
+        )
+
+        print("Uploaded File clicked.")
+
+        # =====================================================
+        # STEP 3 - WAIT FOR DOWNLOAD
+        # =====================================================
+
+        downloaded_file = WebDriverWait(
+            self.driver,
+            30
+        ).until(
+            lambda driver: next(
+                (
+                    file
+                    for file in glob.glob(
+                    os.path.join(
+                        download_path,
+                        "*.xlsx"
+                    )
+                )
+                    if file not in before_files
+                ),
+                False
+            )
+        )
+
+        print(
+            f"Uploaded file downloaded successfully: "
+            f"{downloaded_file}"
+        )

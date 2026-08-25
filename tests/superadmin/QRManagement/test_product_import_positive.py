@@ -64,6 +64,7 @@ class TestProductImportPositive:
         page.select_manufacturer(
             manufacturer_name
         )
+        # input("\nPAUSED - Run the DevTools commands, then press ENTER...\n")
 
         # =====================================================
         # STEP 7 - IMPORT
@@ -75,16 +76,21 @@ class TestProductImportPositive:
         # STEP 8 - VERIFY TOAST
         # =====================================================
 
-        toast_message = (
-            page.get_toast_message()
+        # =====================================================
+        # STEP 8 - VERIFY TOAST
+        # =====================================================
+
+        toast_message = page.get_toast_message()
+
+        # Remove toast close icon if it is included in .text
+        toast_message = toast_message.replace("✖", "").strip()
+
+        expected_message = (
+            "Product import initiated successfully."
         )
 
-        assert (
-            toast_message
-            == "Product import initiated successfully."
-        ), (
-            f"Unexpected toast message: "
-            f"{toast_message}"
+        assert toast_message == expected_message, (
+            f"Unexpected toast message: {toast_message}"
         )
 
         # =====================================================
@@ -102,3 +108,9 @@ class TestProductImportPositive:
             f"Final status: "
             f"{page.get_first_import_status()}"
         )
+
+        # =====================================================
+        # STEP 11 - DOWNLOAD UPLOADED FILE
+        # =====================================================
+
+        page.download_uploaded_file()
