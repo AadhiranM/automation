@@ -12,6 +12,14 @@ from pages.common.base_page import BasePage
 import os
 import time
 from pathlib import Path
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import (
+    TimeoutException,
+    StaleElementReferenceException,
+)
+
 
 class SAQRListPage(BasePage):
 
@@ -69,8 +77,26 @@ class SAQRListPage(BasePage):
         "(//table//tbody//tr[1]//td)[4]"
     )
 
+
     def get_first_batch_text(self):
         return self.get_text(self.FIRST_BATCH)
+
+    def _get_batch_row(self, batch_no, timeout=30):
+        """
+        Always find a fresh table row for the given batch.
+        Do not keep an old WebElement because the table refreshes
+        after status/action changes.
+        """
+
+        row_xpath = (
+            f"//tr[.//td[contains(normalize-space(), '{batch_no}')]]"
+        )
+
+        return WebDriverWait(self.driver, timeout).until(
+            EC.presence_of_element_located(
+                (By.XPATH, row_xpath)
+            )
+        )
 
     def goto_page(self):
         self.driver.get(self.URL)
@@ -99,6 +125,8 @@ class SAQRListPage(BasePage):
 
     def search_batch(self, batch):
 
+        print(f"Searching for batch: {batch}")
+
         self.wait_for_results()
 
         self.type(
@@ -110,7 +138,12 @@ class SAQRListPage(BasePage):
             self.SEARCH_BTN
         )
 
+        print(f"Search button clicked for batch: {batch}")
+
+        # Wait until the search request/table finishes updating.
         self.wait_for_results()
+
+        print(f"Search completed for batch: {batch}")
 
     # =========================
     # VALIDATION
@@ -152,43 +185,42 @@ class SAQRListPage(BasePage):
     # WAIT FOR BATCH
     # =========================
 
-    def wait_for_batch(
-        self,
-        batch,
-        timeout=60
-    ):
+    def wait_for_batch(self, batch):
 
-        print(
-            f"Waiting for batch: {batch}"
-        )
+        print(f"Waiting for batch: {batch}")
 
         def find_batch(driver):
 
-            try:
+            rows = driver.find_elements(
+                By.XPATH,
+                "//table//tbody//tr"
+            )
 
-                row = self._get_batch_row(
-                    batch
-                )
+            for row in rows:
 
-                if row:
-                    return row
+                try:
+                    if not row.is_displayed():
+                        continue
 
-                return False
+                    row_text = row.text.strip()
 
-            except StaleElementReferenceException:
-                return False
+                    if batch.lower() in row_text.lower():
+                        print(f"Batch found: {batch}")
+                        return row
 
-        row = WebDriverWait(
+                except StaleElementReferenceException:
+                    continue
+
+            return False
+
+        return WebDriverWait(
             self.driver,
-            timeout,
-            poll_frequency=2
+            60,
+            poll_frequency=0.5,
+            ignored_exceptions=(StaleElementReferenceException,)
         ).until(find_batch)
 
-        print(
-            f"Batch found: {batch}"
-        )
 
-        return row
 
     # =========================
     # GET BATCH STATUS
@@ -220,73 +252,64 @@ class SAQRListPage(BasePage):
     # WAIT FOR BATCH STATUS
     # =========================
 
-    def wait_for_batch_status(
-        self,
-        batch,
-        expected_status,
-        timeout=60
-    ):
+    def wait_for_batch_status(self, batch_no, expected_status):
 
         print(
-            f"Waiting for batch "
-            f"{batch} -> {expected_status}"
+            f"Waiting for batch {batch_no} -> {expected_status}"
         )
 
         def check_status(driver):
 
-            try:
+            rows = driver.find_elements(
+                By.XPATH,
+                "//table//tbody//tr"
+            )
 
-                row = self._get_batch_row(
-                    batch
-                )
+            for row in rows:
 
-                if not row:
-                    return False
+                try:
 
-                status_button = row.find_element(
-                    By.XPATH,
-                    ".//button["
-                    "contains(normalize-space(.),"
-                    "'QR Generated') "
-                    "or contains(normalize-space(.),"
-                    "'In Print') "
-                    "or contains(normalize-space(.),"
-                    "'In Transit') "
-                    "or contains(normalize-space(.),"
-                    "'Completed')"
-                    "]"
-                )
+                    if not row.is_displayed():
+                        continue
 
-                actual_status = (
-                    status_button.text.strip()
-                )
+                    row_text = row.text.strip()
 
-                print(
-                    f"Batch: {batch} | "
-                    f"Expected: {expected_status} | "
-                    f"Actual: {actual_status}"
-                )
+                    if batch_no.lower() not in row_text.lower():
+                        continue
 
-                return (
-                    actual_status ==
-                    expected_status
-                )
+                    # Re-read status from THIS fresh row
+                    status_element = row.find_element(
+                        By.XPATH,
+                        ".//td[last()-1]"
+                    )
 
-            except (
-                StaleElementReferenceException,
-                TimeoutException
-            ):
-                return False
+                    actual_status = status_element.text.strip()
+
+                    print(
+                        f"Batch: {batch_no} | "
+                        f"Expected: {expected_status} | "
+                        f"Actual: {actual_status}"
+                    )
+
+                    if actual_status.lower() == expected_status.lower():
+                        return True
+
+                except StaleElementReferenceException:
+                    continue
+
+            return False
 
         WebDriverWait(
             self.driver,
-            timeout,
-            poll_frequency=2
+            90,
+            poll_frequency=0.5,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
         ).until(check_status)
 
         print(
-            f"Batch {batch} reached "
-            f"status: {expected_status}"
+            f"Batch {batch_no} reached status: {expected_status}"
         )
 
     # =========================
@@ -1045,6 +1068,8 @@ class SAQRListPage(BasePage):
             pdf_zip
         )
 
+
+
     def _download_from_menu(
             self,
             batch,
@@ -1389,3 +1414,260 @@ class SAQRListPage(BasePage):
         )
 
         return file_path
+
+    def cancel_request(self, batch_no, comment):
+
+        print(f"Starting Cancel Request: {batch_no}")
+
+        # =====================================================
+        # FIND FRESH ROW
+        # =====================================================
+
+        self.wait_for_batch(batch_no)
+
+        row = WebDriverWait(
+            self.driver,
+            15,
+            poll_frequency=0.3
+        ).until(
+            lambda d: d.find_element(
+                By.XPATH,
+                f"//table//tbody//tr[contains(., '{batch_no}')]"
+            )
+        )
+
+        # =====================================================
+        # THREE DOTS
+        # =====================================================
+
+        action_button = WebDriverWait(
+            self.driver,
+            15,
+            poll_frequency=0.3
+        ).until(
+            lambda d: row.find_element(
+                By.XPATH,
+                ".//td[last()]//button"
+            )
+        )
+
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            action_button
+        )
+
+        WebDriverWait(
+            self.driver,
+            10,
+            poll_frequency=0.3
+        ).until(
+            EC.element_to_be_clickable(
+                (
+                    By.XPATH,
+                    f"//table//tbody//tr[contains(., '{batch_no}')]//td[last()]//button"
+                )
+            )
+        ).click()
+
+        # =====================================================
+        # VERIFY MENU IS ACTUALLY OPEN
+        # =====================================================
+
+        cancel_option = WebDriverWait(
+            self.driver,
+            15,
+            poll_frequency=0.3
+        ).until(
+            EC.visibility_of_element_located(
+                (
+                    By.XPATH,
+                    "//a[normalize-space()='Cancel Request']"
+                )
+            )
+        )
+
+        print("Three-dot menu actually opened")
+
+        # =====================================================
+        # CLICK CANCEL REQUEST
+        # =====================================================
+
+        WebDriverWait(
+            self.driver,
+            10,
+            poll_frequency=0.3
+        ).until(
+            EC.element_to_be_clickable(
+                (
+                    By.XPATH,
+                    "//a[normalize-space()='Cancel Request']"
+                )
+            )
+        ).click()
+
+        print("Cancel Request clicked")
+
+        # =====================================================
+        # WAIT FOR CANCEL COMMENT MODAL
+        # =====================================================
+
+        # =====================================================
+        # CANCEL COMMENT
+        # =====================================================
+
+        comment_box = WebDriverWait(
+            self.driver,
+            15,
+            poll_frequency=0.3
+        ).until(
+            EC.visibility_of_element_located(
+                (
+                    By.ID,
+                    "cancelComments"
+                )
+            )
+        )
+
+        WebDriverWait(
+            self.driver,
+            10,
+            poll_frequency=0.3
+        ).until(
+            EC.element_to_be_clickable(
+                (
+                    By.ID,
+                    "cancelComments"
+                )
+            )
+        )
+
+        comment_box.click()
+        comment_box.clear()
+        comment_box.send_keys(comment)
+
+        print(
+            f"Comment entered: {comment}"
+        )
+
+        # =====================================================
+        # UPDATE STATUS
+        # =====================================================
+
+        # =====================================================
+        # CANCEL CONFIRMATION BUTTON
+        # =====================================================
+
+        cancel_button = WebDriverWait(
+            self.driver,
+            15,
+            poll_frequency=0.3
+        ).until(
+            EC.element_to_be_clickable(
+                (
+                    By.ID,
+                    "confirmCancelRequest"
+                )
+            )
+        )
+
+        cancel_button.click()
+
+        print("Cancel confirmation clicked")
+        # =====================================================
+        # WAIT FOR FINAL STATUS
+        # =====================================================
+
+        self.wait_for_batch_status(
+            batch_no,
+            "Request Cancelled"
+        )
+
+        print(
+            f"Cancel Request completed: {batch_no}"
+        )
+    def invalidate_qr(self, batch_no, comment):
+
+        print(f"Starting Invalidate: {batch_no}")
+
+        self.wait_for_batch(batch_no)
+
+        row = self.driver.find_element(
+            By.XPATH,
+            f"//table//tbody//tr[contains(., '{batch_no}')]"
+        )
+
+        # Three dots
+        action_button = row.find_element(
+            By.XPATH,
+            ".//td[last()]//button"
+        )
+
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            action_button
+        )
+
+        action_button.click()
+
+        print("Three-dot menu opened")
+
+        # Invalidate
+        invalidate_option = WebDriverWait(
+            self.driver,
+            10
+        ).until(
+            EC.element_to_be_clickable(
+                (
+                    By.XPATH,
+                    "//a[normalize-space()='Invalidate']"
+                )
+            )
+        )
+
+        invalidate_option.click()
+
+        print("Invalidate clicked")
+
+        # Comment
+        comment_box = WebDriverWait(
+            self.driver,
+            10
+        ).until(
+            EC.visibility_of_element_located(
+                (
+                    By.XPATH,
+                    "//textarea"
+                )
+            )
+        )
+
+        comment_box.clear()
+        comment_box.send_keys(comment)
+
+        print(f"Comment entered: {comment}")
+
+        # Update Status
+        update_button = WebDriverWait(
+            self.driver,
+            10
+        ).until(
+            EC.element_to_be_clickable(
+                (
+                    By.XPATH,
+                    "//button[normalize-space()='Update Status']"
+                )
+            )
+        )
+
+        update_button.click()
+
+        print("Update Status clicked")
+
+        self.wait_for_batch_status(
+            batch_no,
+            "QR Invalidated"
+        )
+
+        print(
+            f"Invalidate completed: {batch_no}"
+        )
