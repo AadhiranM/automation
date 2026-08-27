@@ -15,38 +15,38 @@ from tests.superadmin.QRManagement.test_qr_generation import (
 @pytest.mark.usefixtures("login_superadmin")
 class TestQRInvalidate:
 
-    def test_invalidate_completed_qr(
-        self,
-        login_superadmin
-    ):
+    def test_invalidate_completed_qr(self, setup):
 
-        driver = login_superadmin["driver"]
-
-        # =====================================================
-        # STEP 1 - CREATE FRESH COMPLETED BATCH
-        # =====================================================
+        qr_list = SAQRListPage(setup)
 
         helper = TestQRGeneration()
 
-        batch_no = (
-            helper.create_fresh_completed_batch(
-                driver
-            )
+        # ==========================================
+        # STEP 1 - CREATE FRESH COMPLETED BATCH
+        # ==========================================
+
+        batch_no = helper.create_fresh_completed_batch(
+            setup
         )
 
+        print("=" * 60)
         print(
-            "Invalidate test batch:",
-            batch_no
+            f"INVALIDATE TEST BATCH : [{batch_no}]"
+        )
+        print("=" * 60)
+
+        # ==========================================
+        # STEP 2 - INVALIDATE QR
+        # ==========================================
+
+        qr_list.invalidate_qr(
+            batch_no,
+            "Automation validation - Invalidate QR"
         )
 
-        # =====================================================
-        # STEP 2 - OPEN QR LIST
-        # =====================================================
-
-        qr_list = SAQRListPage(driver)
-
-        qr_list.goto_page()
-        qr_list.wait_for_page()
+        # ==========================================
+        # STEP 3 - VALIDATE INVALIDATED STATUS
+        # ==========================================
 
         qr_list.search_batch(
             batch_no
@@ -56,29 +56,12 @@ class TestQRInvalidate:
             batch_no
         )
 
-        # =====================================================
-        # STEP 3 - INVALIDATE
-        # =====================================================
-
-        qr_list.invalidate_qr(
-            batch_no,
-            "Automation validation - Invalidate QR"
-        )
-
-        # =====================================================
-        # STEP 4 - VALIDATE
-        # =====================================================
-
-        qr_list.wait_for_batch_status(
-            batch_no,
-            "QR Invalidated"
-        )
-
         qr_list.verify_batch_status(
             batch_no,
             "QR Invalidated"
         )
 
         print(
-            "Invalidate validation PASSED"
+            f"Invalidate validation passed: "
+            f"{batch_no}"
         )

@@ -1,3 +1,4 @@
+from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -5,7 +6,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import (
     StaleElementReferenceException,
     TimeoutException,
-    ElementClickInterceptedException
+    ElementClickInterceptedException,
+    NoSuchElementException
 )
 import requests
 from pages.common.base_page import BasePage
@@ -19,6 +21,11 @@ from selenium.common.exceptions import (
     TimeoutException,
     StaleElementReferenceException,
 )
+import time
+
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.keys import Keys
+
 
 
 class SAQRListPage(BasePage):
@@ -226,27 +233,26 @@ class SAQRListPage(BasePage):
     # GET BATCH STATUS
     # =========================
 
-    def get_batch_status(self, batch):
+    def _get_fresh_batch_row(self, batch_no):
 
-        row = self.wait_for_batch(
-            batch
-        )
-
-        status_button = row.find_element(
+        rows = self.driver.find_elements(
             By.XPATH,
-            ".//button["
-            "contains(normalize-space(.),"
-            "'QR Generated') "
-            "or contains(normalize-space(.),"
-            "'In Print') "
-            "or contains(normalize-space(.),"
-            "'In Transit') "
-            "or contains(normalize-space(.),"
-            "'Completed')"
-            "]"
+            "//table//tbody//tr"
         )
 
-        return status_button.text.strip()
+        for row in rows:
+
+            try:
+                if not row.is_displayed():
+                    continue
+
+                if batch_no.lower() in row.text.lower():
+                    return row
+
+            except StaleElementReferenceException:
+                continue
+
+        return None
 
     # =========================
     # WAIT FOR BATCH STATUS
@@ -312,29 +318,109 @@ class SAQRListPage(BasePage):
             f"Batch {batch_no} reached status: {expected_status}"
         )
 
+    def get_batch_status(self, batch_no):
+
+        print(f"Getting current status for: {batch_no}")
+
+        def check_status(driver):
+
+            try:
+
+                row = self._get_fresh_batch_row(batch_no)
+
+                if row is None:
+                    return False
+
+                # IMPORTANT:
+                # This row was freshly obtained
+                status_element = row.find_element(
+                    By.XPATH,
+                    ".//td[last()-1]"
+                )
+
+                status = status_element.text.strip()
+
+                print(
+                    f"Batch: {batch_no} | "
+                    f"Current Status: {status}"
+                )
+
+                return status
+
+            except StaleElementReferenceException:
+
+                print(
+                    f"Table refreshed while reading "
+                    f"{batch_no}. Retrying..."
+                )
+
+                return False
+
+        return WebDriverWait(
+            self.driver,
+            20,
+            poll_frequency=0.5
+        ).until(check_status)
+
     # =========================
     # VERIFY BATCH STATUS
     # =========================
 
-    def verify_batch_status(
-        self,
-        batch,
-        expected_status
-    ):
+    def verify_batch_status(self, batch_no, expected_status):
 
-        actual_status = self.get_batch_status(
-            batch
+        print(
+            f"Verifying batch {batch_no} "
+            f"expected status: {expected_status}"
         )
 
-        assert actual_status == expected_status, (
-            f"Batch status validation failed. "
-            f"Expected: {expected_status}, "
-            f"Actual: {actual_status}"
-        )
+        def verify(driver):
+
+            try:
+
+                row = self._get_fresh_batch_row(batch_no)
+
+                if row is None:
+                    print(
+                        f"Batch {batch_no} not found yet"
+                    )
+                    return False
+
+                status_element = row.find_element(
+                    By.XPATH,
+                    ".//td[last()-1]"
+                )
+
+                actual_status = status_element.text.strip()
+
+                print(
+                    f"Batch: {batch_no} | "
+                    f"Expected: {expected_status} | "
+                    f"Actual: {actual_status}"
+                )
+
+                return (
+                        actual_status.lower()
+                        == expected_status.lower()
+                )
+
+            except StaleElementReferenceException:
+
+                print(
+                    "Table refreshed while validating. "
+                    "Re-reading row..."
+                )
+
+                return False
+
+        WebDriverWait(
+            self.driver,
+            30,
+            poll_frequency=0.5
+        ).until(verify)
 
         print(
             f"Batch status validation passed: "
-            f"{expected_status}"
+            f"{batch_no} -> {expected_status}"
         )
 
     # =====================================================
@@ -765,78 +851,120 @@ class SAQRListPage(BasePage):
         # STEP 11 - COMMENTS
         # =================================================
 
+        # =================================================
+        # STEP 11 - COMMENTS
+        # =================================================
+
+        comments_box_locator = (
+            By.XPATH,
+            "//div[contains(@class,'modal') and contains(@style,'display: block')]"
+            "//textarea"
+        )
+
         comments_box = WebDriverWait(
             self.driver,
-            15
+            15,
+            poll_frequency=0.3
         ).until(
             EC.visibility_of_element_located(
-                (
-                    By.XPATH,
-                    "//textarea"
-                )
+                comments_box_locator
             )
         )
 
-        comments_box.clear()
-
-        comments_box.send_keys(
-            comments
+        self.driver.execute_script(
+            """
+            arguments[0].scrollIntoView({
+                block: 'center'
+            });
+            """,
+            comments_box
         )
+
+        comments_box.click()
+        comments_box.clear()
+        comments_box.send_keys(comments)
 
         print(
             f"Comment entered: {comments}"
         )
 
         # =================================================
+        # =================================================
         # STEP 12 - UPDATE STATUS
         # =================================================
 
         update_button_locator = (
             By.XPATH,
-            "//button["
-            "normalize-space()='Update Status'"
-            "]"
+            "//div[contains(@class,'modal') and contains(@style,'display: block')]"
+            "//button[normalize-space()='Update Status']"
         )
 
         update_button = WebDriverWait(
             self.driver,
-            15
+            15,
+            poll_frequency=0.3
         ).until(
-            EC.element_to_be_clickable(
-                update_button_locator
-            )
+            EC.element_to_be_clickable(update_button_locator)
         )
 
-        try:
+        print(
+            f"Clicking Update Status for: {new_status}"
+        )
 
-            update_button.click()
-
-        except (
-                StaleElementReferenceException,
-                ElementClickInterceptedException
-        ):
-
-            update_button = WebDriverWait(
-                self.driver,
-                10
-            ).until(
-                EC.element_to_be_clickable(
-                    update_button_locator
-                )
-            )
-
-            self.driver.execute_script(
-                "arguments[0].click();",
-                update_button
-            )
+        update_button.click()
 
         print(
-            f"Update Status clicked: "
-            f"{new_status}"
+            f"Update Status clicked: {new_status}"
         )
 
         # =================================================
-        # STEP 13 - WAIT FOR STATUS UPDATE
+        # STEP 12A - WAIT FOR MODAL TO CLOSE
+        # =================================================
+
+        def modal_closed(driver):
+
+            try:
+                modals = driver.find_elements(
+                    By.XPATH,
+                    "//div[contains(@class,'modal') and contains(@style,'display: block')]"
+                )
+
+                return not any(
+                    modal.is_displayed()
+                    for modal in modals
+                )
+
+            except StaleElementReferenceException:
+                return True
+
+        WebDriverWait(
+            self.driver,
+            20,
+            poll_frequency=0.3
+        ).until(
+            modal_closed
+        )
+
+        print("Status confirmation modal closed")
+
+        # =================================================
+        # STEP 12B - WAIT FOR PAGE TO SETTLE
+        # =================================================
+
+        WebDriverWait(
+            self.driver,
+            20,
+            poll_frequency=0.5
+        ).until(
+            lambda driver: driver.execute_script(
+                "return document.readyState"
+            ) == "complete"
+        )
+
+        print("Page settled after status update")
+
+        # =================================================
+        # STEP 13 - RESEARCH / VERIFY UPDATED ROW
         # =================================================
 
         print(
@@ -850,8 +978,7 @@ class SAQRListPage(BasePage):
         )
 
         print(
-            f"Status update completed: "
-            f"{new_status}"
+            f"Status update completed: {new_status}"
         )
 
     def update_batch_status(
@@ -1671,3 +1798,1742 @@ class SAQRListPage(BasePage):
         print(
             f"Invalidate completed: {batch_no}"
         )
+
+    def get_batch_product_and_variant(self, batch_no):
+
+        print(
+            f"Getting Product and Variant for batch: {batch_no}"
+        )
+
+        def find_product_and_variant(driver):
+
+            rows = driver.find_elements(
+                By.XPATH,
+                "//table//tbody//tr"
+            )
+
+            for row in rows:
+
+                try:
+
+                    if not row.is_displayed():
+                        continue
+
+                    row_text = row.text.strip()
+
+                    if batch_no.lower() not in row_text.lower():
+                        continue
+
+                    # IMPORTANT:
+                    # Read Product and Variant from the SAME
+                    # fresh row that contains the batch.
+
+                    product = row.find_element(
+                        By.XPATH,
+                        ".//td[3]"
+                    ).text.strip()
+
+                    variant = row.find_element(
+                        By.XPATH,
+                        ".//td[5]"
+                    ).text.strip()
+
+                    if not product:
+                        return False
+
+                    if not variant:
+                        return False
+
+                    print(
+                        f"Current Product : {product}"
+                    )
+
+                    print(
+                        f"Current Variant : {variant}"
+                    )
+
+                    return product, variant
+
+                except StaleElementReferenceException:
+
+                    # Angular/DataTables refreshed the row.
+                    # Retry with a completely fresh row.
+                    continue
+
+            return False
+
+        # IMPORTANT:
+        # Do NOT search only once.
+        # Keep reading fresh rows until the table settles.
+
+        return WebDriverWait(
+            self.driver,
+            30,
+            poll_frequency=0.5,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            find_product_and_variant
+        )
+
+    def get_different_product_and_variant(
+            self,
+            current_product,
+            current_variant
+    ):
+        """
+        Select a different Product and Variant in the Reassign QR modal.
+
+        IMPORTANT:
+        The Reassign popup can render the controls with either
+        Select2 or Choices.js depending on the current frontend
+        component state. Therefore this method deliberately supports
+        BOTH DOM structures.
+
+        The critical point is:
+            Product selection -> frontend refreshes Variant
+            -> Variant must be located again from the DOM
+            -> then Variant is opened.
+        """
+
+        wait = WebDriverWait(
+            self.driver,
+            30,
+            poll_frequency=0.3,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        )
+
+        print("Selecting different Product and Variant")
+
+        # =========================================================
+        # STEP 1 - VERIFY REASSIGN MODAL
+        # =========================================================
+
+        modal_locator = (
+            By.XPATH,
+            "//div[contains(@class,'modal') "
+            "and .//*[normalize-space()='Reassign QR']]"
+        )
+
+        wait.until(
+            EC.visibility_of_element_located(modal_locator)
+        )
+
+        print("Reassign modal is OPEN")
+
+        # =========================================================
+        # STEP 2 - PRODUCT CONTROL
+        #
+        # Support Select2 + Choices.js.
+        # =========================================================
+
+        product_control_locator = (
+            By.XPATH,
+            "//div[contains(@class,'modal') "
+            "and .//*[normalize-space()='Reassign QR']]"
+            "//label[normalize-space()='Product']"
+            "/following::span[contains(@class,'select2-selection--single')][1]"
+            " | "
+            "//div[contains(@class,'modal') "
+            "and .//*[normalize-space()='Reassign QR']]"
+            "//label[normalize-space()='Product']"
+            "/following::div[contains(@class,'choices__inner')][1]"
+        )
+
+        print("Locating PRODUCT dropdown...")
+
+        product_control = wait.until(
+            EC.visibility_of_element_located(
+                product_control_locator
+            )
+        )
+
+        self.driver.execute_script(
+            """
+            arguments[0].scrollIntoView({
+                block: 'center',
+                inline: 'center'
+            });
+            """,
+            product_control
+        )
+
+        time.sleep(0.3)
+
+        # Re-find after scroll.
+        product_control = wait.until(
+            EC.visibility_of_element_located(
+                product_control_locator
+            )
+        )
+
+        # =========================================================
+        # STEP 3 - OPEN PRODUCT
+        # =========================================================
+
+        print("Clicking PRODUCT dropdown")
+
+        try:
+            ActionChains(
+                self.driver
+            ).move_to_element(
+                product_control
+            ).click().perform()
+        except (
+            StaleElementReferenceException,
+            ElementClickInterceptedException
+        ):
+            product_control = wait.until(
+                EC.visibility_of_element_located(
+                    product_control_locator
+                )
+            )
+
+            self.driver.execute_script(
+                "arguments[0].click();",
+                product_control
+            )
+
+        # =========================================================
+        # STEP 4 - DETERMINE WHICH DROPDOWN LIBRARY OPENED
+        # =========================================================
+
+        select2_open_locator = (
+            By.XPATH,
+            "//span[contains(@class,'select2-container--open')]"
+        )
+
+        choices_open_locator = (
+            By.XPATH,
+            "//div[contains(@class,'choices') "
+            "and contains(@class,'is-open')]"
+        )
+
+        def get_open_dropdown_type(driver):
+            try:
+                select2 = [
+                    x for x in driver.find_elements(
+                        *select2_open_locator
+                    )
+                    if x.is_displayed()
+                ]
+
+                if select2:
+                    return "select2"
+
+                choices = [
+                    x for x in driver.find_elements(
+                        *choices_open_locator
+                    )
+                    if x.is_displayed()
+                ]
+
+                if choices:
+                    return "choices"
+
+            except StaleElementReferenceException:
+                return False
+
+            return False
+
+        dropdown_type = WebDriverWait(
+            self.driver,
+            15,
+            poll_frequency=0.2,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(get_open_dropdown_type)
+
+        print(
+            f"PRODUCT dropdown OPENED "
+            f"using {dropdown_type}"
+        )
+
+        # =========================================================
+        # STEP 5 - PRODUCT OPTIONS
+        # =========================================================
+
+        if dropdown_type == "select2":
+
+            product_option_locator = (
+                By.XPATH,
+                "//span[contains(@class,'select2-container--open')]"
+                "//li[@role='option' "
+                "and not(contains(@class,'select2-results__message'))]"
+            )
+
+        else:
+
+            product_option_locator = (
+                By.XPATH,
+                "//div[contains(@class,'choices') "
+                "and contains(@class,'is-open')]"
+                "//div[contains(@class,'choices__list--dropdown')]"
+                "//*[contains(@class,'choices__item--choice') "
+                "and not(contains(@class,'choices__item--disabled'))]"
+            )
+
+        def visible_product_options(driver):
+            try:
+                options = []
+
+                for option in driver.find_elements(
+                    *product_option_locator
+                ):
+                    try:
+                        if (
+                            option.is_displayed()
+                            and option.text.strip()
+                        ):
+                            options.append(option)
+                    except StaleElementReferenceException:
+                        continue
+
+                return options if options else False
+
+            except StaleElementReferenceException:
+                return False
+
+        product_options = WebDriverWait(
+            self.driver,
+            20,
+            poll_frequency=0.3,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            visible_product_options
+        )
+
+        print(
+            f"Product options found: {len(product_options)}"
+        )
+
+        # =========================================================
+        # STEP 6 - SELECT DIFFERENT PRODUCT
+        # =========================================================
+
+        new_product = None
+
+        for option in product_options:
+
+            try:
+
+                option_text = option.text.strip()
+
+                if not option.is_displayed() or not option_text:
+                    continue
+
+                print(
+                    f"Available Product : {option_text}"
+                )
+
+                product_name = option_text
+
+                if "(" in product_name:
+                    product_name = (
+                        product_name.split("(", 1)[0].strip()
+                    )
+
+                if (
+                    product_name.lower()
+                    == current_product.strip().lower()
+                ):
+                    continue
+
+                new_product = product_name
+
+                print(
+                    f"Selected different Product : "
+                    f"{new_product}"
+                )
+
+                # Re-find option by visible text.
+                if dropdown_type == "select2":
+
+                    if "'" in option_text:
+                        xpath_text = (
+                            "concat(" +
+                            ", ".join(
+                                "'" + part + "'"
+                                for part in option_text.split("'")
+                            ) +
+                            ")"
+                        )
+                    else:
+                        xpath_text = f"'{option_text}'"
+
+                    fresh_option_locator = (
+                        By.XPATH,
+                        "//span[contains(@class,'select2-container--open')]"
+                        "//li[@role='option' "
+                        "and not(contains(@class,'select2-results__message'))]"
+                        f"[normalize-space()={xpath_text}]"
+                    )
+
+                else:
+
+                    fresh_option_locator = (
+                        By.XPATH,
+                        "//div[contains(@class,'choices') "
+                        "and contains(@class,'is-open')]"
+                        "//div[contains(@class,'choices__list--dropdown')]"
+                        f"//*[contains(@class,'choices__item--choice') "
+                        f"and normalize-space()={repr(option_text)}]"
+                    )
+
+                fresh_option = WebDriverWait(
+                    self.driver,
+                    10,
+                    poll_frequency=0.2,
+                    ignored_exceptions=(
+                        StaleElementReferenceException,
+                    )
+                ).until(
+                    EC.element_to_be_clickable(
+                        fresh_option_locator
+                    )
+                )
+
+                try:
+                    fresh_option.click()
+                except (
+                    StaleElementReferenceException,
+                    ElementClickInterceptedException
+                ):
+                    fresh_option = self.driver.find_element(
+                        *fresh_option_locator
+                    )
+
+                    self.driver.execute_script(
+                        "arguments[0].click();",
+                        fresh_option
+                    )
+
+                print(
+                    f"Product selected : {new_product}"
+                )
+
+                break
+
+            except StaleElementReferenceException:
+                continue
+
+        if not new_product:
+            raise AssertionError(
+                "Could not find a different product. "
+                f"Current Product: {current_product}"
+            )
+
+        # =========================================================
+        # STEP 7 - WAIT FOR PRODUCT DROPDOWN TO CLOSE
+        # =========================================================
+
+        print(
+            "Waiting for Product selection to complete..."
+        )
+
+        def product_dropdown_closed(driver):
+            try:
+
+                select2_open = any(
+                    x.is_displayed()
+                    for x in driver.find_elements(
+                        *select2_open_locator
+                    )
+                )
+
+                choices_open = any(
+                    x.is_displayed()
+                    for x in driver.find_elements(
+                        *choices_open_locator
+                    )
+                )
+
+                return not select2_open and not choices_open
+
+            except StaleElementReferenceException:
+                return False
+
+        try:
+            WebDriverWait(
+                self.driver,
+                10,
+                poll_frequency=0.2,
+                ignored_exceptions=(
+                    StaleElementReferenceException,
+                )
+            ).until(
+                product_dropdown_closed
+            )
+        except TimeoutException:
+            pass
+
+        # =========================================================
+        # STEP 8 - WAIT FOR VARIANT CONTROL TO BE CREATED/ENABLED
+        #
+        # THIS IS THE IMPORTANT FIX.
+        #
+        # Do NOT use a previously located Variant element.
+        # Product selection can destroy and recreate it.
+        # =========================================================
+
+        print(
+            "Waiting for Variant dropdown after Product selection"
+        )
+
+        variant_control_locator = (
+            By.XPATH,
+            "//div[contains(@class,'modal') "
+            "and .//*[normalize-space()='Reassign QR']]"
+            "//label[normalize-space()='Variant SKU']"
+            "/following::span[contains(@class,'select2-selection--single')][1]"
+            " | "
+            "//div[contains(@class,'modal') "
+            "and .//*[normalize-space()='Reassign QR']]"
+            "//label[normalize-space()='Variant SKU']"
+            "/following::div[contains(@class,'choices__inner')][1]"
+        )
+
+        def find_variant_control(driver):
+            try:
+
+                elements = driver.find_elements(
+                    *variant_control_locator
+                )
+
+                for element in elements:
+
+                    try:
+
+                        if not element.is_displayed():
+                            continue
+
+                        # The screenshot shows the Variant field
+                        # can initially be disabled. Check the actual
+                        # underlying select/container state instead
+                        # of trusting the wrapper's is_enabled().
+                        classes = (
+                            element.get_attribute("class") or ""
+                        ).lower()
+
+                        aria_disabled = (
+                            element.get_attribute("aria-disabled")
+                            or ""
+                        ).lower()
+
+                        if (
+                            "disabled" in classes
+                            and aria_disabled == "true"
+                        ):
+                            continue
+
+                        return element
+
+                    except StaleElementReferenceException:
+                        continue
+
+            except StaleElementReferenceException:
+                return False
+
+            return False
+
+        variant_control = WebDriverWait(
+            self.driver,
+            30,
+            poll_frequency=0.3,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            find_variant_control
+        )
+
+        print(
+            "Variant dropdown control FOUND"
+        )
+
+        self.driver.execute_script(
+            """
+            arguments[0].scrollIntoView({
+                block: 'center',
+                inline: 'center'
+            });
+            """,
+            variant_control
+        )
+
+        time.sleep(0.3)
+
+        # =========================================================
+        # STEP 9 - OPEN VARIANT
+        # =========================================================
+
+        print("Clicking VARIANT dropdown")
+
+        def click_variant(driver):
+            try:
+
+                # ALWAYS locate a fresh control.
+                elements = driver.find_elements(
+                    *variant_control_locator
+                )
+
+                target = None
+
+                for element in elements:
+
+                    try:
+
+                        if not element.is_displayed():
+                            continue
+
+                        classes = (
+                            element.get_attribute("class") or ""
+                        ).lower()
+
+                        aria_disabled = (
+                            element.get_attribute("aria-disabled")
+                            or ""
+                        ).lower()
+
+                        if (
+                            "disabled" in classes
+                            and aria_disabled == "true"
+                        ):
+                            continue
+
+                        target = element
+                        break
+
+                    except StaleElementReferenceException:
+                        continue
+
+                if target is None:
+                    return False
+
+                driver.execute_script(
+                    """
+                    arguments[0].scrollIntoView({
+                        block: 'center',
+                        inline: 'center'
+                    });
+                    """,
+                    target
+                )
+
+                time.sleep(0.2)
+
+                # Re-find after scroll.
+                elements = driver.find_elements(
+                    *variant_control_locator
+                )
+
+                for element in elements:
+
+                    try:
+
+                        if not element.is_displayed():
+                            continue
+
+                        classes = (
+                            element.get_attribute("class") or ""
+                        ).lower()
+
+                        aria_disabled = (
+                            element.get_attribute("aria-disabled")
+                            or ""
+                        ).lower()
+
+                        if (
+                            "disabled" in classes
+                            and aria_disabled == "true"
+                        ):
+                            continue
+
+                        target = element
+                        break
+
+                    except StaleElementReferenceException:
+                        continue
+
+                if target is None:
+                    return False
+
+                try:
+                    ActionChains(
+                        driver
+                    ).move_to_element(
+                        target
+                    ).click().perform()
+
+                except (
+                    StaleElementReferenceException,
+                    ElementClickInterceptedException
+                ):
+                    # Fresh element + JS fallback.
+                    elements = driver.find_elements(
+                        *variant_control_locator
+                    )
+
+                    target = next(
+                        (
+                            element
+                            for element in elements
+                            if element.is_displayed()
+                        ),
+                        None
+                    )
+
+                    if target is None:
+                        return False
+
+                    driver.execute_script(
+                        "arguments[0].click();",
+                        target
+                    )
+
+                return True
+
+            except StaleElementReferenceException:
+                return False
+
+        WebDriverWait(
+            self.driver,
+            15,
+            poll_frequency=0.2,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            click_variant
+        )
+
+        print(
+            "VARIANT dropdown clicked"
+        )
+
+        # =========================================================
+        # STEP 10 - VERIFY VARIANT DROPDOWN OPEN
+        # =========================================================
+
+        def variant_dropdown_open(driver):
+            try:
+
+                # Select2
+                if any(
+                    x.is_displayed()
+                    for x in driver.find_elements(
+                        *select2_open_locator
+                    )
+                ):
+                    return "select2"
+
+                # Choices
+                if any(
+                    x.is_displayed()
+                    for x in driver.find_elements(
+                        *choices_open_locator
+                    )
+                ):
+                    return "choices"
+
+            except StaleElementReferenceException:
+                return False
+
+            return False
+
+        variant_dropdown_type = WebDriverWait(
+            self.driver,
+            15,
+            poll_frequency=0.2,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            variant_dropdown_open
+        )
+
+        print(
+            f"VARIANT dropdown OPENED "
+            f"using {variant_dropdown_type}"
+        )
+
+        # =========================================================
+        # STEP 11 - VARIANT OPTIONS
+        # =========================================================
+
+        if variant_dropdown_type == "select2":
+
+            variant_option_locator = (
+                By.XPATH,
+                "//span[contains(@class,'select2-container--open')]"
+                "//li[@role='option' "
+                "and not(contains(@class,'select2-results__message'))]"
+            )
+
+        else:
+
+            variant_option_locator = (
+                By.XPATH,
+                "//div[contains(@class,'choices') "
+                "and contains(@class,'is-open')]"
+                "//div[contains(@class,'choices__list--dropdown')]"
+                "//*[contains(@class,'choices__item--choice') "
+                "and not(contains(@class,'choices__item--disabled'))]"
+            )
+
+        def visible_variant_options(driver):
+            try:
+
+                options = []
+
+                for option in driver.find_elements(
+                    *variant_option_locator
+                ):
+
+                    try:
+
+                        if (
+                            option.is_displayed()
+                            and option.text.strip()
+                        ):
+                            options.append(option)
+
+                    except StaleElementReferenceException:
+                        continue
+
+                return options if options else False
+
+            except StaleElementReferenceException:
+                return False
+
+        variant_options = WebDriverWait(
+            self.driver,
+            30,
+            poll_frequency=0.3,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            visible_variant_options
+        )
+
+        print(
+            f"Variant options found: "
+            f"{len(variant_options)}"
+        )
+
+        # =========================================================
+        # STEP 12 - SELECT DIFFERENT VARIANT
+        # =========================================================
+
+        new_variant = None
+
+        for option in variant_options:
+
+            try:
+
+                option_text = option.text.strip()
+
+                if (
+                    not option.is_displayed()
+                    or not option_text
+                ):
+                    continue
+
+                print(
+                    f"Available Variant : {option_text}"
+                )
+
+                if (
+                    option_text.lower()
+                    == current_variant.strip().lower()
+                ):
+                    continue
+
+                new_variant = option_text
+
+                print(
+                    f"Selected different Variant : "
+                    f"{new_variant}"
+                )
+
+                if "'" in option_text:
+                    xpath_text = (
+                        "concat(" +
+                        ", ".join(
+                            "'" + part + "'"
+                            for part in option_text.split("'")
+                        ) +
+                        ")"
+                    )
+                else:
+                    xpath_text = f"'{option_text}'"
+
+                if variant_dropdown_type == "select2":
+
+                    fresh_variant_locator = (
+                        By.XPATH,
+                        "//span[contains(@class,'select2-container--open')]"
+                        "//li[@role='option' "
+                        "and not(contains(@class,'select2-results__message'))]"
+                        f"[normalize-space()={xpath_text}]"
+                    )
+
+                else:
+
+                    fresh_variant_locator = (
+                        By.XPATH,
+                        "//div[contains(@class,'choices') "
+                        "and contains(@class,'is-open')]"
+                        "//div[contains(@class,'choices__list--dropdown')]"
+                        f"//*[contains(@class,'choices__item--choice') "
+                        f"and normalize-space()={xpath_text}]"
+                    )
+
+                fresh_variant = WebDriverWait(
+                    self.driver,
+                    10,
+                    poll_frequency=0.2,
+                    ignored_exceptions=(
+                        StaleElementReferenceException,
+                    )
+                ).until(
+                    EC.element_to_be_clickable(
+                        fresh_variant_locator
+                    )
+                )
+
+                self.driver.execute_script(
+                    """
+                    arguments[0].scrollIntoView({
+                        block: 'nearest'
+                    });
+                    """,
+                    fresh_variant
+                )
+
+                try:
+                    fresh_variant.click()
+                except (
+                    StaleElementReferenceException,
+                    ElementClickInterceptedException
+                ):
+                    fresh_variant = self.driver.find_element(
+                        *fresh_variant_locator
+                    )
+
+                    self.driver.execute_script(
+                        "arguments[0].click();",
+                        fresh_variant
+                    )
+
+                print(
+                    f"Variant selected : {new_variant}"
+                )
+
+                break
+
+            except StaleElementReferenceException:
+                continue
+
+        if not new_variant:
+            raise AssertionError(
+                "Could not find a different variant. "
+                f"Current Variant: {current_variant}"
+            )
+
+        print("=" * 60)
+        print(f"NEW PRODUCT : {new_product}")
+        print(f"NEW VARIANT : {new_variant}")
+        print("=" * 60)
+
+        return new_product, new_variant
+
+    def wait_for_reassignment_update(
+            self,
+            batch_no,
+            expected_product,
+            expected_variant,
+            timeout=60
+    ):
+        """
+        Wait until the QR List API/table reflects the newly reassigned
+        Product and Variant.
+
+        IMPORTANT:
+        Clicking Submit only confirms that the frontend submitted the
+        request. The backend update and the subsequent list/search
+        response can complete a little later.
+
+        Therefore we:
+            1. wait briefly for the backend request to settle
+            2. perform a fresh search for the same batch
+            3. read Product + Variant from a fresh row
+            4. repeat until both values match
+
+        This prevents the test from reading the old cached/table row
+        immediately after Submit.
+        """
+
+        print("=" * 60)
+        print(
+            f"WAITING FOR REASSIGN UPDATE : [{batch_no}]"
+        )
+        print(
+            f"Expected Product : {expected_product}"
+        )
+        print(
+            f"Expected Variant : {expected_variant}"
+        )
+        print("=" * 60)
+
+        deadline = time.time() + timeout
+        attempt = 0
+
+        # Give the backend/API a small amount of time immediately after
+        # Submit before the first search.
+        time.sleep(2)
+
+        last_product = None
+        last_variant = None
+
+        while time.time() < deadline:
+
+            attempt += 1
+
+            try:
+
+                print(
+                    f"Checking reassignment update "
+                    f"(attempt {attempt})"
+                )
+
+                # IMPORTANT:
+                # Trigger a NEW search request. Merely waiting for the
+                # existing row is not enough because it can still contain
+                # the old Product/Variant.
+                self.search_batch(batch_no)
+
+                # Allow the newly returned table DOM to settle.
+                time.sleep(0.8)
+
+                def read_updated_values(driver):
+
+                    rows = driver.find_elements(
+                        By.XPATH,
+                        "//table//tbody//tr"
+                    )
+
+                    for row in rows:
+
+                        try:
+
+                            if not row.is_displayed():
+                                continue
+
+                            row_text = row.text.strip()
+
+                            if (
+                                batch_no.lower()
+                                not in row_text.lower()
+                            ):
+                                continue
+
+                            product = row.find_element(
+                                By.XPATH,
+                                ".//td[3]"
+                            ).text.strip()
+
+                            variant = row.find_element(
+                                By.XPATH,
+                                ".//td[5]"
+                            ).text.strip()
+
+                            if not product or not variant:
+                                return False
+
+                            return product, variant
+
+                        except StaleElementReferenceException:
+                            continue
+
+                    return False
+
+                result = WebDriverWait(
+                    self.driver,
+                    5,
+                    poll_frequency=0.3,
+                    ignored_exceptions=(
+                        StaleElementReferenceException,
+                    )
+                ).until(
+                    read_updated_values
+                )
+
+                last_product, last_variant = result
+
+                print(
+                    f"Reassign check: "
+                    f"Product={last_product} | "
+                    f"Variant={last_variant}"
+                )
+
+                if (
+                    last_product.strip().lower()
+                    == expected_product.strip().lower()
+                    and
+                    last_variant.strip().lower()
+                    == expected_variant.strip().lower()
+                ):
+                    print("=" * 60)
+                    print(
+                        "REASSIGN UPDATE REFLECTED IN LIST"
+                    )
+                    print(
+                        f"Product : {last_product}"
+                    )
+                    print(
+                        f"Variant : {last_variant}"
+                    )
+                    print("=" * 60)
+
+                    return True
+
+                print(
+                    "List still shows old Product/Variant. "
+                    "Waiting for backend/list refresh..."
+                )
+
+            except TimeoutException:
+
+                print(
+                    "Batch row was not ready after search. "
+                    "Retrying..."
+                )
+
+            except StaleElementReferenceException:
+
+                print(
+                    "Table refreshed while reading reassigned "
+                    "values. Retrying with a fresh row..."
+                )
+
+            # Do not hammer the API.
+            time.sleep(2)
+
+        raise AssertionError(
+            "Reassignment was submitted, but the QR List did not "
+            "reflect the new Product/Variant within "
+            f"{timeout} seconds. "
+            f"Expected Product: {expected_product} | "
+            f"Expected Variant: {expected_variant} | "
+            f"Last Product: {last_product} | "
+            f"Last Variant: {last_variant}"
+        )
+
+    def reassign_qr(
+            self,
+            batch_no,
+            new_product,
+            new_variant
+    ):
+        """
+        Submit the Reassign QR modal.
+
+        IMPORTANT:
+        get_different_product_and_variant() has ALREADY:
+            1. opened the Product dropdown
+            2. selected a different Product
+            3. opened the Variant dropdown
+            4. selected a different Variant
+
+        Therefore this method MUST NOT click Product or Variant again.
+
+        The previous implementation was reopening Product here. That
+        caused the frontend Select2/Angular state to change and the
+        submit flow to time out.
+
+        This method only verifies that the Reassign modal is still open
+        and clicks the Submit button.
+        """
+
+        print(
+            f"Submitting Reassign for batch: {batch_no}"
+        )
+
+        # =========================================================
+        # STEP 1 - REASSIGN MODAL MUST ALREADY BE OPEN
+        # =========================================================
+
+        modal_locator = (
+            By.XPATH,
+            "//div[contains(@class,'modal') "
+            "and .//*[normalize-space()='Reassign QR']]"
+        )
+
+        wait = WebDriverWait(
+            self.driver,
+            20,
+            poll_frequency=0.2,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        )
+
+        wait.until(
+            EC.visibility_of_element_located(
+                modal_locator
+            )
+        )
+
+        print("Reassign modal is OPEN")
+
+        # =========================================================
+        # STEP 2 - DO NOT TOUCH PRODUCT / VARIANT
+        #
+        # They were selected by get_different_product_and_variant().
+        #
+        # Screenshot state should be:
+        #
+        # Product     : Mobile (...)
+        # Variant SKU : M19533-PROB-MO-01-Black-128GB-8GB
+        #
+        # We only read the values for logging.
+        # =========================================================
+
+        product_value_locator = (
+            By.XPATH,
+            "//div[contains(@class,'modal') "
+            "and .//*[normalize-space()='Reassign QR']]"
+            "//label[normalize-space()='Product']"
+            "/following::span[contains(@class,'select2-selection__rendered')][1]"
+            " | "
+            "//div[contains(@class,'modal') "
+            "and .//*[normalize-space()='Reassign QR']]"
+            "//label[normalize-space()='Product']"
+            "/following::div[contains(@class,'choices__inner')][1]"
+        )
+
+        variant_value_locator = (
+            By.XPATH,
+            "//div[contains(@class,'modal') "
+            "and .//*[normalize-space()='Reassign QR']]"
+            "//label[normalize-space()='Variant SKU']"
+            "/following::span[contains(@class,'select2-selection__rendered')][1]"
+            " | "
+            "//div[contains(@class,'modal') "
+            "and .//*[normalize-space()='Reassign QR']]"
+            "//label[normalize-space()='Variant SKU']"
+            "/following::div[contains(@class,'choices__inner')][1]"
+        )
+
+        def read_visible_text(locator):
+            try:
+                elements = self.driver.find_elements(*locator)
+
+                for element in elements:
+                    try:
+                        if element.is_displayed():
+                            text = element.text.strip()
+
+                            if text:
+                                return text
+                    except StaleElementReferenceException:
+                        continue
+
+            except StaleElementReferenceException:
+                pass
+
+            return ""
+
+        selected_product = read_visible_text(
+            product_value_locator
+        )
+
+        selected_variant = read_visible_text(
+            variant_value_locator
+        )
+
+        print(
+            f"Current selected Product in modal : "
+            f"{selected_product or new_product}"
+        )
+
+        print(
+            f"Current selected Variant in modal : "
+            f"{selected_variant or new_variant}"
+        )
+
+        # =========================================================
+        # STEP 3 - SUBMIT BUTTON
+        #
+        # IMPORTANT:
+        # Find the button from the modal every time.
+        # Never keep a WebElement while Angular is rendering.
+        # =========================================================
+
+        submit_locator = (
+            By.XPATH,
+            "//div[contains(@class,'modal') "
+            "and .//*[normalize-space()='Reassign QR']]"
+            "//button["
+            "normalize-space()='Submit'"
+            " or "
+            "normalize-space(.)='Submit'"
+            "]"
+        )
+
+        def find_submit_button(driver):
+            try:
+                elements = driver.find_elements(
+                    *submit_locator
+                )
+
+                for element in elements:
+
+                    try:
+
+                        if (
+                            element.is_displayed()
+                            and element.is_enabled()
+                        ):
+                            return element
+
+                    except StaleElementReferenceException:
+                        continue
+
+            except StaleElementReferenceException:
+                return False
+
+            return False
+
+        submit_button = wait.until(
+            find_submit_button
+        )
+
+        print("Reassign Submit button found and enabled")
+
+        # =========================================================
+        # STEP 4 - SCROLL + RE-FIND
+        # =========================================================
+
+        try:
+            self.driver.execute_script(
+                """
+                arguments[0].scrollIntoView({
+                    block: 'center',
+                    inline: 'center'
+                });
+                """,
+                submit_button
+            )
+        except StaleElementReferenceException:
+            pass
+
+        # Angular can rerender after scroll.
+        submit_button = WebDriverWait(
+            self.driver,
+            10,
+            poll_frequency=0.2,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            find_submit_button
+        )
+
+        # =========================================================
+        # STEP 5 - CLICK SUBMIT
+        #
+        # Normal Selenium click first.
+        # If Angular rerenders the button at that exact moment,
+        # re-find it and use JS click.
+        # =========================================================
+
+        print("Clicking Reassign Submit")
+
+        try:
+
+            submit_button.click()
+
+        except (
+            StaleElementReferenceException,
+            ElementClickInterceptedException
+        ):
+
+            print(
+                "Submit button changed during click. "
+                "Re-finding fresh Submit button..."
+            )
+
+            submit_button = WebDriverWait(
+                self.driver,
+                10,
+                poll_frequency=0.2,
+                ignored_exceptions=(
+                    StaleElementReferenceException,
+                )
+            ).until(
+                find_submit_button
+            )
+
+            self.driver.execute_script(
+                "arguments[0].click();",
+                submit_button
+            )
+
+        print("Reassign Submit clicked successfully")
+
+        # =========================================================
+        # STEP 6 - VERIFY SUBMIT ACTION
+        #
+        # The modal should close after a successful submission.
+        # Do NOT fail immediately if the application keeps it open
+        # briefly while the API request is processing.
+        # =========================================================
+
+        def modal_closed(driver):
+            try:
+
+                elements = driver.find_elements(
+                    *modal_locator
+                )
+
+                visible = [
+                    element
+                    for element in elements
+                    if element.is_displayed()
+                ]
+
+                return len(visible) == 0
+
+            except StaleElementReferenceException:
+                # DOM replacement itself is a valid indication that
+                # the modal is being closed/re-rendered.
+                return True
+
+        try:
+
+            WebDriverWait(
+                self.driver,
+                15,
+                poll_frequency=0.2,
+                ignored_exceptions=(
+                    StaleElementReferenceException,
+                )
+            ).until(
+                modal_closed
+            )
+
+            print(
+                "Reassign modal closed after Submit"
+            )
+
+        except TimeoutException:
+
+            # Do not click Submit a second time.
+            # The API may still be processing or the UI may display
+            # a confirmation/toast without immediately removing the modal.
+            print(
+                "Reassign modal is still visible after Submit; "
+                "Submit click was already completed."
+            )
+
+        # =========================================================
+        # STEP 7 - WAIT FOR LIST/API TO REFLECT THE REASSIGNMENT
+        #
+        # THIS IS THE IMPORTANT FIX FOR THE CURRENT FAILURE.
+        #
+        # The Submit click can succeed while the next search still
+        # returns the old Product/Variant for a short period.
+        # =========================================================
+
+        self.wait_for_reassignment_update(
+            batch_no,
+            new_product,
+            new_variant,
+            timeout=60
+        )
+
+        return True
+
+    def open_reassign_modal(self, batch_no):
+
+        print(
+            f"Opening Reassign for batch: {batch_no}"
+        )
+
+        # =====================================================
+        # STEP 1 - LOCATOR FOR THE BATCH ROW
+        # =====================================================
+
+        row_locator = (
+            By.XPATH,
+            f"//table//tbody//tr[contains(., '{batch_no}')]"
+        )
+
+        action_locator = (
+            By.XPATH,
+            f"//table//tbody//tr[contains(., '{batch_no}')]"
+            "//td[last()]//button"
+        )
+
+        # =====================================================
+        # STEP 2 - MAKE SURE FRESH ROW EXISTS
+        # =====================================================
+
+        WebDriverWait(
+            self.driver,
+            30,
+            poll_frequency=0.5,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            EC.visibility_of_element_located(
+                row_locator
+            )
+        )
+
+        print(
+            f"Fresh row found for Reassign: {batch_no}"
+        )
+
+        # =====================================================
+        # STEP 3 - CLICK THREE DOTS
+        #
+        # IMPORTANT:
+        # NEVER STORE THE BUTTON ELEMENT.
+        # RE-FIND IT WHENEVER WE NEED IT.
+        # =====================================================
+
+        menu_opened = False
+
+        for attempt in range(1, 6):
+
+            try:
+
+                print(
+                    f"Clicking three-dot menu "
+                    f"(attempt {attempt}/5)"
+                )
+
+                # Get a COMPLETELY FRESH button
+                action_button = WebDriverWait(
+                    self.driver,
+                    10,
+                    poll_frequency=0.3,
+                    ignored_exceptions=(
+                        StaleElementReferenceException,
+                    )
+                ).until(
+                    EC.element_to_be_clickable(
+                        action_locator
+                    )
+                )
+
+                self.driver.execute_script(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    action_button
+                )
+
+                # Small pause allows Angular table rendering
+                time.sleep(0.3)
+
+                # RE-FIND again because scroll/render can make
+                # the previous element stale
+                action_button = WebDriverWait(
+                    self.driver,
+                    5,
+                    poll_frequency=0.2,
+                    ignored_exceptions=(
+                        StaleElementReferenceException,
+                    )
+                ).until(
+                    EC.element_to_be_clickable(
+                        action_locator
+                    )
+                )
+
+                action_button.click()
+
+                # =================================================
+                # STEP 4 - VERIFY MENU REALLY OPENED
+                # =================================================
+
+                WebDriverWait(
+                    self.driver,
+                    5,
+                    poll_frequency=0.2,
+                    ignored_exceptions=(
+                        StaleElementReferenceException,
+                    )
+                ).until(
+                    EC.visibility_of_element_located(
+                        (
+                            By.XPATH,
+                            "//a[normalize-space()='Re-assign']"
+                            " | "
+                            "//button[normalize-space()='Re-assign']"
+                        )
+                    )
+                )
+
+                print(
+                    "Three-dot menu verified OPEN"
+                )
+
+                menu_opened = True
+                break
+
+            except (
+                    StaleElementReferenceException,
+                    TimeoutException
+            ):
+
+                print(
+                    f"Three-dot click attempt "
+                    f"{attempt} failed - retrying"
+                )
+
+                time.sleep(0.5)
+
+        if not menu_opened:
+            raise AssertionError(
+                f"Could not open three-dot menu "
+                f"for batch: {batch_no}"
+            )
+
+        # =====================================================
+        # STEP 5 - CLICK RE-ASSIGN
+        #
+        # AGAIN: DO NOT STORE THE ELEMENT.
+        # FIND IT FRESH.
+        # =====================================================
+
+        reassign_locator = (
+            By.XPATH,
+            "//a[normalize-space()='Re-assign']"
+            " | "
+            "//button[normalize-space()='Re-assign']"
+        )
+
+        WebDriverWait(
+            self.driver,
+            15,
+            poll_frequency=0.3,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            EC.visibility_of_element_located(
+                reassign_locator
+            )
+        )
+
+        print(
+            "Clicking Re-assign"
+        )
+
+        reassign_clicked = False
+
+        for attempt in range(1, 4):
+
+            try:
+
+                # ALWAYS FIND FRESH
+                reassign_option = WebDriverWait(
+                    self.driver,
+                    5,
+                    poll_frequency=0.2,
+                    ignored_exceptions=(
+                        StaleElementReferenceException,
+                    )
+                ).until(
+                    EC.element_to_be_clickable(
+                        reassign_locator
+                    )
+                )
+
+                reassign_option.click()
+
+                reassign_clicked = True
+                print(
+                    "Re-assign clicked"
+                )
+                break
+
+            except StaleElementReferenceException:
+
+                print(
+                    f"Re-assign element became stale "
+                    f"(attempt {attempt}/3) - retrying"
+                )
+
+                time.sleep(0.5)
+
+        if not reassign_clicked:
+            raise AssertionError(
+                f"Could not click Re-assign "
+                f"for batch: {batch_no}"
+            )
+
+        # =====================================================
+        # STEP 6 - VERIFY REASSIGN MODAL
+        # =====================================================
+
+        modal_locator = (
+            By.XPATH,
+            "//div[contains(@class,'modal')]"
+            "[.//*[normalize-space()='Reassign QR']]"
+        )
+
+        WebDriverWait(
+            self.driver,
+            20,
+            poll_frequency=0.3,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            EC.visibility_of_element_located(
+                modal_locator
+            )
+        )
+
+        # Also verify Product field exists inside modal
+        WebDriverWait(
+            self.driver,
+            10,
+            poll_frequency=0.3,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            EC.visibility_of_element_located(
+                (
+                    By.XPATH,
+                    "//div[contains(@class,'modal')]"
+                    "//label[normalize-space()='Product']"
+                )
+            )
+        )
+
+        print(
+            "Reassign modal verified OPEN"
+        )
+
+    def _is_stale(self, element):
+
+        try:
+            element.is_enabled()
+            return False
+
+        except StaleElementReferenceException:
+            return True
