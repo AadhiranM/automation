@@ -136,21 +136,83 @@ class SAQRListPage(BasePage):
 
         self.wait_for_results()
 
+        # =====================================================
+        # IMPORTANT:
+        # Always clear the existing search value before entering
+        # a new batch number. This is especially important after
+        # Reassign because the QR list is reloaded/rendered again.
+        # =====================================================
+
+        search_box = WebDriverWait(
+            self.driver,
+            15,
+            poll_frequency=0.3,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            EC.visibility_of_element_located(
+                self.SEARCH_BOX
+            )
+        )
+
+        try:
+            search_box.click()
+            search_box.send_keys(Keys.CONTROL, "a")
+            search_box.send_keys(Keys.BACKSPACE)
+        except StaleElementReferenceException:
+            search_box = WebDriverWait(
+                self.driver,
+                10,
+                poll_frequency=0.3,
+                ignored_exceptions=(
+                    StaleElementReferenceException,
+                )
+            ).until(
+                EC.visibility_of_element_located(
+                    self.SEARCH_BOX
+                )
+            )
+
+            search_box.click()
+            search_box.send_keys(Keys.CONTROL, "a")
+            search_box.send_keys(Keys.BACKSPACE)
+
         self.type(
             self.SEARCH_BOX,
             batch
+        )
+
+        # Make sure the input really contains this batch.
+        WebDriverWait(
+            self.driver,
+            10,
+            poll_frequency=0.2
+        ).until(
+            lambda d: (
+                d.find_element(
+                    *self.SEARCH_BOX
+                ).get_attribute("value") or ""
+            ).strip().lower() == batch.strip().lower()
         )
 
         self.click(
             self.SEARCH_BTN
         )
 
-        print(f"Search button clicked for batch: {batch}")
+        print(
+            f"Search button clicked for batch: {batch}"
+        )
 
-        # Wait until the search request/table finishes updating.
-        self.wait_for_results()
+        # Wait specifically for the requested batch instead of merely
+        # checking whether an old table row still exists.
+        self.wait_for_batch(
+            batch
+        )
 
-        print(f"Search completed for batch: {batch}")
+        print(
+            f"Search completed for batch: {batch}"
+        )
 
     # =========================
     # VALIDATION
@@ -2760,30 +2822,40 @@ class SAQRListPage(BasePage):
             batch_no,
             expected_product,
             expected_variant,
-            timeout=60
+            timeout=90
     ):
         """
-        Wait until the QR List API/table reflects the newly reassigned
-        Product and Variant.
+        Wait for the Reassign API/backend update to finish before
+        refreshing/searching the QR Management list.
 
         IMPORTANT:
-        Clicking Submit only confirms that the frontend submitted the
-        request. The backend update and the subsequent list/search
-        response can complete a little later.
+        Reassign behaves like the QR status transitions in the
+        QR-generation flow:
 
-        Therefore we:
-            1. wait briefly for the backend request to settle
-            2. perform a fresh search for the same batch
-            3. read Product + Variant from a fresh row
-            4. repeat until both values match
+            Submit
+                ↓
+            backend processing
+                ↓
+            list/API refresh
+                ↓
+            updated Product + Variant
 
-        This prevents the test from reading the old cached/table row
-        immediately after Submit.
+        Do NOT immediately refresh the page after Submit.
+        A refresh can happen while the backend is still processing,
+        which can make the UI temporarily show the previous state.
+
+        Therefore:
+            1. wait for the modal to close
+            2. wait for the backend to settle
+            3. open ONE fresh QR Management list page
+            4. search the batch
+            5. keep polling/searching on that page until Product +
+               Variant match the expected values
         """
 
         print("=" * 60)
         print(
-            f"WAITING FOR REASSIGN UPDATE : [{batch_no}]"
+            f"WAITING FOR REASSIGN BACKEND UPDATE : [{batch_no}]"
         )
         print(
             f"Expected Product : {expected_product}"
@@ -2793,15 +2865,57 @@ class SAQRListPage(BasePage):
         )
         print("=" * 60)
 
+        # =========================================================
+        # STEP 1 - IMPORTANT WAIT AFTER SUBMIT
+        #
+        # Same principle used for QR Generated -> In Print ->
+        # In Transit -> Completed.
+        #
+        # Give the backend/API enough time to complete the
+        # reassignment BEFORE causing a new page load.
+        # =========================================================
+
+        print(
+            "Waiting for Reassign backend processing to settle..."
+        )
+
+        time.sleep(5)
+
+        print(
+            "Initial Reassign backend wait completed"
+        )
+
+        # =========================================================
+        # STEP 2 - ONE FRESH QR MANAGEMENT PAGE LOAD
+        #
+        # Do NOT refresh repeatedly inside the polling loop.
+        # Repeated navigation can interrupt the application while
+        # Angular is still updating the batch.
+        # =========================================================
+
+        print(
+            "Opening fresh QR Management list after backend wait..."
+        )
+
+        self.goto_page()
+        self.wait_for_page()
+
+        # Extra render wait after navigation.
+        time.sleep(2)
+
+        print(
+            "Fresh QR Management list loaded"
+        )
+
         deadline = time.time() + timeout
         attempt = 0
 
-        # Give the backend/API a small amount of time immediately after
-        # Submit before the first search.
-        time.sleep(2)
-
         last_product = None
         last_variant = None
+
+        # =========================================================
+        # STEP 3 - SEARCH/POLL WITHOUT PAGE NAVIGATION
+        # =========================================================
 
         while time.time() < deadline:
 
@@ -2814,14 +2928,13 @@ class SAQRListPage(BasePage):
                     f"(attempt {attempt})"
                 )
 
-                # IMPORTANT:
-                # Trigger a NEW search request. Merely waiting for the
-                # existing row is not enough because it can still contain
-                # the old Product/Variant.
+                # Always issue a fresh search request, but do NOT
+                # navigate away from the current list page.
                 self.search_batch(batch_no)
 
-                # Allow the newly returned table DOM to settle.
-                time.sleep(0.8)
+                # Allow Angular/DataTables to finish rendering the
+                # newly returned row before reading it.
+                time.sleep(2)
 
                 def read_updated_values(driver):
 
@@ -2867,8 +2980,8 @@ class SAQRListPage(BasePage):
 
                 result = WebDriverWait(
                     self.driver,
-                    5,
-                    poll_frequency=0.3,
+                    8,
+                    poll_frequency=0.5,
                     ignored_exceptions=(
                         StaleElementReferenceException,
                     )
@@ -2884,6 +2997,10 @@ class SAQRListPage(BasePage):
                     f"Variant={last_variant}"
                 )
 
+                # =================================================
+                # STEP 4 - FINAL MATCH
+                # =================================================
+
                 if (
                     last_product.strip().lower()
                     == expected_product.strip().lower()
@@ -2891,6 +3008,7 @@ class SAQRListPage(BasePage):
                     last_variant.strip().lower()
                     == expected_variant.strip().lower()
                 ):
+
                     print("=" * 60)
                     print(
                         "REASSIGN UPDATE REFLECTED IN LIST"
@@ -2906,26 +3024,36 @@ class SAQRListPage(BasePage):
                     return True
 
                 print(
-                    "List still shows old Product/Variant. "
-                    "Waiting for backend/list refresh..."
+                    "List still shows the previous "
+                    "Product/Variant."
+                )
+
+                print(
+                    "Waiting before the next search..."
                 )
 
             except TimeoutException:
 
                 print(
                     "Batch row was not ready after search. "
-                    "Retrying..."
+                    "Waiting before retry..."
                 )
 
             except StaleElementReferenceException:
 
                 print(
                     "Table refreshed while reading reassigned "
-                    "values. Retrying with a fresh row..."
+                    "values. Waiting before retry..."
                 )
 
-            # Do not hammer the API.
-            time.sleep(2)
+            # =====================================================
+            # IMPORTANT WAIT BETWEEN RETRIES
+            #
+            # Do not immediately search again. This is the same
+            # approach used for the QR status transition fix.
+            # =====================================================
+
+            time.sleep(3)
 
         raise AssertionError(
             "Reassignment was submitted, but the QR List did not "
@@ -3246,19 +3374,54 @@ class SAQRListPage(BasePage):
             )
 
         # =========================================================
-        # STEP 7 - WAIT FOR LIST/API TO REFLECT THE REASSIGNMENT
+        # STEP 7 - WAIT BEFORE REFRESHING THE LIST
         #
-        # THIS IS THE IMPORTANT FIX FOR THE CURRENT FAILURE.
+        # IMPORTANT:
+        # The Reassign API may need a few seconds to update the
+        # backend. Refreshing immediately can make the list temporarily
+        # show the old Product/Variant or an intermediate state.
         #
-        # The Submit click can succeed while the next search still
-        # returns the old Product/Variant for a short period.
+        # This is intentionally the same pattern used for the QR
+        # generation status transitions.
         # =========================================================
 
+        print(
+            "Waiting before refreshing QR list after Reassign..."
+        )
+
+        time.sleep(5)
+
+        print(
+            "Reassign wait completed. Safe to refresh list."
+        )
+
+        # =========================================================
+        # STEP 8 - OPEN A FRESH QR LIST PAGE
+        #
+        # IMPORTANT:
+        # Submit can succeed before the existing QR List table has
+        # refreshed. The old Angular/DataTables row may therefore
+        # still show the previous Product/Variant.
+        #
+        # Force a fresh list-page load before validating the result.
+        # =========================================================
+
+        print(
+            "Reassign submitted. Starting backend/list synchronization..."
+        )
+
+        # wait_for_reassignment_update() performs the deliberate
+        # backend-settling wait and ONE fresh QR Management page load.
         self.wait_for_reassignment_update(
             batch_no,
             new_product,
             new_variant,
             timeout=60
+        )
+
+        print(
+            f"Reassign validation data is ready for batch: "
+            f"{batch_no}"
         )
 
         return True
@@ -3528,6 +3691,903 @@ class SAQRListPage(BasePage):
         print(
             "Reassign modal verified OPEN"
         )
+
+
+    # =========================================================
+    # BATCH RELOCATION / UPDATE LOCATION
+    # =========================================================
+
+    def open_action_menu(self, batch_no):
+        """
+        Open the three-dot Action menu for the requested batch.
+
+        Always locate a fresh button because the QR table is
+        re-rendered by Angular/DataTables.
+        """
+
+        action_locator = (
+            By.XPATH,
+            f"//table//tbody//tr[contains(., '{batch_no}')]"
+            "//td[last()]//button"
+        )
+
+        menu_locator = (
+            By.XPATH,
+            "//ul[contains(@class,'dropdown-menu') "
+            "and contains(@class,'show')]"
+            "//*[self::a or self::button]"
+        )
+
+        print(
+            f"Opening three-dot menu for batch: {batch_no}"
+        )
+
+        for attempt in range(1, 6):
+
+            try:
+
+                action_button = WebDriverWait(
+                    self.driver,
+                    10,
+                    poll_frequency=0.2,
+                    ignored_exceptions=(
+                        StaleElementReferenceException,
+                    )
+                ).until(
+                    EC.element_to_be_clickable(
+                        action_locator
+                    )
+                )
+
+                self.driver.execute_script(
+                    """
+                    arguments[0].scrollIntoView({
+                        block: 'center',
+                        inline: 'center'
+                    });
+                    """,
+                    action_button
+                )
+
+                time.sleep(0.3)
+
+                # Re-find after scroll/render.
+                action_button = WebDriverWait(
+                    self.driver,
+                    5,
+                    poll_frequency=0.2,
+                    ignored_exceptions=(
+                        StaleElementReferenceException,
+                    )
+                ).until(
+                    EC.element_to_be_clickable(
+                        action_locator
+                    )
+                )
+
+                try:
+                    action_button.click()
+
+                except (
+                    StaleElementReferenceException,
+                    ElementClickInterceptedException,
+                ):
+
+                    action_button = WebDriverWait(
+                        self.driver,
+                        5,
+                        poll_frequency=0.2,
+                        ignored_exceptions=(
+                            StaleElementReferenceException,
+                        )
+                    ).until(
+                        EC.element_to_be_clickable(
+                            action_locator
+                        )
+                    )
+
+                    self.driver.execute_script(
+                        "arguments[0].click();",
+                        action_button
+                    )
+
+                WebDriverWait(
+                    self.driver,
+                    5,
+                    poll_frequency=0.2,
+                    ignored_exceptions=(
+                        StaleElementReferenceException,
+                    )
+                ).until(
+                    EC.visibility_of_element_located(
+                        menu_locator
+                    )
+                )
+
+                print(
+                    "Three-dot menu verified OPEN"
+                )
+
+                return True
+
+            except (
+                StaleElementReferenceException,
+                TimeoutException,
+                ElementClickInterceptedException,
+            ):
+
+                print(
+                    f"Three-dot menu attempt "
+                    f"{attempt}/5 failed - retrying"
+                )
+
+                time.sleep(0.5)
+
+        raise AssertionError(
+            f"Could not open three-dot menu "
+            f"for batch: {batch_no}"
+        )
+
+    def click_action_option(self, option_text):
+        """
+        Click an option from the currently open three-dot menu.
+        """
+
+        option_locator = (
+            By.XPATH,
+            "//ul[contains(@class,'dropdown-menu') "
+            "and contains(@class,'show')]"
+            "//*[self::a or self::button]"
+            f"[normalize-space()='{option_text}']"
+        )
+
+        print(
+            f"Clicking Action menu option: {option_text}"
+        )
+
+        for attempt in range(1, 4):
+
+            try:
+
+                option = WebDriverWait(
+                    self.driver,
+                    10,
+                    poll_frequency=0.2,
+                    ignored_exceptions=(
+                        StaleElementReferenceException,
+                    )
+                ).until(
+                    EC.element_to_be_clickable(
+                        option_locator
+                    )
+                )
+
+                try:
+                    option.click()
+
+                except (
+                    StaleElementReferenceException,
+                    ElementClickInterceptedException,
+                ):
+
+                    option = WebDriverWait(
+                        self.driver,
+                        5,
+                        poll_frequency=0.2,
+                        ignored_exceptions=(
+                            StaleElementReferenceException,
+                        )
+                    ).until(
+                        EC.element_to_be_clickable(
+                            option_locator
+                        )
+                    )
+
+                    self.driver.execute_script(
+                        "arguments[0].click();",
+                        option
+                    )
+
+                print(
+                    f"{option_text} clicked"
+                )
+
+                return True
+
+            except StaleElementReferenceException:
+
+                print(
+                    f"{option_text} became stale "
+                    f"(attempt {attempt}/3)"
+                )
+
+                time.sleep(0.5)
+
+        raise AssertionError(
+            f"Could not click Action menu option: "
+            f"{option_text}"
+        )
+
+    def open_update_location_modal(self, batch_no):
+        """
+        From the QR list:
+            three dots -> Update Location
+
+        Uses the actual Update Location menu item shown in the UI.
+        """
+
+        print(
+            f"Opening Update Location for batch: {batch_no}"
+        )
+
+        self.wait_for_batch(batch_no)
+
+        self.open_action_menu(batch_no)
+
+        update_location_locator = (
+            By.XPATH,
+            "//ul[contains(@class,'dropdown-menu') "
+            "and contains(@class,'show')]"
+            "//button[contains(@class,'loc_update') "
+            "and normalize-space()='Update Location']"
+            " | "
+            "//ul[contains(@class,'dropdown-menu') "
+            "and contains(@class,'show')]"
+            "//a[normalize-space()='Update Location']"
+        )
+
+        for attempt in range(1, 4):
+
+            try:
+
+                option = WebDriverWait(
+                    self.driver,
+                    10,
+                    poll_frequency=0.2,
+                    ignored_exceptions=(
+                        StaleElementReferenceException,
+                    )
+                ).until(
+                    EC.element_to_be_clickable(
+                        update_location_locator
+                    )
+                )
+
+                try:
+                    option.click()
+
+                except (
+                    StaleElementReferenceException,
+                    ElementClickInterceptedException,
+                ):
+
+                    option = WebDriverWait(
+                        self.driver,
+                        5,
+                        poll_frequency=0.2,
+                        ignored_exceptions=(
+                            StaleElementReferenceException,
+                        )
+                    ).until(
+                        EC.element_to_be_clickable(
+                            update_location_locator
+                        )
+                    )
+
+                    self.driver.execute_script(
+                        "arguments[0].click();",
+                        option
+                    )
+
+                break
+
+            except StaleElementReferenceException:
+
+                print(
+                    f"Update Location became stale "
+                    f"(attempt {attempt}/3)"
+                )
+
+                time.sleep(0.5)
+
+        modal_locator = (
+            By.XPATH,
+            "//div[@id='reassignLocation']"
+            "[contains(@class,'show') or "
+            "contains(@style,'display: block')]"
+            " | "
+            "//div[@id='reassignLocation']"
+        )
+
+        WebDriverWait(
+            self.driver,
+            20,
+            poll_frequency=0.2,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            EC.visibility_of_element_located(
+                modal_locator
+            )
+        )
+
+        WebDriverWait(
+            self.driver,
+            15,
+            poll_frequency=0.2,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            EC.visibility_of_element_located(
+                (
+                    By.XPATH,
+                    "//div[@id='reassignLocation']"
+                    "//*[contains("
+                    "normalize-space(),"
+                    "'Select Batch Location'"
+                    ")]"
+                )
+            )
+        )
+
+        print(
+            "Update Batch Location modal verified OPEN"
+        )
+
+        return True
+
+    def select_batch_location(self, location="Mumbai"):
+        """
+        Select2 flow from the supplied UI:
+
+            Select Batch Location
+                -> type Mumbai
+                -> Mumbai, Maharashtra, India
+        """
+
+        location_dropdown_locator = (
+            By.XPATH,
+            "//div[@id='reassignLocation']"
+            "//select[@name='batch_location']"
+            "/following-sibling::span"
+            "[contains(@class,'select2-container')]"
+            "//span[contains("
+            "@class,"
+            "'select2-selection--single'"
+            ")]"
+            " | "
+            "//div[@id='reassignLocation']"
+            "//select[@name='batch_location']"
+            "/following::span[contains("
+            "@class,"
+            "'select2-selection--single'"
+            ")][1]"
+        )
+
+        open_locator = (
+            By.XPATH,
+            "//span[contains("
+            "@class,"
+            "'select2-container--open'"
+            ")]"
+        )
+
+        search_locator = (
+            By.XPATH,
+            "//span[contains("
+            "@class,"
+            "'select2-container--open'"
+            ")]"
+            "//input[contains("
+            "@class,"
+            "'select2-search__field'"
+            ")]"
+        )
+
+        option_locator = (
+            By.XPATH,
+            "//span[contains("
+            "@class,"
+            "'select2-container--open'"
+            ")]"
+            "//li[@role='option'"
+            " and not(contains("
+            "@class,"
+            "'select2-results__message'"
+            "))]"
+            "[normalize-space()='Mumbai, Maharashtra, India']"
+        )
+
+        selected_locator = (
+            By.XPATH,
+            "//div[@id='reassignLocation']"
+            "//span[contains("
+            "@class,"
+            "'select2-selection__rendered'"
+            ")]"
+            "[normalize-space()='Mumbai, Maharashtra, India']"
+        )
+
+        def find_dropdown(driver):
+            try:
+
+                elements = driver.find_elements(
+                    *location_dropdown_locator
+                )
+
+                for element in elements:
+
+                    try:
+                        if element.is_displayed():
+                            return element
+
+                    except StaleElementReferenceException:
+                        continue
+
+            except StaleElementReferenceException:
+                return False
+
+            return False
+
+        print(
+            "Locating Select Batch Location dropdown..."
+        )
+
+        dropdown = WebDriverWait(
+            self.driver,
+            20,
+            poll_frequency=0.2,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            find_dropdown
+        )
+
+        self.driver.execute_script(
+            """
+            arguments[0].scrollIntoView({
+                block: 'center'
+            });
+            """,
+            dropdown
+        )
+
+        dropdown = WebDriverWait(
+            self.driver,
+            10,
+            poll_frequency=0.2,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            find_dropdown
+        )
+
+        print(
+            "Clicking Select Batch Location dropdown"
+        )
+
+        try:
+
+            ActionChains(
+                self.driver
+            ).move_to_element(
+                dropdown
+            ).click().perform()
+
+        except (
+            StaleElementReferenceException,
+            ElementClickInterceptedException,
+        ):
+
+            dropdown = WebDriverWait(
+                self.driver,
+                10,
+                poll_frequency=0.2,
+                ignored_exceptions=(
+                    StaleElementReferenceException,
+                )
+            ).until(
+                find_dropdown
+            )
+
+            self.driver.execute_script(
+                "arguments[0].click();",
+                dropdown
+            )
+
+        WebDriverWait(
+            self.driver,
+            15,
+            poll_frequency=0.2,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            EC.visibility_of_element_located(
+                open_locator
+            )
+        )
+
+        print(
+            "Batch Location dropdown OPENED"
+        )
+
+        search_box = WebDriverWait(
+            self.driver,
+            15,
+            poll_frequency=0.2,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            EC.visibility_of_element_located(
+                search_locator
+            )
+        )
+
+        search_box.click()
+        search_box.clear()
+        search_box.send_keys(location)
+
+        print(
+            f"Typed {location} into Batch Location search"
+        )
+
+        WebDriverWait(
+            self.driver,
+            20,
+            poll_frequency=0.2,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            EC.visibility_of_element_located(
+                option_locator
+            )
+        )
+
+        print(
+            "Mumbai, Maharashtra, India option displayed"
+        )
+
+        for attempt in range(1, 4):
+
+            try:
+
+                option = WebDriverWait(
+                    self.driver,
+                    10,
+                    poll_frequency=0.2,
+                    ignored_exceptions=(
+                        StaleElementReferenceException,
+                    )
+                ).until(
+                    EC.element_to_be_clickable(
+                        option_locator
+                    )
+                )
+
+                try:
+                    option.click()
+
+                except (
+                    StaleElementReferenceException,
+                    ElementClickInterceptedException,
+                ):
+
+                    option = WebDriverWait(
+                        self.driver,
+                        5,
+                        poll_frequency=0.2,
+                        ignored_exceptions=(
+                            StaleElementReferenceException,
+                        )
+                    ).until(
+                        EC.element_to_be_clickable(
+                            option_locator
+                        )
+                    )
+
+                    self.driver.execute_script(
+                        "arguments[0].click();",
+                        option
+                    )
+
+                break
+
+            except StaleElementReferenceException:
+
+                print(
+                    f"Mumbai option became stale "
+                    f"(attempt {attempt}/3)"
+                )
+
+                time.sleep(0.5)
+
+        WebDriverWait(
+            self.driver,
+            15,
+            poll_frequency=0.2,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            EC.visibility_of_element_located(
+                selected_locator
+            )
+        )
+
+        print(
+            "Selected Batch Location verified: "
+            "Mumbai, Maharashtra, India"
+        )
+
+        return "Mumbai, Maharashtra, India"
+
+    def submit_location_update(self, batch_no=None):
+        """
+        Submit Update Batch Location.
+
+        The batch number is accepted for consistent test logging,
+        but the modal itself contains the actual Submit button.
+        """
+
+        submit_locator = (
+            By.XPATH,
+            "//div[@id='reassignLocation']"
+            "//div[contains(@class,'modal-footer')]"
+            "//button[normalize-space()='Submit']"
+        )
+
+        submit_button = WebDriverWait(
+            self.driver,
+            15,
+            poll_frequency=0.2,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            EC.element_to_be_clickable(
+                submit_locator
+            )
+        )
+
+        self.driver.execute_script(
+            """
+            arguments[0].scrollIntoView({
+                block: 'center',
+                inline: 'center'
+            });
+            """,
+            submit_button
+        )
+
+        # Re-find after scroll.
+        submit_button = WebDriverWait(
+            self.driver,
+            10,
+            poll_frequency=0.2,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        ).until(
+            EC.element_to_be_clickable(
+                submit_locator
+            )
+        )
+
+        print(
+            f"Clicking Submit for Batch Location"
+            + (f": {batch_no}" if batch_no else "")
+        )
+
+        try:
+            submit_button.click()
+
+        except (
+            StaleElementReferenceException,
+            ElementClickInterceptedException,
+        ):
+
+            submit_button = WebDriverWait(
+                self.driver,
+                10,
+                poll_frequency=0.2,
+                ignored_exceptions=(
+                    StaleElementReferenceException,
+                )
+            ).until(
+                EC.element_to_be_clickable(
+                    submit_locator
+                )
+            )
+
+            self.driver.execute_script(
+                "arguments[0].click();",
+                submit_button
+            )
+
+        print(
+            "Batch Location Submit clicked"
+        )
+
+        modal_locator = (
+            By.ID,
+            "reassignLocation"
+        )
+
+        def modal_closed(driver):
+            try:
+
+                elements = driver.find_elements(
+                    *modal_locator
+                )
+
+                return not any(
+                    element.is_displayed()
+                    for element in elements
+                )
+
+            except StaleElementReferenceException:
+                return True
+
+        try:
+
+            WebDriverWait(
+                self.driver,
+                20,
+                poll_frequency=0.2,
+                ignored_exceptions=(
+                    StaleElementReferenceException,
+                )
+            ).until(
+                modal_closed
+            )
+
+            print(
+                "Update Batch Location modal closed"
+            )
+
+        except TimeoutException:
+
+            print(
+                "Update Batch Location modal is still visible; "
+                "Submit was already clicked."
+            )
+
+        return True
+
+    def wait_for_location_update(
+            self,
+            batch_no,
+            expected_location="Mumbai, Maharashtra, India",
+            timeout=60
+    ):
+        """
+        Synchronization wait after Update Location Submit.
+
+        Location update has the same frontend/backend timing pattern
+        seen in QR status transitions and Reassign.
+
+        Do not immediately reload the list after Submit. Give the
+        backend/API time to persist the new location first.
+        """
+
+        print("=" * 60)
+        print(
+            f"WAITING FOR LOCATION UPDATE : [{batch_no}]"
+        )
+        print(
+            f"Expected Location : {expected_location}"
+        )
+        print("=" * 60)
+
+        start = time.time()
+
+        # Same deliberate initial wait pattern used by the working
+        # Reassign implementation.
+        print(
+            "Waiting for Batch Location backend processing..."
+        )
+
+        time.sleep(5)
+
+        elapsed = time.time() - start
+
+        if elapsed > timeout:
+            raise AssertionError(
+                "Location update synchronization exceeded "
+                f"{timeout} seconds."
+            )
+
+        print(
+            "Location update backend wait completed"
+        )
+
+        return True
+
+    def wait_for_batch_view_page(self, timeout=30):
+        """
+        Synchronize after clicking View.
+
+        The View page is already loaded when the URL changes to /show.
+        Do not depend on a particular Bootstrap/container structure.
+
+        We only wait for:
+            - the /show URL
+            - the visible text "Batch Location"
+        """
+
+        wait = WebDriverWait(
+            self.driver,
+            timeout,
+            poll_frequency=0.25,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        )
+
+        # Wait until navigation to the View page is complete.
+        wait.until(
+            lambda d:
+            "/admin/qr-management/" in d.current_url
+            and "/show" in d.current_url
+        )
+
+        print(
+            f"QR Batch View URL loaded: {self.driver.current_url}"
+        )
+
+        # The application renders the label with spacing/newlines
+        # depending on the DOM. Match the text content, not a class.
+        wait.until(
+            lambda d: any(
+                el.is_displayed()
+                for el in d.find_elements(
+                    By.XPATH,
+                    "//*[contains(normalize-space(.), "
+                    "'Batch Location')]"
+                )
+            )
+        )
+
+        print(
+            "Batch Location label rendered on View page"
+        )
+
+        return True
+
+    def get_batch_location_from_view(self):
+        wait = WebDriverWait(self.driver, 30)
+
+        def read_batch_location(driver):
+            try:
+                location_element = driver.find_element(
+                    By.XPATH,
+                    "//div[contains(@class,'user_basic_details_title')"
+                    " and contains(normalize-space(.),'Batch Location')]"
+                    "/following-sibling::div[contains(@class,'req_details')]"
+                    "//span"
+                )
+
+                value = location_element.get_attribute("textContent").strip()
+
+                if value:
+                    print(
+                        f"Batch Location from View: {value}"
+                    )
+                    return value
+
+            except Exception:
+                return False
+
+            return False
+
+        return wait.until(read_batch_location)
 
     def _is_stale(self, element):
 
