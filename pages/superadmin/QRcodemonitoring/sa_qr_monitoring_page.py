@@ -2,6 +2,7 @@ import random
 import time
 from datetime import timedelta, date
 
+from selenium.common import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
@@ -203,6 +204,7 @@ class SAQRMonitoringPage(BasePage):
         self.click(self.SEARCH_BTN)
         self.wait_for_results()
 
+
     # ======================================================
     # STATUS FILTER
     # ======================================================
@@ -221,16 +223,110 @@ class SAQRMonitoringPage(BasePage):
     # ======================================================
     # DATE FILTER
     # ======================================================
+    #
     def filter_date(self, start, end):
 
-        self.safe_click(self.DATE_FILTER)
+        wait = WebDriverWait(
+            self.driver,
+            20,
+            poll_frequency=0.3
+        )
 
-        picker = FlatpickrRangePicker(self.driver)
-        picker.select_range(start, end)
+        print(
+            f"Selecting date range: "
+            f"{start.strftime('%d %b %Y')} - "
+            f"{end.strftime('%d %b %Y')}"
+        )
 
-        self.click(self.SEARCH_BTN)
+        # =========================================================
+        # STEP 1 - Locate date field
+        # =========================================================
 
-        self.wait_for_results()
+        date_field = wait.until(
+            EC.presence_of_element_located(
+                self.DATE_FILTER
+            )
+        )
+
+        # =========================================================
+        # STEP 2 - SCROLL DATE FIELD INTO CENTER
+        #
+        # This fixes:
+        # ElementClickInterceptedException
+        # =========================================================
+
+        self.driver.execute_script(
+            """
+            arguments[0].scrollIntoView({
+                behavior: 'instant',
+                block: 'center',
+                inline: 'center'
+            });
+            """,
+            date_field
+        )
+
+        time.sleep(1)
+
+        # =========================================================
+        # STEP 3 - Open Flatpickr
+        # =========================================================
+
+        date_field = wait.until(
+            EC.visibility_of_element_located(
+                self.DATE_FILTER
+            )
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            date_field
+        )
+
+        print(
+            "Date picker opened"
+        )
+
+        # =========================================================
+        # STEP 4 - Use existing Flatpickr utility
+        # =========================================================
+
+        picker = FlatpickrRangePicker(
+            self.driver
+        )
+
+        result = picker.select_range(
+            start,
+            end
+        )
+
+        assert result is not False, (
+            f"Unable to select date range: "
+            f"{start} - {end}"
+        )
+
+        print(
+            "Date range selected successfully"
+        )
+
+        # =========================================================
+        # STEP 5 - Click Search
+        # =========================================================
+
+        search_button = wait.until(
+            EC.element_to_be_clickable(
+                self.SEARCH_BTN
+            )
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            search_button
+        )
+
+        print(
+            "Search button clicked after date filter"
+        )
     # ======================================================
     # ENTRIES
     # ======================================================
@@ -459,7 +555,24 @@ class SAQRMonitoringPage(BasePage):
         return len(self.driver.find_elements(*self.FIRST_ROW)) > 0
 
     def has_no_data(self):
-        return len(self.driver.find_elements(*self.NO_DATA)) > 0
+
+        no_result_locator = (
+            By.XPATH,
+            "//*[normalize-space(text())='Sorry! No Result Found']"
+        )
+
+        elements = self.driver.find_elements(
+            *no_result_locator
+        )
+
+        for element in elements:
+            try:
+                if element.is_displayed():
+                    return True
+            except StaleElementReferenceException:
+                continue
+
+        return False
 
     def export_bulk_id_based(self):
         wait = WebDriverWait(self.driver, 20)
@@ -808,3 +921,46 @@ class SAQRMonitoringPage(BasePage):
         time.sleep(1)
 
         print("Dropdown closed")
+
+    def wait_for_no_result(self, timeout=30):
+
+        no_result_locator = (
+            By.XPATH,
+            "//*[normalize-space(text())='Sorry! No Result Found']"
+        )
+
+        wait = WebDriverWait(
+            self.driver,
+            timeout,
+            poll_frequency=0.5,
+            ignored_exceptions=(
+                StaleElementReferenceException,
+            )
+        )
+
+        wait.until(
+            lambda d: any(
+                element.is_displayed()
+                for element in d.find_elements(
+                    *no_result_locator
+                )
+            )
+        )
+
+        print(
+            "No Result Found message displayed"
+        )
+
+    def filter_invalid_old_date_range(self, start, end):
+
+        print(
+            f"Selecting invalid date range: "
+            f"{start.strftime('%d %b %Y')} - "
+            f"{end.strftime('%d %b %Y')}"
+        )
+
+        self.filter_date(start, end)
+
+        print(
+            "Invalid old date range applied"
+        )
