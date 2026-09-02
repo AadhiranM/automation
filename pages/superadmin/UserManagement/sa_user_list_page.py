@@ -608,3 +608,251 @@ class SAUserListPage(BasePage):
 
         print(f"User name updated: {new_name}")
         print(f"User mobile updated: {new_mobile}")
+
+    # =====================================================
+    # DATE FILTER
+    # =====================================================
+
+    def filter_by_date(self, start, end):
+
+        wait = WebDriverWait(
+            self.driver,
+            15
+        )
+
+        print(
+            f"Selecting date range: "
+            f"{start.strftime('%d %b %Y')} - "
+            f"{end.strftime('%d %b %Y')}"
+        )
+
+        # -------------------------------------------------
+        # Open Created At date picker
+        # -------------------------------------------------
+
+        date_filter = wait.until(
+            EC.element_to_be_clickable(
+                (
+                    By.XPATH,
+                    "//input[@placeholder='Filter by : Created At']"
+                )
+            )
+        )
+
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block:'center'});",
+            date_filter
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            date_filter
+        )
+
+        print("Date picker opened")
+
+        # -------------------------------------------------
+        # Get current calendar year
+        # -------------------------------------------------
+
+        year_input = wait.until(
+            EC.visibility_of_element_located(
+                (
+                    By.XPATH,
+                    "//div[contains(@class,'flatpickr-calendar') "
+                    "and contains(@class,'open')]"
+                    "//input[contains(@class,'numInput')]"
+                )
+            )
+        )
+
+        current_year = int(
+            year_input.get_attribute("value")
+        )
+
+        target_year = start.year
+
+        print(
+            f"Current calendar year: {current_year}"
+        )
+
+        print(
+            f"Target year: {target_year}"
+        )
+
+        # -------------------------------------------------
+        # YEAR DOWN ARROW
+        #
+        # Example:
+        # 2026 -> 2025 -> 2024
+        # -------------------------------------------------
+
+        while current_year > target_year:
+            year_down = wait.until(
+                EC.element_to_be_clickable(
+                    (
+                        By.XPATH,
+                        "//div[contains(@class,'flatpickr-calendar') "
+                        "and contains(@class,'open')]"
+                        "//span[contains(@class,'arrowDown')]"
+                    )
+                )
+            )
+
+            self.driver.execute_script(
+                "arguments[0].scrollIntoView({block:'center'});",
+                year_down
+            )
+
+            self.driver.execute_script(
+                "arguments[0].click();",
+                year_down
+            )
+
+            time.sleep(0.5)
+
+            year_input = wait.until(
+                EC.visibility_of_element_located(
+                    (
+                        By.XPATH,
+                        "//div[contains(@class,'flatpickr-calendar') "
+                        "and contains(@class,'open')]"
+                        "//input[contains(@class,'numInput')]"
+                    )
+                )
+            )
+
+            current_year = int(
+                year_input.get_attribute("value")
+            )
+
+            print(
+                f"Year after DOWN arrow: {current_year}"
+            )
+
+        # -------------------------------------------------
+        # Verify target year
+        # -------------------------------------------------
+
+        assert current_year == target_year, (
+            f"Year navigation failed. "
+            f"Expected {target_year}, "
+            f"Actual {current_year}"
+        )
+
+        print(
+            f"Year successfully changed to {target_year}"
+        )
+
+        # -------------------------------------------------
+        # Change month using MONTH DROPDOWN
+        #
+        # Example:
+        # September 2024 -> January 2024
+        # -------------------------------------------------
+
+        month_dropdown = wait.until(
+            EC.visibility_of_element_located(
+                (
+                    By.XPATH,
+                    "//div[contains(@class,'flatpickr-calendar') "
+                    "and contains(@class,'open')]"
+                    "//select[contains("
+                    "@class,"
+                    "'flatpickr-monthDropdown-months'"
+                    ")]"
+                )
+            )
+        )
+
+        Select(
+            month_dropdown
+        ).select_by_visible_text(
+            start.strftime("%B")
+        )
+
+        print(
+            f"Month changed to {start.strftime('%B')}"
+        )
+
+        # -------------------------------------------------
+        # Select START DATE
+        # -------------------------------------------------
+
+        start_date = wait.until(
+            EC.element_to_be_clickable(
+                (
+                    By.XPATH,
+                    "//div[contains(@class,'flatpickr-calendar') "
+                    "and contains(@class,'open')]"
+                    f"//span[contains(@class,'flatpickr-day') "
+                    f"and @aria-label='{start.strftime('%B %-d, %Y')}']"
+                )
+            )
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            start_date
+        )
+
+        print(
+            f"Selected start date: "
+            f"{start.strftime('%d %b %Y')}"
+        )
+
+        # -------------------------------------------------
+        # Select END DATE
+        # -------------------------------------------------
+
+        end_date = wait.until(
+            EC.element_to_be_clickable(
+                (
+                    By.XPATH,
+                    "//div[contains(@class,'flatpickr-calendar') "
+                    "and contains(@class,'open')]"
+                    f"//span[contains(@class,'flatpickr-day') "
+                    f"and @aria-label='{end.strftime('%B %-d, %Y')}']"
+                )
+            )
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            end_date
+        )
+
+        print(
+            f"Selected end date: "
+            f"{end.strftime('%d %b %Y')}"
+        )
+
+        # -------------------------------------------------
+        # Click Filter button
+        # -------------------------------------------------
+
+        filter_button = wait.until(
+            EC.element_to_be_clickable(
+                (
+                    By.XPATH,
+                    "//button[normalize-space()='Filter']"
+                )
+            )
+        )
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            filter_button
+        )
+
+        print("Filter button clicked")
+
+        # -------------------------------------------------
+        # Wait for result / no-result state
+        # -------------------------------------------------
+
+        self.wait_for_results()
+
+        print(
+            "Date filter completed successfully"
+        )
