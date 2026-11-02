@@ -16,11 +16,23 @@ class user_filters:
     search_field=(By.XPATH,"//input[@id='search-vale']")
     filter_calender=(By.XPATH,"//input[@class='form-control dash-filter-picker active form-control input']")
     select_status=(By.XPATH,"//select[@id='idStatus']")
-    actions_icon=(By.XPATH,"(//button[@type='button'])[13]")
+    actions_icon=(By.XPATH,"(//button[@type='button'])[14]")
     suspend_opt=(By.XPATH,"//a[normalize-space()='Suspend']")
-    suspend_btn=(By.XPATH,"//button[normalize-space()='Suspend']")
+    yes_btn=(By.XPATH,"//button[normalize-space()='Yes']")
     Activate_opt=(By.XPATH,"//a[normalize-space()='Activate']")
     Activate_btn=(By.XPATH,"//button[normalize-space()='Activate']")
+
+    #filter_toggle
+    filter_toggle=(By.XPATH,"//button[@id='filterToggleBtn']")
+    filter_toggle_name_field=(By.XPATH,"//input[@id='name']")
+    filter_toggle_created_by_opt=(By.XPATH,"//div[@class='choices__item choices__placeholder choices__item--selectable'][normalize-space()='Select Created By']")
+    filter_toggle_created_By_field=(By.XPATH,"//input[@placeholder='Search Created By']")
+    filter_toggle_role_opt=(By.XPATH,"//div[@class='choices__item choices__placeholder choices__item--selectable'][normalize-space()='Select Role']")
+    filter_toggle_role_field=(By.XPATH,"//input[@aria-label='Select Role']")
+    filter_toggle_user_type_opt=(By.XPATH,"//div[@class='choices__item choices__placeholder choices__item--selectable'][normalize-space()='Select User Type']")
+    filter_toggle_user_type_field=(By.XPATH,"//input[@aria-label='Select User Type']")
+    filter_toggle_apply_btn=(By.XPATH,"//button[normalize-space()='Apply']")
+
 
 
     def __init__(self, driver):
@@ -105,38 +117,6 @@ class user_filters:
 
         time.sleep(1)
 
-    # def search_product(self, search_name):
-    #     flag = False
-    #     try:
-    #         # Check if table has empty message
-    #         empty_cells = self.driver.find_elements(By.XPATH, "//table[@id='crudTable']//td[@class='dataTables_empty']")
-    #         if empty_cells:
-    #             print("Table is empty")
-    #             return False
-    #
-    #         # Get all rows in tbody
-    #         rows = self.driver.find_elements(By.XPATH, "//table[@id='crudTable']//tbody//tr")
-    #
-    #         for r in range(1, len(rows) + 1):
-    #             # Get product_name and batch_no using full XPath
-    #             search_result = self.driver.find_element(
-    #                 By.XPATH, f"//table[@id='crudTable']//tbody//tr[{r}]//td[2]"
-    #             ).text.strip()
-    #             # batch_no = self.driver.find_element(
-    #             #     By.XPATH, f"//table[@id='crudTable']//tbody//tr[{r}]//td[3]"
-    #             # ).text.strip()
-    #             time.sleep(1)
-    #
-    #             print(search_result)
-    #             if search_name == search_result:
-    #                 flag = True
-    #                 break
-    #
-    #     except Exception as e:
-    #         print(f"Exception in searching product: {e}")
-    #         flag = False
-    #
-    #     return flag
 
 
     def search_product(self, search_name, expected_status=None):
@@ -207,19 +187,57 @@ class user_filters:
     def Click_actions_icon(self):
         self.driver.find_element(*self.actions_icon).click()
 
-    def Click_suspend_opt(self):
-        self.driver.find_element(*self.suspend_opt).click()
-
-    def Click_suspend_btn(self):
-        self.driver.find_element(*self.suspend_btn).click()
+    def Click_yes_btn(self):
+        self.driver.find_element(*self.yes_btn).click()
 
     def Click_activate_opt(self):
-        self.driver.find_element(*self.Activate_opt).click()
+        WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(self.Activate_opt)
+        ).click()
+
+    def Click_suspend_opt(self):
+        WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(self.suspend_opt)
+        ).click()
 
     def Click_Activate_btn(self):
         self.driver.find_element(*self.Activate_btn).click()
 
+    ###filter_toggle
 
+    def Click_filter_toggle(self):
+        self.driver.find_element(*self.filter_toggle).click()
+
+    def Enter_filter_toggle_name(self, name):
+        self.driver.find_element(*self.filter_toggle_name_field).send_keys(name)
+
+    def Click_filter_toggle_created_by_opt(self):
+        self.driver.find_element(*self.filter_toggle_created_by_opt).click()
+
+    def Enter_filter_toggle_created_by_field(self, created_by):
+        element=self.driver.find_element(*self.filter_toggle_created_By_field)
+        element.send_keys(created_by)
+        element.send_keys(Keys.ENTER)
+        # self.driver.find_element(*self.filter_toggle_created_By_field).send_keys(created_by)
+
+    def Click_filter_toggle_role_opt(self):
+        self.driver.find_element(*self.filter_toggle_role_opt).click()
+
+    def Enter_filter_toggle_role_field(self, role):
+
+        self.driver.find_element(*self.filter_toggle_role_field).send_keys(role)
+
+    def Click_filter_toggle_user_type_opt(self):
+        self.driver.find_element(*self.filter_toggle_user_type_opt).click()
+
+    def Enter_filter_toggle_user_type_field(self, user_type):
+        element=self.driver.find_element(*self.filter_toggle_user_type_field)
+        element.send_keys(user_type)
+        element.send_keys(Keys.ENTER)
+        # self.driver.find_element(*self.filter_toggle_user_type_field).send_keys(user_type)
+
+    def Click_filter_toggle_apply_btn(self):
+        self.driver.find_element(*self.filter_toggle_apply_btn).click()
 
 
 

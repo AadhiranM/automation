@@ -1,6 +1,11 @@
+
+
 import pytest
 import time
 import os
+import random
+import string
+from datetime import datetime, timedelta
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -23,55 +28,80 @@ test_data = get_test_data(excel_path, "products")
 class Test_product_filter_edit(BaseTest):
     logger = LogGen.loggen()
 
-    current_sku = "PRD2025X0012"
+    def test_QR_management_product_filter_flow(self, driver, data):
 
-    def test_QR_management_products_flow(self, driver, data):
+        # Generate Product Name and Brand Name dynamically
+        edit_product_name = random.choice(string.ascii_uppercase) + ''.join(
+            random.choices(string.ascii_lowercase, k=random.randint(4, 9))
+        )
 
-        search_value = data["search_value"]
+        edit_brand_name = random.choice(string.ascii_uppercase) + ''.join(
+            random.choices(string.ascii_lowercase, k=random.randint(4, 9))
+        )
+
         filter_status = data["filter_status"]
-        start_date = data["start_date"]
-        end_date = data["end_date"]
 
         self.logger.info(
-            f"===== QR Management Products Edit Flow Started | Product: {search_value} ====="
+            "===== QR Management Products Edit Flow Started ====="
         )
 
-        self.logger.info(
-            f"Filter Details | "
-            f"Product: {search_value} | "
-            f"Status: {filter_status} | "
-            f"Date Range: {start_date} to {end_date}"
-        )
-
-        wait = WebDriverWait(driver, 5)
-
-        # LOGIN
-        # if data == test_data[0]:
-        #     self.driver = driver
-        #     self.login_and_access()
-        #     self.logger.info("Login successful (first iteration)")
-        # else:
-        #     self.logger.info("Skipping login — already logged in")
+        wait = WebDriverWait(driver, 10)
 
         # NAVIGATION
         self.logger.info("Starting navigation to Products module")
-
-        qr_page = QR_Management_Category_Page(driver)
-
-        qr_page.Click_Dashboard()
-        self.logger.info("Clicked Dashboard")
-
         driver.refresh()
         self.logger.info("Page refreshed successfully")
-
-        qr_page.Click_QR_management()
-        self.logger.info("Opened QR Management module")
-
         qr_products_page = QR_Management_products_Page(driver)
+
+        qr_products_page.Click_Dashboard()
+        self.logger.info("Clicked Dashboard")
+
+        qr_products_page.Click_QR_Management()
+        self.logger.info("Opened QR Management module")
 
         qr_products_page.Click_products()
         self.logger.info("Opened Products page")
 
+
+
+        # GET SEARCH VALUE AND DATE FROM FIRST ROW
+        search_value = wait.until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//tbody/tr[1]/td[3]")
+            )
+        ).text.strip()
+
+        date_value = wait.until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//tbody/tr[1]/td[8]")
+            )
+        ).text.strip()
+
+        actual_date = datetime.strptime(
+            date_value, "%d %b %Y %I:%M %p"
+        )
+
+        start_date = (
+            actual_date - timedelta(days=1)
+        ).strftime("%Y-%m-%d")
+
+        end_date = actual_date.strftime("%Y-%m-%d")
+
+        print("Search Value:", search_value)
+        print("Start Date:", start_date)
+        print("End Date:", end_date)
+
+        self.logger.info(f"Search Value: {search_value}")
+        self.logger.info(f"Start Date: {start_date}")
+        self.logger.info(f"End Date: {end_date}")
+
+        self.logger.info(
+            f"Filter Details | Product: {search_value} | "
+            f"Status: {filter_status} | "
+            f"Date Range: {start_date} to {end_date}"
+        )
+
+        # FILTER ACTION
         qr_products_page.Enter_search_value(search_value)
         self.logger.info(f"Entered Search Value: {search_value}")
 
@@ -80,7 +110,8 @@ class Test_product_filter_edit(BaseTest):
 
         qr_products_page.select_date_range(start_date, end_date)
         self.logger.info(
-            f"Selected Date Range | Start Date: {start_date} | End Date: {end_date}"
+            f"Selected Date Range | Start Date: {start_date} | "
+            f"End Date: {end_date}"
         )
 
         qr_products_page.select_filter_status(filter_status)
@@ -96,7 +127,8 @@ class Test_product_filter_edit(BaseTest):
             )
 
             self.logger.error(
-                f"FILTER FAILED | Product: {search_value} | No matching records found"
+                f"FILTER FAILED | Product: {search_value} | "
+                "No matching records found"
             )
 
             assert status, "FILTER FAILED | No data found "
@@ -105,6 +137,7 @@ class Test_product_filter_edit(BaseTest):
             f"Filter applied successfully | Product: {search_value} | Records found"
         )
 
+        # EDIT PRODUCT
         qr_products_page.click_actions_icon()
         self.logger.info("Clicked Actions icon")
 
@@ -115,14 +148,14 @@ class Test_product_filter_edit(BaseTest):
 
         time.sleep(1)
 
-        qr_products_page.Enter_product_name_or_Id(data["edit_product_name"])
+        qr_products_page.Enter_product_name_or_Id(edit_product_name)
         self.logger.info(
-            f"Updated Product Name: {data['edit_product_name']}"
+            f"Updated Product Name: {edit_product_name}"
         )
 
-        qr_products_page.Enter_brand_name(data["edit_brand_name"])
+        qr_products_page.Enter_brand_name(edit_brand_name)
         self.logger.info(
-            f"Updated Brand Name: {data['edit_brand_name']}"
+            f"Updated Brand Name: {edit_brand_name}"
         )
 
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
@@ -141,7 +174,7 @@ class Test_product_filter_edit(BaseTest):
         except Exception as e:
             self.logger.error(
                 f"Image upload failed for "
-                f"{data['edit_product_name']} | Error: {e}"
+                f"{edit_product_name} | Error: {e}"
             )
             return
 
@@ -150,17 +183,12 @@ class Test_product_filter_edit(BaseTest):
             f"Entered Product URL: {data['edit_product_url']}"
         )
 
-        qr_products_page.Enter_SKU_ID(data["edit_SKU_ID"])
-        self.logger.info(
-            f"Entered SKU ID: {data['edit_SKU_ID']}"
-        )
+        # SKU - Auto Generate
+        new_sku_id = f"PRD2026X{random.randint(1000, 9999)}"
 
-        # # SKU
-        # new_sku = generate_next_sku(self.current_sku)
-        # self.__class__.current_sku = new_sku
-        #
-        # self.logger.info(f"Generated SKU: {new_sku}")
-        # qr_products_page.Enter_SKU_ID(new_sku)
+        self.logger.info(f"Generated SKU ID: {new_sku_id}")
+
+        qr_products_page.Enter_SKU_ID(new_sku_id)
 
         # PRODUCT DETAILS
         qr_products_page.select_category_opt()
@@ -244,9 +272,7 @@ class Test_product_filter_edit(BaseTest):
             # Remove unsupported Unicode characters from logs
             toast_msg = toast_msg.encode("ascii", errors="ignore").decode()
 
-            self.logger.info(
-                f"Toast received: {toast_msg}"
-            )
+            self.logger.info(f"Toast received: {toast_msg}")
 
         except TimeoutException:
             toast_msg = ""
@@ -257,7 +283,7 @@ class Test_product_filter_edit(BaseTest):
 
             self.logger.info(
                 f"Product updated successfully | "
-                f"Product: {data['edit_product_name']} | "
+                f"Product: {edit_product_name} | "
                 f"Toast: {toast_msg}"
             )
 
@@ -272,7 +298,7 @@ class Test_product_filter_edit(BaseTest):
 
             self.logger.error(
                 f"Product update failed | "
-                f"Product: {data['edit_product_name']} | "
+                f"Product: {edit_product_name} | "
                 f"Toast: {toast_msg}"
             )
 

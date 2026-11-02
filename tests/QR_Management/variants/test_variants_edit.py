@@ -1,5 +1,9 @@
+
+
 import pytest
 import time
+import random
+import string
 from selenium.webdriver.common.by import By
 from pages.QR_Management.QR_management_category import QR_Management_Category_Page
 from pages.QR_Management.QR_management_variants import QR_Management_variants_Page
@@ -26,20 +30,15 @@ class Test_variants_edit(BaseTest):
 
         wait = WebDriverWait(driver, 10)
 
-        # ---------------- LOGIN ----------------
+        # Generate variant type and value dynamically
+        edit_variants_type = random.choice(string.ascii_uppercase) + ''.join(
+            random.choices(string.ascii_lowercase, k=random.randint(4, 9))
+        )
 
-        # if data == test_data[0]:
-        #     self.driver = driver
-        #     self.login_and_access()
-        #     self.logger.info("Login successful (first iteration)")
-        # else:
-        #     self.logger.info("Skipping login — already logged in")
+        edit_variants_value = random.choice(string.ascii_uppercase) + ''.join(
+            random.choices(string.ascii_lowercase, k=random.randint(4, 9))
+        )
 
-        search_category_name = data["search_Category"]
-        edit_variants_type = data["edit_variants_type"]
-        edit_variants_value = data["edit_variants_value"]
-
-        self.logger.info(f"Category: {search_category_name}")
         self.logger.info(f"Variant Type: {edit_variants_type}")
         self.logger.info(f"Variant Value: {edit_variants_value}")
 
@@ -61,6 +60,15 @@ class Test_variants_edit(BaseTest):
         qr_variants_page.Click_variants()
         self.logger.info("Opened Variants section")
 
+        # Get category name from the first row of the Variant page
+        search_category_name = wait.until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//tbody/tr[1]/td[1]")
+            )
+        ).text.strip()
+
+        self.logger.info(f"Category: {search_category_name}")
+
         qr_variants_page.Enter_search_category_name(search_category_name)
         self.logger.info(f"Searched for category: {search_category_name}")
 
@@ -74,16 +82,21 @@ class Test_variants_edit(BaseTest):
             )
             self.logger.error("FILTER FAILED | No data found ")
             assert status, "FILTER FAILED | No data found "
+
         self.logger.info("Filter applied successfully, table has records")
 
         qr_variants_page.click_actions_icon()
         self.logger.info("Clicked actions icon")
+
         qr_variants_page.click_edit_opt()
         self.logger.info("Clicked edit option")
+
         qr_variants_page.Enter_edit_variant_type(edit_variants_type)
         self.logger.info(f"Entered variant type: {edit_variants_type}")
+
         qr_variants_page.Enter_edit_variant_value(edit_variants_value)
         self.logger.info(f"Entered variant value: {edit_variants_value}")
+
         qr_variants_page.click_update_btn()
         self.logger.info("Clicked update button")
 
@@ -122,4 +135,3 @@ class Test_variants_edit(BaseTest):
             assert False, (
                 f"variants updation failed | Toast: {toast_text}"
             )
-

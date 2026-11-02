@@ -15,12 +15,11 @@ class Roles_and_permission_filters:
     search_name_field=(By.XPATH,"(//input[@id='search-vale'])[1]")
     filter_calender=(By.XPATH,"//input[@class='form-control dash-filter-picker active form-control input']")
     select_status=(By.XPATH,"//select[@id='idStatus']")
-    actions_icon=(By.XPATH,"(//button[@type='button'])[13]")
+    actions_icon=(By.XPATH,"(//button[@type='button'])[14]")
     inactive_opt=(By.XPATH,"//ul[@class='dropdown-menu dropdown-menu-end dd_action show']//a[@class='dropdown-item status-item-btn icons-designed'][normalize-space()='Inactive']")
     active_opt=(By.XPATH,"//a[normalize-space()='Activate']")
-    Activate_btn=(By.XPATH,"//button[normalize-space()='Activate']")
-    Inactive_opt=(By.XPATH,"//ul[@class='dropdown-menu dropdown-menu-end dd_action show']//a[@class='dropdown-item status-item-btn icons-designed'][normalize-space()='Inactive']")
-    suspend_btn=(By.XPATH,"//button[normalize-space()='Suspend']")
+    Yes_btn=(By.XPATH,"//button[normalize-space()='Yes']")
+
 
     def __init__(self, driver):
         self.driver = driver
@@ -79,12 +78,6 @@ class Roles_and_permission_filters:
             ):
                 d.click()
                 break
-
-        # for d in self.driver.find_elements(By.XPATH, calendar_popup + "//span[contains(@class,'flatpickr-day')]"):
-        #     if d.text == str(int(start_day)) and "disabled" not in d.get_attribute("class"):
-        #         d.click()
-        #         break
-
         time.sleep(1)
 
         # END DATE
@@ -95,43 +88,20 @@ class Roles_and_permission_filters:
             time.sleep(1)
 
         for d in self.driver.find_elements(By.XPATH, calendar_popup + "//span[contains(@class,'flatpickr-day')]"):
-            if d.text == str(int(end_day)) and "disabled" not in d.get_attribute("class"):
+
+            classes = d.get_attribute("class")
+
+            if (
+                    d.text == str(int(end_day))
+                    and "flatpickr-disabled" not in classes
+                    and "notAllowed" not in classes
+                    and "prevMonthDay" not in classes
+                    and "nextMonthDay" not in classes
+            ):
                 d.click()
                 break
-        time.sleep(1)
 
-    # def search_product(self, search_name):
-    #     flag = False
-    #     try:
-    #         # Check if table has empty message
-    #         empty_cells = self.driver.find_elements(By.XPATH, "//table[@id='crudTable']//td[@class='dataTables_empty']")
-    #         if empty_cells:
-    #             print("Table is empty")
-    #             return False
-    #
-    #         # Get all rows in tbody
-    #         rows = self.driver.find_elements(By.XPATH, "//table[@id='crudTable']//tbody//tr")
-    #
-    #         for r in range(1, len(rows) + 1):
-    #             # Get product_name and batch_no using full XPath
-    #             role_name = self.driver.find_element(
-    #                 By.XPATH, f"//table[@id='crudTable']//tbody//tr[{r}]//td[2]"
-    #             ).text.strip()
-    #             active_status = self.driver.find_element(
-    #                 By.XPATH, f"//table[@id='crudTable']//tbody//tr[{r}]//td[5]"
-    #             ).text.strip()
-    #             time.sleep(1)
-    #             print(active_status)
-    #             print(role_name)
-    #             if search_name == role_name:
-    #                 flag = True
-    #                 break
-    #
-    #     except Exception as e:
-    #         print(f"Exception in searching product: {e}")
-    #         flag = False
-    #
-    #     return flag
+
 
     def search_product(self, search_name, expected_status=None):
         try:
@@ -201,70 +171,18 @@ class Roles_and_permission_filters:
     def Click_actions_icon(self):
         self.driver.find_element(*self.actions_icon).click()
 
-    # def Click_inactive_opt(self):
-    #     self.driver.find_element(*self.inactive_opt).click()
-
     def Click_active_opt(self):
         self.driver.find_element(*self.active_opt).click()
 
-    def Click_Activate_btn(self):
-        self.driver.find_element(*self.Activate_btn).click()
+    def Click_yes_btn(self):
+        self.driver.find_element(*self.Yes_btn).click()
 
     def Click_Inactive_opt(self):
-        self.driver.find_element(*self.Inactive_opt).click()
-
-    def Click_suspend_btn(self):
-        self.driver.find_element(*self.suspend_btn).click()
+        self.driver.find_element(*self.inactive_opt).click()
 
 
-    # def Click_refresh_btn(self):
-    #     self.wait.until(
-    #         EC.element_to_be_clickable(self.refresh_btn)
-    #     ).click()
-    #
-    # def Enter_search_name_field(self, search_name):
-    #     search = self.wait.until(
-    #         EC.visibility_of_element_located(self.search_name_field)
-    #     )
-    #     search.clear()
-    #     search.send_keys(search_name)
-    #
-    # def Click_filter_calender(self):
-    #     self.wait.until(
-    #         EC.element_to_be_clickable(self.filter_calender)
-    #     ).click()
-    #
-    # def Choose_select_status(self, select_status):
-    #     dropdown = self.wait.until(
-    #         EC.presence_of_element_located(self.select_status)
-    #     )
-    #     Select(dropdown).select_by_visible_text(select_status)
-    #
-    # def Click_actions_icon(self):
-    #     self.wait.until(
-    #         EC.element_to_be_clickable(self.actions_icon)
-    #     ).click()
-    #
-    # def Click_active_opt(self):
-    #     self.wait.until(
-    #         EC.element_to_be_clickable(self.active_opt)
-    #     ).click()
-    #
-    # def Click_Activate_btn(self):
-    #     self.wait.until(
-    #         EC.element_to_be_clickable(self.Activate_btn)
-    #     ).click()
-    #
-    # def Click_Inactive_opt(self):
-    #     self.wait.until(
-    #         EC.element_to_be_clickable(self.Inactive_opt)
-    #     ).click()
-    #
-    # def Click_suspend_btn(self):
-    #     self.wait.until(
-    #         EC.element_to_be_clickable(self.suspend_btn)
-    #     ).click()
-    #
+
+
 
 
 

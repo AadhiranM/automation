@@ -24,8 +24,8 @@ class QR_Management_Category_Page:
 
     #filter_toggle
     filter_toggle_btn=(By.XPATH,"//button[@id='filterToggleBtn']")
-    filter_toggle_category_field=(By.XPATH,"//input[@id='category_name']")
-    filter_toggle_date_range=(By.XPATH,"//input[@id='date_range']")
+    filter_toggle_category_field=(By.XPATH,"//input[@id='sb_category_name']")
+    filter_toggle_date_range=(By.XPATH,"//input[@id='sb_date_range']")
     filter_toggle_status=(By.XPATH,"//div[@class='choices__inner']")
     filter_toggle_apply_btn=(By.XPATH,"//button[normalize-space()='Apply']")
 

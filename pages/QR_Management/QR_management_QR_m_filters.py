@@ -16,9 +16,10 @@ class QR_Management_QR_m_filters:
     filters_exp_date=(By.XPATH,"//input[@id='expiry_date']")
     filters_apply_btn=(By.XPATH,"//button[normalize-space()='Apply']")
     clear_filter=(By.XPATH,"//button[@id='clear-filter-btn']")
-    filter_product_name=(By.XPATH,"//input[@id='product_name']")
+    # filter_product_name=(By.XPATH,"//input[@id='product_name']")
     search_field=(By.XPATH,"//input[@id='search-vale']")
-    search_btn=(By.XPATH,"//button[@id='search-btn']")
+
+    # search_btn=(By.XPATH,"//button[@id='search-btn']")
     table_rows=(By.XPATH,"//table[@id='crudTable']//tbody//tr")
     table_column=(By.XPATH,"//table[@id='crudTable']//tbody//tr//td")
     table_xpath=(By.XPATH,"//table[@id='crudTable']")
@@ -51,8 +52,8 @@ class QR_Management_QR_m_filters:
     def Enter_search_field(self,search_value):
         self.driver.find_element(*self.search_field).send_keys(search_value)
 
-    def Click_search_btn(self):
-        self.driver.find_element(*self.search_btn).click()
+    # def Click_search_btn(self):
+    #     self.driver.find_element(*self.search_btn).click()
 
     def select_status_drp(self,select_status):
         drpdwn_status=Select(self.driver.find_element(*self.status_drp))
@@ -99,9 +100,9 @@ class QR_Management_QR_m_filters:
     def Click_filter_button(self):
         self.driver.find_element(*self.filters_btn).click()
 
-    def Enter_filter_prd_name(self,product_name):
-        self.driver.find_element(*self.filter_product_name).clear()
-        self.driver.find_element(*self.filter_product_name).send_keys(product_name)
+    # def Enter_filter_prd_name(self,product_name):
+    #     self.driver.find_element(*self.filter_product_name).clear()
+    #     self.driver.find_element(*self.filter_product_name).send_keys(product_name)
 
 
     def Click_filters_apply_btn(self):

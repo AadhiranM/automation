@@ -1,5 +1,10 @@
+
+
 import pytest
 import time
+import random
+import string
+from datetime import datetime, timedelta
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -19,32 +24,20 @@ test_data = get_test_data(excel_path, "category")
 class Test_category_filter_toggle_edit(BaseTest):
 
     logger = LogGen.loggen()
+
     def test_QR_management_category_flow(self, driver, data):
 
-        category_name = data["category_name"]
         filter_status = data["filter_status"]
-        start_date = data["start_date"]
-        end_date = data["end_date"]
-
-        edit_category_name = data["edit_category_name"]
         edit_status = data["edit_status"]
 
-        self.logger.info("===== TEST STARTED: QR CATEGORY CREATION =====")
-        self.logger.info(f"Category: {category_name} | Status: {filter_status}")
+        # Generate dynamic edit category name (5-10 letters)
+        edit_category_name = random.choice(string.ascii_uppercase) + ''.join(
+            random.choices(string.ascii_lowercase, k=random.randint(4, 9))
+        )
+
+        self.logger.info("===== TEST STARTED: QR CATEGORY FILTER TOGGLE EDIT =====")
 
         wait = WebDriverWait(driver, 4)
-
-        # self.driver = driver
-        # self.login_and_access()
-
-        # ---------------- LOGIN ----------------
-
-        # if data == test_data[0]:
-        #     self.driver = driver
-        #     self.login_and_access()
-        #     self.logger.info("Login successful (first iteration)")
-        # else:
-        #     self.logger.info("Skipping login — already logged in")
 
         # ---------------- NAVIGATION ----------------
         self.logger.info("Navigating to Category module")
@@ -62,6 +55,42 @@ class Test_category_filter_toggle_edit(BaseTest):
         qr_page.click_category()
         self.logger.info("Opened Category section")
 
+        # ---------------- GET CATEGORY NAME AND DATE ----------------
+        wait = WebDriverWait(driver, 10)
+
+        category_name = wait.until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//tbody/tr[1]/td[2]")
+            )
+        ).text.strip()
+
+        date_value = wait.until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//tbody/tr[1]/td[5]")
+            )
+        ).text.strip()
+
+        actual_date = datetime.strptime(
+            date_value, "%d %b %Y %I:%M %p"
+        )
+
+        start_date = (
+            actual_date - timedelta(days=1)
+        ).strftime("%Y-%m-%d")
+
+        end_date = actual_date.strftime("%Y-%m-%d")
+
+        print("Category Name:", category_name)
+        print("Start Date:", start_date)
+        print("End Date:", end_date)
+        print("Edit Category Name:", edit_category_name)
+
+        self.logger.info(f"Category Name: {category_name}")
+        self.logger.info(f"Start Date: {start_date}")
+        self.logger.info(f"End Date: {end_date}")
+        self.logger.info(f"Edit Category Name: {edit_category_name}")
+
+        # ---------------- FILTER TOGGLE ----------------
         qr_page.Click_filter_toggle()
 
         qr_page.Enter_filter_toggle_category_field(category_name)
@@ -92,22 +121,30 @@ class Test_category_filter_toggle_edit(BaseTest):
             )
             self.logger.error("FILTER FAILED | No data found ")
             assert status, "FILTER FAILED | No data found "
+
         self.logger.info("Filter applied successfully, table has records")
 
+        # ---------------- EDIT CATEGORY ----------------
         qr_page.click_actions_icon()
         time.sleep(1)
+
         qr_page.click_edit_opt()
         time.sleep(1)
+
         qr_page.enter_edit_category_name(edit_category_name)
         time.sleep(1)
+
         qr_page.select_edit_status(edit_status)
         time.sleep(1)
+
         qr_page.click_edit_update_btn()
 
+        # ---------------- TOAST VALIDATION ----------------
         try:
             toast_text = WebDriverWait(driver, 3).until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, ".toastify"))
             ).text
+
             toast_text = toast_text.encode("ascii", errors="ignore").decode()
 
             print("Toast:", toast_text)
@@ -119,17 +156,14 @@ class Test_category_filter_toggle_edit(BaseTest):
 
             self.logger.error("Toast message not displayed")
 
+        # ---------------- FINAL VALIDATION ----------------
         if "Category Updated Successfully!" in toast_text:
 
-            self.logger.info(
-                f"Category Updated Successfully!"
-            )
+            self.logger.info("Category Updated Successfully!")
 
         else:
 
-            self.logger.error(
-                f"Category Updation FAILED | "
-            )
+            self.logger.error("Category Updation FAILED")
 
             take_screenshot(
                 driver,
