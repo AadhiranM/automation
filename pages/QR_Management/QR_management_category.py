@@ -1,4 +1,3 @@
-# qr_monitoring_page.py
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
@@ -41,32 +40,47 @@ class QR_Management_Category_Page:
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
 
-    # Actions
+
+    def wait_for_visible(self, locator):
+        return self.wait.until(
+            EC.visibility_of_element_located(locator)
+        )
+
+    def wait_for_clickable(self, locator):
+        return self.wait.until(
+            EC.element_to_be_clickable(locator)
+        )
+
+   # Actions
+
+
     def Click_Dashboard(self):
-        self.driver.find_element(*self.Dashboard).click()
+        self.wait_for_clickable(self.Dashboard).click()
 
     def Click_QR_management(self):
-        self.driver.find_element(*self.QR_Management).click()
+        self.wait_for_clickable(self.QR_Management).click()
 
     def click_category(self):
-        self.driver.find_element(*self.category).click()
+        self.wait_for_clickable(self.category).click()
 
     def click_create_category_button(self):
-        self.driver.find_element(*self.create_category_button).click()
+        self.wait_for_clickable(self.create_category_button).click()
 
-    def Enter_category_value(self,category):
-        self.driver.find_element(*self.Enter_category).clear()
-        self.driver.find_element(*self.Enter_category).send_keys(category)
+    def Enter_category_value(self, category):
+        element = self.wait_for_visible(self.Enter_category)
+        element.clear()
+        element.send_keys(category)
 
-    def click_category_status(self,value):
-        drp=Select(self.driver.find_element(*self.category_status))
+    def click_category_status(self, value):
+        element = self.wait_for_visible(self.category_status)
+        drp = Select(element)
         drp.select_by_visible_text(value)
 
     def click_save_button(self):
-        self.driver.find_element(*self.save_button).click()
+        self.wait_for_clickable(self.save_button).click()
 
     def Click_exit_option(self):
-        self.driver.find_element(*self.exit_option).click()
+        self.wait_for_clickable(self.exit_option).click()
 
     def Enter_search_field(self,search_value):
         self.driver.find_element(*self.search_input_field).clear()
@@ -153,10 +167,8 @@ class QR_Management_Category_Page:
         time.sleep(1)
         self.driver.find_element(*self.filter_toggle_category_field).send_keys(category_name)
 
-
     def Click_filter_toggle_date_range(self):
         self.driver.find_element(*self.filter_toggle_date_range).click()
-
 
     def select_filter_toggle_status(self,filter_status):
         # Click the dropdown container

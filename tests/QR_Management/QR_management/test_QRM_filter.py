@@ -124,6 +124,7 @@ class Test_QRM_Filter(BaseTest):
         try:
             qr_m_page.Click_actions_icon()
             self.logger.info("Clicked Actions icon")
+            time.sleep(1)
             qr_m_page.Click_view_icon()
             self.logger.info("Clicked View icon")
             time.sleep(1)

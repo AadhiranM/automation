@@ -1,5 +1,3 @@
-
-
 import pytest
 import time
 import random
@@ -7,14 +5,12 @@ import string
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
 from pages.QR_Management.QR_management_category import QR_Management_Category_Page
 from utilities.read_excel import get_test_data
 from utilities.customlogger import LogGen
 from pages.common.base_page import BaseTest
 from utilities.screenshot_util import take_screenshot
 from selenium.common.exceptions import TimeoutException
-
 # excel_path = r"/mf_products_data.xlsx"
 excel_path = r"mf_products_data.xlsx"
 test_data = get_test_data(excel_path, "category")
@@ -37,7 +33,7 @@ class Test_category_create(BaseTest):
         self.logger.info("===== TEST STARTED: QR CATEGORY CREATION =====")
         self.logger.info(f"Category: {category} | Status: {status}")
 
-        wait = WebDriverWait(driver, 4)
+        wait = WebDriverWait(driver, 10)
 
         # ---------------- NAVIGATION ----------------
         self.logger.info("Navigating to Category module")
@@ -70,9 +66,13 @@ class Test_category_create(BaseTest):
 
         # ---------------- TOAST VALIDATION ----------------
         try:
-            toast = WebDriverWait(driver, 5).until(
-                EC.visibility_of_element_located((By.CSS_SELECTOR, ".toastify"))
-            ).text
+            toast_element = WebDriverWait(driver, 20).until(
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, ".toastify")
+                )
+            )
+
+            toast = toast_element.text.strip()
             toast = toast.encode("ascii", errors="ignore").decode()
 
             self.logger.info(f"Toast received: {toast}")

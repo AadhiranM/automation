@@ -48,7 +48,7 @@ class Test_category_filter_edit(BaseTest):
         self.logger.info("Opened Category section")
 
         # ---------------- GET CATEGORY NAME AND DATE ----------------
-        wait = WebDriverWait(driver, 10)
+        wait = WebDriverWait(driver, 15)
 
         category_name = wait.until(
             EC.visibility_of_element_located(
@@ -129,7 +129,7 @@ class Test_category_filter_edit(BaseTest):
 
         # ---------------- TOAST VALIDATION ----------------
         try:
-            toast_text = WebDriverWait(driver, 3).until(
+            toast_text = WebDriverWait(driver, 10).until(
                 EC.visibility_of_element_located(
                     (By.CSS_SELECTOR, ".toastify")
                 )

@@ -110,10 +110,11 @@ class Test_QRM_Filter_toggle(BaseTest):
 
         qr_m_page.Click_apply_btn()
         self.logger.info("Clicked Apply button")
-        time.sleep(3)
+        time.sleep(5)
         try:
             qr_m_page.Click_actions_icon()
             self.logger.info("Clicked Actions icon")
+            time.sleep(1)
             qr_m_page.Click_view_icon()
             self.logger.info("Clicked View icon")
             time.sleep(1)

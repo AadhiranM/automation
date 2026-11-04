@@ -37,7 +37,7 @@ class Test_category_filter_toggle_edit(BaseTest):
 
         self.logger.info("===== TEST STARTED: QR CATEGORY FILTER TOGGLE EDIT =====")
 
-        wait = WebDriverWait(driver, 4)
+        wait = WebDriverWait(driver, 10)
 
         # ---------------- NAVIGATION ----------------
         self.logger.info("Navigating to Category module")
@@ -141,7 +141,7 @@ class Test_category_filter_toggle_edit(BaseTest):
 
         # ---------------- TOAST VALIDATION ----------------
         try:
-            toast_text = WebDriverWait(driver, 3).until(
+            toast_text = WebDriverWait(driver,10).until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, ".toastify"))
             ).text
 

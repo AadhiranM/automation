@@ -30,6 +30,7 @@ class Test_RP_filters(BaseTest):
         self.logger.info("Navigating to Dashboard")
 
         UM_roles_and_per_filters = Roles_and_permission_filters(driver)
+        driver.refresh()
         UM_roles_and_per_filters.Click_Dashboard()
 
         self.logger.info("Dashboard opened successfully")
