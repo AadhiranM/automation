@@ -80,7 +80,7 @@ class Test_UM_RP_create(BaseTest):
                     (By.CSS_SELECTOR, ".toastify")
                 )
             ).text.strip()
-
+            toast_text = toast_text.encode("ascii", errors="ignore").decode()
             print("Toast:", toast_text)
 
             self.logger.info(f"Toast received: {toast_text}")
